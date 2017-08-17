@@ -14,5 +14,6 @@ public class InteractionTravel : InteractableCustom {
     {
         //Moves the entire player prefab to the transform's designated position
         hand.gameObject.transform.root.transform.position = destination.position;
+        hand.gameObject.transform.root.transform.eulerAngles += new Vector3(0, 180, 0);
     }
 }

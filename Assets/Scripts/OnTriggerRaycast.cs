@@ -19,7 +19,6 @@ public class OnTriggerRaycast : MonoBehaviour {
     void Start()
     {
         hand = GetComponent<Hand>();
-        
     }
 
     void Update()
@@ -62,22 +61,25 @@ public class OnTriggerRaycast : MonoBehaviour {
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
 
                 //If it is in the interactable layer
-                if(rayHit.collider.gameObject.GetComponent<Interactable>())
+                if(rayHit.collider.gameObject.GetComponent<InteractableCustom>())
                 {
                     obj = rayHit.collider.gameObject;
+                }
+                else
+                {
+                    obj = null;
                 }
             }
             else //If we don't hit something...
             {
                 //Render the line to its max distance.
                 GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
+                obj = null;
             }
         }
         else
         {
             GetComponent<LineRenderer>().enabled = false;
-        }
-
-        
+        }  
     }
 }

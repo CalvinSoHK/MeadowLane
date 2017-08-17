@@ -4,6 +4,7 @@ using UnityEngine;
 using Valve.VR.InteractionSystem;
 
 //Script is put onto objects we want to be able to pickup
+[RequireComponent(typeof(Rigidbody))]
 public class InteractionPickup : InteractableCustom {
 
     //Write use function to pick up object
@@ -16,7 +17,7 @@ public class InteractionPickup : InteractableCustom {
     void HandHoverUpdate(Hand hand)
     {
         //If we get the main button down
-        if (hand.GetTrackpadDown())
+        if (hand.GetStandardInteractionButtonDown())
         {
             hand.AttachObject(gameObject);
         }
@@ -31,11 +32,10 @@ public class InteractionPickup : InteractableCustom {
     //Happens every frame while held by a hand
     void HandAttachedUpdate(Hand hand)
     {
-        if (hand.GetTrackpadDown())
+        if (hand.GetStandardInteractionButtonDown())
         {
             hand.DetachObject(gameObject);
-        }
-        
+        } 
     }
 
     //Happens when the object is detaches from the hand
