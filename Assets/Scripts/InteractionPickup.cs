@@ -4,11 +4,16 @@ using UnityEngine;
 using Valve.VR.InteractionSystem;
 
 //Script is put onto objects we want to be able to pickup
-[RequireComponent(typeof(Interactable))]
-public class InteractionPickup : MonoBehaviour {
+public class InteractionPickup : InteractableCustom {
+
+    //Write use function to pick up object
+    public override void Use(Hand hand)
+    {
+        hand.AttachObject(gameObject);
+    }
 
     //Happens whenever a hand is near the object
-	void HandHoverUpdate(Hand hand)
+    void HandHoverUpdate(Hand hand)
     {
         //If we get the main button down
         if (hand.GetTrackpadDown())
