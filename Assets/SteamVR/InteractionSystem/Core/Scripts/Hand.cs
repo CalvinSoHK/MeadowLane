@@ -848,9 +848,168 @@ namespace Valve.VR.InteractionSystem
 			return false;
 		}
 
+        //-------------------------------------------------
+        // Was the grip button just pressed? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetGripButton()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return Input.GetMouseButtonDown(1);
+            }
+            else if (controller != null)
+            {
+                return controller.GetPress(EVRButtonId.k_EButton_Grip);
+            }
 
-		//-------------------------------------------------
-		private void InitController( int index )
+            return false;
+        }
+
+
+        //-------------------------------------------------
+        // Was the grip button just released? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetGripButtonUp()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return Input.GetMouseButtonUp(1);
+            }
+            else if (controller != null)
+            {
+                return controller.GetPressUp(EVRButtonId.k_EButton_Grip);
+            }
+
+            return false;
+        }
+
+
+        //-------------------------------------------------
+        // Is the grip button being pressed down? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetGripButtonDown()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return Input.GetMouseButtonDown(1);
+            }
+            else if (controller != null)
+            {
+                return controller.GetPressDown(EVRButtonId.k_EButton_Grip);
+            }
+
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Was the menu button just pressed? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetMenuButton()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                return controller.GetPress(EVRButtonId.k_EButton_ApplicationMenu);
+            }
+
+            return false;
+        }
+
+        
+        //-------------------------------------------------
+        // Was the grip button just released? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetMenuButtonUp()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return Input.GetMouseButtonUp(1);
+            }
+            else if (controller != null)
+            {
+                return controller.GetPressUp(EVRButtonId.k_EButton_ApplicationMenu);
+            }
+
+            return false;
+        }
+
+
+        //-------------------------------------------------
+        // Is the grip button being pressed down? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetMenuButtonDown()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                return controller.GetPressDown(EVRButtonId.k_EButton_ApplicationMenu);
+            }
+
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Was the menu button just pressed? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetTrackpad()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                return controller.GetPress(EVRButtonId.k_EButton_SteamVR_Touchpad);
+            }
+
+            return false;
+        }
+
+
+        //-------------------------------------------------
+        // Was the grip button just released? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetTrackpadUp()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return Input.GetMouseButtonUp(1);
+            }
+            else if (controller != null)
+            {
+                return controller.GetPressUp(EVRButtonId.k_EButton_SteamVR_Touchpad);
+            }
+
+            return false;
+        }
+
+
+        //-------------------------------------------------
+        // Is the grip button being pressed down? In VR, this is a trigger press. In 2D fallback, this is a mouse left-click.
+        //-------------------------------------------------
+        public bool GetTrackpadDown()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                //Debug.Log(controller.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad));
+                return controller.GetPressDown(EVRButtonId.k_EButton_Axis0);
+            }
+
+            return false;
+        }
+
+        //-------------------------------------------------
+        private void InitController( int index )
 		{
 			if ( controller == null )
 			{
