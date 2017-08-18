@@ -12,8 +12,7 @@ public class InteractionTravel : InteractableCustom {
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {
-        //Moves the entire player prefab to the transform's designated position
-        hand.gameObject.transform.root.transform.position = destination.position;
-        hand.gameObject.transform.root.transform.eulerAngles += new Vector3(0, 180, 0);
+        Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
+            hand.gameObject.transform.root);
     }
 }

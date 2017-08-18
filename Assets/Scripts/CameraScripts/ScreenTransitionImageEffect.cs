@@ -1,7 +1,4 @@
-﻿// This code is related to an answer I provided in the Unity forums at:
-// http://forum.unity3d.com/threads/circular-fade-in-out-shader.344816/
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [ExecuteInEditMode]
@@ -20,7 +17,13 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     public float maskValue;
     public Color maskColor = Color.black;
     public Texture2D maskTexture;
-    public bool maskInvert;
+    public bool maskInvert, runEffect = false;
+    public float openSpeedModifier = 1,
+        closeSpeedModifier = 4,
+        openTimeBetween = 2,
+        closeTimeBetween = 4;
+
+    public Transform destination = null, player = null;
 
     private Material m_Material;
     private bool m_maskInvert;
@@ -60,8 +63,9 @@ public class ScreenTransitionImageEffect : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (runEffect)
         {
+            time = 0.0f;
             setCurrentState(Gamestate.close);
         }
         switch (currentState)
@@ -70,20 +74,25 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 time = 0.0f;
                 break;
             case Gamestate.close:
-                time += Time.deltaTime / 2;
-                maskValue = Mathf.SmoothStep(0.0f, 1.5f, time);
-                if (getStateElapsed() > 3.0f)
+                runEffect = false;
+                time += Time.deltaTime / closeSpeedModifier;
+                maskValue = Mathf.SmoothStep(0.77f, 1.5f, time);
+                if (getStateElapsed() > closeTimeBetween)
                 {
                     setCurrentState(Gamestate.open);
+                    player.transform.position = destination.position;
+                    player.transform.eulerAngles += new Vector3(0, 180, 0);
                     time = 0.0f;
                 }
                 break;
             case Gamestate.open:
-                time += Time.deltaTime / 2;
+                time += Time.deltaTime / openSpeedModifier;
                 maskValue = Mathf.SmoothStep(1.5f, 0.0f, time);
-                if (getStateElapsed() > 3.0f)
+                if (getStateElapsed() > openTimeBetween)
                 {
                     setCurrentState(Gamestate.wait);
+                    destination = null;
+                    player = null;
                 }
                 break;
         }
@@ -130,5 +139,12 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     float getStateElapsed()
     {
         return Time.time - lastStateChange;
+    }
+
+    public void MovePlayer(Transform location, Transform playerT)
+    {
+        destination = location;
+        player = playerT;
+        runEffect = true;
     }
 }

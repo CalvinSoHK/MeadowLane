@@ -6,7 +6,7 @@ using UnityEngine;
 public class FarmBlockInfo : MonoBehaviour {
 
     //States of the block
-    public bool PLANTED = false, WATERED = false, TILLED = false;
+    public bool PLANTED = false, WATERED = false, TILLED = false, INFERTILE = false;
 
     //Coordinate of the block in this plot
     public Vector2 coordinate;
