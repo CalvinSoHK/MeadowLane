@@ -31,6 +31,10 @@ public class BaseItem : MonoBehaviour {
         //Dateable = 0x800
     }
 
+    [SerializeField]
+    [EnumTag]
+    public ItemTags _TAGS = 0;
+
     //Image that is shown in the inventory
     public Image _THUMBNAIL;
 
