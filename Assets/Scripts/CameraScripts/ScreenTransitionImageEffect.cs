@@ -13,6 +13,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     public enum Gamestate{ wait, open, close };
     public Gamestate currentState;
 
+    //We set the range of the maskValue starting at 0 and going up to 1.5
     [Range(0,1.5f)]
     public float maskValue;
     public Color maskColor = Color.black;
@@ -63,11 +64,14 @@ public class ScreenTransitionImageEffect : MonoBehaviour
 
     private void Update()
     {
+        //we check if we need to start the event system and fade the screen out to teleport the player
         if (runEffect)
         {
             time = 0.0f;
             setCurrentState(Gamestate.close);
         }
+
+        //We need a state system to know when to fade in and out when player needs to be telported into rooms
         switch (currentState)
         {
             case Gamestate.wait:
@@ -129,18 +133,18 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         Graphics.Blit(source, destination, material);
     }
 
-
+    //We set what state the camera needs to be in, and update the time since the last update
     public void setCurrentState(Gamestate state)
     {
         currentState = state;
         lastStateChange = Time.time;
     }
-
+    //We check how much time has passed since the last update
     float getStateElapsed()
     {
         return Time.time - lastStateChange;
     }
-
+    //We move the player to the new location
     public void MovePlayer(Transform location, Transform playerT)
     {
         destination = location;

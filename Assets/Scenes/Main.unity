@@ -697,6 +697,13 @@ MonoBehaviour:
   maskColor: {r: 0, g: 0, b: 0, a: 1}
   maskTexture: {fileID: 2800000, guid: 357b7b0badddeac428c3f9c104560b34, type: 3}
   maskInvert: 0
+  runEffect: 0
+  openSpeedModifier: 1
+  closeSpeedModifier: 4
+  openTimeBetween: 2
+  closeTimeBetween: 4
+  destination: {fileID: 0}
+  player: {fileID: 0}
 --- !u!92 &462373066
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1045,9 +1052,10 @@ GameObject:
   - component: {fileID: 680030456}
   - component: {fileID: 680030455}
   - component: {fileID: 680030454}
+  - component: {fileID: 680030451}
+  - component: {fileID: 680030458}
   - component: {fileID: 680030453}
   - component: {fileID: 680030452}
-  - component: {fileID: 680030451}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1078,9 +1086,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 680030450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b204f1c4b369b3f4ea607a1fe66f0b73, type: 3}
+  m_Script: {fileID: 11500000, guid: ffefbea063cab884ca33e5a449e5c22c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attachmentFlags: 12
+  attachmentPoint: 
+  catchSpeedThreshold: 0
+  restoreOriginalParent: 0
+  attachEaseIn: 0
+  snapAttachEaseInCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  snapAttachEaseInTime: 0.15
+  attachEaseInAttachmentNames: []
+  onPickUp:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onDetachFromHand:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  snapAttachEaseInCompleted: 0
 --- !u!114 &680030453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1150,12 +1194,26 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 680030450}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.72, y: 0.044, z: 0}
+  m_LocalPosition: {x: -0.72, y: 0.399, z: -0.927}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &680030458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 680030450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783750eec4c41da428b7651515146d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocityAverageFrames: 5
+  angularVelocityAverageFrames: 11
+  estimateOnAwake: 0
 --- !u!1 &880522136
 GameObject:
   m_ObjectHideFlags: 0
