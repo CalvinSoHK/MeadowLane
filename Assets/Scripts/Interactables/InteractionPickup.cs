@@ -13,6 +13,9 @@ public class InteractionPickup : InteractableCustom {
     //Multiplier that affects how much of the velocity passes over onto the item when thrown.
     public float velocityMutiplier = 1;
 
+    //Whether or not the object is held
+    public bool isHeld = false;
+
     void Awake()
     {
         velocityEstimator = GetComponent<VelocityEstimator>();
@@ -36,6 +39,7 @@ public class InteractionPickup : InteractableCustom {
     //Happens whenever this object is attached to a hand
     public virtual void OnAttachedToHand(Hand hand)
     {
+        isHeld = true;
         GetComponent<Rigidbody>().isKinematic = true;
         if (hand.controller == null)
         {
@@ -55,6 +59,7 @@ public class InteractionPickup : InteractableCustom {
     //Happens when the object is detaches from the hand
     public virtual void OnDetachedFromHand(Hand hand)
     {
+        isHeld = false;
         Rigidbody rb = GetComponent<Rigidbody>();
         //GetComponent<Rigidbody>().isKinematic = false;
         rb.isKinematic = false;

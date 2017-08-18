@@ -8,5 +8,4 @@ public class InfoLinker : MonoBehaviour {
     //The obj with the actual info of this obj.
     public Transform infoObj;
 
-
 }

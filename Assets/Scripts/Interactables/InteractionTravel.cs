@@ -12,7 +12,10 @@ public class InteractionTravel : InteractableCustom {
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {
-        Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
-            hand.gameObject.transform.root);
+        if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
+        {
+            Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
+                hand.gameObject.transform.root);
+        }
     }
 }

@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocityMutiplier: 0.5
+  isHeld: 0
   debug: 0
 --- !u!114 &114283152925595642
 MonoBehaviour:
@@ -203,6 +204,7 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0.2}
   rotOffset: {x: 90, y: -90, z: -86.8}
   _TYPE: 0
+  isValid: 0
 --- !u!136 &136553176015487666
 CapsuleCollider:
   m_ObjectHideFlags: 1
