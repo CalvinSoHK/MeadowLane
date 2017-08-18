@@ -21,7 +21,6 @@ public class InteractionItem : InteractionPickup {
             //Apply rotation offset
             Vector3 rotOffset = GetComponent<BaseItem>().rotOffset;
             transform.localEulerAngles = rotOffset;
-
         }
 
     }
@@ -29,7 +28,7 @@ public class InteractionItem : InteractionPickup {
     //When we attach it to the hand
     public override void OnAttachedToHand(Hand hand)
     {
-        Debug.Log("Attaching...");
+        //Debug.Log("Attaching...");
 
         //Apply the offset onto the player
         Vector3 offset = GetComponent<BaseItem>().offset;

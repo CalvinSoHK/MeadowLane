@@ -21,7 +21,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     public bool maskInvert, runEffect = false;
     public float openSpeedModifier = 1,
         closeSpeedModifier = 4,
-        openTimeBetween = 2,
+        openTimeBetween = 2f,
         closeTimeBetween = 4;
 
     public Transform destination = null, player = null;
