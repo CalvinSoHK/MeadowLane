@@ -10,6 +10,8 @@ public class InteractionPickup : InteractableCustom {
 
     private VelocityEstimator velocityEstimator;
 
+    //Multiplier that affects how much of the velocity passes over onto the item when thrown.
+    public float velocityMutiplier = 1;
 
     void Awake()
     {
@@ -22,7 +24,7 @@ public class InteractionPickup : InteractableCustom {
     }
 
     //Happens whenever a hand is near the object
-    void HandHoverUpdate(Hand hand)
+    public virtual void HandHoverUpdate(Hand hand)
     {
         //If we get the main button down
         if (hand.GetStandardInteractionButtonDown())
@@ -32,7 +34,7 @@ public class InteractionPickup : InteractableCustom {
     }
 
     //Happens whenever this object is attached to a hand
-    void OnAttachedToHand(Hand hand)
+    public virtual void OnAttachedToHand(Hand hand)
     {
         GetComponent<Rigidbody>().isKinematic = true;
         if (hand.controller == null)
@@ -42,7 +44,7 @@ public class InteractionPickup : InteractableCustom {
     }
 
     //Happens every frame while held by a hand
-    void HandAttachedUpdate(Hand hand)
+    public virtual void HandAttachedUpdate(Hand hand)
     {
         if (hand.GetStandardInteractionButtonDown())
         {
@@ -51,7 +53,7 @@ public class InteractionPickup : InteractableCustom {
     }
 
     //Happens when the object is detaches from the hand
-    void OnDetachedFromHand(Hand hand)
+    public virtual void OnDetachedFromHand(Hand hand)
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         //GetComponent<Rigidbody>().isKinematic = false;
@@ -70,8 +72,8 @@ public class InteractionPickup : InteractableCustom {
         }
         else
         {
-            velocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.velocity);
-            angularVelocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.angularVelocity);
+            velocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.velocity) * velocityMutiplier;
+            angularVelocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.angularVelocity) * velocityMutiplier;
             position = hand.transform.position;
         }
 

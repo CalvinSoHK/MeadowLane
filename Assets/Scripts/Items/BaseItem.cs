@@ -38,6 +38,12 @@ public class BaseItem : MonoBehaviour {
     //Image that is shown in the inventory
     public Image _THUMBNAIL;
 
+    //Offset of item when held by hand
+    public Vector3 offset;
+
+    //Rotation offset
+    public Vector3 rotOffset;
+
     //Helper functions below
 
     //Delete item. Insert any effects you want for all items to have for default deletion.
