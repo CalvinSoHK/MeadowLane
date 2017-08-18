@@ -5,8 +5,16 @@ using Valve.VR.InteractionSystem;
 
 //Script is put onto objects we want to be able to pickup
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(VelocityEstimator))]
 public class InteractionPickup : InteractableCustom {
 
+    private VelocityEstimator velocityEstimator;
+
+
+    void Awake()
+    {
+        velocityEstimator = GetComponent<VelocityEstimator>();
+    }
     //Write use function to pick up object
     public override void Use(Hand hand)
     {
@@ -27,6 +35,10 @@ public class InteractionPickup : InteractableCustom {
     void OnAttachedToHand(Hand hand)
     {
         GetComponent<Rigidbody>().isKinematic = true;
+        if (hand.controller == null)
+        {
+            velocityEstimator.BeginEstimatingVelocity();
+        }
     }
 
     //Happens every frame while held by a hand
@@ -41,6 +53,37 @@ public class InteractionPickup : InteractableCustom {
     //Happens when the object is detaches from the hand
     void OnDetachedFromHand(Hand hand)
     {
-        GetComponent<Rigidbody>().isKinematic = false;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        //GetComponent<Rigidbody>().isKinematic = false;
+        rb.isKinematic = false;
+
+        Vector3 position = Vector3.zero;
+        Vector3 velocity = Vector3.zero;
+        Vector3 angularVelocity = Vector3.zero;
+
+        if (hand.controller == null)
+        {
+            velocityEstimator.FinishEstimatingVelocity();
+            velocity = velocityEstimator.GetVelocityEstimate();
+            angularVelocity = velocityEstimator.GetAngularVelocityEstimate();
+            position = velocityEstimator.transform.position;
+        }
+        else
+        {
+            velocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.velocity);
+            angularVelocity = Player.instance.trackingOriginTransform.TransformVector(hand.controller.angularVelocity);
+            position = hand.transform.position;
+        }
+
+        Vector3 r = transform.TransformPoint(rb.centerOfMass) - position;
+        rb.velocity = velocity + Vector3.Cross(angularVelocity, r);
+        rb.angularVelocity = angularVelocity;
+
+        float timeUntilFixedUpdate = (Time.fixedDeltaTime + Time.fixedTime) - Time.time;
+        transform.position += timeUntilFixedUpdate * velocity;
+        float angle = Mathf.Rad2Deg * angularVelocity.magnitude;
+        Vector3 axis = angularVelocity.normalized;
+        transform.rotation *= Quaternion.AngleAxis(angle * timeUntilFixedUpdate, axis);
+
     }
 }
