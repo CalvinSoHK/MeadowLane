@@ -229,7 +229,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		private void HandHoverUpdate( Hand hand )
+		public virtual void HandHoverUpdate( Hand hand )
 		{
 			if ( hand.GetStandardInteractionButtonDown() )
 			{

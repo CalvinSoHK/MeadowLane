@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
-//Script that, on use, lets the player travel through this object.
-public class InteractionTravel : InteractableCustom {
+//Same as travel, but moves the player itself into a fixed position. Like oculus rift.
+public class InteractTravelFixed : InteractableCustom {
 
     //Destination of player prefab
     public Transform destination;
@@ -14,8 +14,9 @@ public class InteractionTravel : InteractableCustom {
     {
         if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
         {
+            Debug.Log("Fixed Travel");
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
-                hand.gameObject.transform.root, false);
+                hand.gameObject.transform.root, true);
         }
     }
 }
