@@ -29,6 +29,9 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     private Material m_Material;
     private bool m_maskInvert;
 
+    //Whether or not it is a fixed travel
+    private bool isFixed;
+
     Material material
     {
         get
@@ -86,6 +89,18 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                     setCurrentState(Gamestate.open);
                     player.transform.position = destination.position;
                     player.transform.eulerAngles += new Vector3(0, 180, 0);
+                    if (isFixed)
+                    {
+                        //Get the actual player
+                        Transform playerObject = player.GetChild(0).Find("VRCamera (eye)");
+
+                        //Move the player based on the local position of the playerObject
+                        player.transform.position -= new Vector3(
+                            playerObject.transform.localPosition.x,
+                            0,
+                            playerObject.transform.localPosition.z);
+
+                    }
                     time = 0.0f;
                 }
                 break;
@@ -145,10 +160,11 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         return Time.time - lastStateChange;
     }
     //We move the player to the new location
-    public void MovePlayer(Transform location, Transform playerT)
+    public void MovePlayer(Transform location, Transform playerT, bool isFixedT)
     {
         destination = location;
         player = playerT;
         runEffect = true;
+        isFixed = isFixedT;
     }
 }
