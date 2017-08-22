@@ -1788,41 +1788,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4208093803046146, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.1903315
-      objectReference: {fileID: 0}
-    - target: {fileID: 4208093803046146, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 0.19033149
-      objectReference: {fileID: 0}
-    - target: {fileID: 4208093803046146, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 0.19033149
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249214327777896, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114494686769329080, guid: 9029468bd8d5ea249bd7bd18202ba2b2,
-        type: 2}
-      propertyPath: velocityMutiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114161139709553162, guid: 9029468bd8d5ea249bd7bd18202ba2b2,
-        type: 2}
-      propertyPath: instantiateWaterLocation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114269955247650178, guid: 9029468bd8d5ea249bd7bd18202ba2b2,
-        type: 2}
-      propertyPath: rotOffset.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4082584863075026, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.27483472
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9029468bd8d5ea249bd7bd18202ba2b2, type: 2}
   m_IsPrefabParent: 0

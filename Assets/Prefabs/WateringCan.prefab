@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 54855662303893546}
   - component: {fileID: 114494686769329080}
   - component: {fileID: 114161139709553162}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WateringCan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ Transform:
   m_GameObject: {fileID: 1922538854276462}
   m_LocalRotation: {x: -0, y: -0, z: 0.29138982, w: 0.9566044}
   m_LocalPosition: {x: 1.068, y: 0.759, z: 0}
-  m_LocalScale: {x: 0.22117981, y: 0.39747757, z: 0.39747757}
+  m_LocalScale: {x: 0.27483472, y: 0.39747757, z: 0.39747757}
   m_Children: []
   m_Father: {fileID: 4208093803046146}
   m_RootOrder: 1
@@ -90,8 +90,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1249214327777896}
   m_LocalRotation: {x: -0, y: -0, z: 0.020960966, w: 0.9997803}
-  m_LocalPosition: {x: -1.5984553, y: 1.85, z: -2.9826972}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.224, y: 0.332, z: -2.414}
+  m_LocalScale: {x: 0.1903315, y: 0.19033149, z: 0.19033149}
   m_Children:
   - {fileID: 4790400317050246}
   - {fileID: 4082584863075026}
@@ -302,7 +302,7 @@ MonoBehaviour:
   _TAGS: 0
   _THUMBNAIL: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
-  rotOffset: {x: 0, y: 0, z: 0}
+  rotOffset: {x: 0, y: -90, z: 0}
 --- !u!114 &114468954597092810
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae785fc249727546b978cb886845128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityMutiplier: 0
+  velocityMutiplier: 1
   isHeld: 0
   debug: 0
 --- !u!135 &135676371625565048
