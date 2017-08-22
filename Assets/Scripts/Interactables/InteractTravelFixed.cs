@@ -9,6 +9,9 @@ public class InteractTravelFixed : InteractableCustom {
     //Destination of player prefab
     public Transform destination;
 
+    //If true, make child of given transform
+    public bool AnchorPlayer;
+
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {
@@ -17,6 +20,11 @@ public class InteractTravelFixed : InteractableCustom {
             Debug.Log("Fixed Travel");
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
                 hand.gameObject.transform.root, true);
+            if (AnchorPlayer)
+            {
+                //Parent steamVR player to the given transform
+                hand.transform.parent.parent.parent = destination;
+            }
         }
     }
 }

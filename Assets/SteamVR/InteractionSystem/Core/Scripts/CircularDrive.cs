@@ -75,33 +75,51 @@ namespace Valve.VR.InteractionSystem
 		[Tooltip( "The output angle value of the drive in degrees, unlimited will increase or decrease without bound, take the 360 modulus to find number of rotations" )]
 		public float outAngle;
 
-		private Quaternion start;
+        [HideInInspector]
+		public Quaternion start;
 
-		private Vector3 worldPlaneNormal = new Vector3( 1.0f, 0.0f, 0.0f );
-		private Vector3 localPlaneNormal = new Vector3( 1.0f, 0.0f, 0.0f );
+        [HideInInspector]
+        public Vector3 worldPlaneNormal = new Vector3( 1.0f, 0.0f, 0.0f );
+        [HideInInspector]
+        public Vector3 localPlaneNormal = new Vector3( 1.0f, 0.0f, 0.0f );
 
-		private Vector3 lastHandProjected;
+        [HideInInspector]
+		public Vector3 lastHandProjected;
 
-		private Color red = new Color( 1.0f, 0.0f, 0.0f );
-		private Color green = new Color( 0.0f, 1.0f, 0.0f );
+        [HideInInspector]
+		public Color red = new Color( 1.0f, 0.0f, 0.0f );
+        [HideInInspector]
+		public Color green = new Color( 0.0f, 1.0f, 0.0f );
 
-		private GameObject[] dbgHandObjects;
-		private GameObject[] dbgProjObjects;
-		private GameObject dbgObjectsParent;
-		private int dbgObjectCount = 0;
-		private int dbgObjectIndex = 0;
+        [HideInInspector]
+		public GameObject[] dbgHandObjects;
+        [HideInInspector]
+		public GameObject[] dbgProjObjects;
+        [HideInInspector]
+		public GameObject dbgObjectsParent;
+        [HideInInspector]
+		public int dbgObjectCount = 0;
+        [HideInInspector]
+		public int dbgObjectIndex = 0;
 
-		private bool driving = false;
+        [HideInInspector]
+		public bool driving = false;
 
-		// If the drive is limited as is at min/max, angles greater than this are ignored 
-		private float minMaxAngularThreshold = 1.0f;
+		// If the drive is limited as is at min/max, angles greater than this are ignored
+        [HideInInspector]
+		public float minMaxAngularThreshold = 1.0f;
 
-		private bool frozen = false;
-		private float frozenAngle = 0.0f;
-		private Vector3 frozenHandWorldPos = new Vector3( 0.0f, 0.0f, 0.0f );
+        [HideInInspector]
+		public bool frozen = false;
+        [HideInInspector]
+		public float frozenAngle = 0.0f;
+        [HideInInspector]
+		public Vector3 frozenHandWorldPos = new Vector3( 0.0f, 0.0f, 0.0f );
+        [HideInInspector]
 		private Vector2 frozenSqDistanceMinMaxThreshold = new Vector2( 0.0f, 0.0f );
 
-		Hand handHoverLocked = null;
+        [HideInInspector]
+		public Hand handHoverLocked = null;
 
 		//-------------------------------------------------
 		private void Freeze( Hand hand )
@@ -152,7 +170,7 @@ namespace Valve.VR.InteractionSystem
 
 			if ( limited )
 			{
-				start = Quaternion.identity;
+                start = transform.localRotation;
 				outAngle = transform.localEulerAngles[(int)axisOfRotation];
 
 				if ( forceStart )
@@ -267,7 +285,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		private Vector3 ComputeToTransformProjected( Transform xForm )
+		public Vector3 ComputeToTransformProjected( Transform xForm )
 		{
 			Vector3 toTransform = ( xForm.position - transform.position ).normalized;
 			Vector3 toTransformProjected = new Vector3( 0.0f, 0.0f, 0.0f );
@@ -414,7 +432,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		// Updates the Debug TextMesh with the linear mapping value and the angle
 		//-------------------------------------------------
-		private void UpdateAll()
+		public void UpdateAll()
 		{
 			UpdateLinearMapping();
 			UpdateGameObject();
@@ -425,7 +443,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		// Computes the angle to rotate the game object based on the change in the transform
 		//-------------------------------------------------
-		private void ComputeAngle( Hand hand )
+		public void ComputeAngle( Hand hand )
 		{
 			Vector3 toHandProjected = ComputeToTransformProjected( hand.hoverSphereTransform );
 

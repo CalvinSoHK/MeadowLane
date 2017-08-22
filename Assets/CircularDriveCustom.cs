@@ -5,10 +5,22 @@ using Valve.VR.InteractionSystem;
 
 public class CircularDriveCustom : CircularDrive {
 
+    //If true, drive is engaged in use, else not.
+    public bool isUse = false;
+
+    //The hand that is driving this steering wheel
+    public Hand drivingHand = null;
+
 	public override void HandHoverUpdate(Hand hand)
     {
         if (hand.GetStandardInteractionButtonDown())
         {
+            //Set flag to true
+            isUse = true;
+
+            //Set the hand to this hand
+            drivingHand = hand;
+
             // Trigger was just pressed
             lastHandProjected = ComputeToTransformProjected(hand.hoverSphereTransform);
 
@@ -27,6 +39,10 @@ public class CircularDriveCustom : CircularDrive {
         }
         else if (hand.GetStandardInteractionButtonUp())
         {
+            //Reset flag, and hand
+            drivingHand = null;
+            isUse = false;
+
             // Trigger was just released
             if (hoverLock)
             {
