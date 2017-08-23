@@ -5,8 +5,12 @@ using UnityEngine;
 //Info for a single farm block.
 public class FarmBlockInfo : MonoBehaviour {
 
+    //The plant in the farm block
+    //If null, no plant.
+    public Transform PLANT;
+
     //States of the block
-    public bool PLANTED = false, WATERED = false, TILLED = false, INFERTILE = false;
+    public bool WATERED = false, TILLED = false, INFERTILE = false;
 
     //Coordinate of the block in this plot
     public Vector2 coordinate;

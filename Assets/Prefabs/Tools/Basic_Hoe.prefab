@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4544996791573820}
   - component: {fileID: 65163362523364130}
-  - component: {fileID: 114283152925595642}
+  - component: {fileID: 114819124124859828}
   m_Layer: 0
   m_Name: Blade_Collider
   m_TagString: Untagged
@@ -41,8 +41,9 @@ GameObject:
   - component: {fileID: 95163279732673766}
   - component: {fileID: 54556236488473972}
   - component: {fileID: 136553176015487666}
-  - component: {fileID: 114050588323593484}
-  - component: {fileID: 114692055329980366}
+  - component: {fileID: 114192834816825908}
+  - component: {fileID: 114203610391642820}
+  - component: {fileID: 114128649775461468}
   m_Layer: 8
   m_Name: Basic_Hoe
   m_TagString: Untagged
@@ -160,7 +161,27 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114050588323593484
+--- !u!114 &114128649775461468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741868023991694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6721de7859d8743ac886766952afeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NAME: Basic_Hoe
+  _VALUE: 0
+  _TAGS: 66
+  _THUMBNAIL: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
+  rotOffset: {x: 90, y: 90, z: 90}
+  _TYPE: 0
+  isValid: 0
+  maxVelocity: -10
+--- !u!114 &114192834816825908
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -174,19 +195,7 @@ MonoBehaviour:
   velocityMutiplier: 0.5
   isHeld: 0
   debug: 0
---- !u!114 &114283152925595642
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1066527393205280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64e13501524a54946863c8c87a9639ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  infoObj: {fileID: 4482922100468806}
---- !u!114 &114692055329980366
+--- !u!114 &114203610391642820
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -194,17 +203,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1741868023991694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02ecd613cc63ffc46bc2ff2f4e2aee77, type: 3}
+  m_Script: {fileID: 11500000, guid: 783750eec4c41da428b7651515146d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NAME: Basic_Hoe
-  _VALUE: 5
-  _TAGS: 67
-  _THUMBNAIL: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0.2}
-  rotOffset: {x: 90, y: -90, z: -86.8}
-  _TYPE: 0
-  isValid: 0
+  velocityAverageFrames: 5
+  angularVelocityAverageFrames: 11
+  estimateOnAwake: 0
+--- !u!114 &114819124124859828
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1066527393205280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d2003c2f361574a9b7ab58a4c88643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoObj: {fileID: 4482922100468806}
+  velocity: 0
+  intervals: 0.25
 --- !u!136 &136553176015487666
 CapsuleCollider:
   m_ObjectHideFlags: 1
