@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 135243619074910798}
   - component: {fileID: 23954798252993064}
   - component: {fileID: 54111912574403586}
+  - component: {fileID: 114380087669681816}
   m_Layer: 0
   m_Name: WaterDrop
   m_TagString: Untagged
@@ -97,6 +98,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114380087669681816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1476669833048896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384f751c1797a30478c316d8cd3eba29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wateringCan: {fileID: 0}
 --- !u!135 &135243619074910798
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -105,7 +118,7 @@ SphereCollider:
   m_GameObject: {fileID: 1476669833048896}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
