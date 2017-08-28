@@ -8,11 +8,20 @@ public class FarmBlockInfo : MonoBehaviour {
     //States of the block
     public bool PLANTED = false, WATERED = false, TILLED = false, INFERTILE = false;
 
+    //how much the block has been watered
+    public float waterCount = 0;
+    public float waterMax = 100;
+
     //Coordinate of the block in this plot
     public Vector2 coordinate;
 
+    //Starting farm block color
+    public Color originalFarmBlockColor;
+
 	// Use this for initialization
 	void Start () {
+        //keep record of original color
+        originalFarmBlockColor = GetComponent<Renderer>().material.color;
         //Parse coordinate from the name.
         string name = transform.name;
 
@@ -28,6 +37,19 @@ public class FarmBlockInfo : MonoBehaviour {
         if (TILLED)
         {
             GetComponent<Renderer>().material = Resources.Load("Materials/FarmBlock/Dirt_Tilled", typeof(Material)) as Material;
+        }
+        if(waterCount >= waterMax)
+        {
+            WATERED = true;
+        }else
+        {
+            Debug.Log("Is water count lower than max");
+            GetComponent<Renderer>().material.color = Color.Lerp(originalFarmBlockColor, originalFarmBlockColor * (10/100), waterCount / 100);
+        }
+        if (WATERED)
+        {
+            Debug.Log("Watered");
+            GetComponent<Renderer>().material.color = originalFarmBlockColor * (10/100);
         }
     }
 

@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Watering : MonoBehaviour {
     public Vector3 objectRotation, instantiateWaterLocation;
-    public GameObject water, instantiateWaterObject;        
+    public GameObject water, instantiateWaterObject, tempWater;        
     public float interval, timer, rotateTriggerUp, rotateTriggerDown;
+    WaterDrop theWaterDrop;
 	// Use this for initialization
 	void Start () {
         resetTimer();
@@ -23,7 +24,10 @@ public class Watering : MonoBehaviour {
             if(getElapsedTime()> interval)
             {
                 Debug.Log("Instantiate the water babbbby");
-                Instantiate(water, instantiateWaterLocation + new Vector3(0.015f,Random.Range(-0.045f,0.015f), Random.Range(-0.025f, 0.035f)), Quaternion.identity);
+                tempWater = Instantiate(water, instantiateWaterLocation + new Vector3(0.015f,Random.Range(-0.045f,0.015f), Random.Range(-0.025f, 0.035f)), Quaternion.identity);
+                theWaterDrop = tempWater.GetComponent<WaterDrop>();
+                theWaterDrop.wateringCan = this.gameObject;
+                theWaterDrop.callIgnoreCollision(this.gameObject);
                 resetTimer();
             }
             
