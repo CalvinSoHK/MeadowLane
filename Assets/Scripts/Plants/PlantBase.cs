@@ -47,6 +47,12 @@ public class PlantBase : MonoBehaviour {
     [SerializeField]
     bool isDead = false;
 
+    //Days since watered
+    int DAYS_SINCE_WATER = 0;
+
+    //How long can plant go without water
+    public int DAYS_TO_DIE;
+
     //Rotation offset of plant
     Vector3 rotOffset;
 
@@ -130,17 +136,42 @@ public class PlantBase : MonoBehaviour {
         else
         {
             //Decrements the day counter by the growth for today
-            TIME_PLANTED -= GROWTH_TODAY;
+            TIME_PLANTED -= CalculateGrowth();
             if (TIME_PLANTED <= 0)
             {
                 //Move onto next stage since we've reached the end for this stage
                 NextStage();
             }
-            else
+            else if(DAYS_SINCE_WATER >= DAYS_TO_DIE)
             {
-                GROWTH_TODAY = 1f;
+                BeDead();
             }
-        }         
+
+            GROWTH_TODAY = 1f;
+        }     
+
+    }
+
+    //Growth function. Takes into account water and fertilized.
+    public virtual float CalculateGrowth()
+    {
+        //Retrieve the value of growth today
+        float totalGrowth = GROWTH_TODAY;
+
+        //Apply any factors
+        if (transform.parent.GetComponent<FarmBlockInfo>().WATERED)
+        {
+            totalGrowth *= 1;
+        }
+        else
+        {
+            DAYS_SINCE_WATER += 1;
+            totalGrowth *= 0;
+        }
+
+        return totalGrowth;
+
+
     }
 	
     //Go next function.
@@ -162,6 +193,9 @@ public class PlantBase : MonoBehaviour {
         //Transfer relevant details to new plant.
         next.GetComponent<PlantBase>().QUALITY = QUALITY;
         next.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
+
+        //Change values in the farmBlockInfo
+        transform.parent.GetComponent<FarmBlockInfo>().PLANT = next.transform;
 
         //Init new plant
         next.GetComponent<PlantBase>().Init(gameObject);

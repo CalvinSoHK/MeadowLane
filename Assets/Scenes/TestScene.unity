@@ -486,7 +486,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &191696853
 Rigidbody:
@@ -1134,7 +1134,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &383988945
 Rigidbody:
@@ -2327,11 +2327,12 @@ MonoBehaviour:
   PRODUCE_NUMBER: 0
   GROWTH_TODAY: 1
   DEATH_ON_HARVEST: 1
-  BIRTHS_PRODUCE: 1
+  BIRTHS_PRODUCE: 0
   MIN_PRODUCE: 0
   MAX_PRODUCE: 0
   INHERIT_PRODUCE: 0
   isDead: 0
+  DAYS_TO_DIE: 0
 --- !u!1 &828425621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,7 +2592,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &868930241
 Rigidbody:
@@ -3789,7 +3790,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1238004444
 Rigidbody:
@@ -4028,7 +4029,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1306068895
 Rigidbody:
@@ -5219,7 +5220,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1909669279
 Rigidbody:
@@ -5482,7 +5483,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1943633671
 Rigidbody:
@@ -5839,7 +5840,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1964196533
 Rigidbody:
@@ -5954,7 +5955,7 @@ MonoBehaviour:
   PLANT: {fileID: 0}
   WATERED: 0
   TILLED: 0
-  INFERTILE: 0
+  FERTILE: 0
   coordinate: {x: 0, y: 0}
 --- !u!54 &1991859078
 Rigidbody:

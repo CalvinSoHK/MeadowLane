@@ -10,7 +10,7 @@ public class FarmBlockInfo : MonoBehaviour {
     public Transform PLANT;
 
     //States of the block
-    public bool WATERED = false, TILLED = false, INFERTILE = false;
+    public bool WATERED = false, TILLED = false, FERTILE = false;
 
     //Coordinate of the block in this plot
     public Vector2 coordinate;
@@ -75,5 +75,13 @@ public class FarmBlockInfo : MonoBehaviour {
                 TILLED = true;
             }
         }
+    }
+
+    //Day end function for farmBlock
+    public void DayEnd()
+    {
+        PLANT.GetComponent<PlantBase>().DayEnd();
+        WATERED = false;
+
     }
 }
