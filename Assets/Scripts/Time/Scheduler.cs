@@ -217,9 +217,14 @@ public class Scheduler : MonoBehaviour {
         }
 
         //Manage time.
-        if(CLOCK <= 86400)
+        if(CLOCK < 86400)
         {
-            time += Time.deltaTime * 32;
+            Debug.Log("Tick");
+            CLOCK += Time.deltaTime * 32;
+        }
+        else
+        {
+            CLOCK = 86400;
         }
         time = GetTime();
     }
