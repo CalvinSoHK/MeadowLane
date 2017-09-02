@@ -122,7 +122,7 @@ public class PlotManager : MonoBehaviour {
         {
             if (plotBlocks[i].transform.GetComponent<FarmBlockInfo>())
             {
-                plotBlocks[i].transform.GetComponent<FarmBlockInfo>().PLANT.GetComponent<PlantBase>().DayEnd();
+                plotBlocks[i].transform.GetComponent<FarmBlockInfo>().DayEnd();
             }
         }
     }

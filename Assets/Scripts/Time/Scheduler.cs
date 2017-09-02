@@ -14,6 +14,9 @@ public class Scheduler : MonoBehaviour {
     //Enum for day of the week
     public enum Day { None, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
 
+    //Enum for day cycle
+    public enum Cycle { None, Day, Night, Midnight };
+
     //Array that saves the length of each month. Index is the month of the year. plugging in month enums should work one to one.
     [HideInInspector]
     int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -69,6 +72,9 @@ public class Scheduler : MonoBehaviour {
 
     //The current time for the game.
     public float CLOCK = 0;
+
+    //The cycle in game
+    public Cycle CYCLE = Cycle.None;
 
     //The time in string
     public string time;
@@ -190,43 +196,39 @@ public class Scheduler : MonoBehaviour {
         return ret;
     }
 
+    //Function that returns the cycle time depending on CLOCK
+    public Cycle GetCycle()
+    {
+        if(CLOCK < 72000f)
+        {
+            return Cycle.Day;
+        }
+        else if(CLOCK < 86400)
+        {
+            return Cycle.Night;
+        }
+        else
+        {
+            return Cycle.Midnight;
+        }
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            date = NextDay(date);
-            date.Print();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            for(int i = 0; i < 7; i++)
-            {
-                date = NextDay(date);
-            }
-            date.Print();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            for(int i = 0; i < 30; i++)
-            {
-                date = NextDay(date);
-            }
-            date.Print();
-        }
 
         //Manage time.
         if(CLOCK < 86400)
         {
-            Debug.Log("Tick");
-            CLOCK += Time.deltaTime * 32;
+            //Debug.Log("Tick");
+            CLOCK += Time.deltaTime * 6400f;
         }
         else
         {
+
             CLOCK = 86400;
         }
         time = GetTime();
+        CYCLE = GetCycle();
     }
 }
 

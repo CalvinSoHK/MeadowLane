@@ -22,12 +22,12 @@ public class WaterDrop : MonoBehaviour {
     }
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.collider.name);
+        //Debug.Log(collision.collider.name);
         if (collision.gameObject.GetComponent<FarmBlockInfo>())
         {
             if (collision.gameObject.GetComponent<FarmBlockInfo>().waterCount <= collision.gameObject.GetComponent<FarmBlockInfo>().waterMax)
             {
-                collision.gameObject.GetComponent<FarmBlockInfo>().waterCount += 1;
+                collision.gameObject.GetComponent<FarmBlockInfo>().waterCount += 10;
             }
             Destroy(gameObject);
         }
@@ -43,4 +43,28 @@ public class WaterDrop : MonoBehaviour {
             }
         }
     }
+    public void OnCollisionStay(Collision collision)
+    {
+        //Debug.Log(collision.collider.name);
+        if (collision.gameObject.GetComponent<FarmBlockInfo>())
+        {
+            if (collision.gameObject.GetComponent<FarmBlockInfo>().waterCount <= collision.gameObject.GetComponent<FarmBlockInfo>().waterMax)
+            {
+                collision.gameObject.GetComponent<FarmBlockInfo>().waterCount += 10;
+            }
+            Destroy(gameObject);
+        }
+        else if (collision.gameObject.GetComponent<WaterDrop>())
+        {
+            Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), GetComponent<Collider>());
+        }
+        else
+        {
+            if (ignoreCollision)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    
 }

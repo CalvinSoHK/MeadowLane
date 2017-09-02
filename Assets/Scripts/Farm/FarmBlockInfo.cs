@@ -49,12 +49,12 @@ public class FarmBlockInfo : MonoBehaviour {
             WATERED = true;
         }else
         {
-            Debug.Log("Is water count lower than max");
+            //Debug.Log("Is water count lower than max");
             GetComponent<Renderer>().material.color = Color.Lerp(currentFarmBlockColor, currentFarmBlockColor * (10/100), waterCount / 100);
         }
         if (WATERED)
         {
-            Debug.Log("Watered");
+            //Debug.Log("Watered");
             GetComponent<Renderer>().material.color = originalFarmBlockColor * (10/100);
         }
     }
@@ -84,6 +84,7 @@ public class FarmBlockInfo : MonoBehaviour {
         }
     }
 
+    /*
     //Check on collision for possible bool changes.
     private void OnCollisionStay(Collision collision)
     {
@@ -103,12 +104,17 @@ public class FarmBlockInfo : MonoBehaviour {
                 TILLED = true;
             }
         }
-    }
+    }*/
 
     //Day end function for farmBlock
     public void DayEnd()
     {
-        PLANT.GetComponent<PlantBase>().DayEnd();
+        if(PLANT != null)
+        {
+            PLANT.GetComponent<PlantBase>().DayEnd();
+        }
+
+        waterCount = 0;
         WATERED = false;
 
     }

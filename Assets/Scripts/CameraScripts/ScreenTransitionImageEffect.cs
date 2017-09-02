@@ -167,4 +167,10 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         runEffect = true;
         isFixed = isFixedT;
     }
+
+    //End the day
+    public void EndDay()
+    {
+        runEffect = true;
+    }
 }

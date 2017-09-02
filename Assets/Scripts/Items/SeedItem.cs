@@ -28,6 +28,7 @@ public class SeedItem : BaseItem {
        
         //"Plant" the plant. Apply offsets. Make child of farm block
         GameObject plant = Instantiate(plantPrefab, farmBlock.position + prefabPosOffset, calcRot, farmBlock);
+        plant.GetComponent<PlantBase>().Init();
 
         //Set variables on farmBlock
         farmBlock.GetComponent<FarmBlockInfo>().PLANT = plant.transform;

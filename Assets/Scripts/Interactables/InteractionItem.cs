@@ -7,5 +7,10 @@ using Valve.VR.InteractionSystem;
 [RequireComponent(typeof(BaseItem))]
 public class InteractionItem : InteractionPickup {
 
-    
+    public override void OnDetachedFromHand(Hand hand)
+    {
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        base.OnDetachedFromHand(hand);
+        transform.parent = null;
+    }
 }

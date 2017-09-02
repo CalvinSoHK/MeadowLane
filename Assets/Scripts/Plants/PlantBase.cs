@@ -60,8 +60,8 @@ public class PlantBase : MonoBehaviour {
     Vector3 posOffset;
 
     //Randomizer factor for offsets. Height will randomize crop heights on init, width randomizes X and Z for bigger circumferences.
-    float heightFactor = 0.5f;
-    float widthFactor = 0.5f;
+    public float heightFactor = 0.5f;
+    public float widthFactor = 0.5f;
 
     //Convert quality to a text
     public string GetQualityString()
@@ -87,6 +87,36 @@ public class PlantBase : MonoBehaviour {
         TIME_PLANTED = TIME_TO_NEXT;
 
         //Use randomizer on models
+        float randomY = Random.Range(heightFactor/2, heightFactor);
+        float randomX = Random.Range(widthFactor/2, widthFactor);
+
+        //Apply to local scale
+        transform.localScale = new Vector3(randomX, randomY, randomX);
+
+        //Spawn produce
+        if (BIRTHS_PRODUCE)
+        {
+            //Generate number of produce
+            PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+
+            //Spawn produce in children
+            BirthProduce();
+        }
+
+        if (INHERIT_PRODUCE)
+        {
+            //Write function to map produce to previous stage.
+        }
+       
+    }
+
+    //When getting planted init script BUT without a previous.
+    public void Init()
+    {
+        //Set timer
+        TIME_PLANTED = TIME_TO_NEXT;
+
+        //Use randomizer on models
         float randomY = Random.Range(-heightFactor, heightFactor);
         float randomX = Random.Range(-widthFactor, widthFactor);
 
@@ -99,15 +129,46 @@ public class PlantBase : MonoBehaviour {
             //Generate number of produce
             PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
 
-            //Spawn produce in children
-            //WRite function to spawn produce in spawn points. 
+            //Spawn produce
+            BirthProduce();
         }
 
         if (INHERIT_PRODUCE)
         {
             //Write function to map produce to previous stage.
         }
-       
+    }
+
+    //Spawns produce on plant in given spawn points
+    public void BirthProduce()
+    {
+        //Debug.Log("Birth");
+        int counter = PRODUCE_NUMBER;
+        List<GameObject> SpawnList = new List<GameObject>();
+
+        //Retrieve all spawn points.
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            SpawnList.Add(transform.GetChild(i).gameObject);
+        }
+
+        //Extract from the list at random.
+        List<GameObject> ChosenList = new List<GameObject> ();
+        for(int i = 0; i < PRODUCE_NUMBER; i++)
+        {
+            //Never exceeds index because it goes up to count. Max exclusive.
+            int index = Random.Range(0, SpawnList.Count);
+            ChosenList.Add(SpawnList[index]);
+            SpawnList.Remove(SpawnList[index]);
+        }
+
+        //SPawn at the chosen points
+        for(int i = 0; i < ChosenList.Count; i++)
+        {
+            //Debug.Log("Spawn!");
+            GameObject obj = Instantiate(PRODUCE, ChosenList[i].transform.position, ChosenList[i].transform.rotation, ChosenList[i].transform);
+        }
+
     }
 
     //Harvest from plant. Returns quality of plant

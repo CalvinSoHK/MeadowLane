@@ -282,6 +282,7 @@ MonoBehaviour:
   instantiateWaterLocation: {x: 0, y: 0, z: 0}
   water: {fileID: 1476669833048896, guid: 2327ac032eab2af478aa7d411c6c3bda, type: 2}
   instantiateWaterObject: {fileID: 1922538854276462}
+  tempWater: {fileID: 0}
   interval: 0.05
   timer: 0
   rotateTriggerUp: 315

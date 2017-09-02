@@ -16,6 +16,9 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Raycasting for interaction
     bool raycast = false;
 
+    //Whether or not we are allowed to raycast
+    public bool ENABLED = true;
+
     //Raycasted object
     GameObject obj;
 
@@ -53,25 +56,27 @@ public class OnTriggerRaycast : MonoBehaviour {
         }
 
         //If we need to raycast...
-        if (raycast)
+        if (raycast && ENABLED)
         {
             GetComponent<LineRenderer>().enabled = true;
             RaycastHit rayHit = new RaycastHit();
             //Raycast, if we hit something...
-            if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f, layerMask))
+            if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f))
             {
                 //Render the line to wherever the raycast ends.
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
-
                 //If it is in the interactable layer
-                if(rayHit.collider.gameObject.GetComponent<InteractableCustom>())
-                {
-                    obj = rayHit.collider.gameObject;
-                }
-                else
-                {
-                    obj = null;
-                }
+                if (rayHit.collider.gameObject.layer == 8){
+                    //And has the interactable script.
+                    if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
+                    {
+                        obj = rayHit.collider.gameObject;
+                    }
+                    else
+                    {
+                        obj = null;
+                    }
+                }  
             }
             else //If we don't hit something...
             {
