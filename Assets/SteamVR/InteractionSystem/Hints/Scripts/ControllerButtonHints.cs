@@ -418,7 +418,7 @@ namespace Valve.VR.InteractionSystem
 		{
 			Clear();
 
-			renderModel.gameObject.SetActive( false );
+			//renderModel.gameObject.SetActive( false );
 		}
 
 

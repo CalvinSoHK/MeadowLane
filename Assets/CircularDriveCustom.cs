@@ -36,6 +36,9 @@ public class CircularDriveCustom : CircularDrive {
             UpdateAll();
 
             ControllerButtonHints.HideButtonHint(hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+
+            //Turn off raycast interact while held down.
+            hand.GetComponent<OnTriggerRaycast>().ENABLED = false;
         }
         else if (hand.GetStandardInteractionButtonUp())
         {
@@ -49,6 +52,9 @@ public class CircularDriveCustom : CircularDrive {
                 hand.HoverUnlock(GetComponent<Interactable>());
                 handHoverLocked = null;
             }
+
+            //Turn on ray cast interact on let go
+            hand.GetComponent<OnTriggerRaycast>().ENABLED = true;
         }
         else if (driving && hand.GetStandardInteractionButton() && hand.hoveringInteractable == GetComponent<Interactable>())
         {

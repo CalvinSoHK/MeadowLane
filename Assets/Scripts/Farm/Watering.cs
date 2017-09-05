@@ -23,7 +23,7 @@ public class Watering : MonoBehaviour {
         {
             if(getElapsedTime()> interval)
             {
-                Debug.Log("Instantiate the water babbbby");
+                //Debug.Log("Instantiate the water babbbby");
                 tempWater = Instantiate(water, instantiateWaterLocation + new Vector3(0.015f,Random.Range(-0.045f,0.015f), Random.Range(-0.025f, 0.035f)), Quaternion.identity);
                 theWaterDrop = tempWater.GetComponent<WaterDrop>();
                 theWaterDrop.wateringCan = this.gameObject;

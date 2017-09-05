@@ -7,39 +7,10 @@ using Valve.VR.InteractionSystem;
 [RequireComponent(typeof(BaseItem))]
 public class InteractionItem : InteractionPickup {
 
-    public bool debug = false;
-
-    private void Update()
+    public override void OnDetachedFromHand(Hand hand)
     {
-
-        if (debug)
-        {
-            //Apply the offset onto the player
-            Vector3 offset = GetComponent<BaseItem>().offset;
-            transform.localPosition = offset;
-
-            //Apply rotation offset
-            Vector3 rotOffset = GetComponent<BaseItem>().rotOffset;
-            transform.localEulerAngles = rotOffset;
-        }
-
-    }
-
-    //When we attach it to the hand
-    public override void OnAttachedToHand(Hand hand)
-    {
-        //Debug.Log("Attaching...");
-
-        //Apply the offset onto the player
-        Vector3 offset = GetComponent<BaseItem>().offset;
-        transform.localPosition = offset;
-
-        //Apply rotation offset
-        Vector3 rotOffset = GetComponent<BaseItem>().rotOffset;
-        transform.localEulerAngles = rotOffset;
-
-        //Disable movement in all directions
-        GetComponent<Rigidbody>().isKinematic = true;
-
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        base.OnDetachedFromHand(hand);
+        transform.parent = null;
     }
 }

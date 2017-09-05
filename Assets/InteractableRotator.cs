@@ -29,7 +29,7 @@ public class InteractableRotator : InteractableCustom {
     {
         //Get the computed angle.
         yRotation = GetComponent<CircularDriveCustom>().outAngle;
-        Debug.Log(yRotation);
+        //Debug.Log(yRotation);
 
         //If the driving wheel is currently engaged.
         if (GetComponent<CircularDriveCustom>().isUse)

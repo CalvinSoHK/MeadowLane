@@ -113,4 +113,17 @@ public class PlotManager : MonoBehaviour {
         return returnArray;
     }
 
+
+    //Call day-end function if valid from all farm blocks
+    public void DayEnd()
+    {
+        //Go through all plotBlocks and call the dayend function if it exists
+        for(int i = 0; i < plotBlocks.Length; i++)
+        {
+            if (plotBlocks[i].transform.GetComponent<FarmBlockInfo>())
+            {
+                plotBlocks[i].transform.GetComponent<FarmBlockInfo>().DayEnd();
+            }
+        }
+    }
 }
