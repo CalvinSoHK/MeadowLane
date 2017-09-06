@@ -17,7 +17,13 @@ public class HoeItem : ToolItem {
                 isValid = isToolValid();
             }
         }
-       
+
+        //If tool is valid, apply effect
+        if (isToolValid())
+        {
+
+        }
+
     }
 
     //Write new isToolValid function
