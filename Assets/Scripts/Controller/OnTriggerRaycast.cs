@@ -32,6 +32,7 @@ public class OnTriggerRaycast : MonoBehaviour {
         //Set line renderer to our position
         GetComponent<LineRenderer>().SetPosition(0, transform.position);
 
+       
         //When we get Trigger down...
         if (hand.GetStandardInteractionButtonDown())
         {
@@ -70,10 +71,33 @@ public class OnTriggerRaycast : MonoBehaviour {
                     //And has the interactable script.
                     if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
                     {
-                        obj = rayHit.collider.gameObject;
+                        //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
+                        if(obj != null && obj != rayHit.collider.gameObject)
+                        {
+                            Material[] array = new Material[1];
+                            array[0] = obj.GetComponent<Renderer>().materials[0];
+                            obj.GetComponent<Renderer>().materials = array;
+
+                            obj = rayHit.collider.gameObject;
+
+                            //Make new material array with highlight as well
+                            Material[] matArray = new Material[2];
+
+                            matArray[0] = obj.GetComponent<Renderer>().material;
+                            matArray[1] = Resources.Load("Materials/HandHiglight", typeof(Material)) as Material;
+                            obj.GetComponent<Renderer>().materials = matArray;
+                        }
                     }
                     else
                     {
+                        //If we previously had an object, get rid of its highlight.
+                        if (obj != null)
+                        {
+                            Material[] array = new Material[1];
+                            array[0] = obj.GetComponent<Renderer>().materials[0];
+                            obj.GetComponent<Renderer>().materials = array;
+
+                        }
                         obj = null;
                     }
                 }  

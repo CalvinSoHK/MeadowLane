@@ -80,6 +80,9 @@ public class PlantBase : MonoBehaviour {
         }
     }
 
+    //The transform with spawn points
+    public Transform SpawnPoints;
+
     //When getting planted, init script
     public void Init(GameObject PREV)
     {
@@ -87,11 +90,12 @@ public class PlantBase : MonoBehaviour {
         TIME_PLANTED = TIME_TO_NEXT;
 
         //Use randomizer on models
-        float randomY = Random.Range(heightFactor/2, heightFactor);
-        float randomX = Random.Range(widthFactor/2, widthFactor);
+        float randomY = 1 + Random.Range(-heightFactor, heightFactor);
+        float randomX = 1 + Random.Range(-widthFactor, widthFactor);
 
         //Apply to local scale
         transform.localScale = new Vector3(randomX, randomY, randomX);
+       
 
         //Spawn produce
         if (BIRTHS_PRODUCE)
@@ -117,8 +121,8 @@ public class PlantBase : MonoBehaviour {
         TIME_PLANTED = TIME_TO_NEXT;
 
         //Use randomizer on models
-        float randomY = Random.Range(-heightFactor, heightFactor);
-        float randomX = Random.Range(-widthFactor, widthFactor);
+        float randomY = 1 + Random.Range(-heightFactor, heightFactor);
+        float randomX = 1 + Random.Range(-widthFactor, widthFactor);
 
         //Apply to local scale
         transform.localScale = new Vector3(randomX, randomY, randomX);
@@ -147,9 +151,9 @@ public class PlantBase : MonoBehaviour {
         List<GameObject> SpawnList = new List<GameObject>();
 
         //Retrieve all spawn points.
-        for(int i = 0; i < transform.childCount; i++)
+        for(int i = 0; i < SpawnPoints.childCount; i++)
         {
-            SpawnList.Add(transform.GetChild(i).gameObject);
+            SpawnList.Add(SpawnPoints.GetChild(i).gameObject);
         }
 
         //Extract from the list at random.
