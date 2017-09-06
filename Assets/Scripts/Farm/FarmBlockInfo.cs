@@ -5,8 +5,12 @@ using UnityEngine;
 //Info for a single farm block.
 public class FarmBlockInfo : MonoBehaviour {
 
+    //The plant in the farm block
+    //If null, no plant.
+    public Transform PLANT;
+
     //States of the block
-    public bool PLANTED = false, WATERED = false, TILLED = false, INFERTILE = false;
+    public bool WATERED = false, TILLED = false, FERTILE = false;
 
     //how much the block has been watered
     public float waterCount = 0;
@@ -16,12 +20,13 @@ public class FarmBlockInfo : MonoBehaviour {
     public Vector2 coordinate;
 
     //Starting farm block color
-    public Color originalFarmBlockColor;
+    public Color originalFarmBlockColor,currentFarmBlockColor;
 
 	// Use this for initialization
 	void Start () {
         //keep record of original color
         originalFarmBlockColor = GetComponent<Renderer>().material.color;
+        currentFarmBlockColor = originalFarmBlockColor;
         //Parse coordinate from the name.
         string name = transform.name;
 
@@ -37,18 +42,19 @@ public class FarmBlockInfo : MonoBehaviour {
         if (TILLED)
         {
             GetComponent<Renderer>().material = Resources.Load("Materials/FarmBlock/Dirt_Tilled", typeof(Material)) as Material;
+            currentFarmBlockColor = GetComponent<Renderer>().material.color;
         }
         if(waterCount >= waterMax)
         {
             WATERED = true;
         }else
         {
-            Debug.Log("Is water count lower than max");
-            GetComponent<Renderer>().material.color = Color.Lerp(originalFarmBlockColor, originalFarmBlockColor * (10/100), waterCount / 100);
+            //Debug.Log("Is water count lower than max");
+            GetComponent<Renderer>().material.color = Color.Lerp(currentFarmBlockColor, currentFarmBlockColor * (10/100), waterCount / 100);
         }
         if (WATERED)
         {
-            Debug.Log("Watered");
+            //Debug.Log("Watered");
             GetComponent<Renderer>().material.color = originalFarmBlockColor * (10/100);
         }
     }
@@ -69,11 +75,16 @@ public class FarmBlockInfo : MonoBehaviour {
             if(mainObj.GetComponent<ToolItem>()._TYPE == ToolItem.ToolType.Hoe &&
                 mainObj.GetComponent<ToolItem>().isValid)
             {
-                TILLED = true;
+                if (!TILLED)
+                {
+                    mainObj.GetComponent<AudioSource>().Play();
+                    TILLED = true;
+                }
             }
         }
     }
 
+    /*
     //Check on collision for possible bool changes.
     private void OnCollisionStay(Collision collision)
     {
@@ -93,5 +104,18 @@ public class FarmBlockInfo : MonoBehaviour {
                 TILLED = true;
             }
         }
+    }*/
+
+    //Day end function for farmBlock
+    public void DayEnd()
+    {
+        if(PLANT != null)
+        {
+            PLANT.GetComponent<PlantBase>().DayEnd();
+        }
+
+        waterCount = 0;
+        WATERED = false;
+
     }
 }

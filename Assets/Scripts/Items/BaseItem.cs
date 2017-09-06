@@ -23,8 +23,8 @@ public class BaseItem : MonoBehaviour {
         Produce = 0x08,
         AnimalFood = 0x10,
         Decoration = 0x20,
-        Tool = 0x40
-        //Exit = 0x80,
+        Tool = 0x40,
+        Seed = 0x80
         //Consumable = 0x100,
         //Wearable = 0x200,
         //Money = 0x400,

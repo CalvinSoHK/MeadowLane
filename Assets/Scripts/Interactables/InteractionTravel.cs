@@ -15,7 +15,7 @@ public class InteractionTravel : InteractableCustom {
         if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
         {
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
-                hand.gameObject.transform.root, false);
+                hand.transform.parent.parent, false);
         }
     }
 }

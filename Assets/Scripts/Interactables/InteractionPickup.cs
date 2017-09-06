@@ -16,10 +16,28 @@ public class InteractionPickup : InteractableCustom {
     //Whether or not the object is held
     public bool isHeld = false;
 
+    //Debug bool to orient offsets
+    public bool debug = false;
+
     void Awake()
     {
         velocityEstimator = GetComponent<VelocityEstimator>();
     }
+
+    private void Update()
+    {
+        if (debug)
+        {
+            //Apply the offset onto the player
+            Vector3 offset = GetComponent<BaseItem>().offset;
+            transform.localPosition = offset;
+
+            //Apply rotation offset
+            Vector3 rotOffset = GetComponent<BaseItem>().rotOffset;
+            transform.localEulerAngles = rotOffset;
+        }
+    }
+
     //Write use function to pick up object
     public override void Use(Hand hand)
     {
@@ -45,6 +63,14 @@ public class InteractionPickup : InteractableCustom {
         {
             velocityEstimator.BeginEstimatingVelocity();
         }
+
+        //Apply the offset onto the player
+        Vector3 offset = GetComponent<BaseItem>().offset;
+        transform.localPosition = offset;
+
+        //Apply rotation offset
+        Vector3 rotOffset = GetComponent<BaseItem>().rotOffset;
+        transform.localEulerAngles = rotOffset;
     }
 
     //Happens every frame while held by a hand
