@@ -576,6 +576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityMutiplier: 1
   isHeld: 0
+  debug: 0
 --- !u!114 &371511368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,6 +1070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityMutiplier: 1
   isHeld: 0
+  debug: 0
 --- !u!114 &599316002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1479,7 +1481,7 @@ MonoBehaviour:
   allItems: {fileID: 4900000, guid: b04397a4be9318343bb5b711947e5aa3, type: 3}
   possibleItems: []
   numberOfIndItems: 
-  maxItems: 0
+  maxItems: 1
   currentNumItems: 0
   currentItem: 
 --- !u!65 &737181638
@@ -1914,6 +1916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityMutiplier: 1
   isHeld: 0
+  debug: 0
 --- !u!114 &1130653413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2426,6 +2429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocityMutiplier: 1
   isHeld: 0
+  debug: 0
 --- !u!114 &1721858736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2650,7 +2654,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storeItemReference: {fileID: 4900000, guid: b4d40284bea90b649babf3dc02803111, type: 3}
   itemArray: []
-  fileName: 
 --- !u!23 &1844153319
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -42,10 +42,15 @@ public class Container : MonoBehaviour {
             currentItem = collision.gameObject.GetComponent<BaseItem>()._NAME;
             int tempIndex = getIndex(currentItem);
             Debug.Log(tempIndex);
-            if(tempIndex != -1)
+            if(currentNumItems >= maxItems)
+            {
+                ejectFromContainer(collision.gameObject);
+            }
+            else if(tempIndex != -1)
             {
                 numberOfIndItems[tempIndex] += 1;
                 Destroy(collision.gameObject);
+                currentNumItems += 1;
             }else
             {
                 Debug.Log("Wrong Index");
@@ -62,7 +67,7 @@ public class Container : MonoBehaviour {
     //eject the object from the container
     public void ejectFromContainer(GameObject theObject)
     {
-        Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 450, Random.Range(-90.0f, 90.0f));
+        Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 100, Random.Range(-90.0f, 90.0f));
         Debug.Log(transform.up);
         theObject.GetComponent<Rigidbody>().AddForce(Vector3.Scale(new Vector3(1,1,1), thrust));
     }
