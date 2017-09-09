@@ -16,7 +16,7 @@ public class Container : MonoBehaviour {
         //Initialize the inventory array for the item, and their total numbers
 		if(allItems != null)
         {
-            possibleItems = allItems.text.Split('\n');
+            possibleItems = allItems.text.Split(' ', '\n');
             numberOfIndItems = new int[possibleItems.Length];
             /*for( int i = 0; i < possibleItems.Length; i++)
             {
@@ -56,10 +56,12 @@ public class Container : MonoBehaviour {
                 Debug.Log("Wrong Index");
                 ejectFromContainer(collision.gameObject);
             }
+        }else if(collision.gameObject.name.Trim().Equals("tempName")){
+
         }else
         {
             Debug.Log("Wrong File");
-            ejectFromContainer(collision.gameObject);
+            //ejectFromContainer(collision.gameObject);
         }
         
     }
@@ -67,7 +69,7 @@ public class Container : MonoBehaviour {
     //eject the object from the container
     public void ejectFromContainer(GameObject theObject)
     {
-        Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 100, Random.Range(-90.0f, 90.0f));
+        Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 300, Random.Range(-90.0f, 90.0f));
         Debug.Log(transform.up);
         theObject.GetComponent<Rigidbody>().AddForce(Vector3.Scale(new Vector3(1,1,1), thrust));
     }
@@ -79,7 +81,7 @@ public class Container : MonoBehaviour {
     public int getIndex(string InvObj)
     {
         //Debug.Log(InvObj);
-        for(int i = 0; i < possibleItems.Length; i++)
+        for(int i = 0; i < possibleItems.Length; i+=3)
         {
             if (possibleItems[i].Trim().Equals(InvObj.Trim()))
             {
