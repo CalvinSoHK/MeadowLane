@@ -48,6 +48,9 @@ public class OnTriggerRaycast : MonoBehaviour {
                 if (obj.GetComponent<InteractableCustom>())
                 {
                     obj.GetComponent<InteractableCustom>().Use(hand);
+                    Material[] array = new Material[1];
+                    array[0] = obj.GetComponent<Renderer>().materials[0];
+                    obj.GetComponent<Renderer>().materials = array;
                 }
             }
             
@@ -71,31 +74,68 @@ public class OnTriggerRaycast : MonoBehaviour {
                     //And has the interactable script.
                     if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
                     {
-                        //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
-                        if(obj != null && obj != rayHit.collider.gameObject)
+                        //If there is a renderer....
+                        if (rayHit.collider.gameObject.GetComponent<Renderer>() != null)
                         {
-                            Material[] array = new Material[1];
-                            array[0] = obj.GetComponent<Renderer>().materials[0];
-                            obj.GetComponent<Renderer>().materials = array;
+                            //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
+                            if (obj != null && obj != rayHit.collider.gameObject)
+                            {
+                                if (obj.GetComponent<Renderer>())
+                                {
+                                    Material[] array = new Material[1];
+                                    array[0] = obj.GetComponent<Renderer>().materials[0];
+                                    obj.GetComponent<Renderer>().materials = array;
 
-                            obj = rayHit.collider.gameObject;
+                                    obj = rayHit.collider.gameObject;
 
-                            //Make new material array with highlight as well
-                            Material[] matArray = new Material[2];
+                                    //Make new material array with highlight as well
+                                    Material[] matArray = new Material[2];
 
-                            matArray[0] = obj.GetComponent<Renderer>().material;
-                            matArray[1] = Resources.Load("Materials/HandHiglight", typeof(Material)) as Material;
-                            obj.GetComponent<Renderer>().materials = matArray;
+                                    matArray[0] = obj.GetComponent<Renderer>().material;
+                                    matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
+                                    obj.GetComponent<Renderer>().materials = matArray;
+                                }
+                            
+                            }
+                            else
+                            {
+                                obj = rayHit.collider.gameObject;
+
+                                //Make new material array with highlight as well
+                                Material[] matArray = new Material[2];
+
+                                matArray[0] = obj.GetComponent<Renderer>().material;
+                                matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
+                                obj.GetComponent<Renderer>().materials = matArray;
+                            }
                         }
+                        else
+                        {
+                            //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
+                            if (obj != null && obj != rayHit.collider.gameObject && obj.GetComponent<Renderer>() != null)
+                            {
+                                Material[] array = new Material[1];
+                                array[0] = obj.GetComponent<Renderer>().materials[0];
+                                obj.GetComponent<Renderer>().materials = array;
+                            }
+
+                            //Always set obj
+                            obj = rayHit.collider.gameObject;
+                        }
+                     
                     }
                     else
                     {
                         //If we previously had an object, get rid of its highlight.
                         if (obj != null)
                         {
-                            Material[] array = new Material[1];
-                            array[0] = obj.GetComponent<Renderer>().materials[0];
-                            obj.GetComponent<Renderer>().materials = array;
+                            if (obj.GetComponent<Renderer>())
+                            {
+                                Material[] array = new Material[1];
+                                array[0] = obj.GetComponent<Renderer>().materials[0];
+                                obj.GetComponent<Renderer>().materials = array;
+
+                            }
 
                         }
                         obj = null;
@@ -106,6 +146,17 @@ public class OnTriggerRaycast : MonoBehaviour {
             {
                 //Render the line to its max distance.
                 GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
+                //If we had something highlighted before, turn it off.
+                if(obj != null)
+                {
+                    if(obj.GetComponent<Renderer>() != null)
+                    {
+                        Material[] array = new Material[1];
+                        array[0] = obj.GetComponent<Renderer>().materials[0];
+                        obj.GetComponent<Renderer>().materials = array;
+                    }
+                   
+                }
                 obj = null;
             }
         }
