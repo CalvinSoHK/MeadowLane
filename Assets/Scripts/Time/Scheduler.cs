@@ -220,7 +220,7 @@ public class Scheduler : MonoBehaviour {
         if(CLOCK < 86400)
         {
             //Debug.Log("Tick");
-            CLOCK += Time.deltaTime * 6400f;
+            CLOCK += Time.deltaTime * 32f;
         }
         else
         {
