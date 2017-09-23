@@ -15,7 +15,7 @@ public class InteractionDayEnd : InteractableCustom {
     public void Update()
     {
         //Debug command
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             FM.DayEndAll();
             TM.NextDay(TM.date);
