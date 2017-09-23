@@ -1,2 +1,3 @@
 Apple 5 Prefabs/Fruit/Apple
 Potato 2 Prefabs/Vegetable/Potato
+Tomato 3 Prefabs/Vegetable/Tomato

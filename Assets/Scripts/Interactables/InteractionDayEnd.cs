@@ -26,11 +26,12 @@ public class InteractionDayEnd : InteractableCustom {
     {
         if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
         {
-            Camera.main.GetComponent<ScreenTransitionImageEffect>().EndDay();
+            Camera.main.GetComponent<ScreenTransitionImageEffect>().EndDay(hand.transform.parent.parent);
+
+            FM.DayEndAll();
+            TM.NextDay(TM.date);
         }
  
-        FM.DayEndAll();
-        TM.NextDay(TM.date);
 
     }
 }
