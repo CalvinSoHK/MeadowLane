@@ -27,12 +27,13 @@ public class OnTriggerRaycast : MonoBehaviour {
         hand = GetComponent<Hand>();
     }
 
+    //obj is the target we're raycasting.
     void Update()
     {
         //Set line renderer to our position
         GetComponent<LineRenderer>().SetPosition(0, transform.position);
 
-       
+
         //When we get Trigger down...
         if (hand.GetStandardInteractionButtonDown())
         {
@@ -43,20 +44,31 @@ public class OnTriggerRaycast : MonoBehaviour {
         //When we get Trigger up...
         if (hand.GetStandardInteractionButtonUp())
         {
-            if(obj != null)
+            if (obj != null)
             {
                 if (obj.GetComponent<InteractableCustom>())
                 {
                     obj.GetComponent<InteractableCustom>().Use(hand);
+                   
                     Material[] array = new Material[1];
                     array[0] = obj.GetComponent<Renderer>().materials[0];
                     obj.GetComponent<Renderer>().materials = array;
+                    if (obj.GetComponent<InteractionPickup>())
+                    {
+                        ENABLED = false;
+                        obj = null;
+                    }
                 }
             }
-            
+            else
+            {
+                ENABLED = true;
+            }
+
 
             //Stop raycasting
             raycast = false;
+          
         }
 
         //If we need to raycast...
@@ -70,7 +82,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                 //Render the line to wherever the raycast ends.
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
                 //If it is in the interactable layer
-                if (rayHit.collider.gameObject.layer == 8){
+                if (rayHit.collider.gameObject.layer == 8) {
                     //And has the interactable script.
                     if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
                     {
@@ -95,7 +107,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                                     matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
                                     obj.GetComponent<Renderer>().materials = matArray;
                                 }
-                            
+
                             }
                             else
                             {
@@ -122,7 +134,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                             //Always set obj
                             obj = rayHit.collider.gameObject;
                         }
-                     
+
                     }
                     else
                     {
@@ -140,22 +152,22 @@ public class OnTriggerRaycast : MonoBehaviour {
                         }
                         obj = null;
                     }
-                }  
+                }
             }
             else //If we don't hit something...
             {
                 //Render the line to its max distance.
                 GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
                 //If we had something highlighted before, turn it off.
-                if(obj != null)
+                if (obj != null)
                 {
-                    if(obj.GetComponent<Renderer>() != null)
+                    if (obj.GetComponent<Renderer>() != null)
                     {
                         Material[] array = new Material[1];
                         array[0] = obj.GetComponent<Renderer>().materials[0];
                         obj.GetComponent<Renderer>().materials = array;
                     }
-                   
+
                 }
                 obj = null;
             }
@@ -163,6 +175,6 @@ public class OnTriggerRaycast : MonoBehaviour {
         else
         {
             GetComponent<LineRenderer>().enabled = false;
-        }  
+        }
     }
 }
