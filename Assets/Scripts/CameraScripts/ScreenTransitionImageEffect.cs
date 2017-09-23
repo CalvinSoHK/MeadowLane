@@ -159,6 +159,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     {
         return Time.time - lastStateChange;
     }
+
     //We move the player to the new location
     public void MovePlayer(Transform location, Transform playerT, bool isFixedT)
     {
@@ -169,8 +170,11 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     }
 
     //End the day
-    public void EndDay()
+    public void EndDay(Transform playerT)
     {
+        player = playerT;
+        destination = player;
         runEffect = true;
+        isFixed = false;
     }
 }

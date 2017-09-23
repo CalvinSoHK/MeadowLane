@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114174710602870734}
   - component: {fileID: 114893201491558790}
   - component: {fileID: 64956437314913508}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tomato_Seed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1187298167059300}
   m_LocalRotation: {x: 0, y: -0.15643446, z: -0, w: 0.98768836}
-  m_LocalPosition: {x: 3.5755, y: 0.0413, z: 17.655}
+  m_LocalPosition: {x: 3.5755, y: 7.4702992, z: 17.655}
   m_LocalScale: {x: 1, y: 0.2612824, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
