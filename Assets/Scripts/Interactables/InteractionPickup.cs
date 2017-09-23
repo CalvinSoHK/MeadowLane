@@ -13,6 +13,9 @@ public class InteractionPickup : InteractableCustom {
     //Multiplier that affects how much of the velocity passes over onto the item when thrown.
     public float velocityMutiplier = 1;
 
+    //Whether or not the object is originally anchored.
+    public bool isAnchored = false;
+
     //Whether or not the object is held
     public bool isHeld = false;
 
@@ -62,6 +65,13 @@ public class InteractionPickup : InteractableCustom {
         if (hand.controller == null)
         {
             velocityEstimator.BeginEstimatingVelocity();
+        }
+
+        //If our object is anchored, de-anchor it.
+        if (isAnchored)
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            isAnchored = false;
         }
 
         //Apply the offset onto the player

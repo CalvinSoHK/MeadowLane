@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 //Manages the locations of the map.
 public class MapManager : MonoBehaviour {
@@ -66,6 +68,7 @@ public class MapManager : MonoBehaviour {
     }
 }
 
+#if UNITY_EDITOR
 //Custom editor for map manager
 [CustomEditor(typeof(MapManager))]
 public class MapManagerEditor : Editor
@@ -133,3 +136,4 @@ public class MapManagerEditor : Editor
         GetTarget.ApplyModifiedProperties();    
     }
 }
+#endif
