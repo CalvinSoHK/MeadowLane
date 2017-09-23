@@ -17,7 +17,7 @@ public class Container : MonoBehaviour {
 		if(allItems != null)
         {
             possibleItems = allItems.text.Split(' ', '\n');
-            numberOfIndItems = new int[possibleItems.Length];
+            numberOfIndItems = new int[possibleItems.Length/3];
             /*for( int i = 0; i < possibleItems.Length; i++)
             {
                 numberOfIndItems[i] = 0;
@@ -86,7 +86,7 @@ public class Container : MonoBehaviour {
             if (possibleItems[i].Trim().Equals(InvObj.Trim()))
             {
                 Debug.Log(i);
-                return i;
+                return i/3;
             }
         }
         return -1;
