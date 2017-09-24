@@ -121,7 +121,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                                 obj.GetComponent<Renderer>().materials = matArray;
                             }
                         }
-                        else
+                        else //This else is for when we had models that had multiple colliders. The hit collider sometimes didnt have a renderer.
                         {
                             //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
                             if (obj != null && obj != rayHit.collider.gameObject && obj.GetComponent<Renderer>() != null)
@@ -136,22 +136,22 @@ public class OnTriggerRaycast : MonoBehaviour {
                         }
 
                     }
-                    else
+                }
+                else
+                {
+                    //If we previously had an object, get rid of its highlight.
+                    if (obj != null)
                     {
-                        //If we previously had an object, get rid of its highlight.
-                        if (obj != null)
+                        if (obj.GetComponent<Renderer>())
                         {
-                            if (obj.GetComponent<Renderer>())
-                            {
-                                Material[] array = new Material[1];
-                                array[0] = obj.GetComponent<Renderer>().materials[0];
-                                obj.GetComponent<Renderer>().materials = array;
-
-                            }
+                            Material[] array = new Material[1];
+                            array[0] = obj.GetComponent<Renderer>().materials[0];
+                            obj.GetComponent<Renderer>().materials = array;
 
                         }
-                        obj = null;
+
                     }
+                    obj = null;
                 }
             }
             else //If we don't hit something...
