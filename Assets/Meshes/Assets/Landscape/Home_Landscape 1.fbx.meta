@@ -1,22 +1,41 @@
 fileFormatVersion: 2
-guid: f86c5065ab24266479564906042f2e9b
-timeCreated: 1506019396
+guid: 5cd5ebbaee9a4774a9e73716609f7052
+timeCreated: 1506366489
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: pCube1_MeshPart0
-    100002: pCube1_MeshPart1
-    100004: //RootNode
-    400000: pCube1_MeshPart0
-    400002: pCube1_MeshPart1
-    400004: //RootNode
-    2300000: pCube1_MeshPart0
-    2300002: pCube1_MeshPart1
-    3300000: pCube1_MeshPart0
-    3300002: pCube1_MeshPart1
-    4300000: pCube1_MeshPart0
-    4300002: pCube1_MeshPart1
+    100000: //RootNode
+    100002: pCube1
+    100004: pCube2
+    100006: pCube3
+    100008: pSphere1
+    100010: pSphere2
+    100012: pSphere3
+    100014: pSphere4
+    100016: transform1
+    100018: transform2
+    100020: transform3
+    100022: transform4
+    100024: transform5
+    100026: transform6
+    400000: //RootNode
+    400002: pCube1
+    400004: pCube2
+    400006: pCube3
+    400008: pSphere1
+    400010: pSphere2
+    400012: pSphere3
+    400014: pSphere4
+    400016: transform1
+    400018: transform2
+    400020: transform3
+    400022: transform4
+    400024: transform5
+    400026: transform6
+    2300000: pCube3
+    3300000: pCube3
+    4300000: pCube3
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -45,7 +64,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 500
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
