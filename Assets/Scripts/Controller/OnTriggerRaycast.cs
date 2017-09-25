@@ -118,6 +118,8 @@ public class OnTriggerRaycast : MonoBehaviour {
 
                                 matArray[0] = obj.GetComponent<Renderer>().material;
                                 matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
+                                //matArray[1] = Resources.Load("Materials/tempHighlight", typeof(Material)) as Material;
+                                //matArray[1].mainTexture = matArray[0].mainTexture;
                                 obj.GetComponent<Renderer>().materials = matArray;
                             }
                         }
