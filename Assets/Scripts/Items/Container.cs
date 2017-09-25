@@ -34,36 +34,41 @@ public class Container : MonoBehaviour {
         }*/
 	}
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         //Debug.Log("Does a collision happen");
-        if(collision.gameObject.GetComponent<BaseItem>() != null)
+        if (collision.gameObject.GetComponent<BaseItem>() != null && collision.gameObject.layer == 8)
         {
+            Debug.Log(collision.gameObject.name);
             currentItem = collision.gameObject.GetComponent<BaseItem>()._NAME;
             int tempIndex = getIndex(currentItem);
             Debug.Log(tempIndex);
-            if(currentNumItems >= maxItems)
+            if (currentNumItems >= maxItems)
             {
                 ejectFromContainer(collision.gameObject);
             }
-            else if(tempIndex != -1)
+            else if (tempIndex != -1)
             {
                 numberOfIndItems[tempIndex] += 1;
                 Destroy(collision.gameObject);
                 currentNumItems += 1;
-            }else
+            }
+            else
             {
                 Debug.Log("Wrong Index");
                 ejectFromContainer(collision.gameObject);
             }
-        }else if(collision.gameObject.name.Trim().Equals("tempName")){
+        }
+        else if (collision.gameObject.name.Trim().Equals("tempName"))
+        {
 
-        }else
+        }
+        else
         {
             Debug.Log("Wrong File");
             //ejectFromContainer(collision.gameObject);
         }
-        
+
     }
 
     //eject the object from the container
