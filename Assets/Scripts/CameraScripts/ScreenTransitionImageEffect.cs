@@ -32,6 +32,9 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     //Whether or not it is a fixed travel
     private bool isFixed;
 
+    //Whether or not we want to flip the camera on travel. 180 rotation.
+    private bool isFlipped;
+
     Material material
     {
         get
@@ -88,7 +91,10 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 {
                     setCurrentState(Gamestate.open);
                     player.transform.position = destination.position;
-                    player.transform.eulerAngles += new Vector3(0, 180, 0);
+                    if (isFlipped)
+                    {
+                        player.transform.eulerAngles += new Vector3(0, 180, 0);
+                    }           
                     if (isFixed)
                     {
                         //Get the actual player
@@ -161,12 +167,14 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     }
 
     //We move the player to the new location
-    public void MovePlayer(Transform location, Transform playerT, bool isFixedT)
+    public void MovePlayer(Transform location, Transform playerT, bool isFixedT, bool isFlippedT)
     {
         destination = location;
         player = playerT;
-        runEffect = true;
         isFixed = isFixedT;
+        isFlipped = isFlippedT;
+        runEffect = true;
+     
     }
 
     //End the day
@@ -174,7 +182,9 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     {
         player = playerT;
         destination = player;
-        runEffect = true;
         isFixed = false;
+        isFlipped = false;
+        runEffect = true;
+
     }
 }

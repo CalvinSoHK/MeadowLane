@@ -19,7 +19,7 @@ public class InteractTravelFixed : InteractableCustom {
         {
             Debug.Log("Fixed Travel");
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
-                hand.gameObject.transform.parent.parent, true);
+                hand.gameObject.transform.parent.parent, true, true);
             if (AnchorPlayer)
             {
                 //Parent steamVR player to the given transform
