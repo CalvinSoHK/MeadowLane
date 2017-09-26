@@ -132,16 +132,20 @@ Shader "Valve/VR/Silhouette"
 
 	SubShader
 	{
-		Tags { "RenderType"="Outline" "Queue" = "Geometry-1"  }
+		Tags { "RenderType"="Outline" }
+		LOD 200
+		ZWrite On
+		ZTest Always
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		// Render the object with stencil=1 to mask out the part that isn't the silhouette
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		Pass
 		{
-			Tags { "LightMode" = "Always" }
+			Tags { "LightMode" = "Always"  }
 			ColorMask 0
 			Cull Off
+			//ZTest Greater
 			ZWrite Off
 			Stencil
 			{
@@ -180,4 +184,5 @@ Shader "Valve/VR/Silhouette"
 			ENDCG
 		}
 	}
+
 }
