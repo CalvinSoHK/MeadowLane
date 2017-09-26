@@ -132,8 +132,10 @@ Shader "Valve/VR/Silhouette"
 
 	SubShader
 	{
-		Tags { "RenderType"="Outline" "Queue" = "Geometry-1"  }
-
+		Tags { "RenderType"="Outline" "Queue" = "Geometry+1"  }
+		LOD 200
+		ZWrite On
+		ZTest Always
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		// Render the object with stencil=1 to mask out the part that isn't the silhouette
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -13,19 +13,22 @@ public class SmartSensor : MonoBehaviour {
     int NUM_OF_ELEMENTS = 0;
 
     //The text label for the earnings
-    public Text TOTAL;
+    public Text TOTAL_TEXT;
+
+    //The total earnings as of now
+    int TOTAL;
 
     //Lists that have our textboxes
     List<Text> COUNT_TEXT_LIST = new List<Text>(), TYPE_TEXT_LIST = new List<Text>(), PRICE_PER_TEXT_LIST = new List<Text>(), PRICE_TOTAL_TEXT_LIST = new List<Text>();
 
     //The container that we are displaying
-    public List<Container> CONTAINER_LIST = new List<Container>();
+    List<Container> CONTAINER_LIST = new List<Container>();
 
     //A list for each of the elements. These lists represent the consolidated data from multiple containers.
-    public List<int> COUNT_LIST = new List<int>(), PRICE_PER_LIST = new List<int>(), PRICE_TOTAL_LIST = new List<int>();
-    public List<string> TYPE_LIST = new List<string>();
+    List<int> COUNT_LIST = new List<int>(), PRICE_PER_LIST = new List<int>(), PRICE_TOTAL_LIST = new List<int>();
+    List<string> TYPE_LIST = new List<string>();
 
-    //Start script
+    //Start script 
     void Start()
     {
         //Initialize our lists.
@@ -66,6 +69,8 @@ public class SmartSensor : MonoBehaviour {
             UpdateLists();
             DisplayInfo();
         }
+        TOTAL = GetEarnings();
+        TOTAL_TEXT.text = TOTAL + "";
     }
 
 
@@ -101,11 +106,23 @@ public class SmartSensor : MonoBehaviour {
         }
     }
 
+    //Calculate the total earnings from the lists.
+    public int GetEarnings()
+    {
+        int total = 0;
+
+        foreach(int price in PRICE_TOTAL_LIST)
+        {
+            total += price;
+        }
+        return total;
+    }
+
     //Update list values;
     public void UpdateLists()
     {
         //First set the counts to zero for everyone
-        for(int i = 0; i < COUNT_LIST.Count; i++)
+        for (int i = 0; i < COUNT_LIST.Count; i++)
         {
             COUNT_LIST[i] = 0;
         }
@@ -116,14 +133,14 @@ public class SmartSensor : MonoBehaviour {
             //For all their elements...
             for (int i = 0; i < container.numberOfIndItems.Length; i++)
             {
+                //The data values we need to add
+                string TYPE = container.possibleItems[(i + 1) * 3 - 3];
+                int COUNT = container.numberOfIndItems[i];
+                int PRICE_PER = int.Parse(container.possibleItems[(i + 1) * 3 - 2]);
+
                 //If the possible item has at least 1 of it.
                 if (container.numberOfIndItems[i] != 0)
                 {
-                    //The data values we need to add
-                    string TYPE = container.possibleItems[(i + 1) * 3 - 3];
-                    int COUNT = container.numberOfIndItems[i];
-                    int PRICE_PER = int.Parse(container.possibleItems[(i + 1) * 3 - 2]);
-
                     //If we haven't yet added the item to the TYPE_LIST
                     if (!TYPE_LIST.Contains(TYPE))
                     {
@@ -155,6 +172,18 @@ public class SmartSensor : MonoBehaviour {
         for(int i = 0; i < TYPE_LIST.Count; i++)
         {
             SetElement(i, TYPE_LIST[i], PRICE_PER_LIST[i] + "" , COUNT_LIST[i], PRICE_TOTAL_LIST[i]);
+        }
+        
+    }
+
+    //Helper function that empties all containers on the sensor, and all the lists as well.
+    public void EmptyContainers()
+    {
+        foreach(Container container in CONTAINER_LIST)
+        {
+            container.EmptyContainer();
+            Debug.Log("CLear");
+            ClearList();
         }
     }
 
@@ -220,7 +249,12 @@ public class SmartSensor : MonoBehaviour {
             text.text = "";
         }
 
-        TOTAL.text = "";
+        COUNT_LIST.Clear();
+        TYPE_LIST.Clear();
+        PRICE_PER_LIST.Clear();
+        PRICE_TOTAL_LIST.Clear();
+
+        TOTAL_TEXT.text = "";
     }
 
     //Helper function that assigns values using an index of the array. It will also return the value earned per call

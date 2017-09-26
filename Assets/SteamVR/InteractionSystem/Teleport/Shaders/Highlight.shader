@@ -13,7 +13,40 @@ Shader "Valve/VR/Highlight"
 		_Darken( "Darken", Range( 0.0, 1.0 ) ) = 0.0
 		_MainTex( "MainTex", 2D ) = "white" {}
 	}
+	SubShader
+	{
+		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		LOD 100
 
+		// Behind Geometry ---------------------------------------------------------------------------------------------------------------------------------------------------
+		Pass
+		{
+			// Render State ---------------------------------------------------------------------------------------------------------------------------------------------
+			Blend One OneMinusSrcAlpha
+			Cull Front
+			ZWrite Off
+			ZTest Always
+
+			CGPROGRAM
+				#pragma vertex MainVS
+				#pragma fragment SeeThruPS
+			ENDCG
+		}
+
+		Pass
+		{
+			// Render State ---------------------------------------------------------------------------------------------------------------------------------------------
+			Blend One OneMinusSrcAlpha
+			Cull Front
+			ZWrite Off
+			ZTest Always
+
+			CGPROGRAM
+				#pragma vertex MainVS
+				#pragma fragment MainPS
+			ENDCG
+		}
+	}
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 	CGINCLUDE
 		
@@ -92,38 +125,5 @@ Shader "Valve/VR/Highlight"
 
 	ENDCG
 
-	SubShader
-	{
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
-		LOD 100
-
-		// Behind Geometry ---------------------------------------------------------------------------------------------------------------------------------------------------
-		Pass
-		{
-			// Render State ---------------------------------------------------------------------------------------------------------------------------------------------
-			Blend One OneMinusSrcAlpha
-			Cull Off
-			ZWrite Off
-			ZTest Greater
-
-			CGPROGRAM
-				#pragma vertex MainVS
-				#pragma fragment SeeThruPS
-			ENDCG
-		}
-
-		Pass
-		{
-			// Render State ---------------------------------------------------------------------------------------------------------------------------------------------
-			Blend One OneMinusSrcAlpha
-			Cull Off
-			ZWrite Off
-			ZTest LEqual
-
-			CGPROGRAM
-				#pragma vertex MainVS
-				#pragma fragment MainPS
-			ENDCG
-		}
-	}
+	
 }
