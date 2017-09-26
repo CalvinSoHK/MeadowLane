@@ -96,4 +96,14 @@ public class Container : MonoBehaviour {
         }
         return -1;
     }
+
+    //Helper function that will "empty" the container.
+    //Goes through the numIndItems and just sets them all to zero.
+    public void EmptyContainer()
+    {
+        for(int i = 0; i < numberOfIndItems.Length; i++)
+        {
+            numberOfIndItems[i] = 0;
+        }
+    }
 }

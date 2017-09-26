@@ -98,7 +98,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                     if (isFixed)
                     {
                         //Get the actual player
-                        Transform playerObject = player.GetChild(0).Find("VRCamera (eye)");
+                        Transform playerObject = player.GetChild(0).Find("VRCamera");
 
                         //Move the player based on the local position of the playerObject
                         player.transform.position -= new Vector3(
@@ -174,7 +174,6 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         isFixed = isFixedT;
         isFlipped = isFlippedT;
         runEffect = true;
-     
     }
 
     //End the day

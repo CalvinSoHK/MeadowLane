@@ -24,8 +24,8 @@ public class BaseItem : MonoBehaviour {
         AnimalFood = 0x10,
         Decoration = 0x20,
         Tool = 0x40,
-        Seed = 0x80
-        //Consumable = 0x100,
+        Seed = 0x80,
+        Container = 0x100
         //Wearable = 0x200,
         //Money = 0x400,
         //Dateable = 0x800
@@ -63,5 +63,22 @@ public class BaseItem : MonoBehaviour {
     public virtual void Use()
     {
         Debug.Log("Use function called. Using default from : " + _NAME + " | " + gameObject.name);
+    }
+
+    //Helper function to manipulate tags
+    public bool hasTag(ItemTags tag)
+    {
+        return (_TAGS & tag) != 0;
+    }
+
+    //Probably won't need to call these from other scripts.
+    protected void removeTag(ItemTags tagsToRemove)
+    {
+        _TAGS = _TAGS & ~(tagsToRemove);
+    }
+
+    protected void addTag(ItemTags tagsToAdd)
+    {
+        _TAGS |= tagsToAdd;
     }
 }

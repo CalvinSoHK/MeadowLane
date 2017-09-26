@@ -16,14 +16,17 @@ public class InteractTravelFixed : InteractableCustom {
     public override void Use(Hand hand)
     {
         if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
-        {
-            Debug.Log("Fixed Travel");
+        {    
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
                 hand.gameObject.transform.parent.parent, true, true);
             if (AnchorPlayer)
             {
                 //Parent steamVR player to the given transform
                 hand.transform.parent.parent.parent = destination;
+            }
+            else
+            {
+                hand.transform.parent.parent.parent = null;
             }
         }
     }
