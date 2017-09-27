@@ -48,8 +48,13 @@ public class OnTriggerRaycast : MonoBehaviour {
             {
                 if (obj.GetComponent<InteractableCustom>())
                 {
-                    obj.GetComponent<InteractableCustom>().Use(hand);
-                   
+                    //Use every interact on an object.
+                    foreach(InteractableCustom interact in obj.GetComponents<InteractableCustom>())
+                    {
+                        interact.Use(hand);
+                       
+                    }
+
                     Material[] array = new Material[1];
                     array[0] = obj.GetComponent<Renderer>().materials[0];
                     obj.GetComponent<Renderer>().materials = array;
@@ -58,6 +63,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                         ENABLED = false;
                         obj = null;
                     }
+
                 }
             }
             else

@@ -75,6 +75,13 @@ ModelImporter:
     100134: transform7
     100136: transform8
     100138: transform9
+    100140: group4
+    100142: group5
+    100144: pasted__group4
+    100146: pasted__pasted__pCube23
+    100148: pasted__pCube23
+    100150: pasted__pCube24
+    100152: pCube63
     400000: group
     400002: group1
     400004: group2
@@ -145,6 +152,13 @@ ModelImporter:
     400134: transform7
     400136: transform8
     400138: transform9
+    400140: group4
+    400142: group5
+    400144: pasted__group4
+    400146: pasted__pasted__pCube23
+    400148: pasted__pCube23
+    400150: pasted__pCube24
+    400152: pCube63
     2300000: pasted__pasted__pCube3
     2300002: pasted__pasted__pCube4
     2300004: pasted__pCube17
@@ -183,6 +197,10 @@ ModelImporter:
     2300070: pCube8
     2300072: Roof
     2300074: group2_pasted__pCube2
+    2300076: pasted__pasted__pCube23
+    2300078: pasted__pCube23
+    2300080: pasted__pCube24
+    2300082: pCube63
     3300000: pasted__pasted__pCube3
     3300002: pasted__pasted__pCube4
     3300004: pasted__pCube17
@@ -221,6 +239,10 @@ ModelImporter:
     3300070: pCube8
     3300072: Roof
     3300074: group2_pasted__pCube2
+    3300076: pasted__pasted__pCube23
+    3300078: pasted__pCube23
+    3300080: pasted__pCube24
+    3300082: pCube63
     4300000: pCube1
     4300002: pCube2
     4300004: pasted__pCube2
@@ -259,6 +281,11 @@ ModelImporter:
     4300070: Roof
     4300072: pCube62
     4300074: group2_pasted__pCube2
+    4300076: pasted__pCube23
+    4300078: pasted__pCube24
+    4300080: pCube63
+    4300082: pasted__pasted__pCube23
+    7400000: Take 001
     9500000: //RootNode
   materials:
     importMaterials: 1
