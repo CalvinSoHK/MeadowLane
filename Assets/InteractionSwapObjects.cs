@@ -12,19 +12,27 @@ public class InteractionSwapObjects : InteractableCustom{
     //Override use key to swap both objects
     public override void Use(Hand hand)
     {
-        //Holder variables so we can swap the two
-        Transform tempTransform = obj1.parent;
-        Vector3 tempPosition = obj1.localPosition;
-        Quaternion tempRotation = obj1.localRotation;
+        StartCoroutine(SwapAfter(2));
+    }
 
-        //Swap obj1 into obj2
-        obj1.parent = obj2.parent;
-        obj1.localPosition = obj2.localPosition;
-        obj1.localRotation = obj2.localRotation;
+    //Use a coroutine (temp fix) to swqap after a delay, s seconds
+    public IEnumerator SwapAfter(int s)
+    {
+            yield return new WaitForSeconds(s);
+            //Holder variables so we can swap the two
+            Transform tempTransform = obj1.parent;
+            Vector3 tempPosition = obj1.localPosition;
+            Quaternion tempRotation = obj1.localRotation;
 
-        //Swap obj2 into temp
-        obj2.parent = tempTransform;
-        obj2.localPosition = tempPosition;
-        obj2.localRotation = tempRotation;
+            //Swap obj1 into obj2
+            obj1.parent = obj2.parent;
+            obj1.localPosition = obj2.localPosition;
+            obj1.localRotation = obj2.localRotation;
+
+            //Swap obj2 into temp
+            obj2.parent = tempTransform;
+            obj2.localPosition = tempPosition;
+            obj2.localRotation = tempRotation;
+
     }
 }
