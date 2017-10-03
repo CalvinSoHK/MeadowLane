@@ -34,6 +34,8 @@ public class FarmBlockInfo : MonoBehaviour {
         int y = int.Parse(name.Substring(3, 1));
 
         coordinate = new Vector2(x, y);
+
+       // Physics.IgnoreLayerCollision(8, 9);
 	}
 
     void Update()

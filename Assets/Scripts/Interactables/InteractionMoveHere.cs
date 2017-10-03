@@ -34,5 +34,6 @@ public class InteractionMoveHere : InteractableCustom {
       
         OBJ.transform.localPosition = POS_OFFSET;
         OBJ.transform.localRotation = Quaternion.Euler(ROT_OFFSET);
+        Debug.Log("Moved");
     }
 }

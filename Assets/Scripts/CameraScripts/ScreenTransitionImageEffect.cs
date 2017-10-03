@@ -19,10 +19,10 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     public Color maskColor = Color.black;
     public Texture2D maskTexture;
     public bool maskInvert, runEffect = false;
-    public float openSpeedModifier = 1,
-        closeSpeedModifier = 4,
+    public float openSpeedModifier = 4f,
+        closeSpeedModifier = 4f,
         openTimeBetween = 2f,
-        closeTimeBetween = 4;
+        closeTimeBetween = 2f;
 
     public Transform destination = null, player = null;
 

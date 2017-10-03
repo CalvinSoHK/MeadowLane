@@ -12,6 +12,9 @@ public class InteractionTravel : InteractableCustom {
     //Whether or not it should flip the player on travel
     public bool FLIP = false;
 
+    //Whether or not we want it to anchor
+    public bool ANCHOR = false;
+
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {
@@ -19,6 +22,10 @@ public class InteractionTravel : InteractableCustom {
         {
             Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
                 hand.transform.parent.parent, false, FLIP);
+        }
+        if (ANCHOR)
+        {
+            hand.transform.parent.parent.parent = destination;
         }
     }
 }
