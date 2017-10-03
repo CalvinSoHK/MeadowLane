@@ -19,6 +19,9 @@ public class InteractionPickup : InteractableCustom {
     //Whether or not the object is held
     public bool isHeld = false;
 
+    //Whether or not the object should become kinematic
+    public bool isKin = false;
+
     //Debug bool to orient offsets
     public bool debug = false;
 
@@ -50,18 +53,27 @@ public class InteractionPickup : InteractableCustom {
     //Happens whenever a hand is near the object
     public virtual void HandHoverUpdate(Hand hand)
     {
+        /*
         //If we get the main button down
         if (hand.GetStandardInteractionButtonDown())
         {
             hand.AttachObject(gameObject);
-        }
+        }*/
     }
 
     //Happens whenever this object is attached to a hand
     public virtual void OnAttachedToHand(Hand hand)
     {
         isHeld = true;
-        GetComponent<Rigidbody>().isKinematic = true;
+        if (isKin)
+        {
+            GetComponent<Rigidbody>().isKinematic = true;
+        }
+        else
+        {
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+      
         if (hand.controller == null)
         {
             velocityEstimator.BeginEstimatingVelocity();

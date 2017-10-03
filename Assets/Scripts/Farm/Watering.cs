@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(InteractionItem))]
 public class Watering : MonoBehaviour {
     public Vector3 objectRotation, instantiateWaterLocation;
     public GameObject water, instantiateWaterObject, tempWater;        
@@ -19,7 +20,7 @@ public class Watering : MonoBehaviour {
         //objectRotation.z *= 100;
         //Check the rotation of the watering can to see if we need to instantiate water
         //315, 275
-        if(objectRotation.z < rotateTriggerUp && objectRotation.z > rotateTriggerDown)
+        if(objectRotation.z < rotateTriggerUp && objectRotation.z > rotateTriggerDown && GetComponent<InteractionItem>().isHeld)
         {
             if(getElapsedTime()> interval)
             {
