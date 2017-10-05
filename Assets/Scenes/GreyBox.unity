@@ -11044,17 +11044,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1834916072910442, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114035775850943066, guid: 03dd77205c79dac43b42ec350c8eb1c8,
-        type: 2}
-      propertyPath: m_FontData.m_Alignment
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 224874103408834478, guid: 03dd77205c79dac43b42ec350c8eb1c8,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -408
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
