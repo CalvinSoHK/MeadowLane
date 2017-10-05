@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 06fe40b78aab5344cac5a52d0a6dec47
-timeCreated: 1506211563
+guid: 2408faff0faa42e4b81c7141332c5b19
+timeCreated: 1507152671
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCylinder1
+    4300000: pCube1
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -38,7 +38,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 200
+    globalScale: 10
     meshCompression: 0
     addColliders: 0
     importVisibility: 1

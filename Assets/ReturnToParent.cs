@@ -6,6 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(InteractionItem))]
 public class ReturnToParent : MonoBehaviour {
 
+    //Whether or not this is enabled
+    public bool ENABLED = true;
+
     //Transform of parent in the beginning
     public Transform OG_PARENT;
 
@@ -32,10 +35,13 @@ public class ReturnToParent : MonoBehaviour {
 
     void Update()
     {
-        if (!ITEM.isHeld && !RUNNING && transform.parent != OG_PARENT)
+        if (ENABLED)
         {
-            StartCoroutine(ReturnAfterDelay(Wait_Time));
-            RUNNING = true;
+            if (!ITEM.isHeld && !RUNNING && transform.parent != OG_PARENT)
+            {
+                StartCoroutine(ReturnAfterDelay(Wait_Time));
+                RUNNING = true;
+            }
         }
 
         if(ITEM.isHeld && RUNNING)

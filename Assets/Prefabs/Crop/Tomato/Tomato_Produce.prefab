@@ -142,6 +142,7 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 1
   isHeld: 0
+  isKin: 1
   debug: 0
 --- !u!114 &114912926549903782
 MonoBehaviour:

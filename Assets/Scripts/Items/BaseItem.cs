@@ -9,6 +9,10 @@ public class BaseItem : MonoBehaviour {
     //Name of the item
     public string _NAME = "BaseItem";
 
+    //Owner of the Object
+    public enum Owner { None, NPC, Player };
+    public Owner _OWNER = Owner.None;
+
     //Monetary value of the item
     public int _VALUE = 0;
 
@@ -43,6 +47,9 @@ public class BaseItem : MonoBehaviour {
 
     //Rotation offset
     public Vector3 rotOffset;
+
+    
+
 
     //Helper functions below
 

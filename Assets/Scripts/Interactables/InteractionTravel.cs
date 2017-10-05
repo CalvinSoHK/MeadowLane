@@ -15,6 +15,8 @@ public class InteractionTravel : InteractableCustom {
     //Whether or not we want it to anchor
     public bool ANCHOR = false;
 
+
+
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {
@@ -27,5 +29,6 @@ public class InteractionTravel : InteractableCustom {
         {
             hand.transform.parent.parent.parent = destination;
         }
+
     }
 }
