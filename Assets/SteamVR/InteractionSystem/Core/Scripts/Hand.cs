@@ -1009,6 +1009,103 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
+        // Did we use trackpad to press up
+        //-------------------------------------------------
+        public bool GetTrackpadPressUp()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if(input.y > 0.7f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press down
+        //-------------------------------------------------
+        public bool GetTrackpadPressDown()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.y < -0.7f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press left
+        //-------------------------------------------------
+        public bool GetTrackpadPressLeft()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.x < -0.7f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press up
+        //-------------------------------------------------
+        public bool GetTrackpadPressRight()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.x > 0.7f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+
+        //-------------------------------------------------
         private void InitController( int index )
 		{
 			if ( controller == null )

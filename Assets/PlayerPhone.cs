@@ -12,9 +12,12 @@ public class PlayerPhone : MonoBehaviour {
     //Player stats
     public PlayerStats PLAYER_STATS;
 
-    //State of the phone
+    //Where the phone is showing
     public enum ShowState { None, Hand1, Hand2 };
     public ShowState SHOW = ShowState.None;
+
+    //State of the phone, as in is it in an app or is it on OS, i.e. home screen.
+    public enum PhoneState { OS, Message, Camera };
 
     //Pos offset for the phone on being called
     public Vector3 POS_OFFSET;
@@ -28,15 +31,42 @@ public class PlayerPhone : MonoBehaviour {
     //Reference to the actual phone object if it exists
     GameObject PHONE;
 
+    //Bools for the four directions on the phone
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false;
+
 	// Use this for initialization
 	void Start () {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
     }
-	
+
+    private void Update()
+    {
+        //Update the directional bools based off of the current hand's trackpad
+        if(SHOW == ShowState.Hand1)
+        {
+            PRESS_DOWN = hand1.GetTrackpadDown();
+            PRESS_UP = hand1.GetTrackpadUp();
+            LEFT = hand1.GetTrackpadPressLeft();
+            RIGHT = hand1.GetTrackpadPressRight();
+            UP = hand1.GetTrackpadPressUp();
+            DOWN = hand1.GetTrackpadPressDown();
+
+        }
+        else if(SHOW == ShowState.Hand2)
+        {
+            PRESS_DOWN = hand2.GetTrackpadDown();
+            PRESS_UP = hand2.GetTrackpadUp();
+            LEFT = hand2.GetTrackpadPressLeft();
+            RIGHT = hand2.GetTrackpadPressRight();
+            UP = hand2.GetTrackpadPressUp();
+            DOWN = hand2.GetTrackpadPressDown();
+        }
+    }
+
     //Menu button was pressed, use the phone on the hand that called it.
-	public void UsePhone(Hand hand)
+    public void UsePhone(Hand hand)
     {
         //If we are in the NONE show state, just show the phone on this hand
         if(SHOW == ShowState.None)
