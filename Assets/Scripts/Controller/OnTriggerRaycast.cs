@@ -48,8 +48,13 @@ public class OnTriggerRaycast : MonoBehaviour {
             {
                 if (obj.GetComponent<InteractableCustom>())
                 {
-                    obj.GetComponent<InteractableCustom>().Use(hand);
-                   
+                    //Use every interact on an object.
+                    foreach(InteractableCustom interact in obj.GetComponents<InteractableCustom>())
+                    {
+                        interact.Use(hand);
+                       
+                    }
+
                     Material[] array = new Material[1];
                     array[0] = obj.GetComponent<Renderer>().materials[0];
                     obj.GetComponent<Renderer>().materials = array;
@@ -58,6 +63,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                         ENABLED = false;
                         obj = null;
                     }
+
                 }
             }
             else
@@ -77,7 +83,9 @@ public class OnTriggerRaycast : MonoBehaviour {
             GetComponent<LineRenderer>().enabled = true;
             RaycastHit rayHit = new RaycastHit();
             //Raycast, if we hit something...
+            
             if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f))
+            //if (Physics.SphereCast(transform.position, transform.forward, out rayHit, ))
             {
                 //Render the line to wherever the raycast ends.
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
