@@ -1,3 +1,2 @@
-Apple 5 Prefabs/Fruit/Apple
-Potato 2 Prefabs/Vegetable/Potato
-Tomato 3 Prefabs/Vegetable/Tomato
+Tomato 8 Prefabs/Crop/Tomato/Tomato_Produce
+Tomato_Seed_Dispenser 20 Prefabs/Tools/Tomato_Seed_Dispenser

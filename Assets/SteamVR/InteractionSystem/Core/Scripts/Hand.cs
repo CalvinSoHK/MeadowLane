@@ -1020,7 +1020,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if(input.y > 0.7f)
+                if(input.y > 0.6f)
                 {
                     return true;
                 }
@@ -1044,7 +1044,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.y < -0.7f)
+                if (input.y < -0.6f)
                 {
                     return true;
                 }
@@ -1068,7 +1068,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.x < -0.7f)
+                if (input.x < -0.6f)
                 {
                     return true;
                 }
@@ -1092,7 +1092,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.x > 0.7f)
+                if (input.x > 0.6f)
                 {
                     return true;
                 }

@@ -16,9 +16,6 @@ public class PlayerPhone : MonoBehaviour {
     public enum ShowState { None, Hand1, Hand2 };
     public ShowState SHOW = ShowState.None;
 
-    //State of the phone, as in is it in an app or is it on OS, i.e. home screen.
-    public enum PhoneState { OS, Message, Camera };
-
     //Pos offset for the phone on being called
     public Vector3 POS_OFFSET;
 
@@ -32,7 +29,7 @@ public class PlayerPhone : MonoBehaviour {
     GameObject PHONE;
 
     //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false;
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
 
 	// Use this for initialization
 	void Start () {
@@ -52,6 +49,7 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand1.GetTrackpadPressRight();
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
+            TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
 
         }
         else if(SHOW == ShowState.Hand2)
@@ -62,6 +60,7 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand2.GetTrackpadPressRight();
             UP = hand2.GetTrackpadPressUp();
             DOWN = hand2.GetTrackpadPressDown();
+            TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
         }
     }
 
