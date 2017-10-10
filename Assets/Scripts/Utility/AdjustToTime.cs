@@ -29,7 +29,8 @@ public class AdjustToTime : MonoBehaviour {
         ROT_STEP = Mathf.Abs(ROT_END - ROT_START) / (FIVE_PM - EIGHT_AM);
     }
 
-    private void Update()
+    //Function that gets called to change the rotation
+    public void ChangeRotation()
     {
         transform.rotation = GetRotation(SCHEDULER.CLOCK);
     }
