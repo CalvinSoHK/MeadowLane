@@ -105,5 +105,6 @@ public class Container : MonoBehaviour {
         {
             numberOfIndItems[i] = 0;
         }
+        currentNumItems = 0;
     }
 }
