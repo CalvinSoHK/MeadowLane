@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 9
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 8
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -88,7 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 112000012, guid: 58d7a235653806b4bb2aefa3e6de7976,
     type: 2}
-  m_UseShadowmask: 1
+  m_ShadowMaskMode: 2
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -504,6 +504,7 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0
+  isKin: 0
   debug: 0
 --- !u!114 &371511368
 MonoBehaviour:
@@ -999,6 +1000,7 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0
+  isKin: 0
   debug: 0
 --- !u!114 &599316002
 MonoBehaviour:
@@ -1407,6 +1409,47 @@ MonoBehaviour:
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 11
   estimateOnAwake: 0
+--- !u!1 &737451795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 737451797}
+  - component: {fileID: 737451796}
+  m_Layer: 0
+  m_Name: dialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &737451796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 737451795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6a727b7823473458ae87ac7c3433dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+--- !u!4 &737451797
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 737451795}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.150908, y: 0.6333729, z: -9.458432}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &784215833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,6 +1775,7 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0
+  isKin: 0
   debug: 0
 --- !u!114 &1130653413
 MonoBehaviour:
@@ -2096,6 +2140,7 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0
+  isKin: 0
   debug: 0
 --- !u!114 &1721858736
 MonoBehaviour:
