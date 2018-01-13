@@ -114,15 +114,15 @@ public class PlayerPhone : MonoBehaviour {
     }
 
     //Helper function to vibrate the phone + controller
-    public void VibratePhone(ushort INTENSITY)
+    public void VibratePhone(float DURATION, float STRENGTH)
     {
         if (SHOW == ShowState.Hand1)
         {
-            hand1.TriggerHaptic(INTENSITY);
+            hand1.TriggerHaptic(DURATION,STRENGTH);
         }
         else if (SHOW == ShowState.Hand2)
         {
-            hand2.TriggerHaptic(INTENSITY);
+            hand2.TriggerHaptic(DURATION, STRENGTH);
         }
         else
         {

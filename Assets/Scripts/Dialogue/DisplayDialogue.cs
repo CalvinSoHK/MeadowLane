@@ -17,8 +17,8 @@ public class DisplayDialogue: MonoBehaviour{
 
     private int numberOfLines, indexLine, indexLetter; //private ref to the current line, letter, and total line of dialogue that are needed/currently being displayed
     private string currentLine; //string reference to the current line being displayed
-    private bool inDialogue; //checks whether the character is currently in dialogue
-
+    private bool inDialogue, //checks whether the character is currently in dialogue
+        proceed = false;            //Whether or not we should proceed through the text.    
 
     // Use this for initialization
     void Start()
@@ -63,8 +63,9 @@ public class DisplayDialogue: MonoBehaviour{
                 break;
 
             case GameState.WaitingToProceed: //all dialogue has been typed out. Waiting for player to continue (possible timer)
-                if(Input.GetMouseButtonDown(0)) //by clicking the mouse, the player is ready to proceed
+                if(proceed) //by clicking the mouse, the player is ready to proceed
                 {
+                    proceed = false;
                     if (indexLine < numberOfLines) //we check if we are at the last line
                     {
                         indexLine += 1; //move to the next line
@@ -90,6 +91,7 @@ public class DisplayDialogue: MonoBehaviour{
                     setCurrentState(GameState.Wait);
                 }
                 inDialogue = false; //they are no longer in dialogue
+                DialogueManager.resetCurrentDialogue();
                 break;
 
             case GameState.TransitionToShop: //If you are talking to a shop owner have it transition to buy items (maybe not necessary)
@@ -116,6 +118,24 @@ public class DisplayDialogue: MonoBehaviour{
     float getStateElapsed()
     {
         return Time.time - lastStateChange; //return time since the last change in state
+    }
+
+    /// <summary>
+    /// Set proceed bool. Proceeds through dialogue.
+    /// </summary>
+    /// <param name="SET"></param>
+    public void SetProceed(bool SET)
+    {
+        proceed = SET;
+    }
+
+    /// <summary>
+    /// Getter for indialogue bool.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetInDialogue()
+    {
+        return inDialogue;
     }
 
     /*

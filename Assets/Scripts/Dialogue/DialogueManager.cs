@@ -36,4 +36,10 @@ public static class DialogueManager{
             }
         }
     }
+
+    //Clears the character dialogue so we don't double up.
+    public static void resetCurrentDialogue()
+    {
+        currentDialogueForCharacter.Clear();
+    }
 }
