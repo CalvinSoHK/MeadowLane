@@ -4,6 +4,10 @@
 //
 //=============================================================================
 
+//Edited by Studio Outis
+//More input calls and public function to do haptic feedback
+
+
 using UnityEngine;
 using System;
 using System.Collections;
@@ -1007,6 +1011,112 @@ namespace Valve.VR.InteractionSystem
 
             return false;
         }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press up
+        //-------------------------------------------------
+        public bool GetTrackpadPressUp()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if(input.y > 0.6f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press down
+        //-------------------------------------------------
+        public bool GetTrackpadPressDown()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.y < -0.6f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press left
+        //-------------------------------------------------
+        public bool GetTrackpadPressLeft()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.x < -0.6f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //-------------------------------------------------
+        // Did we use trackpad to press up
+        //-------------------------------------------------
+        public bool GetTrackpadPressRight()
+        {
+            if (noSteamVRFallbackCamera)
+            {
+                return false;
+            }
+            else if (controller != null)
+            {
+                Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
+                if (input.x > 0.6f)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //Helper function to trigger haptic feedback with a float of intensity
+        public void TriggerHaptic(ushort INTENSITY)
+        {
+            if (controller != null)
+            {
+                controller.TriggerHapticPulse(INTENSITY);
+            }
+        }
+
 
         //-------------------------------------------------
         private void InitController( int index )

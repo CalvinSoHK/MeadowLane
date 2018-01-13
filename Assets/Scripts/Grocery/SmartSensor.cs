@@ -24,9 +24,9 @@ public class SmartSensor : MonoBehaviour {
     //The container that we are displaying
     List<Container> CONTAINER_LIST = new List<Container>();
 
+    //NOTE: this would be infinitely easier with a custom class.
     //A list for each of the elements. These lists represent the consolidated data from multiple containers.
-    List<int> COUNT_LIST = new List<int>(), PRICE_PER_LIST = new List<int>(), PRICE_TOTAL_LIST = new List<int>();
-    List<string> TYPE_LIST = new List<string>();
+    List<ELEMENT_INFO> ELEMENT_LIST = new List<ELEMENT_INFO>();
 
     //Start script 
     void Start()
@@ -66,10 +66,10 @@ public class SmartSensor : MonoBehaviour {
         }
         else //Calculate all the values we need to display
         {
-            UpdateLists();
+            UpdateList();
             DisplayInfo();
         }
-        TOTAL = GetEarnings();
+        TOTAL = GetTotal(ELEMENT_LIST);
         TOTAL_TEXT.text = TOTAL + "";
     }
 
@@ -106,62 +106,71 @@ public class SmartSensor : MonoBehaviour {
         }
     }
 
-    //Calculate the total earnings from the lists.
-    public int GetEarnings()
+    /// <summary>
+    /// Returns the total value of the containers in question.
+    /// </summary>
+    /// <returns></returns>
+    public int GetTotal(List<ELEMENT_INFO> LIST)
     {
         int total = 0;
 
-        foreach(int price in PRICE_TOTAL_LIST)
+        foreach(ELEMENT_INFO INFO in LIST)
         {
-            total += price;
+            total += INFO.TOTAL_PRICE;
         }
         return total;
     }
 
-    //Update list values;
-    public void UpdateLists()
+    /// <summary>
+    /// Helper function that updates all information pertaining to one container to a given list
+    /// </summary>
+    public void UpdateContainer(Container CONTAINER, List<ELEMENT_INFO> LIST)
     {
-        //First set the counts to zero for everyone
-        for (int i = 0; i < COUNT_LIST.Count; i++)
+        //For all elements in a container
+        for (int i = 0; i < CONTAINER.numberOfIndItems.Length; i++)
         {
-            COUNT_LIST[i] = 0;
-        }
+            //The data values we need to add
+            string TYPE = CONTAINER.possibleItems[(i + 1) * 3 - 3];
+            int COUNT = CONTAINER.numberOfIndItems[i];
+            int PRICE_PER = int.Parse(CONTAINER.possibleItems[(i + 1) * 3 - 2]);
 
-        //For all the containers...
-        foreach (Container container in CONTAINER_LIST)
-        {
-            //For all their elements...
-            for (int i = 0; i < container.numberOfIndItems.Length; i++)
+            //If the possible item has at least 1 of it.
+            if (CONTAINER.numberOfIndItems[i] != 0)
             {
-                //The data values we need to add
-                string TYPE = container.possibleItems[(i + 1) * 3 - 3];
-                int COUNT = container.numberOfIndItems[i];
-                int PRICE_PER = int.Parse(container.possibleItems[(i + 1) * 3 - 2]);
-
-                //If the possible item has at least 1 of it.
-                if (container.numberOfIndItems[i] != 0)
+                //If we haven't yet added the item to the TYPE_LIST
+                if (!HasType(TYPE, LIST))
                 {
-                    //If we haven't yet added the item to the TYPE_LIST
-                    if (!TYPE_LIST.Contains(TYPE))
-                    {
-                        //"Init" this product in our lists.
-                        //Note: Price total is quivalent to our price per times count for now.
-                        TYPE_LIST.Add(TYPE);
-                        COUNT_LIST.Add(COUNT);
-                        PRICE_PER_LIST.Add(PRICE_PER);
-                        PRICE_TOTAL_LIST.Add(PRICE_PER * COUNT);
-                    }
-                    else//It contains the type we're trying to add, we should consolidate the info.
-                    {
-                        //First, get the index of the product in our list.
-                        int index = TYPE_LIST.IndexOf(TYPE);
+                    //"Init" this product in our lists.
+                    //Note: Price total is quivalent to our price per times count for now.
+                    LIST.Add(new ELEMENT_INFO(TYPE, COUNT, PRICE_PER));
+                }
+                else//It contains the type we're trying to add, we should consolidate the info.
+                {
+                    int index = IndexOfType(TYPE, LIST);
 
-                        //Then add to the valid lists
-                        COUNT_LIST[index] += COUNT;
-                        PRICE_TOTAL_LIST[index] = COUNT_LIST[index] * PRICE_PER;
-                    }
+                    //Then add to the valid lists
+                    LIST[index].COUNT += COUNT;
+                    LIST[index].TOTAL_PRICE = ELEMENT_LIST[index].COUNT * PRICE_PER;
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Helper function that updates the list ELEMENT_LIST to keep all information up to date.
+    /// </summary>
+    public void UpdateList()
+    {
+        //For each ELEMENT_INFO in our lists.
+        foreach(ELEMENT_INFO INFO in ELEMENT_LIST)
+        {
+            INFO.COUNT = 0;
+        }
+
+        //Count the total for each element in each container 
+        foreach (Container CONTAINER in CONTAINER_LIST)
+        {
+            UpdateContainer(CONTAINER, ELEMENT_LIST);
         }
     }
 
@@ -169,28 +178,16 @@ public class SmartSensor : MonoBehaviour {
     public void DisplayInfo()
     {
         //As many elements that are in our lists.
-        for(int i = 0; i < TYPE_LIST.Count; i++)
+        foreach(ELEMENT_INFO INFO in ELEMENT_LIST)
         {
-            SetElement(i, TYPE_LIST[i], PRICE_PER_LIST[i] + "" , COUNT_LIST[i], PRICE_TOTAL_LIST[i]);
+            SetElement(IndexOfType(INFO.TYPE, ELEMENT_LIST), INFO.TYPE, INFO.PRICE_PER + "" , INFO.COUNT, INFO.TOTAL_PRICE);
         }
-        
     }
 
-    //Helper function that empties all containers on the sensor, and all the lists as well.
-    public void EmptyContainers()
-    {
-        foreach(Container container in CONTAINER_LIST)
-        {
-            container.EmptyContainer();
-            Debug.Log("CLear");
-            ClearList();
-        }
-    }
 
     //Helper function that removes a container from our list and does the necessary work
     void RemoveContainer(Container container)
     {
-        Debug.Log("Remove");
         //For every element, update its info, either removing it completely, or modifying the values
         for(int i = 0; i < container.numberOfIndItems.Length; i++)
         {
@@ -203,20 +200,17 @@ public class SmartSensor : MonoBehaviour {
                 int PRICE_PER = int.Parse(container.possibleItems[(i + 1) * 3 - 2]);
 
                 //Get the index of that type of produce
-                int index = TYPE_LIST.IndexOf(TYPE);
+                int index = IndexOfType(TYPE, ELEMENT_LIST);
 
                 //Update the count. If it's zero, we should remove the entire item from all lists.
-                COUNT_LIST[index] -= COUNT;
-                if (COUNT_LIST[index] <= 0)
+                ELEMENT_LIST[index].COUNT -= COUNT;
+                if (ELEMENT_LIST[index].COUNT <= 0)
                 {
-                    TYPE_LIST.RemoveAt(index);
-                    COUNT_LIST.RemoveAt(index);
-                    PRICE_PER_LIST.RemoveAt(index);
-                    PRICE_TOTAL_LIST.RemoveAt(index);
+                    ELEMENT_LIST.RemoveAt(index);
                 }
                 else //If some other container has that object, don't remove it, just update the total values.
                 {
-                    PRICE_TOTAL_LIST[index] = COUNT_LIST[index] * PRICE_PER_LIST[index];
+                    ELEMENT_LIST[index].TOTAL_PRICE = ELEMENT_LIST[index].PRICE_PER * ELEMENT_LIST[index].COUNT;
                 }
             }
            
@@ -249,15 +243,12 @@ public class SmartSensor : MonoBehaviour {
             text.text = "";
         }
 
-        COUNT_LIST.Clear();
-        TYPE_LIST.Clear();
-        PRICE_PER_LIST.Clear();
-        PRICE_TOTAL_LIST.Clear();
+        ELEMENT_LIST.Clear();
 
         TOTAL_TEXT.text = "";
     }
 
-    //Helper function that assigns values using an index of the array. It will also return the value earned per call
+    //Helper function that assigns values using an index of the array.
     //Note: Possible items is a string array, every group of three is one object.
     //      The order is, type, price, prefab path.
     //      i.e. {Apple, 9, Prefabs/Apple, Orange, 10, Prefabs/Orange}.
@@ -281,4 +272,173 @@ public class SmartSensor : MonoBehaviour {
             return true;
         }
     }
+
+    /// <summary>
+    /// Function that helps check if the given element and type is in our list
+    /// True if in it, false if not.
+    /// </summary>
+    /// <param name="TYPE"></param>
+    /// <returns></returns>
+    public bool HasType(string TYPE, List<ELEMENT_INFO> LIST)
+    {
+        foreach (ELEMENT_INFO INFO in LIST)
+        {
+            if (INFO.TYPE == TYPE)
+            {
+                return true;
+            }
+        }
+        return false;
+    } 
+
+    /// <summary>
+    /// Function that gives us the index of a given type of item.
+    /// Returns -1 if it can't find the item.
+    /// </summary>
+    /// <param name="TYPE"></param>
+    /// <returns></returns>
+    public int IndexOfType(string TYPE, List<ELEMENT_INFO> LIST)
+    {
+        foreach(ELEMENT_INFO INFO in LIST)
+        {
+            if(INFO.TYPE == TYPE)
+            {
+                return ELEMENT_LIST.IndexOf(INFO);
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Function that changes ownership of a container.
+    /// </summary>
+    /// <param name="OWNER"></param>
+    public void ChangeOwnership(BaseItem.Owner OWNER)
+    {
+        foreach(Container CONTAINER in CONTAINER_LIST)
+        {
+            //If it isn't the same owner type, change it.
+            if(CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER != OWNER)
+            {
+                CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER = OWNER;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Helper function that returns the price of everything under the given owner
+    /// </summary>
+    /// <param name="OWNER"></param>
+    public int GetTotal(BaseItem.Owner OWNER)
+    {
+        //Total, the return variable
+        int total = 0;
+
+        //Temp list that we will do our calculations in
+        List<ELEMENT_INFO> TEMP_LIST = new List<ELEMENT_INFO>();
+
+        //For every containre in our list
+        foreach (Container CONTAINER in CONTAINER_LIST)
+        {
+            //If it is the owner type we want
+            if (CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER == OWNER)
+            {
+                //Add the container into the list
+                UpdateContainer(CONTAINER, TEMP_LIST);
+            }
+        }
+
+        //Sum up the totals
+        foreach(ELEMENT_INFO INFO in TEMP_LIST)
+        {
+            total += INFO.TOTAL_PRICE;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// Helper function that removes all items from containers owned by the given owner.
+    /// </summary>
+    /// <param name="OWNER"></param>  
+    public void EmptyContainers(BaseItem.Owner OWNER)
+    {
+        foreach(Container CONTAINER in CONTAINER_LIST)
+        {
+            if(CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER == OWNER)
+            {
+                CONTAINER.EmptyContainer();
+                ClearList();
+            }
+        }
+    }
+
+
+    //Helper function that empties all containers on the sensor, and all the lists as well.
+    public void EmptyContainers()
+    {
+        foreach (Container container in CONTAINER_LIST)
+        {
+            container.EmptyContainer();
+            ClearList();
+        }
+    }
+
+    //Helper function that loads in items from the relevant containers into the delivery system.
+    public void SendToDelivery(BaseItem.Owner OWNER)
+    {
+        //For every container under this owner
+        foreach(Container CONTAINER in CONTAINER_LIST)
+        {
+            //If it is the same owner
+            if(CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER == OWNER)
+            {
+                //For all container items
+                for(int i = 0; i < CONTAINER.numberOfIndItems.Length; i++)
+                {
+                    //If there are any of this item to worry about
+                    if(CONTAINER.numberOfIndItems[i] > 0)
+                    {
+                        //For all instances of the current possible item
+                        for(int j = 0; j < CONTAINER.numberOfIndItems[i]; j++)
+                        {
+                            //Add one of that item to the delivery manager.
+                            DeliveryManager.Instance.AddItem(CONTAINER.possibleItems[i]);
+                        }  
+                    }
+                }
+            }
+        }
+        EmptyContainers();
+
+    }
+
+}
+
+
+//Custom class that will help us keep track of multiple things of a type of element in a given collection
+//
+public class ELEMENT_INFO
+{
+    //The name of the element
+    public string TYPE;
+
+    //How many of the given element is in this container
+    public int COUNT;
+
+    //The price per of this element
+    public int PRICE_PER;
+
+    //Total price for all of the objects of this element
+    public int TOTAL_PRICE;
+
+    //Intialization function
+    public ELEMENT_INFO(string TYPE_T, int COUNT_T, int PRICE_PER_T)
+    {
+        TYPE = TYPE_T;
+        COUNT = COUNT_T;
+        PRICE_PER = PRICE_PER_T;
+        TOTAL_PRICE = COUNT * PRICE_PER;
+    }
+
 }
