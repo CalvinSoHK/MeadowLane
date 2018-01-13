@@ -60,13 +60,13 @@ public class MoneyApp : BasicApp {
         if(PLAYER_STATS.GetMoney() < i)
         {
             //Vibrate for feedback
-            PHONE.VibratePhone((ushort) 600);
+            PHONE.VibratePhone(0.75f, 500f);
             return false;
         }
         else//We have enough, subtract the money 
         {
             //Vibrate for feedback
-            PHONE.VibratePhone((ushort)200);
+            PHONE.VibratePhone(0.75f, 500f);
 
             //There is only addmoney, so just add the negative value.
             PLAYER_STATS.AddMoney(-i);
@@ -77,7 +77,7 @@ public class MoneyApp : BasicApp {
     //Give money to the player
     public void EarnMoney(int i)
     {
-        PHONE.VibratePhone((ushort)500);
+        PHONE.VibratePhone(0.75f, 500f);
         PLAYER_STATS.AddMoney(i);
     }
 

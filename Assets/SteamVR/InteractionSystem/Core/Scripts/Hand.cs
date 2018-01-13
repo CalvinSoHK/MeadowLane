@@ -1109,11 +1109,23 @@ namespace Valve.VR.InteractionSystem
         }
 
         //Helper function to trigger haptic feedback with a float of intensity
-        public void TriggerHaptic(ushort INTENSITY)
+        public void TriggerHaptic(float DURATION, float STRENGTH)
         {
-            if (controller != null)
+            StartCoroutine(TriggerHapticRoutine(DURATION, STRENGTH));
+        }
+
+        IEnumerator TriggerHapticRoutine(float DURATION, float STRENGTH)
+        {
+            STRENGTH = Mathf.Clamp01(STRENGTH);
+            float startTime = Time.realtimeSinceStartup;
+
+            while (Time.realtimeSinceStartup - startTime <= DURATION)
             {
-                controller.TriggerHapticPulse(INTENSITY);
+                int valveStrength = Mathf.RoundToInt(Mathf.Lerp(0, 3999, STRENGTH));
+
+                controller.TriggerHapticPulse((ushort)valveStrength);
+
+                yield return null;
             }
         }
 
