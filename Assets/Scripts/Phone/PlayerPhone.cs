@@ -31,8 +31,8 @@ public class PlayerPhone : MonoBehaviour {
     //Bools for the four directions on the phone
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
@@ -41,7 +41,7 @@ public class PlayerPhone : MonoBehaviour {
     private void Update()
     {
         //Update the directional bools based off of the current hand's trackpad
-        if(SHOW == ShowState.Hand1)
+        if (SHOW == ShowState.Hand1)
         {
             PRESS_DOWN = hand1.GetTrackpadDown();
             PRESS_UP = hand1.GetTrackpadUp();
@@ -50,9 +50,9 @@ public class PlayerPhone : MonoBehaviour {
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
             TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
-
+            
         }
-        else if(SHOW == ShowState.Hand2)
+        else if (SHOW == ShowState.Hand2)
         {
             PRESS_DOWN = hand2.GetTrackpadDown();
             PRESS_UP = hand2.GetTrackpadUp();
@@ -68,10 +68,10 @@ public class PlayerPhone : MonoBehaviour {
     public void UsePhone(Hand hand)
     {
         //If we are in the NONE show state, just show the phone on this hand
-        if(SHOW == ShowState.None)
+        if (SHOW == ShowState.None)
         {
             ShowPhone(hand);
-            if(hand == hand1)
+            if (hand == hand1)
             {
                 SHOW = ShowState.Hand1;
             }
@@ -80,10 +80,10 @@ public class PlayerPhone : MonoBehaviour {
                 SHOW = ShowState.Hand2;
             }
         }
-        else if(SHOW == ShowState.Hand1)
+        else if (SHOW == ShowState.Hand1)
         {
             //If the hand that called it was hand1, just hide the phone
-            if(hand == hand1)
+            if (hand == hand1)
             {
                 HidePhone(hand);
                 SHOW = ShowState.None;
@@ -95,7 +95,7 @@ public class PlayerPhone : MonoBehaviour {
                 SHOW = ShowState.Hand2;
             }
         }
-        else if(SHOW == ShowState.Hand2)
+        else if (SHOW == ShowState.Hand2)
         {
             //If the hand that called it was hand2, just hide the phone
             if (hand == hand2)
@@ -110,8 +110,26 @@ public class PlayerPhone : MonoBehaviour {
                 SHOW = ShowState.Hand1;
             }
         }
-       
+
     }
+
+    //Helper function to vibrate the phone + controller
+    public void VibratePhone(ushort INTENSITY)
+    {
+        if (SHOW == ShowState.Hand1)
+        {
+            hand1.TriggerHaptic(INTENSITY);
+        }
+        else if (SHOW == ShowState.Hand2)
+        {
+            hand2.TriggerHaptic(INTENSITY);
+        }
+        else
+        {
+            Debug.Log("ERROR: No hand to vibrate.");
+        }
+    }
+
 
     //Helper functions to show and hide the phone
     void ShowPhone(Hand hand)
@@ -136,6 +154,7 @@ public class PlayerPhone : MonoBehaviour {
         Destroy(PHONE);
     }
 
+    
     //Helper coroutine that fades the phone in and moves it in
     IEnumerator FadeIn(GameObject phone, float FADE_TIME)
     {

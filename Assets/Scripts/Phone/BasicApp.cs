@@ -12,8 +12,8 @@ public class BasicApp : MonoBehaviour {
     //References to PlayerPhone and PhoneLinker
     //Note: PlayerPhone references the master script that is handling input from the player and getting stats
     //      PhoneLinker is what is actually running the phone, switching between states.
-    PlayerPhone PHONE;
-    PhoneLinker LINKER;
+    public PlayerPhone PHONE;
+    public PhoneLinker LINKER;
 
     //Function that will be called by the PhoneLinker if the app is running
 	public virtual void RunApp()

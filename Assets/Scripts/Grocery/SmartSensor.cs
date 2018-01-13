@@ -380,9 +380,37 @@ public class SmartSensor : MonoBehaviour {
         foreach (Container container in CONTAINER_LIST)
         {
             container.EmptyContainer();
-            Debug.Log("CLear");
             ClearList();
         }
+    }
+
+    //Helper function that loads in items from the relevant containers into the delivery system.
+    public void SendToDelivery(BaseItem.Owner OWNER)
+    {
+        //For every container under this owner
+        foreach(Container CONTAINER in CONTAINER_LIST)
+        {
+            //If it is the same owner
+            if(CONTAINER.transform.parent.GetComponent<BaseItem>()._OWNER == OWNER)
+            {
+                //For all container items
+                for(int i = 0; i < CONTAINER.numberOfIndItems.Length; i++)
+                {
+                    //If there are any of this item to worry about
+                    if(CONTAINER.numberOfIndItems[i] > 0)
+                    {
+                        //For all instances of the current possible item
+                        for(int j = 0; j < CONTAINER.numberOfIndItems[i]; j++)
+                        {
+                            //Add one of that item to the delivery manager.
+                            DeliveryManager.Instance.AddItem(CONTAINER.possibleItems[i]);
+                        }  
+                    }
+                }
+            }
+        }
+        EmptyContainers();
+
     }
 
 }

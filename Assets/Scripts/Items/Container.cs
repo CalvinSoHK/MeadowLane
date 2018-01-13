@@ -48,7 +48,7 @@ public class Container : MonoBehaviour {
             //Debug.Log(tempIndex);
 
             //If we are already maxed out in this continer OR the owner is not the same as the container
-            if (currentNumItems >= maxItems || collision.gameObject.GetComponent<BaseItem>()._OWNER == OWNER)
+            if (currentNumItems >= maxItems || collision.gameObject.GetComponent<BaseItem>()._OWNER != OWNER)
             {
                 //Eject the object from the container
                 ejectFromContainer(collision.gameObject);

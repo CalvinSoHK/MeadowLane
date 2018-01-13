@@ -4,6 +4,10 @@
 //
 //=============================================================================
 
+//Edited by Studio Outis
+//More input calls and public function to do haptic feedback
+
+
 using UnityEngine;
 using System;
 using System.Collections;
@@ -1102,6 +1106,15 @@ namespace Valve.VR.InteractionSystem
                 }
             }
             return false;
+        }
+
+        //Helper function to trigger haptic feedback with a float of intensity
+        public void TriggerHaptic(ushort INTENSITY)
+        {
+            if (controller != null)
+            {
+                controller.TriggerHapticPulse(INTENSITY);
+            }
         }
 
 
