@@ -24,7 +24,7 @@ public class InteractActivateButton : InteractableCustom {
         //Set the trigger for the animation. 
         animator.SetTrigger("PressTrigger");
         PlayerStats stats = hand.transform.parent.parent.GetComponent<PlayerStats>();
-        stats.AddMoney(sensor.GetEarnings());
+        stats.AddMoney(sensor.GetTotal(BaseItem.Owner.Player));
         sensor.EmptyContainers();
     }
 }

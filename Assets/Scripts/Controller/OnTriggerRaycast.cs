@@ -187,4 +187,21 @@ public class OnTriggerRaycast : MonoBehaviour {
             GetComponent<LineRenderer>().enabled = false;
         }
     }
+
+    //Helper function to manually pick something up with script
+    public void PickUpObj(GameObject OBJECT)
+    {
+        hand.AttachObject(OBJECT);
+        ENABLED = false;
+        obj = OBJECT;
+    }
+
+    //Helper function to manually detach something 
+    public void DropObj(GameObject OBJECT)
+    {
+        hand.DetachObject(OBJECT);
+        ENABLED = true;
+        obj = null;
+    }
+
 }

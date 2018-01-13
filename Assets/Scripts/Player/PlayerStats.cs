@@ -25,4 +25,10 @@ public class PlayerStats : MonoBehaviour {
             MONEY = 0;
         }
     }
+
+    //Get how much money the player has
+    public int GetMoney()
+    {
+        return MONEY;
+    }
 }

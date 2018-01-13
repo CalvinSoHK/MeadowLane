@@ -11,6 +11,10 @@ public class Container : MonoBehaviour {
     public int maxItems, currentNumItems;
     public string currentItem;
     bool resetAllValues;
+
+    //Owner of this container
+    public BaseItem.Owner OWNER;
+
 	// Use this for initialization
 	void Start () {
         //Initialize the inventory array for the item, and their total numbers
@@ -28,45 +32,43 @@ public class Container : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        /*if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ejectFromContainer(this.gameObject);
-        }*/
+        OWNER = transform.parent.GetComponent<BaseItem>()._OWNER;
 	}
 
     void OnTriggerEnter(Collider collision)
     {
-        //Debug.Log("Does a collision happen");
+        //If the object is an Item, AND is interactable 
         if (collision.gameObject.GetComponent<BaseItem>() != null && collision.gameObject.layer == 8)
         {
-            Debug.Log(collision.gameObject.name);
+            //Debug.Log(collision.gameObject.name);
+
+            //Retrieve the relevant info into a variable for ease of reading
             currentItem = collision.gameObject.GetComponent<BaseItem>()._NAME;
             int tempIndex = getIndex(currentItem);
-            Debug.Log(tempIndex);
-            if (currentNumItems >= maxItems)
+            //Debug.Log(tempIndex);
+
+            //If we are already maxed out in this continer OR the owner is not the same as the container
+            if (currentNumItems >= maxItems || collision.gameObject.GetComponent<BaseItem>()._OWNER != OWNER)
             {
+                //Eject the object from the container
                 ejectFromContainer(collision.gameObject);
             }
-            else if (tempIndex != -1)
+            else if (tempIndex != -1) //If the object is in the list of possible items to store NOTE: if it is negative one then it can't be stored.
             {
+                //Increase the number of items for that item, destroy the physical object, keep track of total container items.
                 numberOfIndItems[tempIndex] += 1;
                 Destroy(collision.gameObject);
                 currentNumItems += 1;
             }
-            else
+            else //We somehow made a mistake and the item isn't in the container. Mostly for debug. Prevents some crashing.
             {
                 Debug.Log("Wrong Index");
                 ejectFromContainer(collision.gameObject);
             }
         }
-        else if (collision.gameObject.name.Trim().Equals("tempName"))
+        else //The object we tried to throw in isn't a base item and isn't in the right layer.
         {
-
-        }
-        else
-        {
-            Debug.Log("Wrong File");
-            //ejectFromContainer(collision.gameObject);
+            Debug.Log("Incorrect Item: Isn't a BaseItem AND/OR isn't in the right layer 8");
         }
 
     }
@@ -74,12 +76,17 @@ public class Container : MonoBehaviour {
     //eject the object from the container
     public void ejectFromContainer(GameObject theObject)
     {
+        //Set the owner to the same as the container
+        theObject.GetComponent<BaseItem>()._OWNER = OWNER;
+
+        //PUsh the object up
         Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 300, Random.Range(-90.0f, 90.0f));
-        Debug.Log(transform.up);
         theObject.GetComponent<Rigidbody>().AddForce(Vector3.Scale(new Vector3(1,1,1), thrust));
+       
     }
     /// <summary>
-    /// returns the index of the object in the possibleItems array
+    /// Returns the index of the object in the possibleItems array
+    /// Returns negative one if it isn't in there.
     /// </summary>
     /// <param name="InvObj"></param>
     /// <returns></returns>
@@ -105,5 +112,9 @@ public class Container : MonoBehaviour {
         {
             numberOfIndItems[i] = 0;
         }
+        currentNumItems = 0;
     }
+
+
+
 }
