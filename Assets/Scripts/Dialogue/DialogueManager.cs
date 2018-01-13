@@ -1,87 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using System.IO;
 
-public class DialogueManager: MonoBehaviour {
-    public static DialogueManager instance = new DialogueManager();
-    public enum GameState {Wait, Typing, WaitingToProceed, TransitionToShop}
-    public GameState currentState;
-    float time = 0.0f, lastStateChange;
-    bool shopOwner;
-    
 
-	// Use this for initialization
-	void Start () {
-        instance = this; //start of the singleton, might have to go somewhere other than start... might create more instances when starting scenes
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        
+public static class DialogueManager{
 
-        DebugTextParsing();
-
-        switch (currentState)
-        {
-            case GameState.Wait: //if we don't need it to do anything atm
-
-                break;
-
-            case GameState.Typing: //if dialogue is currently being typed out
-
-                break;
-
-            case GameState.WaitingToProceed: //all dialogue has been typed out. Waiting for player to continue (possible timer)
-
-                break;
-
-            case GameState.TransitionToShop: //If you are talking to a shop owner have it transition to buy items (maybe not necessary)
-
-                break;
-        }
+    public static List<string> currentDialogueForCharacter = new List<string>();
 
 
-
-
-	}
-
-   
-
-    public void DebugTextParsing()
+    public static void setUpCurrentDialogue(string characterName, string currentSituation, bool shopOwner)
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        using (StreamReader reader = new StreamReader("Assets/TextFiles/AllDialogue.txt"))
         {
-            DisplayDialogue.setUpCurrentDialogue("Aleksei", "TestingCode", false);
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            for(int i = 0; i < DisplayDialogue.currentDialogueForCharacter.Count; i++)
+            while (!reader.ReadLine().Trim().Equals(characterName.Trim()))
             {
-                Debug.Log(DisplayDialogue.currentDialogueForCharacter[i]);
+                //go through the lines until we reach the right character
+            }
+            //we should now be at the line in the text file for the character
+            while (!reader.ReadLine().Trim().Equals(currentSituation.Trim()))
+            {
+                //go through the lines within that character until we get to the right situation
+            }
+            while (true)
+            {
+                string line = reader.ReadLine();
+                if (line.Trim().Equals("_STOP_"))
+                {
+                    break;
+                }
+                else
+                {
+                    currentDialogueForCharacter.Add(line);
+                }
             }
         }
-    }
-
-    /// <summary>
-    /// sets the current state of the game manager
-    /// </summary>
-    /// <param name="state"></param>
-    public void setCurrentState(GameState state)
-    {
-        //update the state and the time since the state has been changes
-        currentState = state;
-        lastStateChange = Time.time;
-    }
-
-    /// <summary>
-    /// returns the amount of time that has passed since the last state change
-    /// </summary>
-    /// <returns></returns>
-    float getStateElapsed()
-    {
-        return Time.time - lastStateChange; //return time since the last change in state
     }
 }
