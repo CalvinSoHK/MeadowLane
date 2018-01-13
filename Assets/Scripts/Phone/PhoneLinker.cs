@@ -28,6 +28,10 @@ public class PhoneLinker : MonoBehaviour {
     public enum PhoneState { OS, App };
     public PhoneState RunState = PhoneState.OS;
 
+    //The app that is running on the phone
+    //When null, we aren't running anything.
+    public Transform RUNNING_APP = null;
+
     //Internal bool to use the selector
     bool IS_SELECTOR = true;
 
@@ -101,17 +105,24 @@ public class PhoneLinker : MonoBehaviour {
         //Disable everything but the app and the parent
         for(int i = 1; i < APPLICATIONS.Length; i++)
         {
+            //If it isn't the right app
             if(APPLICATIONS[i] != app)
             {
+                //Disable it
                 APPLICATIONS[i].gameObject.SetActive(false);
             }
         }
+
+        //Set the running app
+        RUNNING_APP = app;
 
         //Init the app
         app.GetComponent<BasicApp>().InitializeApp(PHONE, this);
 
         //Set the phone state
         RunState = PhoneState.App;
+
+      
     }
 
     //Helper function to transition back to home screen
