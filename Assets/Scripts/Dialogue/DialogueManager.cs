@@ -6,9 +6,14 @@ using System.IO;
 
 public static class DialogueManager{
 
-    public static List<string> currentDialogueForCharacter = new List<string>();
+    public static List<string> currentDialogueForCharacter = new List<string>(); //List that will hold the current dialogue that will be displayed
 
-
+    /// <summary>
+    /// Will parse through the dialogue text file to find the appropriate dialogue lines based on the character name and the current situation they are in
+    /// </summary>
+    /// <param name="characterName"></param>
+    /// <param name="currentSituation"></param>
+    /// <param name="shopOwner"></param>
     public static void setUpCurrentDialogue(string characterName, string currentSituation, bool shopOwner)
     {
         using (StreamReader reader = new StreamReader("Assets/TextFiles/AllDialogue.txt"))
@@ -37,7 +42,9 @@ public static class DialogueManager{
         }
     }
 
-    //Clears the character dialogue so we don't double up.
+    /// <summary>
+    /// Clears the character dialogue so we don't double up.
+    /// </summary>
     public static void resetCurrentDialogue()
     {
         currentDialogueForCharacter.Clear();
