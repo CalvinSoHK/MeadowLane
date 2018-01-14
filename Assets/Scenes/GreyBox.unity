@@ -2817,7 +2817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   ENABLED: 1
 --- !u!114 &254426598
 MonoBehaviour:
@@ -10156,7 +10156,7 @@ GameObject:
   - component: {fileID: 1115811941}
   - component: {fileID: 1115811940}
   - component: {fileID: 1115811942}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: HMO_TextBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16997,7 +16997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   ENABLED: 1
 --- !u!114 &1825245640
 MonoBehaviour:

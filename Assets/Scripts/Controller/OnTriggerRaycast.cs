@@ -90,7 +90,8 @@ public class OnTriggerRaycast : MonoBehaviour {
                 //Render the line to wherever the raycast ends.
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
                 //If it is in the interactable layer
-                if (rayHit.collider.gameObject.layer == 8) {
+                if (layerMask == (layerMask | (1 << rayHit.collider.gameObject.layer)))
+                {
                     //And has the interactable script.
                     if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
                     {
