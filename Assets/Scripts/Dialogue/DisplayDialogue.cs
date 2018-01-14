@@ -14,11 +14,14 @@ public class DisplayDialogue: MonoBehaviour{
     float time = 0.0f, lastStateChange; //references to the amount of time that has passed since last state change
     public GameObject textBox; //reference to the specific textbox for the character
     public Text textObject; //reference to the specific ui textobject associated to the textbox.
+    public GameObject blinker; //reference to object shown once line of dialogue is done displaying. Indicates either more or end of dialogue
 
     private int numberOfLines, indexLine, indexLetter; //private ref to the current line, letter, and total line of dialogue that are needed/currently being displayed
     private string currentLine; //string reference to the current line being displayed
     private bool inDialogue, //checks whether the character is currently in dialogue
-        proceed = false;            //Whether or not we should proceed through the text.    
+        proceed = false,            //Whether or not we should proceed through the text.  
+        showBlinker = false;        //Whether or not we should show the blinker at the end of dialogue.
+    private float blinkingTimeTrue=.7f, blinkingTimeFalse = .3f;  
 
     // Use this for initialization
     void Start()
@@ -72,12 +75,40 @@ public class DisplayDialogue: MonoBehaviour{
                         currentLine = ""; //reset the line to be displayed
                         indexLetter = 0; //reset the current letter to add to the line
                         setCurrentState(GameState.Typing); //go back to the typing state
+                        showBlinker = false;
+                        blinker.SetActive(false);
+                        break;
                     }
                     else //otherwise we have reached the last line
                     {
                         setCurrentState(GameState.StopDisplayingText);// go to the stop diplaying text state
+                        showBlinker = false;
+                        blinker.SetActive(false);
+                        break;
                     }
                 }
+
+                if(indexLine < numberOfLines)
+                {
+                    if (showBlinker)
+                    {
+                        if (getStateElapsed() > blinkingTimeTrue)
+                        {
+                            determineBlink(showBlinker);
+                        }
+                    }
+                    else
+                    {
+                        if (getStateElapsed() > blinkingTimeFalse)
+                        {
+                            determineBlink(showBlinker);
+                        }
+                    }
+                }else
+                {
+                    blinker.SetActive(true);
+                }
+
                 break;
 
             case GameState.StopDisplayingText: //we need to stop displaying text as we have reached the end of the dialogue
@@ -118,6 +149,20 @@ public class DisplayDialogue: MonoBehaviour{
     float getStateElapsed()
     {
         return Time.time - lastStateChange; //return time since the last change in state
+    }
+
+    void determineBlink(bool isBlinking)
+    {
+        if (isBlinking)
+        {
+            showBlinker = false;
+            blinker.SetActive(false);
+        }else
+        {
+            showBlinker = true;
+            blinker.SetActive(true);
+        }
+        lastStateChange = Time.time;
     }
 
     /// <summary>
