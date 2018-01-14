@@ -22,9 +22,13 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Raycasted object
     GameObject obj;
 
+    //The player object
+    Transform PLAYER;
+
     void Start()
     {
         hand = GetComponent<Hand>();
+        PLAYER = transform.parent.Find("VRCamera");
     }
 
     //obj is the target we're raycasting.
@@ -103,43 +107,29 @@ public class OnTriggerRaycast : MonoBehaviour {
                             {
                                 if (obj.GetComponent<Renderer>())
                                 {
-                                    Material[] array = new Material[1];
-                                    array[0] = obj.GetComponent<Renderer>().materials[0];
-                                    obj.GetComponent<Renderer>().materials = array;
+                                    //Remove highlight
+                                    RemoveHighlight(obj);
 
-                                    obj = rayHit.collider.gameObject;
-
-                                    //Make new material array with highlight as well
-                                    Material[] matArray = new Material[2];
-
-                                    matArray[0] = obj.GetComponent<Renderer>().material;
-                                    matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
-                                    obj.GetComponent<Renderer>().materials = matArray;
+                                    //Disable UI if possible
+                                    DisableUI(obj);
                                 }
 
                             }
-                            else
-                            {
-                                obj = rayHit.collider.gameObject;
+                            //Note: We always apply highlight to the new object
+                            //Apply highlight to the given object
+                            obj = rayHit.collider.gameObject;
+                            ApplyHighlight(obj);
 
-                                //Make new material array with highlight as well
-                                Material[] matArray = new Material[2];
-
-                                matArray[0] = obj.GetComponent<Renderer>().material;
-                                matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
-                                //matArray[1] = Resources.Load("Materials/tempHighlight", typeof(Material)) as Material;
-                                //matArray[1].mainTexture = matArray[0].mainTexture;
-                                obj.GetComponent<Renderer>().materials = matArray;
-                            }
+                            //Enable UI of object
+                            EnableUI(obj);
                         }
                         else //This else is for when we had models that had multiple colliders. The hit collider sometimes didnt have a renderer.
                         {
                             //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
                             if (obj != null && obj != rayHit.collider.gameObject && obj.GetComponent<Renderer>() != null)
                             {
-                                Material[] array = new Material[1];
-                                array[0] = obj.GetComponent<Renderer>().materials[0];
-                                obj.GetComponent<Renderer>().materials = array;
+                                RemoveHighlight(obj);
+                                DisableUI(obj);
                             }
 
                             //Always set obj
@@ -155,10 +145,8 @@ public class OnTriggerRaycast : MonoBehaviour {
                     {
                         if (obj.GetComponent<Renderer>())
                         {
-                            Material[] array = new Material[1];
-                            array[0] = obj.GetComponent<Renderer>().materials[0];
-                            obj.GetComponent<Renderer>().materials = array;
-
+                            RemoveHighlight(obj);
+                            DisableUI(obj);
                         }
 
                     }
@@ -174,9 +162,8 @@ public class OnTriggerRaycast : MonoBehaviour {
                 {
                     if (obj.GetComponent<Renderer>() != null)
                     {
-                        Material[] array = new Material[1];
-                        array[0] = obj.GetComponent<Renderer>().materials[0];
-                        obj.GetComponent<Renderer>().materials = array;
+                        RemoveHighlight(obj);
+                        DisableUI(obj);
                     }
 
                 }
@@ -205,4 +192,60 @@ public class OnTriggerRaycast : MonoBehaviour {
         obj = null;
     }
 
+    //Helper function that finds the interactable that shows UI and shows it
+    public void EnableUI(GameObject OBJ)
+    {
+        //Get all interactables in obj
+        InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
+
+        //Find the relevant object
+        foreach(InteractableCustom INTERACTABLE in LIST)
+        {
+            //IF it has show_UI enabled
+            if (INTERACTABLE.SHOW_UI)
+            {
+                INTERACTABLE.DisplayUI(PLAYER);
+                return;
+            }
+        }
+    }
+
+    //Helper function that finds the interactable that shows UI and disables it
+    public void DisableUI(GameObject OBJ)
+    {
+        //Get all interactables in obj
+        InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
+
+        //Find the relevant object
+        foreach (InteractableCustom INTERACTABLE in LIST)
+        {
+            //IF it has show_UI enabled
+            if (INTERACTABLE.SHOW_UI && INTERACTABLE.UI_PREFAB != null)
+            {
+                INTERACTABLE.HideUI();
+                return;
+            }
+        }
+    }
+
+    //Helper function that applies the highlight to given obj
+    public void ApplyHighlight(GameObject OBJ)
+    {
+        //Make new material array with highlight as well
+        Material[] matArray = new Material[2];
+
+        //Apply highlight
+        matArray[0] = OBJ.GetComponent<Renderer>().material;
+        matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
+        OBJ.GetComponent<Renderer>().materials = matArray;
+    }
+
+    //Helper function that removes the highlight to a given obj
+    public void RemoveHighlight(GameObject OBJ)
+    {
+        //Remove highlight from previous
+        Material[] array = new Material[1];
+        array[0] = OBJ.GetComponent<Renderer>().materials[0];
+        OBJ.GetComponent<Renderer>().materials = array;
+    }
 }
