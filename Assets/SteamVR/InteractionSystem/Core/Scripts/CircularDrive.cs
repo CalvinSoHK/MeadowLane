@@ -260,12 +260,9 @@ namespace Valve.VR.InteractionSystem
 					handHoverLocked = hand;
 				}
 
-				driving = true;
-
 				ComputeAngle( hand );
 				UpdateAll();
 
-				ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
 			}
 			else if ( hand.GetStandardInteractionButtonUp() )
 			{
@@ -276,7 +273,7 @@ namespace Valve.VR.InteractionSystem
 					handHoverLocked = null;
 				}
 			}
-			else if ( driving && hand.GetStandardInteractionButton() && hand.hoveringInteractable == GetComponent<Interactable>() )
+			else if ( hand.GetStandardInteractionButton() && hand.hoveringInteractable == GetComponent<Interactable>() )
 			{
 				ComputeAngle( hand );
 				UpdateAll();

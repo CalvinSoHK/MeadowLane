@@ -7,8 +7,10 @@ using Valve.VR.InteractionSystem;
 //Script that enables the controller to raycast trigger items
 public class OnTriggerRaycast : MonoBehaviour {
 
+
+
     //Layermask
-    public LayerMask layerMask;
+    public LayerMask INTERACTABLE_LAYERS, HITTABLE_LAYERS;
 
     //The hand we're attached to.
     Hand hand;
@@ -88,13 +90,13 @@ public class OnTriggerRaycast : MonoBehaviour {
             RaycastHit rayHit = new RaycastHit();
             //Raycast, if we hit something...
             
-            if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f))
+            if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f, HITTABLE_LAYERS))
             //if (Physics.SphereCast(transform.position, transform.forward, out rayHit, ))
             {
                 //Render the line to wherever the raycast ends.
                 GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
                 //If it is in the interactable layer
-                if (layerMask == (layerMask | (1 << rayHit.collider.gameObject.layer)))
+                if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << rayHit.collider.gameObject.layer)))
                 {
                     //And has the interactable script.
                     if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())

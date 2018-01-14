@@ -20,7 +20,7 @@ public class InteractableCustom : Interactable{
     public float DIST_TO_PLAYER = 0.5f;
 
     //Bool to disable this interactables UI from showing
-    public bool SHOW_UI = true;
+    public bool SHOW_UI = false;
 
     //Overrideable use function for all interactable objects
 	public virtual void Use(Hand hand)
