@@ -13,7 +13,6 @@ public class EntryManager : MonoBehaviour {
     public int COUNT, PRICE;
     public string NAME;
 
-
 	// Update is called once per frame
 	void Update () {
         

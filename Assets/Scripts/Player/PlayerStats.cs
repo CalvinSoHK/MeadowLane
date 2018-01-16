@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour {
 
     //How much money they have.
-    int MONEY;
+    public int MONEY;
 
 
     //Check to see if player has enough money

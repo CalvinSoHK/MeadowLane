@@ -403,7 +403,7 @@ public class SmartSensor : MonoBehaviour {
                         for(int j = 0; j < CONTAINER.numberOfIndItems[i]; j++)
                         {
                             //Add one of that item to the delivery manager.
-                            DeliveryManager.Instance.AddItem(CONTAINER.possibleItems[i]);
+                            //DeliveryManager.Instance.AddItem(CONTAINER.possibleItems[i]);
                         }  
                     }
                 }
