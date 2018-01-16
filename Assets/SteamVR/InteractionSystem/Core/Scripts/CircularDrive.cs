@@ -121,6 +121,10 @@ namespace Valve.VR.InteractionSystem
         [HideInInspector]
 		public Hand handHoverLocked = null;
 
+        //Studio outis
+        float REF_VELOCITY;
+        float OUT_ANGLE_DAMPED;
+
 		//-------------------------------------------------
 		private void Freeze( Hand hand )
 		{
@@ -227,28 +231,29 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		private void OnHandHoverBegin( Hand hand )
 		{
-			ControllerButtonHints.ShowButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
+			//ControllerButtonHints.ShowButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
 		}
 
 
 		//-------------------------------------------------
 		private void OnHandHoverEnd( Hand hand )
 		{
-			ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
+			//ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
 
-			if ( driving && hand.GetStandardInteractionButton() )
-			{
-				StartCoroutine( HapticPulses( hand.controller, 1.0f, 10 ) );
-			}
+			//if ( driving && hand.GetStandardInteractionButton() )
+			//{
+			//	StartCoroutine( HapticPulses( hand.controller, 1.0f, 10 ) );
+			//}
 
-			driving = false;
-			handHoverLocked = null;
+			//driving = false;
+			//handHoverLocked = null;
 		}
 
 
 		//-------------------------------------------------
 		public virtual void HandHoverUpdate( Hand hand )
 		{
+            /*
 			if ( hand.GetStandardInteractionButtonDown() )
 			{
 				// Trigger was just pressed
@@ -277,7 +282,7 @@ namespace Valve.VR.InteractionSystem
 			{
 				ComputeAngle( hand );
 				UpdateAll();
-			}
+			}*/
 		}
 
 
@@ -395,7 +400,7 @@ namespace Valve.VR.InteractionSystem
 			{
 				// Normalize to [0, 1] based on 360 degree windings
 				float flTmp = outAngle / 360.0f;
-				linearMapping.value = flTmp - Mathf.Floor( flTmp );
+                linearMapping.value = flTmp - Mathf.Floor(flTmp);
 			}
 
 			UpdateDebugText();
@@ -409,7 +414,8 @@ namespace Valve.VR.InteractionSystem
 		{
 			if ( rotateGameObject )
 			{
-				transform.localRotation = start * Quaternion.AngleAxis( outAngle, localPlaneNormal );
+                OUT_ANGLE_DAMPED = Mathf.SmoothDamp(OUT_ANGLE_DAMPED, outAngle, ref REF_VELOCITY, 0.55f);
+				transform.localRotation = start * Quaternion.AngleAxis( OUT_ANGLE_DAMPED, localPlaneNormal );
 			}
 		}
 
@@ -436,6 +442,14 @@ namespace Valve.VR.InteractionSystem
 			UpdateDebugText();
 		}
 
+        /// <summary>
+        /// Function that modifies outangle
+        /// </summary>
+        /// <param name="hand"></param>
+        public void OutAngleModify(float i)
+        {
+            outAngle += i;
+        }
 
 		//-------------------------------------------------
 		// Computes the angle to rotate the game object based on the change in the transform

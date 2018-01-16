@@ -9,6 +9,19 @@ public class BaseItem : MonoBehaviour {
     //Name of the item
     public string _NAME = "BaseItem";
 
+    //Category
+    public enum Categories { Produce, Tools, Deco, Gifts, KeyItems, Misc };
+    public string CATEGORY;
+
+    //Prefab reference
+    public GameObject PREFAB_REF;
+
+    //Key reference
+    public int KEY;
+
+    //Image that is shown in the inventory
+    public Image ICON;
+
     //Owner of the Object
     public enum Owner { None, NPC, Player };
     public Owner _OWNER = Owner.None;
@@ -39,8 +52,8 @@ public class BaseItem : MonoBehaviour {
     [EnumTag]
     public ItemTags _TAGS = 0;
 
-    //Image that is shown in the inventory
-    public Image _THUMBNAIL;
+    //Containable
+    public bool CONTAINABLE = false;
 
     //Offset of item when held by hand
     public Vector3 offset;
@@ -48,7 +61,7 @@ public class BaseItem : MonoBehaviour {
     //Rotation offset
     public Vector3 rotOffset;
 
-    
+
 
 
     //Helper functions below
