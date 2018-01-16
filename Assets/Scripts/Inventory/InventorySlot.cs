@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class InventorySlot {
 
     private string p_Name; //name of the item
-    private string p_Category; // category which the item belongs to
-    private string p_PrefabRef; //ref to the item's prefab  
+    private int p_Category; // category which the item belongs to
+    private GameObject p_PrefabRef; //ref to the item's prefab  
     //(IF WE ARE KEEPING TRACK OF AN IMAGE SHOULD WE KEEP TRACK OF THE ABOVE AS A GAME OBJECT RATHER THAT STRING)
     private int p_TotalNum; //total number of this item in inventory
     private int p_Key; //key representing item
@@ -23,7 +23,7 @@ public class InventorySlot {
     /// <param name="prefabRef"></param>
     /// <param name="key"></param>
     /// <param name="icon"></param>
-    public InventorySlot(string name, string category, string prefabRef, int key, Image icon)
+    public InventorySlot(string name, int category, GameObject prefabRef, int key, Image icon)
     {
         p_Name = name;
         p_Category = category;
