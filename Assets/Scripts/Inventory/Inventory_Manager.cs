@@ -18,11 +18,60 @@ public static class  Inventory_Manager {
         //do stuff with the player inventory here.
     }
 
+    /// <summary>
+    /// Adds an item to the player's inventory
+    /// </summary>
+    /// <param name="itemInfo"></param>
     public static void AddItemToInventory(BaseItem itemInfo)
     {
-        Category.FindIndex(itemInfo.)
+        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim()); //get the index of the category for which the item will be placed in
+        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex); //get the index of the item within the category list (if it is already there)
+        if(inventorySlotIndex == -1) //this item is not in the inventory yet
+        {
+            //add the item in the category at the end of the list
+            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.PREFAB_REF, itemInfo.KEY, itemInfo.ICON));
+        }else //item type is already in inventory
+        {
+            //increase the total number of specific item in inventory by 1
+            CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+        }
     }
-    
+
+    /// <summary>
+    /// finds the index of the specific category within the static category list
+    /// </summary>
+    /// <param name="category"></param>
+    /// <returns></returns>
+    public static int checkItemCategoryIndex(string category)
+    {
+        for(int i = 0; i < Category.Count; i++)
+        {
+            if (category.Equals(Category[i]))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Checks if item that needs to be added to inventory already has a reference within the list.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public static int checkItemInvetorySlot(int key, int index)
+    {
+        for (int i = 0; i < CategorySlots[index].Count; i++)
+        {
+            if (key == CategorySlots[index][i].Key)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }
 
 static class ListExtensions
