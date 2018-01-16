@@ -171,6 +171,9 @@ public class PlantBase : MonoBehaviour {
         {
             //Debug.Log("Spawn!");
             GameObject obj = Instantiate(PRODUCE, ChosenList[i].transform.position, ChosenList[i].transform.rotation, ChosenList[i].transform);
+
+            //Set owner of objects to player
+            obj.GetComponent<BaseItem>()._OWNER = BaseItem.Owner.Player;
         }
 
     }

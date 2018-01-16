@@ -5,61 +5,38 @@ using Valve.VR.InteractionSystem;
 
 public class CircularDriveCustom : CircularDrive {
 
-    //If true, drive is engaged in use, else not.
-    public bool isUse = false;
-
     //The hand that is driving this steering wheel
     public Hand drivingHand = null;
 
-	public override void HandHoverUpdate(Hand hand)
+    //New function that just follows the hand given
+    public void FollowHand(Hand hand)
     {
-        if (hand.GetStandardInteractionButtonDown())
+        //Set the hand to this hand
+        drivingHand = hand;
+
+        //Turn off raycast interact while held down.
+        hand.GetComponent<OnTriggerRaycast>().ENABLED = false;
+    }
+
+    private void Update()
+    {
+        //Follow the hand given if we have a hand
+        if(drivingHand != null)
         {
-            //Set flag to true
-            isUse = true;
-
-            //Set the hand to this hand
-            drivingHand = hand;
-
-            // Trigger was just pressed
-            lastHandProjected = ComputeToTransformProjected(hand.hoverSphereTransform);
-
-            if (hoverLock)
-            {
-                hand.HoverLock(GetComponent<Interactable>());
-                handHoverLocked = hand;
-            }
-
-            driving = true;
-
-            ComputeAngle(hand);
+            ComputeAngle(drivingHand);
             UpdateAll();
 
-            ControllerButtonHints.HideButtonHint(hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-
-            //Turn off raycast interact while held down.
-            hand.GetComponent<OnTriggerRaycast>().ENABLED = false;
-        }
-        else if (hand.GetStandardInteractionButtonUp())
-        {
-            //Reset flag, and hand
-            drivingHand = null;
-            isUse = false;
-
-            // Trigger was just released
-            if (hoverLock)
+            if (drivingHand.GetStandardInteractionButtonDown())
             {
-                hand.HoverUnlock(GetComponent<Interactable>());
-                handHoverLocked = null;
+                drivingHand.GetComponent<OnTriggerRaycast>().ENABLED = true;
+                drivingHand = null;
             }
 
-            //Turn on ray cast interact on let go
-            hand.GetComponent<OnTriggerRaycast>().ENABLED = true;
         }
-        else if (driving && hand.GetStandardInteractionButton() && hand.hoveringInteractable == GetComponent<Interactable>())
-        {
-            ComputeAngle(hand);
-            UpdateAll();
-        }
+    }
+
+    public override void HandHoverUpdate(Hand hand)
+    {
+       //Nothing. Don't want it to do anything.
     }
 }
