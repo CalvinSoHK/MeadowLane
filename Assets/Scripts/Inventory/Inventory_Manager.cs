@@ -7,7 +7,7 @@ public static class  Inventory_Manager {
     static TextAsset playerInventorySave; //Text Asset Loaded and Saved to know what the player's inventory is between scenes/loads
     public static List<string> Category = new List<string>(new string[] { "Produce", "Tools", "Deco", "Gifts", "KeyItems", "Misc" }); //all categories
     public static List<InventorySlot>[] CategorySlots = new List<InventorySlot>[6]; //all items within each category
-    static int currentCategoryIndex = 0, currentCategorySlotsIndex = 0; //current index for the diplay of category and item.
+    public static int currentCategoryIndex = 0, currentCategorySlotsIndex = 0; //current index for the diplay of category and item.
 
     public static void LoadPlayerInventory()
     {
@@ -29,7 +29,7 @@ public static class  Inventory_Manager {
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             //add the item in the category at the end of the list
-            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.PREFAB_REF, itemInfo.KEY, itemInfo.ICON));
+            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.PREFAB_REF, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
         }else //item type is already in inventory
         {
             //increase the total number of specific item in inventory by 1
