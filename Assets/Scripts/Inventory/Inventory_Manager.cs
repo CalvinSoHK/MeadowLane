@@ -38,6 +38,19 @@ public static class  Inventory_Manager {
     }
 
     /// <summary>
+    /// After item is spawned from inventory, removes that item instance from inventory if it is produce
+    /// </summary>
+    /// <param name="itemInfo"></param>
+    public static void RemoveItemFromInventory(InventorySlot itemInfo)
+    {
+        itemInfo.TotalNum -= 1; //reduce the total number of that slot object
+        if(currentCategoryIndex == 0 && itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category and whether there are none left.
+        {
+            CategorySlots[currentCategoryIndex].Remove(itemInfo); //remove that item from the list
+        }
+    }
+
+    /// <summary>
     /// finds the index of the specific category within the static category list
     /// </summary>
     /// <param name="category"></param>
@@ -66,6 +79,7 @@ public static class  Inventory_Manager {
         {
             if (key == CategorySlots[index][i].Key)
             {
+                
                 return i;
             }
         }
