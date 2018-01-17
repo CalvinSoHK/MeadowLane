@@ -8,6 +8,7 @@ public static class  Inventory_Manager {
     public static List<string> Category = new List<string>(new string[] { "Produce", "Tools", "Deco", "Gifts", "KeyItems", "Misc" }); //all categories
     public static List<InventorySlot>[] CategorySlots = new List<InventorySlot>[6]; //all items within each category
     public static int currentCategoryIndex = 0, currentCategorySlotsIndex = 0; //current index for the diplay of category and item.
+    public static Dictionary<int, GameObject> InventoryItemInScene = new Dictionary<int, GameObject>(); //referene to all inventory items in scenes
 
     public static void LoadPlayerInventory()
     {
@@ -86,7 +87,26 @@ public static class  Inventory_Manager {
         return -1;
     }
 
+    /// <summary>
+    /// returns the item which has already been spawned from the player's inventory to connect it back to the player's hand
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public static GameObject MoveItemToHandOfPlayer(int key)
+    {
+        return InventoryItemInScene[key];
+    }
+
+    public static void RemoveInventoryItemsFromScenes()
+    {
+        //get all the keys from the ditionanary
+        //use a for loop to go through that list
+        //add the objects back into the inventory
+        //destroy the object from the scene
+    }
+
 }
+
 
 static class ListExtensions
 {
