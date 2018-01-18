@@ -8,18 +8,28 @@ public class PlayerInventory : MonoBehaviour {
     bool isInventoryOn = false; //ref to whether the inventory UI is on
     int totalCategory; //total number of categories
     int TotalItemForCategory; //total number of items within the category
+
+    public GameObject[] DebugInventory;
 	// Use this for initialization
 	void Start () {
+        Inventory_Manager.LoadPlayerInventory();
         totalCategory = Inventory_Manager.Category.Count; //get the total number of categorries in the inventory manager
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Debug.Log("inventory is being debugged");
+            debugInventory();
+        }
         if (Input.GetKeyDown(KeyCode.Space) && !isInventoryOn) //if player presses space and the inventory is off
         {
-            int CategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex); //we check to see which, from the last selected category, contains an item
+            Debug.Log("is this getting accessed");
+            int CategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, true); //we check to see which, from the last selected category, contains an item
             if (CategoryIndex != -1) //if the category index is not equal to -1 (meaning all categories are empty)
             {
+                Debug.Log("-1 you is not");
                 Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
                 Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in category
@@ -37,7 +47,7 @@ public class PlayerInventory : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow)){ //if we press left on the D-Pad
                 Inventory_Manager.currentCategorySlotsIndex -= 1; //move the inventory item to the left
-                if (Inventory_Manager.currentCategorySlotsIndex <= 0) // if you go beyond the left most item rotate back to the right
+                if (Inventory_Manager.currentCategorySlotsIndex < 0) // if you go beyond the left most item rotate back to the right
                 {
                     Inventory_Manager.currentCategorySlotsIndex = TotalItemForCategory - 1;
                 }
@@ -53,25 +63,31 @@ public class PlayerInventory : MonoBehaviour {
             }else if (Input.GetKeyDown(KeyCode.UpArrow)) //if we press Up on the D-Pad
             {
                 Inventory_Manager.currentCategoryIndex += 1; //get the next category in the list
-                if(Inventory_Manager.currentCategoryIndex >= totalCategory) //if you go beyond the top most category roatate back to the bottom
+                
+                if(Inventory_Manager.currentCategoryIndex >= totalCategory) //if you go beyond the top most category rotate back to the bottom
                 {
                     Inventory_Manager.currentCategoryIndex = 0;
                 }
+                Inventory_Manager.currentCategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, true);
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in the new category
                 Inventory_Manager.currentCategorySlotsIndex = 0; //go to the first object in that category
                 UpdateImage(true, true); //update the images of both the category and the item
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) //if we press Down on the D-Pad
             {
-                Inventory_Manager.currentCategoryIndex -= 1;
-                if (Inventory_Manager.currentCategoryIndex >= 0)
+                Inventory_Manager.currentCategoryIndex -= 1; //get the previous category in the list
+                if (Inventory_Manager.currentCategoryIndex < 0) //if you go beyond the bottom most category rotate back to the bottom
                 {
+                    Debug.Log(Inventory_Manager.currentCategoryIndex);
                     Inventory_Manager.currentCategoryIndex = totalCategory - 1;
+                    Debug.Log(Inventory_Manager.currentCategoryIndex);
                 }
+                Inventory_Manager.currentCategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, false);
+                Debug.Log(Inventory_Manager.currentCategoryIndex);
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in the new category
-                Inventory_Manager.currentCategorySlotsIndex = 0;
-                UpdateImage(true, true);
-            }else if (Input.GetKeyDown(KeyCode.P))
+                Inventory_Manager.currentCategorySlotsIndex = 0; //go to the first object in that category
+                UpdateImage(true, true); //update the category and item image
+            }else if (Input.GetKeyDown(KeyCode.P)) //If we press the center button of the D-Pad
             {
                 CheckInventoryUI(false); //turn off the Inventory UI
                 InventorySlot tempSlot = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex]; // get a ref to the item selected by the player
@@ -81,13 +97,14 @@ public class PlayerInventory : MonoBehaviour {
                     {
                         //get reference to the object in the scene through the inventory manager                        
                         GameObject tempGameObject = Inventory_Manager.MoveItemToHandOfPlayer(tempSlot.Key);
-                        //attach the object to the hand of the player
+                        AttachObjectToHand(tempGameObject); //attach that object to the hand
                     }
                     else //if the object has not been put in the scene yet
                     {
                         SpawnItemFromInventory(tempSlot, true); //spawn the item into the scene
                     }
-                }else //If we are in the produce section
+                }
+                else //If we are in the produce section
                 {
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
@@ -98,68 +115,144 @@ public class PlayerInventory : MonoBehaviour {
         }        
 	}
 
-    public void SpawnItemFromInventory(InventorySlot tempSlot, bool removeFromInventory)
+    public void debugInventory()
     {
-        GameObject prefabRef = tempSlot.PrefabRef;
-        //ADD THE INSTANTIATED OBJECT TO THE DICTIONARY OF THE INVENTORY MANAGER
-        Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
-        if (removeFromInventory)
+        for(int i = 0; i < DebugInventory.Length; i++)
         {
-            Inventory_Manager.RemoveItemFromInventory(tempSlot);
+            Inventory_Manager.AddItemToInventory(DebugInventory[i].GetComponent<BaseItem>());
         }
     }
 
+
+    /// <summary>
+    /// Instantiates item from inventory into 
+    /// </summary>
+    /// <param name="tempSlot"></param>
+    /// <param name="removeFromInventory"></param>
+    public void SpawnItemFromInventory(InventorySlot tempSlot, bool removeFromInventory)
+    {
+        GameObject prefabRef = tempSlot.PrefabRef; //get prefab reference of object
+        GameObject ObjectRef = Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity); //Keep reference of instantiated object
+        Inventory_Manager.AddItemToDictionary(tempSlot.Key, ObjectRef); //Add the instantiated object to the Dictionary in Inventory Manager that keeps track of inventory items in the scene
+        AttachObjectToHand(ObjectRef);//Attach the instantiated object to the player's hand
+        if (removeFromInventory) //does it need to be removed from inventory
+        {
+            Inventory_Manager.RemoveItemFromInventory(tempSlot); //remove it from inv
+        }
+    }
+
+    /// <summary>
+    /// Attaches object that has been instantiated from player inventory to the player's hand
+    /// </summary>
+    /// <param name="InstantiatedObject"></param>
+    public void AttachObjectToHand(GameObject InstantiatedObject)
+    {
+        //Attach object to hand
+    }
+
+    /// <summary>
+    /// Turns Inventory on/off
+    /// </summary>
+    /// <param name="isOn"></param>
     public void CheckInventoryUI(bool isOn)
     {
-        isInventoryOn = isOn;
-        if (!isInventoryOn)
+        isInventoryOn = isOn; //updates inventory bool
+        if (!isInventoryOn) //if false
         {
-            currentCategory_Image.gameObject.SetActive(false);
+            currentCategory_Image.gameObject.SetActive(false); //turn UI images for inventory off
             currentItem_Image.gameObject.SetActive(false);
-        }else
+        }else //if true
         {
-            currentCategory_Image.gameObject.SetActive(true);
+            currentCategory_Image.gameObject.SetActive(true); //turn UI images for inventory on
             currentItem_Image.gameObject.SetActive(true);
         }
     }
 
-    public int CheckIfOpeningCategoryContainsItem(int CategoryIndex)
+    /// <summary>
+    /// When opening the inventory, check if last category the player was on contains an item. 
+    /// If not moves to the next category that has an item.
+    /// </summary>
+    /// <param name="CategoryIndex"></param>
+    /// <returns></returns>
+    public int CheckIfOpeningCategoryContainsItem(int CategoryIndex, bool after)
     {
-        if (Inventory_Manager.CategorySlots[CategoryIndex].Count != 0)
+        if (Inventory_Manager.CategorySlots[CategoryIndex].Count != 0) //if there is at least 1 item in the opening category
         {
-            return CategoryIndex;
+            return CategoryIndex; //return that index
         }
-        return CheckIfCategoryContainsItem(CategoryIndex);
+        if (after) { 
+            return CheckIfCategoryContainsItem(CategoryIndex); //either find the index for the next category that has an intem
+        }else
+        {
+            return CheckIfPreviousCategoryContainsItem(CategoryIndex);
+        }
     }
 
+    /// <summary>
+    /// Finds which category from the starting index onward has an item in it.
+    /// </summary>
+    /// <param name="CategoryIndex"></param>
+    /// <returns></returns>
     public int CheckIfCategoryContainsItem(int CategoryIndex)
     {
-        CategoryIndex += 1;
-        for (int i = 0; i < totalCategory; i++)
+        CategoryIndex += 1; //start off from the next index
+        for (int i = 0; i < totalCategory; i++) //go through each possible category
         {
-            if (CategoryIndex >= totalCategory)
+            if (CategoryIndex >= totalCategory) //if we reach the right most category
             {
-                CategoryIndex = 0;
+                CategoryIndex = 0; //loop back to the beginning of index
             }
-            if(Inventory_Manager.CategorySlots[CategoryIndex].Count != 0)
+            if(Inventory_Manager.CategorySlots[CategoryIndex].Count != 0) // check if the category has at least one item in it
             {
-                return CategoryIndex;
+                return CategoryIndex; //if it does return that index
             }
             CategoryIndex += 1;
 
         }
-        return -1;
-    }    
+        return -1; //all categories are empty
+    }
 
+    /// <summary>
+    /// Finds which category from the starting index backward has an item in it.
+    /// </summary>
+    /// <param name="CategoryIndex"></param>
+    /// <returns></returns>
+    public int CheckIfPreviousCategoryContainsItem (int CategoryIndex)
+    {
+        CategoryIndex -= 1;
+        Debug.Log("Category Index: " + CategoryIndex);
+        for (int i = 0; i < totalCategory; i++) //go through each possible category
+        {
+            if(CategoryIndex <= 0)
+            {
+                CategoryIndex = totalCategory - 1;
+            }
+            if (Inventory_Manager.CategorySlots[CategoryIndex].Count != 0) // check if the category has at least one item in it
+            {
+                Debug.Log("Category Index before return: " + CategoryIndex);
+                return CategoryIndex; //if it does return that index
+            }
+            CategoryIndex -= 1;
+
+        }
+        return -1;
+    } 
+
+
+    /// <summary>
+    /// Update the cateogry and item images for the inventory UI
+    /// </summary>
+    /// <param name="category"></param>
+    /// <param name="item"></param>
     public void UpdateImage(bool category, bool item)
     {
-        if (category)
-        {            
-            currentCategory_Image = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon;
-        }
-        if (item)
+        if (category) //if we have to change the category image
         {
-            currentItem_Image = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon;
+            currentCategory_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon.GetComponent<Image>().sprite; //update to the current category index
+        }
+        if (item) // if we have to change the item image 
+        {
+            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
         }
     }
 }

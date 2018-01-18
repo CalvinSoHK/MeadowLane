@@ -13,6 +13,10 @@ public static class  Inventory_Manager {
     public static void LoadPlayerInventory()
     {
         //do stuff with the textFile here...
+        for(int i = 0; i < Category.Count; i++)
+        {
+            CategorySlots[i] = new List<InventorySlot>();
+        }
     }
     public static void SavePlayerInventory()
     {
@@ -25,6 +29,8 @@ public static class  Inventory_Manager {
     /// <param name="itemInfo"></param>
     public static void AddItemToInventory(BaseItem itemInfo)
     {
+        //CategorySlots[0] = new List<InventorySlot>();
+       // Debug.Log(CategorySlots[0]);
         int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim()); //get the index of the category for which the item will be placed in
         int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex); //get the index of the item within the category list (if it is already there)
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
@@ -103,6 +109,10 @@ public static class  Inventory_Manager {
         //use a for loop to go through that list
         //add the objects back into the inventory
         //destroy the object from the scene
+    }
+    public static void AddItemToDictionary(int key, GameObject value)
+    {
+        InventoryItemInScene.Add(key, value);
     }
 
 }
