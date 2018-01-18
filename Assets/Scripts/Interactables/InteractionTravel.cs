@@ -22,12 +22,16 @@ public class InteractionTravel : InteractableCustom {
     {
         if (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState == ScreenTransitionImageEffect.Gamestate.wait)
         {
-            Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
-                hand.transform.parent.parent, false, FLIP);
-        }
-        if (ANCHOR)
-        {
-            hand.transform.parent.parent.parent = destination;
+            if (ANCHOR)
+            {
+                Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
+                    hand.transform.parent.parent, false, ANCHOR);
+            }
+            else
+            {
+                Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
+                hand.transform.parent.parent, false, ANCHOR);
+            }
         }
 
     }

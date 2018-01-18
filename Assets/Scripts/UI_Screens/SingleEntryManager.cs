@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //Manages a single entry and what it is displaying
-public class EntryManager : MonoBehaviour {
+public class SingleEntryManager : MonoBehaviour {
 
     //Holds all the textboxes we should manage
     public Text COUNT_TEXT, NAME_TEXT, PRICE_TEXT;
@@ -12,6 +12,9 @@ public class EntryManager : MonoBehaviour {
     //Statistics to keep track of
     public int COUNT, PRICE;
     public string NAME;
+
+    //Bool to change the values inside or not
+    public bool CHANGE_PROPERTIES = true;
 
 	// Update is called once per frame
 	void Update () {
@@ -25,15 +28,18 @@ public class EntryManager : MonoBehaviour {
                 COUNT_TEXT.text = " " + COUNT;
             }         
         }
-
-        if(PRICE_TEXT != null)
+        if (CHANGE_PROPERTIES)
         {
-            PRICE_TEXT.text = " " + PRICE;
-        }
+            if (PRICE_TEXT != null)
+            {
+                PRICE_TEXT.text = " " + PRICE;
+            }
 
-        if(NAME_TEXT != null)
-        {
-            NAME_TEXT.text = " " + NAME;
+            if (NAME_TEXT != null)
+            {
+                NAME_TEXT.text = " " + NAME;
+            }
         }
+       
 	}
 }

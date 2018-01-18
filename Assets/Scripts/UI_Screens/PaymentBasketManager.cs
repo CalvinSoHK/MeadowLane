@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PaymentBasketManager : MonoBehaviour {
 
@@ -8,7 +9,13 @@ public class PaymentBasketManager : MonoBehaviour {
     List<GameObject> OBJECT_LIST = new List<GameObject>();
 
     //Entry manager this basket is linked to
-    public EntriesManager ENTRIES_MANAGER;
+    public ShopEntryManager ENTRIES_MANAGER;
+
+    //Events to fire when thing enters the container.
+    public UnityEvent ON_OBJ_ENTER, ON_OBJ_EXIT;
+
+    //The object we are manipulating currently
+    public BaseItem CURRENT;
 
     void OnTriggerEnter(Collider other)
     {
@@ -20,6 +27,7 @@ public class PaymentBasketManager : MonoBehaviour {
             {
                 ENTRIES_MANAGER.AddItem(other.GetComponent<BaseItem>());
                 OBJECT_LIST.Add(other.gameObject);
+                ON_OBJ_ENTER.Invoke();
             }
         }
            
@@ -35,8 +43,15 @@ public class PaymentBasketManager : MonoBehaviour {
             {
                 ENTRIES_MANAGER.RemoveItem(other.GetComponent<BaseItem>());
                 OBJECT_LIST.Remove(other.gameObject);
+                ON_OBJ_EXIT.Invoke();
             }
         }
+    }
+
+    //Gives us the list
+    public List<GameObject> GetList()
+    {
+        return OBJECT_LIST;
     }
 
     /// <summary>

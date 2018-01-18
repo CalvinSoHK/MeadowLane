@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //Cardreader script. Connects the sensor to the player.
 public class CardreaderManager : MonoBehaviour {
 
-    //Smart sensor that is connected to this card reader
-    public EntriesManager ENTRIES_MANAGER;
-    public PaymentBasketManager BASKET_MANAGER;
+    //Two events. One for getting the total we need to keep going. Second for if we have enough.
+    public UnityEvent GET_TOTALPRICE, ORDER_VALID;
+
+    //Total value of the thing we are trying to do
+    public int TOTAL;
 
     //On trigger enter
     void OnTriggerEnter(Collider col)
@@ -28,12 +31,13 @@ public class CardreaderManager : MonoBehaviour {
                     //Money app reference
                     MoneyApp APP = PHONE.RUNNING_APP.GetComponent<MoneyApp>();
 
+                    //We call the event that will pass the price to this script.
+                    GET_TOTALPRICE.Invoke();
+
                     //If we are able to pay for the total
-                    if (APP.PayMoney(ENTRIES_MANAGER.TOTAL))
+                    if (APP.PayMoney(TOTAL))
                     {
-                        //Deliver the items
-                        ENTRIES_MANAGER.DeliverItems();
-                        BASKET_MANAGER.PackageItems();
+                        ORDER_VALID.Invoke();
                     }
                     else
                     {

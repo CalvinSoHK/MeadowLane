@@ -35,6 +35,10 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     //Whether or not we want to flip the camera on travel. 180 rotation.
     private bool isFlipped;
 
+    //Whether or not we want to anchor
+    private bool isAnchored = false;
+
+
     Material material
     {
         get
@@ -107,6 +111,14 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                             playerObject.transform.localPosition.z);
 
                     }
+                    if (isAnchored)
+                    {
+                        player.transform.parent = destination;
+                    }
+                    else
+                    {
+                        player.transform.parent = null;
+                    }
                     time = 0.0f;
                 }
                 break;
@@ -167,12 +179,12 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     }
 
     //We move the player to the new location
-    public void MovePlayer(Transform location, Transform playerT, bool isFixedT, bool isFlippedT)
+    public void MovePlayer(Transform location, Transform playerT, bool isFixedT, bool isAnchoredT)
     {
         destination = location;
         player = playerT;
         isFixed = isFixedT;
-        isFlipped = isFlippedT;
+        isAnchored = isAnchoredT;
         runEffect = true;
     }
 
