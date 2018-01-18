@@ -21,6 +21,7 @@ public class BaseItem : MonoBehaviour {
 
     //Image that is shown in the inventory
     public Image ICON;
+    public Image CATEGORY_ICON;
 
     //Owner of the Object
     public enum Owner { None, NPC, Player };

@@ -88,25 +88,25 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                 }
 
-                if(indexLine < numberOfLines)
+                if(indexLine < numberOfLines) //if the whole line is being displayed and the player has not clicked yet
                 {
-                    if (showBlinker)
+                    if (showBlinker) //if the blinker is currently being displayed
                     {
-                        if (getStateElapsed() > blinkingTimeTrue)
+                        if (getStateElapsed() > blinkingTimeTrue) //check if the timer has elapsed
                         {
-                            determineBlink(showBlinker);
+                            determineBlink(showBlinker); //turn off blinker
                         }
                     }
-                    else
+                    else //blinker is not being displayed
                     {
-                        if (getStateElapsed() > blinkingTimeFalse)
+                        if (getStateElapsed() > blinkingTimeFalse) //timer is up
                         {
-                            determineBlink(showBlinker);
+                            determineBlink(showBlinker); //turn on blinker
                         }
                     }
-                }else
+                }else //if we have reached the last line of dialogue
                 {
-                    blinker.SetActive(true);
+                    blinker.SetActive(true); //blinker stays continuously on
                 }
 
                 break;
@@ -151,18 +151,22 @@ public class DisplayDialogue: MonoBehaviour{
         return Time.time - lastStateChange; //return time since the last change in state
     }
 
+    /// <summary>
+    /// turn on and off dialogue blinker
+    /// </summary>
+    /// <param name="isBlinking"></param>
     void determineBlink(bool isBlinking)
     {
-        if (isBlinking)
+        if (isBlinking) //if the blinker was on
         {
-            showBlinker = false;
+            showBlinker = false; //turn off the blinker
             blinker.SetActive(false);
-        }else
+        }else //if it was off
         {
-            showBlinker = true;
+            showBlinker = true; //turn is back on
             blinker.SetActive(true);
         }
-        lastStateChange = Time.time;
+        lastStateChange = Time.time; //reset the timer
     }
 
     /// <summary>

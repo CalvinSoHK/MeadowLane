@@ -12,7 +12,7 @@ public class RetrieveTime : MonoBehaviour {
     {
         if(SCHEDULER == null)
         {
-            SCHEDULER = GameObject.Find("TimeManager").GetComponent<Scheduler>();
+            SCHEDULER = GameObject.Find("GameManager").GetComponent<Scheduler>();
         }
         else
         {

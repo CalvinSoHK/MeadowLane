@@ -254,7 +254,7 @@ namespace Valve.VR.InteractionSystem
 			if ( ( flags & AttachmentFlags.ParentToHand ) == AttachmentFlags.ParentToHand )
 			{
 				//Parent the object to the hand
-				objectToAttach.transform.parent = GetAttachmentTransform( attachmentPoint );
+				objectToAttach.transform.SetParent( GetAttachmentTransform( attachmentPoint ));
 				attachedObject.isParentedToHand = true;
 			}
 			else
