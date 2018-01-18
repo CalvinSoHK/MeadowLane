@@ -2,30 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntriesManager : MonoBehaviour {
+//Shop UI entry manager.
+public class ShopEntryManager : BasicEntryManager {
 
-    //Manages all children entries
-    public EntryManager[] ENTRYU_UI_ARRAY;
-
-    //List of information
-    List<Entry> ENTRY_LIST = new List<Entry>();
-
-    //The total value of everything in the list
-    public int TOTAL;
-
-	// Use this for initialization
-	void Start () {
-        ENTRYU_UI_ARRAY = gameObject.GetComponentsInChildren<EntryManager>();
-	}
-	
 	// Update is called once per frame
 	void Update () {
 
+    
+        //Maintain total
+        TOTAL = CalculateTotal();
+
+        UpdateEntries();
+
+	}
+
+    /// <summary>
+    /// Updated the function to update entries correctly for this entry manager.
+    /// </summary>
+    public override void UpdateEntries()
+    {
         //Keep track of index
         int index = 0;
 
+
         //For every entry
-        foreach(Entry ENTRY in ENTRY_LIST)
+        foreach (Entry ENTRY in ENTRY_LIST)
         {
             //Display the entry.
             SetEntry(index, ENTRY.COUNT, ENTRY.PRICE, ENTRY.NAME);
@@ -35,10 +36,10 @@ public class EntriesManager : MonoBehaviour {
         }
 
         //For every other entry past this index, empty them
-        for(; index < ENTRYU_UI_ARRAY.Length; index++)
+        for (; index < ENTRYU_UI_ARRAY.Length; index++)
         {
             //For every entry except the last one.
-            if(index != ENTRYU_UI_ARRAY.Length - 1)
+            if (index != ENTRYU_UI_ARRAY.Length - 1)
             {
                 ENTRYU_UI_ARRAY[index].gameObject.SetActive(false);
             }
@@ -46,10 +47,39 @@ public class EntriesManager : MonoBehaviour {
             {
                 SetEntry(index, 0, TOTAL, "TOTAL");
             }
-          
-        }
 
-	}
+        }
+    }
+
+    /// <summary>
+    /// Delivers all items in our basket into the delivery service.
+    /// </summary>
+    public void DeliverItems()
+    {
+        //For all entries
+        foreach(Entry ENTRY in ENTRY_LIST)
+        {
+            for(int i = 0; i < ENTRY.COUNT; i++)
+            {
+                DeliveryManager.Instance.AddItem(ENTRY.PREFAB_REF);               
+            }
+        }
+        ENTRY_LIST.Clear();
+    }
+
+    /// <summary>
+    /// Calculates the total value of items in our cart.
+    /// </summary>
+    /// <returns></returns>
+    public override int CalculateTotal()
+    {
+        int TOTAL = 0;
+        foreach (Entry ENTRY in ENTRY_LIST)
+        {
+            TOTAL += ENTRY.COUNT * ENTRY.PRICE;
+        }
+        return TOTAL;
+    }
 
     /// <summary>
     /// Helper function that checks to see if the obj is already in the ENTRY_LIST
@@ -100,7 +130,7 @@ public class EntriesManager : MonoBehaviour {
         }
         else
         {
-            ENTRY_LIST.Add(new Entry(1, obj._VALUE, obj._NAME));
+            ENTRY_LIST.Add(new Entry(1, obj._VALUE, obj._NAME, obj.PREFAB_REF));
         }
     }
 
@@ -156,11 +186,13 @@ public class Entry
 {
     public int COUNT, PRICE;
     public string NAME;
+    public GameObject PREFAB_REF;
 
-    public Entry(int COUNT_T, int PRICE_T, string NAME_T)
+    public Entry(int COUNT_T, int PRICE_T, string NAME_T, GameObject PREFAB_REF_T)
     {
         COUNT = COUNT_T;
         PRICE = PRICE_T;
         NAME = NAME_T;
+        PREFAB_REF = PREFAB_REF_T;
     }
 }

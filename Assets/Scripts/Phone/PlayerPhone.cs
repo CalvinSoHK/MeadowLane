@@ -64,53 +64,46 @@ public class PlayerPhone : MonoBehaviour {
         }
     }
 
-    //Menu button was pressed, use the phone on the hand that called it.
+    //Menu button was pressed, use the phone on the hand that called it. Never turns it off.
     public void UsePhone(Hand hand)
     {
-        //If we are in the NONE show state, just show the phone on this hand
-        if (SHOW == ShowState.None)
+        //If it is not holding something
+        if (hand.currentAttachedObject.name == hand.controllerPrefab.name + "_" + hand.name)
         {
-            ShowPhone(hand);
-            if (hand == hand1)
+            //If we are in the NONE show state, just show the phone on this hand
+            if (SHOW == ShowState.None)
             {
-                SHOW = ShowState.Hand1;
-            }
-            else
-            {
-                SHOW = ShowState.Hand2;
-            }
-        }
-        else if (SHOW == ShowState.Hand1)
-        {
-            //If the hand that called it was hand1, just hide the phone
-            if (hand == hand1)
-            {
-                HidePhone(hand);
-                SHOW = ShowState.None;
-            }
-            else//if the hand that called it was hand2, hide the phone on hand1, and show the phone on hand2.
-            {
-                HidePhone(hand1);
                 ShowPhone(hand);
-                SHOW = ShowState.Hand2;
+                if (hand == hand1)
+                {
+                    SHOW = ShowState.Hand1;
+                }
+                else
+                {
+                    SHOW = ShowState.Hand2;
+                }
+            }
+            else if (SHOW == ShowState.Hand1)
+            {
+                //If the hand that called it was hand1, just hide the phone
+                if (hand != hand1)
+                {
+                    HidePhone(hand1);
+                    ShowPhone(hand);
+                    SHOW = ShowState.Hand2;
+                }
+            }
+            else if (SHOW == ShowState.Hand2)
+            {
+                //If the hand that called it was hand2, just hide the phone
+                if (hand != hand2)
+                {
+                    HidePhone(hand2);
+                    ShowPhone(hand1);
+                    SHOW = ShowState.Hand1;
+                }
             }
         }
-        else if (SHOW == ShowState.Hand2)
-        {
-            //If the hand that called it was hand2, just hide the phone
-            if (hand == hand2)
-            {
-                HidePhone(hand);
-                SHOW = ShowState.None;
-            }
-            else//if the hand that called it was hand1, hide the phone on hand2, and show the phone on hand2.
-            {
-                HidePhone(hand2);
-                ShowPhone(hand1);
-                SHOW = ShowState.Hand1;
-            }
-        }
-
     }
 
     //Helper function to vibrate the phone + controller
@@ -147,11 +140,17 @@ public class PlayerPhone : MonoBehaviour {
         PHONE.GetComponent<PhoneLinker>().PHONE = this;
     }
 
-    void HidePhone(Hand hand)
+    public void HidePhone(Hand hand)
     {
         //Detach the object in script, then destroy it
-        hand.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
-        Destroy(PHONE);
+        if((hand == hand1 && SHOW == ShowState.Hand1) || (hand == hand2 && SHOW == ShowState.Hand2))
+        {
+            
+            hand.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            SHOW = ShowState.None;
+            Destroy(PHONE);
+        }
+     
     }
 
     

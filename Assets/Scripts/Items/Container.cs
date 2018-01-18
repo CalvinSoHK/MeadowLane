@@ -77,7 +77,7 @@ public class Container : MonoBehaviour {
     public void ejectFromContainer(GameObject theObject)
     {
         //Set the owner to the same as the container
-        theObject.GetComponent<BaseItem>()._OWNER = OWNER;
+        //theObject.GetComponent<BaseItem>()._OWNER = OWNER;
 
         //PUsh the object up
         Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 300, Random.Range(-90.0f, 90.0f));
