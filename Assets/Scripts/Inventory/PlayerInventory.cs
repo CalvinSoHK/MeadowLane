@@ -13,6 +13,10 @@ public class PlayerInventory : MonoBehaviour {
     public enum ShowState { None, Hand1, Hand2 };
     public ShowState SHOW = ShowState.None;
 
+    //Temp state for the next frame. We change this tate, which is applied at the end of the frame.
+    //Prevents inputs from being taken on the first frame.
+    private ShowState TEMP_STATE = ShowState.None;
+
     //Pos offset for the inventoryUI on being called
     public Vector3 POS_OFFSET;
     public Vector3 ROT_OFFSET;
@@ -26,6 +30,7 @@ public class PlayerInventory : MonoBehaviour {
     //Bools for the four directions on the UI
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
 
+
     public GameObject[] DebugInventory;
 	// Use this for initialization
 	void Start () {
@@ -38,28 +43,7 @@ public class PlayerInventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //Update the directional bools based off of the current hand's trackpad
-        if (SHOW == ShowState.Hand1)
-        {
-            PRESS_DOWN = hand1.GetTrackpadDown();
-            PRESS_UP = hand1.GetTrackpadUp();
-            LEFT = hand1.GetTrackpadPressLeft();
-            RIGHT = hand1.GetTrackpadPressRight();
-            UP = hand1.GetTrackpadPressUp();
-            DOWN = hand1.GetTrackpadPressDown();
-            TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
-
-        }
-        else if (SHOW == ShowState.Hand2)
-        {
-            PRESS_DOWN = hand2.GetTrackpadDown();
-            PRESS_UP = hand2.GetTrackpadUp();
-            LEFT = hand2.GetTrackpadPressLeft();
-            RIGHT = hand2.GetTrackpadPressRight();
-            UP = hand2.GetTrackpadPressUp();
-            DOWN = hand2.GetTrackpadPressDown();
-            TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
-        }
+       
 
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -86,9 +70,33 @@ public class PlayerInventory : MonoBehaviour {
         {
             CheckInventoryUI(false); //then we turn off the inventory
         }*/
-
-        if (isInventoryOn) //if the inventory is on
+        
+        //If we're on AND we're not showing nothing.
+        if (SHOW != ShowState.None && isInventoryOn)
         {
+            //Update the directional bools based off of the current hand's trackpad
+            if (SHOW == ShowState.Hand1)
+            {
+                PRESS_DOWN = hand1.GetTrackpadDown();
+                PRESS_UP = hand1.GetTrackpadUp();
+                LEFT = hand1.GetTrackpadPressLeft();
+                RIGHT = hand1.GetTrackpadPressRight();
+                UP = hand1.GetTrackpadPressUp();
+                DOWN = hand1.GetTrackpadPressDown();
+                TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
+
+            }
+            else if (SHOW == ShowState.Hand2)
+            {
+                PRESS_DOWN = hand2.GetTrackpadDown();
+                PRESS_UP = hand2.GetTrackpadUp();
+                LEFT = hand2.GetTrackpadPressLeft();
+                RIGHT = hand2.GetTrackpadPressRight();
+                UP = hand2.GetTrackpadPressUp();
+                DOWN = hand2.GetTrackpadPressDown();
+                TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+            }
+
             if (LEFT && PRESS_DOWN){ //if we press left on the D-Pad
                 Debug.Log("LEFT");
                 Inventory_Manager.currentCategorySlotsIndex -= 1; //move the inventory item to the left
@@ -134,8 +142,7 @@ public class PlayerInventory : MonoBehaviour {
                 Inventory_Manager.currentCategorySlotsIndex = 0; //go to the first object in that category
                 UpdateImage(true, true); //update the category and item image
             }else if (PRESS_DOWN) //If we press the center button of the D-Pad
-            {
-                CheckInventoryUI(false); //turn off the Inventory UI
+            {          
                 InventorySlot tempSlot = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex]; // get a ref to the item selected by the player
                 if(Inventory_Manager.currentCategoryIndex != 0) //If we are not in the produce section
                 {
@@ -154,14 +161,38 @@ public class PlayerInventory : MonoBehaviour {
                 }
                 else //If we are in the produce section
                 {
+                    
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
+                CheckInventoryUI(false); //turn off the Inventory UI
                 /*GameObject prefabRef = tempSlot.PrefabRef;
                 Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
                 Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
             }            
-        }        
-	}
+        }
+
+        //Change the state machine at the end of a frame. Prevents same input when opening the inventory up.
+        SHOW = TEMP_STATE;
+
+        
+    }
+
+    //Return the right hand
+    //Only called when UI is up, which means show state is either hand. Should never give us a null.
+    public Hand GetHand()
+    {
+        if (SHOW == ShowState.Hand1)
+        {
+            return hand1;
+
+        }
+        else if (SHOW == ShowState.Hand2)
+        {
+            return hand2;
+        }
+        Debug.Log("Error: For some reason spawning item with no hand.");
+        return null;
+    }
 
     //Only brings up the inventory on the given hand.
     public void CallInventory(Hand hand)
@@ -175,11 +206,11 @@ public class PlayerInventory : MonoBehaviour {
                 hand.GetComponent<OnTriggerRaycast>().PickUpObj(UICanvas.gameObject);
                 if (hand == hand1)
                 {
-                    SHOW = ShowState.Hand1;
+                    TEMP_STATE = ShowState.Hand1;
                 }
                 else
                 {
-                    SHOW = ShowState.Hand2;
+                    TEMP_STATE = ShowState.Hand2;
                 }
             }
             else if (SHOW == ShowState.Hand1)
@@ -188,7 +219,7 @@ public class PlayerInventory : MonoBehaviour {
                 if (hand != hand1)
                 {
                     hand.GetComponent<OnTriggerRaycast>().PickUpObj(UICanvas.gameObject);
-                    SHOW = ShowState.Hand2;
+                    TEMP_STATE = ShowState.Hand2;
                 }
             }
             else if (SHOW == ShowState.Hand2)
@@ -197,7 +228,7 @@ public class PlayerInventory : MonoBehaviour {
                 if (hand != hand2)
                 {
                     hand.GetComponent<OnTriggerRaycast>().PickUpObj(UICanvas.gameObject);
-                    SHOW = ShowState.Hand1;
+                    TEMP_STATE = ShowState.Hand1;
                 }
             }
             
@@ -249,10 +280,11 @@ public class PlayerInventory : MonoBehaviour {
             int CategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, true); //we check to see which, from the last selected category, contains an item
             if (CategoryIndex != -1) //if the category index is not equal to -1 (meaning all categories are empty)
             {
-                Debug.Log("-1 you is not");
+                Debug.Log("-1 you is not: " + CategoryIndex);
                 Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
                 Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in category
+                Debug.Log("Count: " + TotalItemForCategory);
                 UpdateImage(true, true); //update both the category and item image
                 CheckInventoryUI(true); //Inventory will only open if there is something in it
                 return true;
@@ -278,7 +310,7 @@ public class PlayerInventory : MonoBehaviour {
     /// <param name="removeFromInventory"></param>
     public GameObject SpawnItemFromInventory(InventorySlot tempSlot, bool removeFromInventory)
     {
-        GameObject prefabRef = tempSlot.PrefabRef; //get prefab reference of object
+        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name) as GameObject;
         GameObject ObjectRef = Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity); //Keep reference of instantiated object
         
         AttachObjectToHand(ObjectRef);//Attach the instantiated object to the player's hand
@@ -296,6 +328,9 @@ public class PlayerInventory : MonoBehaviour {
     public void AttachObjectToHand(GameObject InstantiatedObject)
     {
         //Attach object to hand
+        Hand hand = GetHand();
+
+        hand.GetComponent<OnTriggerRaycast>().PickUpObj(InstantiatedObject);
     }
 
     /// <summary>
@@ -319,7 +354,7 @@ public class PlayerInventory : MonoBehaviour {
                 hand2.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
             }
 
-            SHOW = ShowState.None;
+            TEMP_STATE = ShowState.None;
         }
         else //if true
         {
@@ -344,6 +379,7 @@ public class PlayerInventory : MonoBehaviour {
             return CheckIfCategoryContainsItem(CategoryIndex); //either find the index for the next category that has an intem
         }else
         {
+            Debug.Log("Goes to previous.");
             return CheckIfPreviousCategoryContainsItem(CategoryIndex);
         }
     }

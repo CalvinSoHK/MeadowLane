@@ -5,6 +5,9 @@ using UnityEngine;
 //Shop UI entry manager.
 public class ShopEntryManager : BasicEntryManager {
 
+    //Whether or not we want the items to be delivered next day or given immediately.
+    public bool IS_DELIVERY;
+
 	// Update is called once per frame
 	void Update () {
 
@@ -61,7 +64,16 @@ public class ShopEntryManager : BasicEntryManager {
         {
             for(int i = 0; i < ENTRY.COUNT; i++)
             {
-                DeliveryManager.Instance.AddItem(ENTRY.PREFAB_REF);               
+                if (IS_DELIVERY)
+                {
+                    //If delivery for tomorrow
+                    DeliveryManager.Instance.AddItem(Resources.Load(ENTRY.CATEGORY + "/" + ENTRY.NAME) as GameObject);
+                }
+                else
+                {
+                    //else add it now
+                    Inventory_Manager.AddItemToInventory((Resources.Load(ENTRY.CATEGORY + "/" + ENTRY.NAME) as GameObject).GetComponent<BaseItem>());
+                }   
             }
         }
         ENTRY_LIST.Clear();
@@ -130,7 +142,7 @@ public class ShopEntryManager : BasicEntryManager {
         }
         else
         {
-            ENTRY_LIST.Add(new Entry(1, obj._VALUE, obj._NAME, obj.PREFAB_REF));
+            ENTRY_LIST.Add(new Entry(1, obj._VALUE, obj._NAME, obj.CATEGORY));
         }
     }
 
@@ -186,13 +198,13 @@ public class Entry
 {
     public int COUNT, PRICE;
     public string NAME;
-    public GameObject PREFAB_REF;
+    public string CATEGORY;
 
-    public Entry(int COUNT_T, int PRICE_T, string NAME_T, GameObject PREFAB_REF_T)
+    public Entry(int COUNT_T, int PRICE_T, string NAME_T, string CATEGORY_T)
     {
+        CATEGORY = CATEGORY_T;
         COUNT = COUNT_T;
         PRICE = PRICE_T;
         NAME = NAME_T;
-        PREFAB_REF = PREFAB_REF_T;
     }
 }

@@ -40,30 +40,42 @@ public class Container : MonoBehaviour {
         //If the object is an Item, AND is interactable 
         if (collision.gameObject.GetComponent<BaseItem>() != null && collision.gameObject.layer == 8)
         {
-            //Debug.Log(collision.gameObject.name);
+            //If containable, try to put it in
+            if (collision.gameObject.GetComponent<BaseItem>().CONTAINABLE)
+            {
+                //If this is the players container, put it in our inventory
+                if (OWNER == BaseItem.Owner.Player)
+                {
+                    Debug.Log("Firing");
+                    Inventory_Manager.AddItemToInventory(collision.gameObject.GetComponent<BaseItem>());
+                    Destroy(collision.gameObject);
+                }
+                else //Normal behavior for other containers. Try to save what this container currently has.
+                {
+                    //Retrieve the relevant info into a variable for ease of reading
+                    currentItem = collision.gameObject.GetComponent<BaseItem>()._NAME;
+                    int tempIndex = getIndex(currentItem);
+                    //Debug.Log(tempIndex);
 
-            //Retrieve the relevant info into a variable for ease of reading
-            currentItem = collision.gameObject.GetComponent<BaseItem>()._NAME;
-            int tempIndex = getIndex(currentItem);
-            //Debug.Log(tempIndex);
-
-            //If we are already maxed out in this continer OR the owner is not the same as the container
-            if (currentNumItems >= maxItems || collision.gameObject.GetComponent<BaseItem>()._OWNER != OWNER)
-            {
-                //Eject the object from the container
-                ejectFromContainer(collision.gameObject);
-            }
-            else if (tempIndex != -1) //If the object is in the list of possible items to store NOTE: if it is negative one then it can't be stored.
-            {
-                //Increase the number of items for that item, destroy the physical object, keep track of total container items.
-                numberOfIndItems[tempIndex] += 1;
-                Destroy(collision.gameObject);
-                currentNumItems += 1;
-            }
-            else //We somehow made a mistake and the item isn't in the container. Mostly for debug. Prevents some crashing.
-            {
-                Debug.Log("Wrong Index");
-                ejectFromContainer(collision.gameObject);
+                    //If we are already maxed out in this continer OR the owner is not the same as the container
+                    if (currentNumItems >= maxItems || collision.gameObject.GetComponent<BaseItem>()._OWNER != OWNER)
+                    {
+                        //Eject the object from the container
+                        ejectFromContainer(collision.gameObject);
+                    }
+                    else if (tempIndex != -1) //If the object is in the list of possible items to store NOTE: if it is negative one then it can't be stored.
+                    {
+                        //Increase the number of items for that item, destroy the physical object, keep track of total container items.
+                        numberOfIndItems[tempIndex] += 1;
+                        Destroy(collision.gameObject);
+                        currentNumItems += 1;
+                    }
+                    else //We somehow made a mistake and the item isn't in the container. Mostly for debug. Prevents some crashing.
+                    {
+                        Debug.Log("Wrong Index");
+                        ejectFromContainer(collision.gameObject);
+                    }
+                }
             }
         }
         else //The object we tried to throw in isn't a base item and isn't in the right layer.

@@ -7,7 +7,6 @@ public class InventorySlot {
 
     private string p_Name; //name of the item
     private string p_Category; // category which the item belongs to
-    private GameObject p_PrefabRef; //ref to the item's prefab  
     //(IF WE ARE KEEPING TRACK OF AN IMAGE SHOULD WE KEEP TRACK OF THE ABOVE AS A GAME OBJECT RATHER THAT STRING)
     private int p_TotalNum; //total number of this item in inventory
     private int p_Key; //key representing item
@@ -24,11 +23,10 @@ public class InventorySlot {
     /// <param name="prefabRef"></param>
     /// <param name="key"></param>
     /// <param name="icon"></param>
-    public InventorySlot(string name, string category, GameObject prefabRef, int key, Image icon, Image cIcon)
+    public InventorySlot(string name, string category, int key, Image icon, Image cIcon)
     {
         p_Name = name;
         p_Category = category;
-        p_PrefabRef = prefabRef;
         p_Key = key;
         p_Icon = icon;
         p_CategoryIcon = cIcon;
@@ -76,11 +74,20 @@ public class InventorySlot {
             return p_CategoryIcon;
         }
     }
-    public GameObject PrefabRef
+
+    public string Category
     {
         get
         {
-            return p_PrefabRef;
+            return p_Category;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return p_Name;
         }
     }
 }

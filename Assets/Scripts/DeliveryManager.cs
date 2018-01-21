@@ -59,12 +59,12 @@ public class DeliveryManager : MonoBehaviour
     }
 
     //Function that manages deliveries being put into the right place
-    public void ManageDeliveries(List<GameObject> LIST)
+    public void ManageDeliveries()
     {
         //For every obj
-        foreach(GameObject OBJ in LIST)
+        foreach(GameObject OBJ in ITEMS_LIST)
         {
-
+            Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
         }
     }
 

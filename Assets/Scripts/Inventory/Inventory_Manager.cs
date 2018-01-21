@@ -27,7 +27,7 @@ public static class  Inventory_Manager {
     /// Adds an item to the player's inventory
     /// </summary>
     /// <param name="itemInfo"></param>
-    public static void AddItemToInventory(BaseItem itemInfo)
+     public static void AddItemToInventory(BaseItem itemInfo)
     {
         //CategorySlots[0] = new List<InventorySlot>();
        // Debug.Log(CategorySlots[0]);
@@ -36,7 +36,7 @@ public static class  Inventory_Manager {
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             //add the item in the category at the end of the list
-            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.PREFAB_REF, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
+            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
         }else //item type is already in inventory
         {
             //increase the total number of specific item in inventory by 1
