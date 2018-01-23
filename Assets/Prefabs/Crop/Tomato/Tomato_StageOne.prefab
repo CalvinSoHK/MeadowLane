@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NEXT_STAGE: {fileID: 1058316018840474, guid: dde08e81e0581f84884edaa0b999dd92, type: 2}
-  PRODUCE: {fileID: 0}
+  PRODUCE: {fileID: 1166997846139522, guid: ae7a47f4541366749960e83fe9bc36d1, type: 2}
   DEAD_STAGE: {fileID: 0}
   TIME_TO_NEXT: 2
   PRODUCE_NUMBER: 0

@@ -43,5 +43,6 @@ public class InteractionDayEnd : InteractableCustom {
         }
         FM.DayEndAll();
         TM.NextDay(TM.date);
+        DeliveryManager.Instance.ManageDeliveries();
     }
 }

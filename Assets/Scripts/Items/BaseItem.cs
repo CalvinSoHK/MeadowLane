@@ -14,7 +14,7 @@ public class BaseItem : MonoBehaviour {
     public string CATEGORY;
 
     //Prefab reference
-    public GameObject PREFAB_REF;
+    //public GameObject PREFAB_REF;
 
     //Key reference
     public int KEY;

@@ -68,9 +68,9 @@ public class Scheduler : MonoBehaviour {
     }
 
     //The current date of the game
-    public Date date;
+    public Date        date;
 
-    //The current time for the game.
+    //The current time for the game. 
     public float CLOCK = 0;
 
     //The cycle in game
