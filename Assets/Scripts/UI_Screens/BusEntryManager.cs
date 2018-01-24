@@ -22,6 +22,9 @@ public class BusEntryManager : BasicEntryManager {
     //The location we are at
     public string Location;
 
+    //The bus location on arrival
+    public Transform BUS_ARRIVAL;
+
     //The type of transition we need to go here
     public enum TransitionType { Village, Outskirts, Beachside };
     public TransitionType TRANSITION_TO;
@@ -84,7 +87,8 @@ public class BusEntryManager : BasicEntryManager {
     //Invoke the bus and give it our selected. Then clear.
     public void GiveToBus()
     {
-        Bus_Stop_Manager.Instance.BUS.MoveTo(Location, SELECTED.NAME);
+        //Debug.Log(SELECTED.name);
+        Bus_Stop_Manager.Instance.BUS.MoveTo(SELECTED.NAME);
         ClearSelected();
     }
 

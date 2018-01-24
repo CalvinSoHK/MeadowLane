@@ -82,7 +82,6 @@ GameObject:
   - component: {fileID: 114436405619053726}
   - component: {fileID: 114339952623615624}
   - component: {fileID: 114303492828151658}
-  - component: {fileID: 114215441964869264}
   m_Layer: 8
   m_Name: Tomato_Seed_Dispenser
   m_TagString: Untagged
@@ -237,20 +236,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114215441964869264
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1414316071674742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 076f08eeb42d22342a7cd359d714a25f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ENABLED: 1
-  OG_PARENT: {fileID: 0}
-  Wait_Time: 5
 --- !u!114 &114303492828151658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,9 +248,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _NAME: Tomato_Seed_Dispenser
+  CATEGORY: Tools
+  KEY: 0
+  ICON: {fileID: 0}
+  CATEGORY_ICON: {fileID: 0}
+  _OWNER: 2
   _VALUE: 20
   _TAGS: 386
-  _THUMBNAIL: {fileID: 0}
+  CONTAINABLE: 0
   offset: {x: 0.05, y: 0, z: 0}
   rotOffset: {x: 0, y: 90, z: 0}
 --- !u!114 &114306965060025752
@@ -363,6 +353,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae785fc249727546b978cb886845128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0

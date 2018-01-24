@@ -128,8 +128,8 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 if (getStateElapsed() > openTimeBetween)
                 {
                     setCurrentState(Gamestate.wait);
-                    destination = null;
-                    player = null;
+                    //destination = null;
+                    //player = null;
                 }
                 break;
         }
@@ -178,6 +178,12 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         return Time.time - lastStateChange;
     }
 
+    //Getter function for state
+    public Gamestate GetCurrentState()
+    {
+        return currentState;
+    }
+
     //We move the player to the new location
     public void MovePlayer(Transform location, Transform playerT, bool isFixedT, bool isAnchoredT)
     {
@@ -185,6 +191,13 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         player = playerT;
         isFixed = isFixedT;
         isAnchored = isAnchoredT;
+        runEffect = true;
+    }
+
+    //Blink eyes
+    //This is going to move us to the same location as last time. Should be no problem for most cases.
+    public void BlinkEyes()
+    {
         runEffect = true;
     }
 
