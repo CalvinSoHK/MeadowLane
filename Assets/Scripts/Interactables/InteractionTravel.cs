@@ -15,7 +15,14 @@ public class InteractionTravel : InteractableCustom {
     //Whether or not we want it to anchor
     public bool ANCHOR = false;
 
+    //The travel point we are managing
+    TravelPointController TPC;
 
+    private void Awake()
+    {
+        Debug.Log(destination.name);
+        TPC = destination.GetComponent<TravelPointController>();
+    }
 
     //Override use function to move the player rig
     public override void Use(Hand hand)
@@ -32,6 +39,11 @@ public class InteractionTravel : InteractableCustom {
                 Camera.main.GetComponent<ScreenTransitionImageEffect>().MovePlayer(destination,
                 hand.transform.parent.parent, false, ANCHOR);
             }
+
+            destination.GetComponent<TravelPointController>().isValid = false;
+
+            TravelPointManager.Instance.ResetValid();
+            TravelPointManager.Instance.SetIndex(TravelPointManager.Instance.GetIndex(TPC));
         }
 
     }

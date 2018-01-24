@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 114772256695003730}
   - component: {fileID: 114693742426057564}
   - component: {fileID: 114381143513247640}
-  - component: {fileID: 114314092448217400}
   m_Layer: 8
   m_Name: WateringCan_Standin
   m_TagString: Untagged
@@ -163,19 +162,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114314092448217400
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1856392183127974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 076f08eeb42d22342a7cd359d714a25f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OG_PARENT: {fileID: 0}
-  Wait_Time: 5
 --- !u!114 &114381143513247640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -188,9 +174,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _NAME: WateringCan
+  CATEGORY: Tools
+  KEY: 0
+  ICON: {fileID: 0}
+  CATEGORY_ICON: {fileID: 0}
+  _OWNER: 2
   _VALUE: 1
   _TAGS: 66
-  _THUMBNAIL: {fileID: 0}
+  CONTAINABLE: 0
   offset: {x: 0, y: -0.2, z: 0.15}
   rotOffset: {x: 0, y: 90, z: 0}
 --- !u!114 &114462577236036860
@@ -238,6 +229,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae785fc249727546b978cb886845128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0

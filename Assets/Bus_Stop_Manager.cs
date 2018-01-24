@@ -33,7 +33,13 @@ public class Bus_Stop_Manager : MonoBehaviour {
 
     //List of prices for each stop. Indexes correlate with all stops
     public List<int> STOP_PRICES = new List<int>();
-    
+
+    //List of the locations we can go to
+    public List<string> Transition_List;
+
+    //Bus's movement speed
+    public float MAX_SPEED = 5f;
+
     //The list of all stops.
     public List<BusEntryManager> STOP_CONTROLLER_LIST = new List<BusEntryManager>();
 
