@@ -39,8 +39,16 @@ public static class  Inventory_Manager {
             CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
         }else //item type is already in inventory
         {
-            //increase the total number of specific item in inventory by 1
-            CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+            //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
+            if (InventoryItemInScene.ContainsKey(itemInfo.KEY))
+            {
+                InventoryItemInScene.Remove(itemInfo.KEY); //remove that item from the dictionary
+            }else
+            {
+                //increase the total number of specific item in inventory by 1
+                CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+            }
+            
         }
     }
 
