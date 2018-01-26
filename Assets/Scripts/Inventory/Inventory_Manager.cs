@@ -66,6 +66,27 @@ public static class  Inventory_Manager {
     }
 
     /// <summary>
+    /// Removes all items from the given category slot
+    /// </summary>
+    /// <param name="INDEX"></param>
+    public static void RemoveAllItemsFromCategory(int INDEX)
+    {
+        CategorySlots[INDEX].Clear();
+    }
+
+    /// <summary>
+    /// Adds all items from a list of base items back into the inventory
+    /// </summary>
+    /// <param name="LIST"></param>
+    public static void AddAllItemsFromList(List<BaseItem> LIST)
+    {
+        foreach(BaseItem ITEM in LIST)
+        {
+            AddItemToInventory(ITEM);
+        }
+    }
+
+    /// <summary>
     /// finds the index of the specific category within the static category list
     /// </summary>
     /// <param name="category"></param>
@@ -121,6 +142,24 @@ public static class  Inventory_Manager {
     public static void AddItemToDictionary(int key, GameObject value)
     {
         InventoryItemInScene.Add(key, value);
+    }
+
+    /// <summary>
+    /// Function that gives us the entire inventory information of a given category
+    /// </summary>
+    /// <param name="CATEGORY_INDEX"></param>
+    /// <returns></returns>
+    public static List<InventorySlot> GetCategory(string CATEGORY)
+    {
+        //Get index of the category given
+        int INDEX = checkItemCategoryIndex(CATEGORY);
+
+        //Check if there is at least something in the category
+        if(INDEX  != -1 && CategorySlots[INDEX].Count > 0)
+        {
+            return CategorySlots[INDEX];
+        }
+        return null;
     }
 
 }
