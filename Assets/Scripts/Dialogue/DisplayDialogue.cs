@@ -9,7 +9,7 @@ public class DisplayDialogue: MonoBehaviour{
     public string characterName, currentSituation; //strings representing the specific character name and situation for this instance
     public string[] allSituations; //array of all possible instances for that character
     public bool shopOwner; //whether or not they are a shop owner
-    public enum GameState { Wait, Idle, DialogueSetup, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText} //statemachine for the displaying of dialogue
+    public enum GameState { Wait, Idle, DialogueSetup, DialogueSetupForShop, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText} //statemachine for the displaying of dialogue
     public GameState currentState; //current state in the state machine
     float time = 0.0f, lastStateChange; //references to the amount of time that has passed since last state change
     public GameObject textBox; //reference to the specific textbox for the character
@@ -21,7 +21,8 @@ public class DisplayDialogue: MonoBehaviour{
     private bool inDialogue, //checks whether the character is currently in dialogue
         proceed = false,            //Whether or not we should proceed through the text.  
         showBlinker = false;        //Whether or not we should show the blinker at the end of dialogue.
-    private float blinkingTimeTrue=.7f, blinkingTimeFalse = .3f;  
+    private float blinkingTimeTrue=.7f, blinkingTimeFalse = .3f;
+    string currentRecipe;
 
     // Use this for initialization
     void Start()
@@ -44,6 +45,17 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DialogueSetup: //Get the correct Dialogue from the dialogue manager based on name and situation.
                 DialogueManager.setUpCurrentDialogue(characterName, currentSituation, shopOwner); //Find the lines of dialogue needed for this character and situation instance
+                numberOfLines = DialogueManager.currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
+                indexLine = 0; //reset current line
+                indexLetter = 0; //reset current letter
+                currentLine = ""; //reset the line of dialogue being displayed
+                inDialogue = true; //they are now in dialogue
+                textBox.SetActive(true); //display the text box
+                setCurrentState(GameState.Typing); //setup up is done, we now need to display the text
+                break;
+
+            case GameState.DialogueSetupForShop:
+                DialogueManager.setUpCurrentDialogueForShop(currentRecipe);
                 numberOfLines = DialogueManager.currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
                 indexLine = 0; //reset current line
                 indexLetter = 0; //reset current letter
@@ -185,6 +197,21 @@ public class DisplayDialogue: MonoBehaviour{
     public bool GetInDialogue()
     {
         return inDialogue;
+    }
+
+    /// <summary>
+    /// Starts dialogue in shop minigame throug code
+    /// </summary>
+    public void ActivateShopDialogue(string recipe)
+    {
+        setCurrentState(GameState.DialogueSetupForShop);
+        currentRecipe = recipe;
+
+    }
+
+    public void DeActivateShop()
+    {
+        setCurrentState(GameState.StopDisplayingText);
     }
 
     /*

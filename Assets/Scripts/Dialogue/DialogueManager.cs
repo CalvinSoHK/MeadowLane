@@ -7,6 +7,8 @@ using System.IO;
 public static class DialogueManager{
 
     public static List<string> currentDialogueForCharacter = new List<string>(); //List that will hold the current dialogue that will be displayed
+    public static string[] greetings = { "Hey there! I'm here to pick up a RECIPE please", "Yo! I need a RECIPE ASAP!", "Hello, could I get one RECIPE please",
+        "Hey, how is it going? One RECIPE please" };
 
     /// <summary>
     /// Will parse through the dialogue text file to find the appropriate dialogue lines based on the character name and the current situation they are in
@@ -40,6 +42,14 @@ public static class DialogueManager{
                 }
             }
         }
+    }
+
+    public static void setUpCurrentDialogueForShop(string recipe)
+    {
+        string currentGreeting = greetings[Random.Range(0, greetings.Length)];
+        currentGreeting = currentGreeting.Replace("RECIPE", recipe);
+        resetCurrentDialogue();
+        currentDialogueForCharacter.Add(currentGreeting);
     }
 
     /// <summary>
