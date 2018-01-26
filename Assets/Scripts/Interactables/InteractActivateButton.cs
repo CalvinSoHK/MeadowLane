@@ -10,9 +10,6 @@ public class InteractActivateButton : InteractableCustom {
     //The animation controller
     Animator animator;
 
-    //The scale sensor we correspond to
-    public SmartSensor sensor;
-
     void Start()
     {
         animator = transform.parent.GetComponent<Animator>();
@@ -23,8 +20,5 @@ public class InteractActivateButton : InteractableCustom {
     {
         //Set the trigger for the animation. 
         animator.SetTrigger("PressTrigger");
-        PlayerStats stats = hand.transform.parent.parent.GetComponent<PlayerStats>();
-        stats.AddMoney(sensor.GetTotal(BaseItem.Owner.Player));
-        sensor.EmptyContainers();
     }
 }

@@ -1,0 +1,18 @@
+Candied Tomato
+0.1 10
+Produce/Tomato
+Pizza
+0.2 20
+Produce/Tomato Produce/Tomato
+Tomato Soup
+0.3 30
+Produce/Tomato Produce/Tomato Produce/Tomato
+Tomato Dip
+0.4 40
+Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
+Tomato Jam
+0.5 50
+Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
+Tomato Salad
+0.6 60
+Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
