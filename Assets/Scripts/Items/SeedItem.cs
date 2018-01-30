@@ -15,6 +15,8 @@ public class SeedItem : BaseItem {
     //Offset for rotation when planting
     public Vector3 prefabRotOffset;
 
+    public bool isPlanted = false;
+
     //Plant the seed into the given farmBlock
 	public virtual void PlantSeed(Transform farmBlock)
     {
@@ -44,10 +46,10 @@ public class SeedItem : BaseItem {
         GameObject target = collision.collider.gameObject;
 
         //Check if its a farm block
-        if (target.GetComponent<FarmBlockInfo>())
+        if (!isPlanted && target.GetComponent<FarmBlockInfo>())
         {
             //Check if the ground has already been tilled
-            if (target.GetComponent<FarmBlockInfo>().TILLED)
+            if (target.GetComponent<FarmBlockInfo>().TILLED && target.GetComponent<FarmBlockInfo>().HAS_SEED)
             {
                 //Use the function to plant the seed there.
                 //After this the function destroys the object so nothing comes after this.
@@ -55,7 +57,7 @@ public class SeedItem : BaseItem {
             }
             else //If not, sit as a normal object.
             {
-                Debug.Log("Can't plant, not tilled." + gameObject.name);
+                Debug.Log("Can't plant, not tilled or already has seed." + gameObject.name);
             }
            
         }
