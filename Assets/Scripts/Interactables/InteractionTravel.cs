@@ -20,7 +20,7 @@ public class InteractionTravel : InteractableCustom {
 
     private void Awake()
     {
-        Debug.Log(destination.name);
+        //Debug.Log(destination.name);
         TPC = destination.GetComponent<TravelPointController>();
     }
 

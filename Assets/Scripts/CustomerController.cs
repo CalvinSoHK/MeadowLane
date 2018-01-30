@@ -15,7 +15,7 @@ public class CustomerController : MonoBehaviour {
     public GameObject BASKET;
 
     //Whether or not we completed the list of ingredients
-    bool isDone = false;
+    public bool isDone = false;
 
     //Timer of how long the customer will wait
     //All customers will wait the same amount of time

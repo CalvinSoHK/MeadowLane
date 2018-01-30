@@ -16,7 +16,7 @@ public class SeedItem : BaseItem {
     public Vector3 prefabRotOffset;
 
     public bool isPlanted = false;
-
+    int tempCount = 0;
     //Plant the seed into the given farmBlock
 	public virtual void PlantSeed(Transform farmBlock)
     {
@@ -43,17 +43,22 @@ public class SeedItem : BaseItem {
     private void OnCollisionEnter(Collision collision)
     {
         //Retrieve the collided object
+        Debug.Log("on collision enter count: " + tempCount);
+        tempCount += 1;
         GameObject target = collision.collider.gameObject;
 
         //Check if its a farm block
         if (!isPlanted && target.GetComponent<FarmBlockInfo>())
         {
             //Check if the ground has already been tilled
-            if (target.GetComponent<FarmBlockInfo>().TILLED && target.GetComponent<FarmBlockInfo>().HAS_SEED)
+            if (target.GetComponent<FarmBlockInfo>().TILLED && !target.GetComponent<FarmBlockInfo>().HAS_SEED)
             {
                 //Use the function to plant the seed there.
                 //After this the function destroys the object so nothing comes after this.
+                isPlanted = true;
                 PlantSeed(target.transform);
+                target.GetComponent<FarmBlockInfo>().HAS_SEED = true;
+                
             }
             else //If not, sit as a normal object.
             {

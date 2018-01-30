@@ -104,25 +104,39 @@ public class StallManager : MonoBehaviour {
         foreach(CustomerController CC in CUSTOMER_LIST)
         {
             if(CC.STATE == CustomerController.CustomerState.Result)
-            {             
-                //A list of all redundant items.
-                List<BaseItem> BASKET_LIST = CC.GetRedundantIngredients();
-
-                //If we have any at all
-                if(BASKET_LIST.Count > 0)
+            {
+                //If we actually completed the recipe, we need to remove extra items then process it.
+                if (CC.isDone)
                 {
-                    //for all the items in our basket list
-                    foreach(BaseItem ITEM in BASKET_LIST)
+                    //A list of all redundant items.
+                    List<BaseItem> BASKET_LIST = CC.GetRedundantIngredients();
+
+                    //If we have any at all
+                    if (BASKET_LIST.Count > 0)
                     {
-                        RemoveItem(ITEM);
+                        //for all the items in our basket list
+                        foreach (BaseItem ITEM in BASKET_LIST)
+                        {
+                            RemoveItem(ITEM);
+                        }
+                    }
+
+                    //Pay the money
+                    CC.PayMoney();
+
+
+                    //Clear the basket
+                    CC.ClearBasket();
+
+                }
+                else //We failed to complete the recipe. Add the ingredients we failed to use back to our item count
+                {
+                    foreach(BaseItem ITEM in CC.RECIPE.INGREDIENTS)
+                    {
+                        AddItem(ITEM);
                     }
                 }
 
-                //Pay the money
-                CC.PayMoney();
-
-                //Clear the basket
-                CC.ClearBasket();
 
                 //Make the customer leave.
                 CC.SetState(CustomerController.CustomerState.Leaving);
@@ -321,6 +335,9 @@ public class StallManager : MonoBehaviour {
             CUSTOMER_SLOTS.Add(true);
         }
 
+        //Reset the index for difficulty
+        CARD_INDEX = 0;
+
         //Change the state
         STATE = StallState.Open;
     }
@@ -391,6 +408,19 @@ public class StallManager : MonoBehaviour {
 
         }
         return RETURN_LIST;
+    }
+
+    //Function for the dictinoary to add an item to the count. Overload method that takes baseitems
+    public void AddItem(BaseItem ITEM)
+    {
+        if (ITEM_COUNT.ContainsKey(ITEM.KEY))
+        {
+            ITEM_COUNT[ITEM.KEY]++;
+        }
+        else
+        {
+            ITEM_COUNT.Add(ITEM.KEY, 1);
+        }
     }
 
     //Function for the dictionary to add an item to the count
