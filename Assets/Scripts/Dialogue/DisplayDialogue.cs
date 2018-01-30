@@ -23,6 +23,7 @@ public class DisplayDialogue: MonoBehaviour{
         showBlinker = false;        //Whether or not we should show the blinker at the end of dialogue.
     private float blinkingTimeTrue=.7f, blinkingTimeFalse = .3f;
     string currentRecipe;
+    List<string> currentDialogueForCharacter = new List<string>();   
 
     // Use this for initialization
     void Start()
@@ -45,7 +46,9 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DialogueSetup: //Get the correct Dialogue from the dialogue manager based on name and situation.
                 DialogueManager.setUpCurrentDialogue(characterName, currentSituation, shopOwner); //Find the lines of dialogue needed for this character and situation instance
-                numberOfLines = DialogueManager.currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
+                currentDialogueForCharacter = DialogueManager.currentDialogueForCharacter;
+                DialogueManager.resetCurrentDialogue();
+                numberOfLines = currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
                 indexLine = 0; //reset current line
                 indexLetter = 0; //reset current letter
                 currentLine = ""; //reset the line of dialogue being displayed
@@ -56,7 +59,9 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DialogueSetupForShop:
                 DialogueManager.setUpCurrentDialogueForShop(currentRecipe);
-                numberOfLines = DialogueManager.currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
+                currentDialogueForCharacter = DialogueManager.currentDialogueForCharacter;
+                DialogueManager.resetCurrentDialogue();
+                numberOfLines = currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
                 indexLine = 0; //reset current line
                 indexLetter = 0; //reset current letter
                 currentLine = ""; //reset the line of dialogue being displayed
@@ -66,9 +71,9 @@ public class DisplayDialogue: MonoBehaviour{
                 break;
 
             case GameState.Typing: //if dialogue is currently being typed out
-                if(indexLetter < DialogueManager.currentDialogueForCharacter[indexLine].Length) //if the current number of letter displyaed is below the total number of letters in the dialogue line
+                if(indexLetter < currentDialogueForCharacter[indexLine].Length) //if the current number of letter displyaed is below the total number of letters in the dialogue line
                 {
-                    currentLine += DialogueManager.currentDialogueForCharacter[indexLine][indexLetter]; //add the next letter to the current line
+                    currentLine += currentDialogueForCharacter[indexLine][indexLetter]; //add the next letter to the current line
                     textObject.text = currentLine;// update the text ui element
                     indexLetter += 1; //move on to the next letter
                 }else
@@ -134,7 +139,7 @@ public class DisplayDialogue: MonoBehaviour{
                     setCurrentState(GameState.Wait);
                 }
                 inDialogue = false; //they are no longer in dialogue
-                DialogueManager.resetCurrentDialogue();
+                
                 break;
 
             case GameState.TransitionToShop: //If you are talking to a shop owner have it transition to buy items (maybe not necessary)
