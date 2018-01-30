@@ -35,6 +35,9 @@ public class CustomerController : MonoBehaviour {
     //Slot numbner
     public int SLOT_NUMBER;
 
+    //The display dialogue script
+    DisplayDialogue DD;
+
     void Start()
     {
         //Customer model
@@ -45,6 +48,9 @@ public class CustomerController : MonoBehaviour {
 
         //Set the state on start. This is so our internal time works.
         SetState(CustomerState.Approaching);
+
+        //Get the DisplayDialogue Script
+        DD = GetComponent<DisplayDialogue>();
     }
 
     // Update is called once per frame
@@ -61,16 +67,18 @@ public class CustomerController : MonoBehaviour {
                 LERP_TIMER += Time.deltaTime / 3f;
                 if (LERP_TIMER >= 1)
                 {
+                    DD.ActivateShopDialogue(RECIPE.NAME);
                     SetState(CustomerState.Waiting);
                     LERP_TIMER = 0;
                 }
                 break;
             case CustomerState.Waiting:
                 //If we have the right combination
-                
+
                 if (CheckIngredients())
                 {
                     isDone = true;
+                    DD.DeActivateShop();
                 }
 
                 //If we reach the end of our waiting time, or we get the correct combination
