@@ -46,7 +46,12 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DialogueSetup: //Get the correct Dialogue from the dialogue manager based on name and situation.
                 DialogueManager.setUpCurrentDialogue(characterName, currentSituation, shopOwner); //Find the lines of dialogue needed for this character and situation instance
-                currentDialogueForCharacter = DialogueManager.currentDialogueForCharacter;
+                //Deep copy. Empty first
+                currentDialogueForCharacter.Clear();
+                foreach (string LINES in DialogueManager.currentDialogueForCharacter)
+                {
+                    currentDialogueForCharacter.Add(LINES);
+                }
                 DialogueManager.resetCurrentDialogue();
                 numberOfLines = currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
                 indexLine = 0; //reset current line
@@ -59,7 +64,14 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DialogueSetupForShop:
                 DialogueManager.setUpCurrentDialogueForShop(currentRecipe);
-                currentDialogueForCharacter = DialogueManager.currentDialogueForCharacter;
+
+                //Deep copy. Empty first
+                currentDialogueForCharacter.Clear();
+                foreach(string LINES in DialogueManager.currentDialogueForCharacter)
+                {
+                    currentDialogueForCharacter.Add(LINES);
+                }
+
                 DialogueManager.resetCurrentDialogue();
                 numberOfLines = currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
                 indexLine = 0; //reset current line
@@ -130,6 +142,8 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.StopDisplayingText: //we need to stop displaying text as we have reached the end of the dialogue
                 textBox.SetActive(false); //turn off the dialogue box
+                blinker.SetActive(false); //Turn off the blinker fam
+
                 textObject.text = "";//remove the text in the text object                
                 if (shopOwner && inDialogue) //check if they are shop owner and that the player is still near the character when the conversation ended
                 {
@@ -209,7 +223,10 @@ public class DisplayDialogue: MonoBehaviour{
     /// </summary>
     public void ActivateShopDialogue(string recipe)
     {
+
         setCurrentState(GameState.DialogueSetupForShop);
+
+        //Set recipe
         currentRecipe = recipe;
 
     }

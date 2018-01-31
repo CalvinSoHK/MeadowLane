@@ -78,7 +78,7 @@ public class StallManager : MonoBehaviour {
             }
 
             //If we run out of produce
-            if(ITEM_COUNT.Count == 0)
+            if (ITEM_COUNT.Count == 0 && NoCustomersHere())
             {
                 //Problem
                 STATE = StallState.Return;
@@ -95,6 +95,24 @@ public class StallManager : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Helper function that checks tat we have no customers
+    /// </summary>
+    /// <param name="HERE"></param>
+    /// <returns></returns>
+    public bool NoCustomersHere()
+    {
+        //NOTE: True means empty
+        foreach(bool TEMP in CUSTOMER_SLOTS)
+        {
+            if (!TEMP)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //Function that manages our customers
     //Everything below here should be called by the animation OR called by the state machine. We can add a new state called ANIMATING.
     //Should be called by each individual customer.
@@ -104,25 +122,39 @@ public class StallManager : MonoBehaviour {
         foreach(CustomerController CC in CUSTOMER_LIST)
         {
             if(CC.STATE == CustomerController.CustomerState.Result)
-            {             
-                //A list of all redundant items.
-                List<BaseItem> BASKET_LIST = CC.GetRedundantIngredients();
-
-                //If we have any at all
-                if(BASKET_LIST.Count > 0)
+            {
+                //If we actually completed the recipe, we need to remove extra items then process it.
+                if (CC.isDone)
                 {
-                    //for all the items in our basket list
-                    foreach(BaseItem ITEM in BASKET_LIST)
+                    //A list of all redundant items.
+                    List<BaseItem> BASKET_LIST = CC.GetRedundantIngredients();
+
+                    //If we have any at all
+                    if (BASKET_LIST.Count > 0)
                     {
-                        RemoveItem(ITEM);
+                        //for all the items in our basket list
+                        foreach (BaseItem ITEM in BASKET_LIST)
+                        {
+                            RemoveItem(ITEM);
+                        }
+                    }
+
+                    //Pay the money
+                    CC.PayMoney();
+
+
+                    //Clear the basket
+                    CC.ClearBasket();
+
+                }
+                else //We failed to complete the recipe. Add the ingredients we failed to use back to our item count
+                {
+                    foreach(BaseItem ITEM in CC.RECIPE.INGREDIENTS)
+                    {
+                        AddItem(ITEM);
                     }
                 }
 
-                //Pay the money
-                CC.PayMoney();
-
-                //Clear the basket
-                CC.ClearBasket();
 
                 //Make the customer leave.
                 CC.SetState(CustomerController.CustomerState.Leaving);
@@ -234,6 +266,7 @@ public class StallManager : MonoBehaviour {
         //If we have any items at all.
         if (ITEM_COUNT.Count > 0)
         {
+            Debug.Log("Tomato count: " + ITEM_COUNT[0]);
             //Index of the bool if we want to change it
             int index = 0;
 
@@ -248,7 +281,7 @@ public class StallManager : MonoBehaviour {
                 //Check if there is an available slot
                 foreach (bool VALID in CUSTOMER_SLOTS)
                 {
-                    Debug.Log(VALID);
+                    //Debug.Log(VALID);
                     //If the slot is open, spawn a customer
                     if (VALID)
                     {
@@ -291,38 +324,46 @@ public class StallManager : MonoBehaviour {
     //Function to be called when we start the game
     public void StartGame()
     {
-        //Init the list. The function will do nothing if already init.
-        RecipeManager.InitList();
-
-        //Get the list of recipes the player has already discovered.
-        RECIPE_LIST = RecipeManager.GetDiscovered();
-
         //Get all the produce the player has
         GetProduce();
 
-        //Init baskets
-        InitBaskets();
-
-        //Wipe out the produce
-        Inventory_Manager.RemoveAllItemsFromCategory(Inventory_Manager.checkItemCategoryIndex("Produce"));
-
-        //Further reduce the list to the recipes the player can actually make with their items.
-        RECIPE_LIST = FilterRecipeList(RECIPE_LIST);
-
-        //Shuffle the list.
-        GeoWeightedShuffle(RECIPE_LIST, COIN_VALUE);
-
-        //Clear the bool list in case we've done it before
-        CUSTOMER_SLOTS.Clear();
-
-        //Init the customer slot bools
-        for(int i = 0; i < SHOPPING_BASKET_LIST.Length; i++)
+        //If we have any produce
+        if(ITEM_COUNT.Count > 0)
         {
-            CUSTOMER_SLOTS.Add(true);
-        }
+            //Init the list. The function will do nothing if already init.
+            RecipeManager.InitList();
 
-        //Change the state
-        STATE = StallState.Open;
+            //Get the list of recipes the player has already discovered.
+            RECIPE_LIST = RecipeManager.GetDiscovered();
+
+
+            //Init baskets
+            InitBaskets();
+
+            //Wipe out the produce
+            Inventory_Manager.RemoveAllItemsFromCategory(Inventory_Manager.checkItemCategoryIndex("Produce"));
+
+            //Further reduce the list to the recipes the player can actually make with their items.
+            RECIPE_LIST = FilterRecipeList(RECIPE_LIST);
+
+            //Shuffle the list.
+            GeoWeightedShuffle(RECIPE_LIST, COIN_VALUE);
+
+            //Clear the bool list in case we've done it before
+            CUSTOMER_SLOTS.Clear();
+
+            //Init the customer slot bools
+            for (int i = 0; i < SHOPPING_BASKET_LIST.Length; i++)
+            {
+                CUSTOMER_SLOTS.Add(true);
+            }
+
+            //Reset the index for difficulty
+            CARD_INDEX = 0;
+
+            //Change the state
+            STATE = StallState.Open;
+        }
     }
 
     //Helper function that fills ITEM_COUNT from player inventory
@@ -331,15 +372,20 @@ public class StallManager : MonoBehaviour {
         //Get the produce
         List<InventorySlot> PRODUCE_LIST =  Inventory_Manager.GetCategory("Produce");
 
-        //Add every slot onto our item count list.
-        foreach(InventorySlot SLOT in PRODUCE_LIST)
+        //Check to see we have some produce of some kind
+        if(PRODUCE_LIST != null)
         {
-            for(int i = 0; i < SLOT.TotalNum; i++)
+            //Add every slot onto our item count list.
+            foreach (InventorySlot SLOT in PRODUCE_LIST)
             {
-                AddItem(SLOT);
-                ALL_PRODUCE.Add(SLOT.Name);
-            }      
+                for (int i = 0; i < SLOT.TotalNum; i++)
+                {
+                    AddItem(SLOT);
+                    ALL_PRODUCE.Add(SLOT.Name);
+                }
+            }
         }
+      
     }
 
     //Helper function that reduces a given list to the recipes the player can make
@@ -391,6 +437,19 @@ public class StallManager : MonoBehaviour {
 
         }
         return RETURN_LIST;
+    }
+
+    //Function for the dictinoary to add an item to the count. Overload method that takes baseitems
+    public void AddItem(BaseItem ITEM)
+    {
+        if (ITEM_COUNT.ContainsKey(ITEM.KEY))
+        {
+            ITEM_COUNT[ITEM.KEY]++;
+        }
+        else
+        {
+            ITEM_COUNT.Add(ITEM.KEY, 1);
+        }
     }
 
     //Function for the dictionary to add an item to the count

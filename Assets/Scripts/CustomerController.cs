@@ -15,7 +15,7 @@ public class CustomerController : MonoBehaviour {
     public GameObject BASKET;
 
     //Whether or not we completed the list of ingredients
-    bool isDone = false;
+    public bool isDone = false;
 
     //Timer of how long the customer will wait
     //All customers will wait the same amount of time
@@ -35,6 +35,9 @@ public class CustomerController : MonoBehaviour {
     //Slot numbner
     public int SLOT_NUMBER;
 
+    //The display dialogue script
+    DisplayDialogue DD;
+
     void Start()
     {
         //Customer model
@@ -45,12 +48,15 @@ public class CustomerController : MonoBehaviour {
 
         //Set the state on start. This is so our internal time works.
         SetState(CustomerState.Approaching);
+
+        //Get the DisplayDialogue Script
+        DD = GetComponent<DisplayDialogue>();
     }
 
     // Update is called once per frame
     void Update() {
 
-        Debug.Log("name of cc: " + this.gameObject.name + " count: " + INGREDIENTS.Count);
+        //Debug.Log("name of cc: " + this.gameObject.name + " count: " + INGREDIENTS.Count);
 
         //Handle each state.
         switch (STATE)
@@ -61,16 +67,18 @@ public class CustomerController : MonoBehaviour {
                 LERP_TIMER += Time.deltaTime / 3f;
                 if (LERP_TIMER >= 1)
                 {
+                    DD.ActivateShopDialogue(RECIPE.NAME);
                     SetState(CustomerState.Waiting);
                     LERP_TIMER = 0;
                 }
                 break;
             case CustomerState.Waiting:
                 //If we have the right combination
-                
+
                 if (CheckIngredients())
                 {
                     isDone = true;
+                    DD.DeActivateShop();
                 }
 
                 //If we reach the end of our waiting time, or we get the correct combination
@@ -89,9 +97,9 @@ public class CustomerController : MonoBehaviour {
                 //Move the model customer away
                 CUSTOMER_MODEL.position = Vector3.Lerp(BASKET.transform.position - BASKET.transform.forward * 1f, BASKET.transform.position - BASKET.transform.forward * 3, LERP_TIMER);
                 LERP_TIMER += Time.deltaTime / 3f;
+                DD.DeActivateShop();
                 if (LERP_TIMER >= 1)
                 {
-                    Debug.Log("Leaving");
                     Destroy(gameObject);
                 }
                 break;
@@ -117,7 +125,7 @@ public class CustomerController : MonoBehaviour {
     //On trigger enter
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("is in trigger");
+        //Debug.Log("is in trigger");
         //If the object is a base item
         if (other.gameObject.GetComponent<BaseItem>() != null)
         {
@@ -125,7 +133,7 @@ public class CustomerController : MonoBehaviour {
             //If it is a produce item
             if (ITEM.CATEGORY.Equals("Produce"))
             {
-                Debug.Log("is it actually a produce");
+                //Debug.Log("is it actually a produce");
                 INGREDIENTS.Add(ITEM);
             }
         }
@@ -215,7 +223,7 @@ public class CustomerController : MonoBehaviour {
             {
                 if(ITEM.KEY == INGREDIENT.KEY)
                 {
-                    Debug.Log("am I removing the object?");
+                    //Debug.Log("am I removing the object?");
                     TEMP_LIST.Remove(INGREDIENT);
                     break;
                 }
