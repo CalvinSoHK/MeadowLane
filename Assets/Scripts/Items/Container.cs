@@ -80,7 +80,7 @@ public class Container : MonoBehaviour {
         }
         else //The object we tried to throw in isn't a base item and isn't in the right layer.
         {
-            Debug.Log("Incorrect Item: Isn't a BaseItem AND/OR isn't in the right layer 8");
+            //Debug.Log("Incorrect Item: Isn't a BaseItem AND/OR isn't in the right layer 8");
         }
 
     }

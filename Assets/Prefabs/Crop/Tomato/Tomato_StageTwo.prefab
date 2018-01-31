@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 4742382550281616}
   - component: {fileID: 95122219580072350}
   - component: {fileID: 114872768800859400}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Tomato_StageTwo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
