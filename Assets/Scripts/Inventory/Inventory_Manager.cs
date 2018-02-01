@@ -190,6 +190,11 @@ public static class  Inventory_Manager {
         InventorySeedCount[itemInfo.KEY] = 0;
         return temp;
     }
+    public static int getSeeds(int key)
+    {
+        
+        return InventorySeedCount[key];
+    }
 
 }
 
