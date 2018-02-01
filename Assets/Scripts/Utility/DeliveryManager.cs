@@ -64,7 +64,7 @@ public class DeliveryManager : MonoBehaviour
         //For every obj
         foreach(GameObject OBJ in ITEMS_LIST)
         {
-             Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());     
+            Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
         }
     }
 
