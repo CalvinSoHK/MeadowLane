@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class  Inventory_Manager {
+public static class Inventory_Manager
+{
 
     static TextAsset playerInventorySave; //Text Asset Loaded and Saved to know what the player's inventory is between scenes/loads
     public static List<string> Category = new List<string>(new string[] { "Produce", "Tools", "Deco", "Gifts", "KeyItems", "Misc" }); //all categories
@@ -13,7 +14,7 @@ public static class  Inventory_Manager {
     public static void LoadPlayerInventory()
     {
         //do stuff with the textFile here...
-        for(int i = 0; i < Category.Count; i++)
+        for (int i = 0; i < Category.Count; i++)
         {
             CategorySlots[i] = new List<InventorySlot>();
         }
@@ -27,28 +28,32 @@ public static class  Inventory_Manager {
     /// Adds an item to the player's inventory
     /// </summary>
     /// <param name="itemInfo"></param>
-     public static void AddItemToInventory(BaseItem itemInfo)
+    public static void AddItemToInventory(BaseItem itemInfo)
     {
         //CategorySlots[0] = new List<InventorySlot>();
-       // Debug.Log(CategorySlots[0]);
+        // Debug.Log(CategorySlots[0]);
         int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim()); //get the index of the category for which the item will be placed in
         int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex); //get the index of the item within the category list (if it is already there)
-        if(inventorySlotIndex == -1) //this item is not in the inventory yet
+        if (inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             //add the item in the category at the end of the list
             CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
-        }else //item type is already in inventory
+        }
+        else //item type is already in inventory
         {
+            
             //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
             if (InventoryItemInScene.ContainsKey(itemInfo.KEY))
             {
                 InventoryItemInScene.Remove(itemInfo.KEY); //remove that item from the dictionary
-            }else
+                CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+            }
+            else
             {
                 //increase the total number of specific item in inventory by 1
                 CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
             }
-            
+
         }
     }
 
@@ -59,7 +64,7 @@ public static class  Inventory_Manager {
     public static void RemoveItemFromInventory(InventorySlot itemInfo)
     {
         itemInfo.TotalNum -= 1; //reduce the total number of that slot object
-        if(currentCategoryIndex == 0 && itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category and whether there are none left.
+        if (currentCategoryIndex == 0 && itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category and whether there are none left.
         {
             CategorySlots[currentCategoryIndex].Remove(itemInfo); //remove that item from the list
         }
@@ -80,7 +85,7 @@ public static class  Inventory_Manager {
     /// <param name="LIST"></param>
     public static void AddAllItemsFromList(List<BaseItem> LIST)
     {
-        foreach(BaseItem ITEM in LIST)
+        foreach (BaseItem ITEM in LIST)
         {
             AddItemToInventory(ITEM);
         }
@@ -93,7 +98,7 @@ public static class  Inventory_Manager {
     /// <returns></returns>
     public static int checkItemCategoryIndex(string category)
     {
-        for(int i = 0; i < Category.Count; i++)
+        for (int i = 0; i < Category.Count; i++)
         {
             if (category.Equals(Category[i]))
             {
@@ -115,7 +120,7 @@ public static class  Inventory_Manager {
         {
             if (key == CategorySlots[index][i].Key)
             {
-                
+
                 return i;
             }
         }
@@ -155,13 +160,71 @@ public static class  Inventory_Manager {
         int INDEX = checkItemCategoryIndex(CATEGORY);
 
         //Check if there is at least something in the category
-        if(INDEX  != -1 && CategorySlots[INDEX].Count > 0)
+        if (INDEX != -1 && CategorySlots[INDEX].Count > 0)
         {
             return CategorySlots[INDEX];
         }
         return null;
     }
 
+    /// <summary>
+    /// Function that checks if the inventory has the given item
+    /// </summary>
+    /// <param name="ITEM"></param>
+    /// <returns></returns>
+    public static bool HasItem(BaseItem ITEM)
+    {
+        //Get the category of the given item to cut down on our search time
+        int CAT_INDEX = checkItemCategoryIndex(ITEM.CATEGORY);
+
+        //As long as the index is viable
+        if (CAT_INDEX != -1)
+        {
+            foreach (InventorySlot SLOT in CategorySlots[CAT_INDEX])
+            {
+                if (SLOT.Key == ITEM.KEY)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else
+        {
+            Debug.Log("Checking if an item that doesn't have a category is in inventory.");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Gives us the prefab reference if possible. Else returns null.
+    /// </summary>
+    /// <param name="ITEM"></param>
+    /// <returns></returns>
+    public static BaseItem GetItem(BaseItem ITEM)
+    {
+        //Get the category of the given item to cut down on our search time
+        int CAT_INDEX = checkItemCategoryIndex(ITEM.CATEGORY);
+
+        //As long as the index is viable
+        if (CAT_INDEX != -1)
+        {
+            foreach (InventorySlot SLOT in CategorySlots[CAT_INDEX])
+            {
+                if (SLOT.Key == ITEM.KEY)
+                {
+                    return (Resources.Load(SLOT.Category + "/" + SLOT.Name) as GameObject).GetComponent<BaseItem>();
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Checking if an item that doesn't have a category is in inventory.");
+            return null;
+        }
+        return null;
+
+    }
 }
 
 
