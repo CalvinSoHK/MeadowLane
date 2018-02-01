@@ -179,9 +179,16 @@ public static class  Inventory_Manager {
         return null;
     }
 
+    /// <summary>
+    /// getst he amount of seeds for that specific container.
+    /// </summary>
+    /// <param name="itemInfo"></param>
+    /// <returns></returns>
     public static int getSeeds(BaseItem itemInfo)
     {
-        return InventorySeedCount[itemInfo.KEY];
+        int temp = InventorySeedCount[itemInfo.KEY];
+        InventorySeedCount[itemInfo.KEY] = 0;
+        return temp;
     }
 
 }
