@@ -13,6 +13,9 @@ public class PlayerInventory : MonoBehaviour {
     public enum ShowState { None, Hand1, Hand2 };
     public ShowState SHOW = ShowState.None;
 
+    public enum FadeState { FadeOut, FadeIn, Wait};
+    public FadeState currentFadeState;
+
     //Temp state for the next frame. We change this tate, which is applied at the end of the frame.
     //Prevents inputs from being taken on the first frame.
     private ShowState TEMP_STATE = ShowState.None;
@@ -49,7 +52,63 @@ public class PlayerInventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (changeItemImage)
+
+        switch (currentFadeState)
+        {
+            case FadeState.Wait:
+                changeCategoryImage = false;
+                changeItemImage = false;
+                break;
+
+            case FadeState.FadeOut:
+                if (changeItemImage)
+                {
+                    if (RIGHT)
+                    {
+                        setArrows(true, false, false, false);
+                    }else if (LEFT)
+                    {
+                        setArrows(false, true, false, false);
+                    }
+                }else if (changeItemImage)
+                {
+                    if (UP)
+                    {
+                        setArrows(false, false, true, false);
+                    }
+                    else if (DOWN)
+                    {
+                        setArrows(false, false, false, true);
+                    }
+                }
+
+                Color tmp = currentCategory_Image.color;
+                alphaValue = INVISIBLE;
+                tmp.a = alphaValue;
+                currentCategory_Image.color = tmp;
+
+                if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
+                {
+                    fadeOut = false; currentFadeState = FadeState.FadeIn; imageTimer = Time.time; alphaTime = 0f;
+                }
+                break;
+
+            case FadeState.FadeIn:
+                alphaTime += Time.deltaTime;
+                tmp = currentCategory_Image.color;
+                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
+                tmp.a = alphaValue;
+                currentCategory_Image.color = tmp;
+
+                if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
+                {
+                    fadeOut = false; currentFadeState = FadeState.Wait; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
+                }
+                break;
+
+            
+        }
+       /* if (changeItemImage)
         {
             if (RIGHT)
             {
@@ -66,7 +125,7 @@ public class PlayerInventory : MonoBehaviour {
                 downArrow.gameObject.SetActive(false);
             }
 
-            if (/*elapsedTime() > imageWaitTime &&*/ fadeOut)
+            if (/*elapsedTime() > imageWaitTime &&*//* fadeOut)
             {
                 alphaTime += Time.deltaTime;
                 Color tmp = currentCategory_Image.color;
@@ -133,7 +192,7 @@ public class PlayerInventory : MonoBehaviour {
                 fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
             }
         }
-        
+        */
 
        
 
@@ -264,7 +323,7 @@ public class PlayerInventory : MonoBehaviour {
                 tmp.a = alphaValue;
                 currentCategory_Image.color = tmp;
                 CheckInventoryUI(false); //turn off the Inventory UI
-                turnOnArrows(false);
+               
                 /*GameObject prefabRef = tempSlot.PrefabRef;
                 Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
                 Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
@@ -448,8 +507,8 @@ public class PlayerInventory : MonoBehaviour {
             currentCategory_Image.gameObject.SetActive(false); //turn UI images for inventory off
             currentItem_Image.gameObject.SetActive(false);
             currentCount.gameObject.SetActive(false);
-
-            if(SHOW == ShowState.Hand1)
+            turnOnArrows(false);
+            if (SHOW == ShowState.Hand1)
             {
                 hand1.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
             }
@@ -465,6 +524,7 @@ public class PlayerInventory : MonoBehaviour {
             currentCategory_Image.gameObject.SetActive(true); //turn UI images for inventory on
             currentItem_Image.gameObject.SetActive(true);
             currentCount.gameObject.SetActive(true);
+            turnOnArrows(true);
         }
     }
 
@@ -551,26 +611,48 @@ public class PlayerInventory : MonoBehaviour {
         {
             currentCategory_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon.GetComponent<Image>().sprite; //update to the current category index
             imageTimer = Time.time;            
-            changeCategoryImage = true;
+            
+            if (!changeCategoryImage)
+            {
+                changeCategoryImage = true;
+            }
+            else
+            {
+                changeItemImage = false;
+                Color tmp = currentCategory_Image.color;
+                float alpha = 1.0f;
+                tmp.a = alpha;
+                currentCategory_Image.color = tmp;
+            }
         }
         if (item) // if we have to change the item image 
         {
             currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
             imageTimer = Time.time;
-            if (!changeCategoryImage)
+            if (!changeCategoryImage) //if we are not changing the category and we are trying to change the item.
             {
                 //Debug.Log("Getting accessed.");
                 changeItemImage = true;
             }
-            fadeOut = true;
+            else
+            {
+                changeCategoryImage = false;
+                Color tmp = currentItem_Image.color;
+                float alpha = 1.0f;
+                tmp.a = alpha;
+                currentItem_Image.color = tmp;
+            }           
         }
         if (open)
         {
             changeCategoryImage = false;
             changeItemImage = false;
-            fadeOut = true;
-            turnOnArrows(true);       
+            
+            turnOnArrows(true);
+            currentFadeState = FadeState.Wait;
+            return;    
         }
+        currentFadeState = FadeState.FadeOut;
     }
 
     public float elapsedTime()
@@ -594,5 +676,13 @@ public class PlayerInventory : MonoBehaviour {
             upArrow.gameObject.SetActive(false);
             downArrow.gameObject.SetActive(false);
         }
+    }
+
+    public void setArrows(bool arrow1, bool arrow2, bool arrow3, bool arrow4)
+    {
+        rightArrow.gameObject.SetActive(arrow1);
+        leftArrow.gameObject.SetActive(arrow2);
+        upArrow.gameObject.SetActive(arrow3);
+        downArrow.gameObject.SetActive(arrow4);
     }
 }
