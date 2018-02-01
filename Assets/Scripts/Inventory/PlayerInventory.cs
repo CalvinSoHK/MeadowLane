@@ -221,7 +221,7 @@ public class PlayerInventory : MonoBehaviour {
         {
             CheckInventoryUI(false); //then we turn off the inventory
         }*/
-        
+
         //If we're on AND we're not showing nothing.
         if (SHOW != ShowState.None && isInventoryOn)
         {
@@ -248,7 +248,7 @@ public class PlayerInventory : MonoBehaviour {
                 TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
             }
 
-            if (LEFT && PRESS_DOWN){ //if we press left on the D-Pad
+            if (LEFT && PRESS_DOWN) { //if we press left on the D-Pad
                 Debug.Log("LEFT");
                 Inventory_Manager.currentCategorySlotsIndex -= 1; //move the inventory item to the left
                 if (Inventory_Manager.currentCategorySlotsIndex < 0) // if you go beyond the left most item rotate back to the right
@@ -256,20 +256,20 @@ public class PlayerInventory : MonoBehaviour {
                     Inventory_Manager.currentCategorySlotsIndex = TotalItemForCategory - 1;
                 }
                 UpdateImage(false, true, false); // update the image of the item
-            }else if (RIGHT && PRESS_DOWN) //if we press Right on the D-Pad
+            } else if (RIGHT && PRESS_DOWN) //if we press Right on the D-Pad
             {
                 Debug.Log("RIGHT");
                 Inventory_Manager.currentCategorySlotsIndex += 1; //move the inventory item to the right
-                if(Inventory_Manager.currentCategorySlotsIndex >= TotalItemForCategory) //if you go beyond the right most item rotate back to the left
+                if (Inventory_Manager.currentCategorySlotsIndex >= TotalItemForCategory) //if you go beyond the right most item rotate back to the left
                 {
                     Inventory_Manager.currentCategorySlotsIndex = 0;
                 }
                 UpdateImage(false, true, false); //update the image of the item
-            }else if (UP && PRESS_DOWN) //if we press Up on the D-Pad
+            } else if (UP && PRESS_DOWN) //if we press Up on the D-Pad
             {
                 Inventory_Manager.currentCategoryIndex += 1; //get the next category in the list
-                
-                if(Inventory_Manager.currentCategoryIndex >= totalCategory) //if you go beyond the top most category rotate back to the bottom
+
+                if (Inventory_Manager.currentCategoryIndex >= totalCategory) //if you go beyond the top most category rotate back to the bottom
                 {
                     Inventory_Manager.currentCategoryIndex = 0;
                 }
@@ -292,12 +292,12 @@ public class PlayerInventory : MonoBehaviour {
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in the new category
                 Inventory_Manager.currentCategorySlotsIndex = 0; //go to the first object in that category
                 UpdateImage(true, true, false); //update the category and item image
-            }else if (PRESS_DOWN) //If we press the center button of the D-Pad
-            {          
+            } else if (PRESS_DOWN) //If we press the center button of the D-Pad
+            {
                 InventorySlot tempSlot = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex]; // get a ref to the item selected by the player
-                if(Inventory_Manager.currentCategoryIndex != 0) //If we are not in the produce section
+                if (Inventory_Manager.currentCategoryIndex != 0) //If we are not in the produce section
                 {
-                    if(tempSlot.TotalNum <= 0) //if the object is already in the scene
+                    if (tempSlot.TotalNum <= 0) //if the object is already in the scene
                     {
                         //get reference to the object in the scene through the inventory manager                        
                         GameObject tempGameObject = Inventory_Manager.MoveItemToHandOfPlayer(tempSlot.Key);
@@ -307,12 +307,12 @@ public class PlayerInventory : MonoBehaviour {
                     {
                         GameObject ObjectRef = SpawnItemFromInventory(tempSlot, true); //spawn the item into the scene
                         Inventory_Manager.AddItemToDictionary(tempSlot.Key, ObjectRef); //Add the instantiated object to the Dictionary in Inventory Manager that keeps track of inventory items in the scene
-                         
+
                     }
                 }
                 else //If we are in the produce section
                 {
-                    
+
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
                 Color tmp = currentItem_Image.color;
@@ -323,14 +323,20 @@ public class PlayerInventory : MonoBehaviour {
                 tmp.a = alphaValue;
                 currentCategory_Image.color = tmp;
                 CheckInventoryUI(false); //turn off the Inventory UI
-               
+
                 /*GameObject prefabRef = tempSlot.PrefabRef;
                 Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
                 Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
             }
 
             //Update the item count
-            currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
+            if(Inventory_Manager.InventorySeedCount.ContainsKey(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key)){
+                currentCount.text = Inventory_Manager.getSeeds(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key) + "" ;
+            }else
+            {
+                currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
+            }
+            //currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
         }
 
         //Change the state machine at the end of a frame. Prevents same input when opening the inventory up.
