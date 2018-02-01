@@ -41,10 +41,12 @@ public static class Inventory_Manager
         }
         else //item type is already in inventory
         {
+            
             //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
             if (InventoryItemInScene.ContainsKey(itemInfo.KEY))
             {
                 InventoryItemInScene.Remove(itemInfo.KEY); //remove that item from the dictionary
+                CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
             }
             else
             {
