@@ -64,30 +64,7 @@ public class DeliveryManager : MonoBehaviour
         //For every obj
         foreach(GameObject OBJ in ITEMS_LIST)
         {
-            //If the object is a container...
-            if (OBJ.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Container))
-            {
-                //If the inventory manager already has that object
-                if (Inventory_Manager.HasItem(OBJ.GetComponent<BaseItem>()))
-                {
-                    //Get the object and increment its count by our value
-                    BaseItem TEMP = Inventory_Manager.GetItem(OBJ.GetComponent<BaseItem>());
-                    TEMP.GetComponent<PourObject>().COUNT += OBJ.GetComponent<PourObject>().COUNT;
-                }
-                else //We don't have the object yet
-                {
-                    //Load in the tool into our inventory
-                    Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
-                    BaseItem TEMP = Inventory_Manager.GetItem(OBJ.GetComponent<BaseItem>());
-
-                    //Set the value of the tool to the same as the new object
-                    TEMP.GetComponent<PourObject>().COUNT = OBJ.GetComponent<PourObject>().COUNT;
-                }
-            }
-            else
-            {
-                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
-            }        
+             Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());     
         }
     }
 

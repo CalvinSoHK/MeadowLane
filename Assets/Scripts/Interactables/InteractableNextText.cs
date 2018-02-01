@@ -17,6 +17,8 @@ public class InteractableNextText : InteractableCustom {
         if(DD.currentState == DisplayDialogue.GameState.WaitingToProceed)
         {
             DD.SetProceed(true);
-        }   
+           
+        }
+        base.Use(hand);
     }
 }

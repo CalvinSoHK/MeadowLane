@@ -20,5 +20,8 @@ public class InteractActivateButton : InteractableCustom {
     {
         //Set the trigger for the animation. 
         animator.SetTrigger("PressTrigger");
+
+        //Despawn the UI
+        base.Use(hand);
     }
 }

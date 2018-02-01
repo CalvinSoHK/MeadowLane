@@ -13,6 +13,7 @@ public class InteractionSwapObjects : InteractableCustom{
     public override void Use(Hand hand)
     {
         StartCoroutine(SwapAfter(2));
+        base.Use(hand);
     }
 
     //Use a coroutine (temp fix) to swqap after a delay, s seconds

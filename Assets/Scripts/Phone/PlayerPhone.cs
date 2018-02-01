@@ -25,8 +25,8 @@ public class PlayerPhone : MonoBehaviour {
     //How long the fade takes to work
     public float FADE_TIME;
 
-    //Reference to the actual phone object if it exists
-    GameObject PHONE;
+    //Reference to the actual phone object
+    public GameObject PHONE;
 
     //Bools for the four directions on the phone
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
@@ -130,12 +130,13 @@ public class PlayerPhone : MonoBehaviour {
         //Get the transform of the hand
         Transform t_hand = hand.transform;
 
-        //Instantiate the phone a bit below the offset, and slide it into place
-        PHONE = Instantiate(Resources.Load("Tools/SmartPhone_Standin", typeof(GameObject)) as GameObject, t_hand);
+        //Position the phone then set it on
+
         hand.GetComponent<OnTriggerRaycast>().PickUpObj(PHONE);
         PHONE.transform.localPosition = POS_OFFSET;
         PHONE.transform.localRotation = Quaternion.identity;
-        StartCoroutine(FadeIn(PHONE, FADE_TIME));
+        PHONE.SetActive(true);
+        //StartCoroutine(FadeIn(PHONE, FADE_TIME));
 
         PHONE.GetComponent<PhoneLinker>().PHONE = this;
     }
@@ -148,7 +149,7 @@ public class PlayerPhone : MonoBehaviour {
             
             hand.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
             SHOW = ShowState.None;
-            Destroy(PHONE);
+            PHONE.SetActive(false);
         }
      
     }

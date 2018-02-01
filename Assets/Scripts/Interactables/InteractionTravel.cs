@@ -45,6 +45,7 @@ public class InteractionTravel : InteractableCustom {
             TravelPointManager.Instance.ResetValid();
             TravelPointManager.Instance.SetIndex(TravelPointManager.Instance.GetIndex(TPC));
         }
+        base.Use(hand);
 
     }
 }

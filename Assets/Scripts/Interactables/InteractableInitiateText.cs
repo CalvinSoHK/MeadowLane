@@ -23,6 +23,8 @@ public class InteractableInitiateText : InteractableCustom
         if (DD.currentState == DisplayDialogue.GameState.Wait && !DD.GetInDialogue())
         {
             DD.setCurrentState(DisplayDialogue.GameState.DialogueSetup);
+           
         }
+        base.Use(hand);
     }
 }

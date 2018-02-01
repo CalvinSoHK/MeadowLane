@@ -25,8 +25,8 @@ public class InteractableCustom : Interactable{
     //Overrideable use function for all interactable objects
 	public virtual void Use(Hand hand)
     {
-        //Default interaction is nothing. Debug something
-        Debug.Log(gameObject.name + " Interactable: Has no use function");
+        //Despawn the UI on use
+        HideUI();
     }
 
     //Function that is used to display the UI image for the player
