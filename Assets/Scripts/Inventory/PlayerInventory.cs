@@ -23,6 +23,7 @@ public class PlayerInventory : MonoBehaviour {
 
     public Canvas UICanvas;
     public Image currentCategory_Image, currentItem_Image; //Category and Item UI image ref
+    public Text currentCount; //UI text placement for count
     bool isInventoryOn = false; //ref to whether the inventory UI is on
     int totalCategory; //total number of categories
     int TotalItemForCategory; //total number of items within the category
@@ -168,7 +169,10 @@ public class PlayerInventory : MonoBehaviour {
                 /*GameObject prefabRef = tempSlot.PrefabRef;
                 Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
                 Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
-            }            
+            }
+
+            //Update the item count
+            currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
         }
 
         //Change the state machine at the end of a frame. Prevents same input when opening the inventory up.
@@ -344,6 +348,7 @@ public class PlayerInventory : MonoBehaviour {
         {
             currentCategory_Image.gameObject.SetActive(false); //turn UI images for inventory off
             currentItem_Image.gameObject.SetActive(false);
+            currentCount.gameObject.SetActive(false);
 
             if(SHOW == ShowState.Hand1)
             {
@@ -360,6 +365,7 @@ public class PlayerInventory : MonoBehaviour {
         {
             currentCategory_Image.gameObject.SetActive(true); //turn UI images for inventory on
             currentItem_Image.gameObject.SetActive(true);
+            currentCount.gameObject.SetActive(true);
         }
     }
 

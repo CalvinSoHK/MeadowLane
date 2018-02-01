@@ -56,7 +56,7 @@ public class CustomerController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        Debug.Log("name of cc: " + this.gameObject.name + " count: " + INGREDIENTS.Count);
+        //Debug.Log("name of cc: " + this.gameObject.name + " count: " + INGREDIENTS.Count);
 
         //Handle each state.
         switch (STATE)
@@ -97,9 +97,9 @@ public class CustomerController : MonoBehaviour {
                 //Move the model customer away
                 CUSTOMER_MODEL.position = Vector3.Lerp(BASKET.transform.position - BASKET.transform.forward * 1f, BASKET.transform.position - BASKET.transform.forward * 3, LERP_TIMER);
                 LERP_TIMER += Time.deltaTime / 3f;
+                DD.DeActivateShop();
                 if (LERP_TIMER >= 1)
                 {
-                    Debug.Log("Leaving");
                     Destroy(gameObject);
                 }
                 break;
@@ -125,7 +125,7 @@ public class CustomerController : MonoBehaviour {
     //On trigger enter
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("is in trigger");
+        //Debug.Log("is in trigger");
         //If the object is a base item
         if (other.gameObject.GetComponent<BaseItem>() != null)
         {
@@ -133,7 +133,7 @@ public class CustomerController : MonoBehaviour {
             //If it is a produce item
             if (ITEM.CATEGORY.Equals("Produce"))
             {
-                Debug.Log("is it actually a produce");
+                //Debug.Log("is it actually a produce");
                 INGREDIENTS.Add(ITEM);
             }
         }
@@ -223,7 +223,7 @@ public class CustomerController : MonoBehaviour {
             {
                 if(ITEM.KEY == INGREDIENT.KEY)
                 {
-                    Debug.Log("am I removing the object?");
+                    //Debug.Log("am I removing the object?");
                     TEMP_LIST.Remove(INGREDIENT);
                     break;
                 }
