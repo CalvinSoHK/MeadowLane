@@ -32,7 +32,10 @@ public class PlayerInventory : MonoBehaviour {
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
 
     bool changeCategoryImage, changeItemImage, fadeIn, fadeOut;
-    float imageTimer = 0.0f, imageWaitTime = 2.0f, alphaTime = 0.0f, alphaValue = 0.0f;
+    float imageTimer = 0.0f, imageWaitTime = 3.0f, alphaTime = 0.0f, alphaValue = 0.0f;
+
+    //Opacity for visible and invisilbe
+    public float VISIBLE = 1.0f, INVISIBLE = 0f;
 
     public GameObject[] DebugInventory;
 	// Use this for initialization
@@ -63,29 +66,29 @@ public class PlayerInventory : MonoBehaviour {
                 downArrow.gameObject.SetActive(false);
             }
 
-            if (elapsedTime() > imageWaitTime && fadeOut)
+            if (/*elapsedTime() > imageWaitTime &&*/ fadeOut)
             {
-                alphaTime += Time.deltaTime / 2;
+                alphaTime += Time.deltaTime;
                 Color tmp = currentCategory_Image.color;
-                alphaValue = Mathf.Lerp(1.0f, 0.3f, alphaTime / 2);
+                alphaValue = Mathf.Lerp(VISIBLE, INVISIBLE, alphaTime);
                 tmp.a = alphaValue;
                 currentCategory_Image.color = tmp;
             }
-            if (elapsedTime() > imageWaitTime && alphaValue == 0.3f)
+            if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
             {
-                fadeOut = false; fadeIn = true; imageTimer = Time.time;
+                fadeOut = false; fadeIn = true; imageTimer = Time.time; alphaTime = 0f;
             }
             if (fadeIn)
             {
-                alphaTime += Time.deltaTime / 2;
+                alphaTime += Time.deltaTime;
                 Color tmp = currentCategory_Image.color;
-                alphaValue = Mathf.Lerp(0.3f, 1.0f, alphaTime / 2);
+                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
                 tmp.a = alphaValue;
                 currentCategory_Image.color = tmp;
             }
-            if (elapsedTime() > imageWaitTime && alphaValue == 0.3f)
+            if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
             {
-                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows();
+                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
             }
         }
         if (changeCategoryImage)
@@ -105,29 +108,29 @@ public class PlayerInventory : MonoBehaviour {
                 downArrow.gameObject.SetActive(true);
             }
 
-            if (elapsedTime() > imageWaitTime && fadeOut)
+            if (fadeOut)
             {
-                alphaTime += Time.deltaTime / 2;
+                alphaTime += Time.deltaTime;
                 Color tmp = currentItem_Image.color;
-                alphaValue = Mathf.Lerp(1.0f, 0.3f, alphaTime / 2);
+                alphaValue = Mathf.Lerp(VISIBLE, INVISIBLE, alphaTime);
                 tmp.a = alphaValue;
                 currentItem_Image.color = tmp;
             }
-            if (alphaValue == 0.3f)
+            if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
             {
-                fadeOut = false; fadeIn = true; imageTimer = Time.time;
+                fadeOut = false; fadeIn = true; imageTimer = Time.time; alphaTime = 0f;
             }
-            if (elapsedTime() > imageWaitTime && fadeIn)
+            if (fadeIn)
             {
-                alphaTime += Time.deltaTime / 2;
+                alphaTime += Time.deltaTime;
                 Color tmp = currentItem_Image.color;
-                alphaValue = Mathf.Lerp(0.3f, 1.0f, alphaTime / 2);
+                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
                 tmp.a = alphaValue;
                 currentItem_Image.color = tmp;
             }
-            if (alphaValue == 0.3f)
+            if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
             {
-                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows();
+                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
             }
         }
         
@@ -261,6 +264,7 @@ public class PlayerInventory : MonoBehaviour {
                 tmp.a = alphaValue;
                 currentCategory_Image.color = tmp;
                 CheckInventoryUI(false); //turn off the Inventory UI
+                turnOnArrows(false);
                 /*GameObject prefabRef = tempSlot.PrefabRef;
                 Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
                 Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
@@ -555,6 +559,7 @@ public class PlayerInventory : MonoBehaviour {
             imageTimer = Time.time;
             if (!changeCategoryImage)
             {
+                //Debug.Log("Getting accessed.");
                 changeItemImage = true;
             }
             fadeOut = true;
@@ -563,8 +568,8 @@ public class PlayerInventory : MonoBehaviour {
         {
             changeCategoryImage = false;
             changeItemImage = false;
-            fadeOut = false;
-            turnOnArrows();       
+            fadeOut = true;
+            turnOnArrows(true);       
         }
     }
 
@@ -573,11 +578,21 @@ public class PlayerInventory : MonoBehaviour {
         return Time.time - imageTimer;
     }
 
-    public void turnOnArrows()
+    public void turnOnArrows(bool on)
     {
-        rightArrow.gameObject.SetActive(true);
-        leftArrow.gameObject.SetActive(true);
-        upArrow.gameObject.SetActive(true);
-        downArrow.gameObject.SetActive(true);
+        if (on)
+        {
+            rightArrow.gameObject.SetActive(true);
+            leftArrow.gameObject.SetActive(true);
+            upArrow.gameObject.SetActive(true);
+            downArrow.gameObject.SetActive(true);
+        }
+        else
+        {
+            rightArrow.gameObject.SetActive(false);
+            leftArrow.gameObject.SetActive(false);
+            upArrow.gameObject.SetActive(false);
+            downArrow.gameObject.SetActive(false);
+        }
     }
 }
