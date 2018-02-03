@@ -12,6 +12,7 @@ public class InteractFireEvent : InteractableCustom{
     public override void Use(Hand hand)
     {
         OnInteractEvent.Invoke();
+        base.Use(hand);
     }
 
 }

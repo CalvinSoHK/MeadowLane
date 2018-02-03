@@ -11,5 +11,6 @@ public class InteractionSun : InteractableCustom{
     public override void Use(Hand hand)
     {
         sun.GetComponent<AdjustToTime>().ChangeRotation();
+        base.Use(hand);
     }
 }

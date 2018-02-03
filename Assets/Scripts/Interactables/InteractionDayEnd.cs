@@ -31,6 +31,7 @@ public class InteractionDayEnd : InteractableCustom {
             StartCoroutine(EndDayAfterTransition());
            
         }
+        base.Use(hand);
  
 
     }
