@@ -16,7 +16,7 @@ public class PhoneLinker : MonoBehaviour {
     public Image SELECTOR;
 
     //Selected APP
-    Transform SELECTED;
+    Transform SELECTED_ICON, SELECTED_APP;
 
     //Index of selected object
     int index = 1;
@@ -25,21 +25,31 @@ public class PhoneLinker : MonoBehaviour {
     Transform[] APPLICATIONS;
 
     //State of the phone, as in is it in an app or is it on OS, i.e. home screen.
-    public enum PhoneState { OS, App };
+    public enum PhoneState { OS, App, Transition};
     public PhoneState RunState = PhoneState.OS;
+    PhoneState NEXT_STATE;
+
+    //The home screen transform
+    public Transform HOME_SCREEN, SECOND_SCREEN, THIRD_SCREEN, ALL_APP_SCREENS;
+    Transform TARGET_SCREEN;
+
+    //The transform that has all our applications
+    public Transform APP_GRID;
 
     //The app that is running on the phone
     //When null, we aren't running anything.
     public Transform RUNNING_APP = null;
 
-    //Internal bool to use the selector
-    bool IS_SELECTOR = true;
+    //Transition variables
+    float DAMP_STRENGTH = 0.1f;
+    Vector3 TARGET_POS = Vector3.zero;
+    Vector3 REF_VELOCITY = Vector3.zero;
 
     private void Start()
     {
-        APPLICATIONS = transform.GetChild(0).Find("Applications").GetComponentsInChildren<Transform>();
-        SELECTED = APPLICATIONS[index];
-        SELECTOR.transform.localPosition = SELECTED.transform.localPosition;
+        APPLICATIONS = APP_GRID.GetComponentsInChildren<Transform>();
+        SELECTED_ICON = APPLICATIONS[index];
+        SELECTOR.transform.localPosition = SELECTED_ICON.transform.localPosition;
     }
 
     private void Update()
@@ -80,67 +90,101 @@ public class PhoneLinker : MonoBehaviour {
                 }
                 else //No direction was clicked, select the app.
                 {
-                    TransitionTo(SELECTED);
+                    //Clear app if we try to go to another app
+                    ClearApp();
+
+                    //Transition to the second screen to the selected.
+                    TransitionTo(SECOND_SCREEN, SELECTED_ICON);
                 }
             }
 
+            //Clear the second screen if we're on OS
+
+
             //Maintain selection.
-            SELECTED = APPLICATIONS[index];
-            SELECTOR.transform.localPosition = SELECTED.transform.localPosition;
+            SELECTED_ICON = APPLICATIONS[index];
+            SELECTOR.transform.position = SELECTED_ICON.transform.position;
         }
         else if(RunState == PhoneState.App) //if its an app, use the app's script to run
         {
-            SELECTED.GetComponent<BasicApp>().RunApp();
+            if(SELECTED_APP != null)
+            {
+                SELECTED_APP.GetComponent<BasicApp>().RunApp();
+            }         
+        }
+        else if(RunState == PhoneState.Transition) //We are transitioning to a screen
+        {
+            //Smooth damp to the target position
+            ALL_APP_SCREENS.transform.localPosition = Vector3.SmoothDamp(ALL_APP_SCREENS.transform.localPosition, TARGET_POS, ref REF_VELOCITY, DAMP_STRENGTH);
+            //Debug.Log(ALL_APP_SCREENS.transform.position);
+            //When we're close enough just finish it and go to our next state.
+            Debug.Log(Vector3.Distance(ALL_APP_SCREENS.transform.localPosition, TARGET_POS));
+            if(Vector3.Distance(ALL_APP_SCREENS.transform.localPosition, TARGET_POS) <= 0.1f)
+            {
+                ALL_APP_SCREENS.transform.localPosition = TARGET_POS;
+                RunState = NEXT_STATE;
+            }
         }
        
     }
 
-    //Helper functions
-    //Transitions to a different screen. The transform is the icon for the app on the home screen
-    public void TransitionTo(Transform app)
+    //Helper function that loads in an app on a different screen
+    public void LoadApp(Transform SCREEN, Transform APP)
     {
-        //Disable selection
-        IS_SELECTOR = false;
+        Debug.Log("Loading app");
 
-        //Disable everything but the app and the parent
-        for(int i = 1; i < APPLICATIONS.Length; i++)
-        {
-            //If it isn't the right app
-            if(APPLICATIONS[i] != app)
-            {
-                //Disable it
-                APPLICATIONS[i].gameObject.SetActive(false);
-            }
-        }
-
-        //Set the running app
-        RUNNING_APP = app;
+        //Instantiate and set the app
+        Transform TEMP = Instantiate(APP, SCREEN.position, SCREEN.rotation, SCREEN);
+        SELECTED_APP = TEMP;
 
         //Init the app
-        app.GetComponent<BasicApp>().InitializeApp(PHONE, this);
+        SELECTED_APP.GetComponentInChildren<BasicApp>().InitializeApp(PHONE, this);
+    }
 
-        //Set the phone state
-        RunState = PhoneState.App;
+    //Helper function that clears a screen
+    public void ClearApp()
+    {
+        if(SECOND_SCREEN.childCount > 0)
+        {
+            Destroy(SECOND_SCREEN.GetChild(0).gameObject);
+        }
 
-      
+        if(THIRD_SCREEN.childCount > 0)
+        {
+            Destroy(THIRD_SCREEN.GetChild(0).gameObject);
+        }
+    }
+
+    //Helper functions
+    //Transitions to a different screen. The transform is the icon for the app on the home screen
+    public void TransitionTo(Transform SCREEN, Transform ICON)
+    {
+        //Go to transition state
+        RunState = PhoneState.Transition;
+
+        //Set the state based on what screen we're going to
+        if(SCREEN == HOME_SCREEN)
+        {
+            NEXT_STATE = PhoneState.OS;
+        }
+        else
+        {
+            NEXT_STATE = PhoneState.App;
+            LoadApp(SCREEN, ICON.GetComponent<AppSelector>().APP_SCREEN);
+        }
+
+        //Set our target screen
+        TARGET_SCREEN = SCREEN;
+
+        //Calculate target pos. Should be the reverse of the actual position.
+        TARGET_POS = -TARGET_SCREEN.localPosition;      
+        Debug.Log(TARGET_POS);
     }
 
     //Helper function to transition back to home screen
-    public void TransitionHome(Transform app)
+    public void TransitionHome()
     {
-        //Disable children
-        foreach(Transform child in app.GetComponentsInChildren<Transform>())
-        {
-            child.gameObject.SetActive(false);
-        }
-
-        //Re-enable everything.
-        foreach(Transform APP in APPLICATIONS)
-        {
-            APP.gameObject.SetActive(true);
-        }
-
-        //Set the phone state
-        RunState = PhoneState.OS;
+        //Transition to the home screen
+        TransitionTo(HOME_SCREEN, null);
     }
 }
