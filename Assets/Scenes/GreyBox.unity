@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11782192, g: 0.13594742, b: 0.16595343, a: 1}
+  m_IndirectSpecularColor: {r: 0.11782172, g: 0.13594706, b: 0.16595295, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -10885,10 +10885,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf678a024852244bb3b4a1e3fde9adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI_PREFAB: {fileID: 0}
+  UI_PREFAB: {fileID: 1988234003215910, guid: 8151276a68e8bf048ae468dde8554fe7, type: 2}
   UI_OFFSET: {x: 0, y: 0, z: 0}
   DIST_TO_PLAYER: 1
-  SHOW_UI: 0
+  SHOW_UI: 1
 --- !u!1 &859401700
 GameObject:
   m_ObjectHideFlags: 0
@@ -18864,7 +18864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI_PREFAB: {fileID: 1554908381084224, guid: 9bed68b9b10f8624781a1442d40bce5b, type: 2}
+  UI_PREFAB: {fileID: 1768499216070182, guid: 9bed68b9b10f8624781a1442d40bce5b, type: 2}
   UI_OFFSET: {x: 0, y: 0, z: 0}
   DIST_TO_PLAYER: 0.1
   SHOW_UI: 1
