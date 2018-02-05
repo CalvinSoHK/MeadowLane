@@ -24,7 +24,7 @@ public class UI_Controller : MonoBehaviour {
     public bool IS_SHOWING = true;
 
     //The image we are showing
-    public Image IMG;
+    public SpriteRenderer IMG;
 
     //Ref for Alpha "velocity"
     float REF_ALPHA;
@@ -60,7 +60,7 @@ public class UI_Controller : MonoBehaviour {
         if (IS_SHOWING)
         {
             //Lerp the alpha to opaque
-            IMG.GetComponent<Image>().color =
+            IMG.color =
                 new Color(
                     IMG.color.r,
                     IMG.color.g,
@@ -70,7 +70,7 @@ public class UI_Controller : MonoBehaviour {
         else
         {
             //Lerp the alpha to opaque
-            IMG.GetComponent<Image>().color =
+            IMG.color =
                 new Color(
                     IMG.color.r,
                     IMG.color.g,
@@ -78,7 +78,7 @@ public class UI_Controller : MonoBehaviour {
                     Mathf.SmoothDamp(IMG.color.a, 0, ref REF_ALPHA, 0.1f));
 
             //Once alpha reaches 0, destroy image
-            if(IMG.GetComponent<Image>().color.a <= 0.01f)
+            if(IMG.color.a <= 0.01f)
             {
                 Destroy(gameObject);
             }
