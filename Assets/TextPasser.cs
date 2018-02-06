@@ -12,6 +12,8 @@ public class TextPasser : MonoBehaviour {
 
     public Image NOTIFICATION;
 
+    public List<string> MESSAGES;
+
     public void SetText(string MESSAGE)
     {
         TEXT.text = MESSAGE;
@@ -27,5 +29,11 @@ public class TextPasser : MonoBehaviour {
         NOTIFICATION.gameObject.SetActive(BOOL);
     }
 
-
+    public void CopyMessages(List<string> LIST)
+    {
+        foreach (string TEMP in LIST)
+        {
+            MESSAGES.Add(TEMP);
+        }
+    }
 }

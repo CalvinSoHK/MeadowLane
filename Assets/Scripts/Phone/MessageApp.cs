@@ -33,16 +33,10 @@ public class MessageApp : BasicApp {
 
         //Spawn the second convo screen on the THIRD SCREEn
         Transform TEMP = (Instantiate(CONVO_SCREEN, LINKER.THIRD_SCREEN.position, LINKER.THIRD_SCREEN.rotation, LINKER.THIRD_SCREEN) as GameObject).transform;
+        CONVERSATION_CONTENT = TEMP.GetComponent<ReferencePasser>().REF;
 
         //Populate the contacts list
         PopulateConvoList();
-
-        //Enable selection if there are contacts
-        if(CONVO_ENTRIES.Count > 0)
-        {
-            SELECTION.SetActive(true);
-            SELECTION.transform.localPosition = CONVO_ENTRIES[0].transform.localPosition;
-        }
 
         //Reset index
         INDEX = 0;
@@ -76,20 +70,48 @@ public class MessageApp : BasicApp {
             if(CONVO_ENTRIES.Count > 0)
             {
                 SELECTION.transform.localPosition = CONVO_ENTRIES[INDEX].transform.localPosition;
+                SELECTION.SetActive(true);
                 if(SELECTION.transform.localPosition.y < -750f)
                 {
-
+                    //Move thing down
                 }
             }
-         
+
             //If we press down on the button AND no directional presses were done.
             if (PHONE.PRESS_DOWN && !PHONE.ANY_DIRECTIONAL)
             {
-                //Populate convo screen
+                //Clear the messages if there are any sitting around
+                if (CONVERSATION_CONTENT.transform.childCount > 0)
+                {
+                    //Clear the message screen
+                    ClearConversation();
+                }
 
+                //Make the first image with the profile pic
+                GameObject TEMP = Instantiate(LEFT_MESSAGE, CONVERSATION_CONTENT.transform);
+                TEMP.GetComponent<TextPasser>().SetText(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES[0]);
+                TEMP.GetComponent<TextPasser>().SetProfile(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite);
+
+                //Populate convo screen
+                bool ignore = true; //Helps us skip the first line
+                foreach (string MESSAGE in CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES)
+                {
+                    if (!ignore)
+                    {
+                        TEMP = Instantiate(LEFT_MESSAGE_NOPIC, CONVERSATION_CONTENT.transform);
+                        TEMP.GetComponent<TextPasser>().SetText(MESSAGE);
+                    }
+                    else { ignore = false; }        
+                }
+ 
                 //Transition to convo screen
                 LINKER.TransitionTo(LINKER.THIRD_SCREEN);
                 STATE = MESSAGE_APP_STATE.Conversation;
+
+                //Mark the current message as viewed
+                CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().SetNotification(false);
+                ConvoInfo TEMP_INFO = new ConvoInfo(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().TEXT.text, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES);
+                TextMessageManager.MoveConvo(TEMP_INFO);
             }
 
         }
@@ -102,23 +124,65 @@ public class MessageApp : BasicApp {
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
                 STATE = MESSAGE_APP_STATE.ConvoList;
             }
+        }
+    }
 
+    public void ClearConversation()
+    {
+        //Get all messages and delete them all
+        Transform[] ALL_MESSAGES = CONVERSATION_CONTENT.GetComponentsInChildren<Transform>();
+        for(int i = 1; i < ALL_MESSAGES.Length; i++)
+        {
+            Destroy(ALL_MESSAGES[i].gameObject);
         }
     }
 
     public void PopulateConvoList()
     {
-        //Get old and new conversations from some data structure
+        //Clear all our contacts if we have any
+        for(int i = CONVO_ENTRIES.Count-1; i > 0; i--)
+        {
+            Destroy(CONVO_ENTRIES[i].gameObject);
+        }
+
+        //Get conversations from some data structure
         //Remember to populate from newest to oldest.
-        
+        foreach(ConvoInfo INFO in TextMessageManager.NewPhoneConversations)
+        {
+            //Create a new entry
+            GameObject TEMP = Instantiate(CONVO_ENTRY, CONVO_LIST.transform);
 
+            //Assign all the important variables
+            TEMP.GetComponent<TextPasser>().SetNotification(true);
+            TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
+        }
 
+        //Get old conversations from some data structure
+        //Remember to populate from newest to oldest.
+        foreach (ConvoInfo INFO in TextMessageManager.OldPhoneConversations)
+        {
+            //Create a new entry
+            GameObject TEMP = Instantiate(CONVO_ENTRY, CONVO_LIST.transform);
 
+            //Assign all the important variables
+            TEMP.GetComponent<TextPasser>().SetNotification(false);
+            TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
+        }
 
         //Fill our list so we have a reference to each
-        foreach (Transform ENTRY in CONVO_LIST.GetComponentInChildren<Transform>())
+        bool ignore = true;
+        foreach (Transform ENTRY in CONVO_LIST.GetComponentsInChildren<Transform>())
         {
-            CONVO_ENTRIES.Add(ENTRY.gameObject);
+            if (!ignore)
+            {
+                CONVO_ENTRIES.Add(ENTRY.gameObject);
+            }
+            else { ignore = false; }
+          
         }
     }
 

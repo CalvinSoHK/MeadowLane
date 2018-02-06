@@ -239,6 +239,9 @@ public class PlayerInventory : MonoBehaviour {
         //If we're on AND we're not showing nothing.
         if (SHOW != ShowState.None && isInventoryOn)
         {
+            //Saves the count of the item we're on
+            int COUNT = -1;
+
             //Update the directional bools based off of the current hand's trackpad
             if (SHOW == ShowState.Hand1)
             {
@@ -326,7 +329,7 @@ public class PlayerInventory : MonoBehaviour {
                 }
                 else //If we are in the produce section
                 {
-
+                    COUNT = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum - 1;
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
                 
@@ -338,12 +341,19 @@ public class PlayerInventory : MonoBehaviour {
             }
 
             //Update the item count
-            if(Inventory_Manager.InventorySeedCount.ContainsKey(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key)){
-                currentCount.text = Inventory_Manager.getSeeds(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key) + "" ;
-            }else
+            if (COUNT != 0)
             {
-                currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
+                if (Inventory_Manager.InventorySeedCount.ContainsKey(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key))
+                {
+                    currentCount.text = Inventory_Manager.getSeeds(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key) + "";
+                }
+                else
+                {
+                    currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
+                }
             }
+
+            COUNT = 1;
             //currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
         }
 
@@ -486,7 +496,7 @@ public class PlayerInventory : MonoBehaviour {
     /// <param name="removeFromInventory"></param>
     public GameObject SpawnItemFromInventory(InventorySlot tempSlot, bool removeFromInventory)
     {
-        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name) as GameObject;
+        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name, typeof(GameObject)) as GameObject;
         GameObject ObjectRef = Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity); //Keep reference of instantiated object
         if (ObjectRef.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Container))
         {
@@ -641,8 +651,8 @@ public class PlayerInventory : MonoBehaviour {
     {
         if (category) //if we have to change the category image
         {
-            currentCategory_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon.GetComponent<Image>().sprite; //update to the current category index
-            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
+            currentCategory_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon; //update to the current category index
+            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon; //update to the current item index
             imageTimer = Time.time;            
             
             if (!changeItemImage)
@@ -667,7 +677,7 @@ public class PlayerInventory : MonoBehaviour {
         }
         else if (item) // if we have to change the item image 
         {
-            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
+            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon;//Update to the current index
             imageTimer = Time.time;
             if (!changeCategoryImage) //if we are not changing the category and we are trying to change the item.
             {
@@ -733,4 +743,4 @@ public class PlayerInventory : MonoBehaviour {
         upArrow.gameObject.SetActive(arrow3);
         downArrow.gameObject.SetActive(arrow4);
     }
-}
+}   

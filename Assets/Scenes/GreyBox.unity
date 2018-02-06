@@ -3465,6 +3465,10 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: -17
       objectReference: {fileID: 0}
+    - target: {fileID: 1834916072910442, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
   m_IsPrefabParent: 0
@@ -16970,8 +16974,6 @@ MonoBehaviour:
   _NAME: BarrelContainer
   CATEGORY: 
   KEY: 0
-  ICON: {fileID: 0}
-  CATEGORY_ICON: {fileID: 0}
   _OWNER: 2
   _VALUE: 5
   _TAGS: 322
