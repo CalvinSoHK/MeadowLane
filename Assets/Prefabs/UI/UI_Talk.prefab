@@ -89,10 +89,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TARGET: {fileID: 0}
+  FACE_TARGET: {fileID: 0}
   HOME: {fileID: 0}
   DISTANCE: 0.8
+  OFFSET: {x: 0, y: 0.6, z: 0}
   IS_SHOWING: 1
-  IMG: {fileID: 0}
+  IMG: {fileID: 212152098955391492}
 --- !u!114 &114746421407404864
 MonoBehaviour:
   m_ObjectHideFlags: 1

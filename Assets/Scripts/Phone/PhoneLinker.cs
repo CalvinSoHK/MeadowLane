@@ -139,6 +139,7 @@ public class PhoneLinker : MonoBehaviour {
 
         //Init the app
         SELECTED_APP.GetComponentInChildren<BasicApp>().InitializeApp(PHONE, this);
+        RUNNING_APP = TEMP;
     }
 
     //Helper function that clears a screen
@@ -175,6 +176,7 @@ public class PhoneLinker : MonoBehaviour {
         if(SCREEN == HOME_SCREEN)
         {
             NEXT_STATE = PhoneState.OS;
+            RUNNING_APP = null;
         }
         else
         {

@@ -35,7 +35,7 @@ public class PlayerInventory : MonoBehaviour {
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
 
     bool changeCategoryImage, changeItemImage, fadeIn, fadeOut;
-    float imageTimer = 0.0f, imageWaitTime = 3.0f, alphaTime = 0.0f, alphaValue = 0.0f;
+    float imageTimer = 0.0f, imageWaitTime = 3.0f, alphaTime = 0.0f, alphaValueItem = 0.0f, alphaValueCategory = 0.0f;
 
     //Opacity for visible and invisilbe
     public float VISIBLE = 1.0f, INVISIBLE = 0f;
@@ -63,44 +63,58 @@ public class PlayerInventory : MonoBehaviour {
             case FadeState.FadeOut:
                 if (changeItemImage)
                 {
-                    if (RIGHT)
-                    {
-                        setArrows(true, false, false, false);
-                    }else if (LEFT)
-                    {
-                        setArrows(false, true, false, false);
-                    }
-                }else if (changeItemImage)
+                    Color tmp = currentCategory_Image.color;
+                    alphaValueCategory = INVISIBLE;
+                    tmp.a = alphaValueCategory;
+                    currentCategory_Image.color = tmp;
+                    upArrow.color = tmp;
+                    downArrow.color = tmp;
+
+                }
+                else if (changeCategoryImage)
                 {
-                    if (UP)
-                    {
-                        setArrows(false, false, true, false);
-                    }
-                    else if (DOWN)
-                    {
-                        setArrows(false, false, false, true);
-                    }
+                    Color tmp = currentItem_Image.color;
+                    alphaValueItem = INVISIBLE;
+                    tmp.a = alphaValueItem;
+                    currentItem_Image.color = tmp;
+                    rightArrow.color = tmp;
+                    leftArrow.color = tmp;
+                    currentCount.color = tmp;
                 }
 
-                Color tmp = currentCategory_Image.color;
-                alphaValue = INVISIBLE;
-                tmp.a = alphaValue;
-                currentCategory_Image.color = tmp;
+                
 
-                if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
+                if (elapsedTime() > imageWaitTime && (alphaValueCategory == INVISIBLE || alphaValueItem == INVISIBLE))
                 {
                     fadeOut = false; currentFadeState = FadeState.FadeIn; imageTimer = Time.time; alphaTime = 0f;
                 }
                 break;
 
             case FadeState.FadeIn:
-                alphaTime += Time.deltaTime;
-                tmp = currentCategory_Image.color;
-                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
-                tmp.a = alphaValue;
-                currentCategory_Image.color = tmp;
+                if (changeItemImage)
+                {
+                    alphaTime += Time.deltaTime;
+                    Color tmp = currentCategory_Image.color;
+                    alphaValueCategory = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
+                    tmp.a = alphaValueCategory;
+                    currentCategory_Image.color = tmp;
+                    upArrow.color = tmp;
+                    downArrow.color = tmp;
 
-                if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
+                }
+                else if (changeCategoryImage)
+                {
+                    alphaTime += Time.deltaTime;
+                    Color tmp = currentItem_Image.color;
+                    alphaValueItem = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
+                    tmp.a = alphaValueItem;
+                    currentItem_Image.color = tmp;
+                    rightArrow.color = tmp;
+                    leftArrow.color = tmp;
+                    currentCount.color = tmp;
+                }
+
+                if (elapsedTime() > imageWaitTime && (alphaValueCategory == INVISIBLE || alphaValueItem == INVISIBLE))
                 {
                     fadeOut = false; currentFadeState = FadeState.Wait; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
                 }
@@ -315,13 +329,7 @@ public class PlayerInventory : MonoBehaviour {
 
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
-                Color tmp = currentItem_Image.color;
-                alphaValue = 1.0f;
-                tmp.a = alphaValue;
-                currentItem_Image.color = tmp;
-                tmp = currentCategory_Image.color;
-                tmp.a = alphaValue;
-                currentCategory_Image.color = tmp;
+                
                 CheckInventoryUI(false); //turn off the Inventory UI
 
                 /*GameObject prefabRef = tempSlot.PrefabRef;
@@ -527,6 +535,21 @@ public class PlayerInventory : MonoBehaviour {
             }
 
             TEMP_STATE = ShowState.None;
+            Color tmp = currentItem_Image.color;
+            alphaValueItem = 1.0f;
+            tmp.a = alphaValueItem;
+            currentItem_Image.color = tmp;
+            tmp = currentCategory_Image.color;
+            alphaValueCategory = 1.0f;
+            tmp.a = alphaValueCategory;
+            currentCategory_Image.color = tmp;
+            upArrow.color = tmp;
+            downArrow.color = tmp;
+            leftArrow.color = tmp;
+            rightArrow.color = tmp;
+            currentCount.color = tmp;
+            turnOnArrows(false);
+            currentFadeState = FadeState.Wait;
         }
         else //if true
         {
@@ -619,22 +642,30 @@ public class PlayerInventory : MonoBehaviour {
         if (category) //if we have to change the category image
         {
             currentCategory_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].cIcon.GetComponent<Image>().sprite; //update to the current category index
+            currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
             imageTimer = Time.time;            
             
-            if (!changeCategoryImage)
+            if (!changeItemImage)
             {
                 changeCategoryImage = true;
             }
             else
             {
                 changeItemImage = false;
+                changeCategoryImage = true;
                 Color tmp = currentCategory_Image.color;
-                float alpha = 1.0f;
-                tmp.a = alpha;
+                Color tmp2 = currentItem_Image.color;
+                alphaValueCategory = 1.0f;
+                alphaValueItem = 0.0f;
+                tmp.a = alphaValueCategory;
+                tmp2.a = alphaValueItem;
                 currentCategory_Image.color = tmp;
+                currentItem_Image.color = tmp2;
+                upArrow.color = tmp;
+                downArrow.color = tmp;
             }
         }
-        if (item) // if we have to change the item image 
+        else if (item) // if we have to change the item image 
         {
             currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon.GetComponent<Image>().sprite; //update to the current item index
             imageTimer = Time.time;
@@ -646,10 +677,18 @@ public class PlayerInventory : MonoBehaviour {
             else
             {
                 changeCategoryImage = false;
+                changeItemImage = true;
                 Color tmp = currentItem_Image.color;
-                float alpha = 1.0f;
-                tmp.a = alpha;
+                Color tmp2 = currentCategory_Image.color;
+                alphaValueItem = 1.0f;
+                alphaValueCategory = 0.0f;
+                tmp.a = alphaValueItem;
+                tmp2.a = alphaValueCategory;
                 currentItem_Image.color = tmp;
+                currentCategory_Image.color = tmp2;
+                rightArrow.color = tmp;
+                leftArrow.color = tmp;
+                currentCount.color = tmp;
             }           
         }
         if (open)

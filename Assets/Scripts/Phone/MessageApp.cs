@@ -6,10 +6,10 @@ using UnityEngine;
 public class MessageApp : BasicApp {
 
     //References for type of messages
-    public GameObject LEFT_MESSAGE, LEFT_MESSAGE_NOPIC, RIGHT_MESSAGE, RIGHT_MESSAGE_NOPIC, CONTACT_ENTRY;
+    public GameObject LEFT_MESSAGE, LEFT_MESSAGE_NOPIC, RIGHT_MESSAGE, RIGHT_MESSAGE_NOPIC, CONVO_ENTRY;
 
     //Reference for where to add messages
-    public GameObject CONTACT_LIST, CONVERSATION_CONTENT;
+    public GameObject CONVO_LIST, CONVERSATION_CONTENT;
 
     //Selection object
     public GameObject SELECTION;
@@ -19,11 +19,11 @@ public class MessageApp : BasicApp {
     public GameObject CONVO_SCREEN;
 
     //State of this application
-    public enum MESSAGE_APP_STATE {ContactList, Conversation, Transition};
-    public MESSAGE_APP_STATE STATE = MESSAGE_APP_STATE.ContactList;
+    public enum MESSAGE_APP_STATE {ConvoList, Conversation, Transition};
+    public MESSAGE_APP_STATE STATE = MESSAGE_APP_STATE.ConvoList;
 
     //Our contact list
-    List<GameObject> CONTACT_ENTRIES = new List<GameObject>();
+    List<GameObject> CONVO_ENTRIES = new List<GameObject>();
 
     //Override base init
     public override void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
@@ -35,13 +35,13 @@ public class MessageApp : BasicApp {
         Transform TEMP = (Instantiate(CONVO_SCREEN, LINKER.THIRD_SCREEN.position, LINKER.THIRD_SCREEN.rotation, LINKER.THIRD_SCREEN) as GameObject).transform;
 
         //Populate the contacts list
-        PopulateContactList();
+        PopulateConvoList();
 
         //Enable selection if there are contacts
-        if(CONTACT_ENTRIES.Count > 0)
+        if(CONVO_ENTRIES.Count > 0)
         {
             SELECTION.SetActive(true);
-            SELECTION.transform.localPosition = CONTACT_ENTRIES[0].transform.localPosition;
+            SELECTION.transform.localPosition = CONVO_ENTRIES[0].transform.localPosition;
         }
 
         //Reset index
@@ -51,7 +51,7 @@ public class MessageApp : BasicApp {
     public override void RunApp()
     {
         //When we are manipulating the contact list
-        if(STATE == MESSAGE_APP_STATE.ContactList)
+        if(STATE == MESSAGE_APP_STATE.ConvoList)
         {
             //Allows for exiting with trigger down
             base.RunApp();
@@ -59,7 +59,7 @@ public class MessageApp : BasicApp {
             //Allow us to select a contact
             if (PHONE.DOWN && PHONE.PRESS_DOWN)
             {
-                if(INDEX < CONTACT_ENTRIES.Count - 1)
+                if(INDEX < CONVO_ENTRIES.Count - 1)
                 {
                     INDEX++;
                 }
@@ -73,9 +73,13 @@ public class MessageApp : BasicApp {
             }
 
             //Place the selection on the right index
-            if(CONTACT_ENTRIES.Count > 0)
+            if(CONVO_ENTRIES.Count > 0)
             {
-                SELECTION.transform.localPosition = CONTACT_ENTRIES[INDEX].transform.localPosition;
+                SELECTION.transform.localPosition = CONVO_ENTRIES[INDEX].transform.localPosition;
+                if(SELECTION.transform.localPosition.y < -750f)
+                {
+
+                }
             }
          
             //If we press down on the button AND no directional presses were done.
@@ -96,20 +100,25 @@ public class MessageApp : BasicApp {
             {
                 //Go back to message screen
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
-                STATE = MESSAGE_APP_STATE.ContactList;
+                STATE = MESSAGE_APP_STATE.ConvoList;
             }
 
         }
     }
 
-    public void PopulateContactList()
+    public void PopulateConvoList()
     {
-        //Get contacts from some data structure
+        //Get old and new conversations from some data structure
+        //Remember to populate from newest to oldest.
+        
+
+
+
 
         //Fill our list so we have a reference to each
-        foreach (Transform ENTRY in CONTACT_LIST.GetComponentInChildren<Transform>())
+        foreach (Transform ENTRY in CONVO_LIST.GetComponentInChildren<Transform>())
         {
-            CONTACT_ENTRIES.Add(ENTRY.gameObject);
+            CONVO_ENTRIES.Add(ENTRY.gameObject);
         }
     }
 

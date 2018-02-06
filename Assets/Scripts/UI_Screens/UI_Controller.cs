@@ -5,14 +5,18 @@ using UnityEngine.UI;
 
 public class UI_Controller : MonoBehaviour {
 
-    //Object to face
-    public Transform TARGET;
+    //Object to move towards, and to face
+    public Transform TARGET,
+       FACE_TARGET;
 
     //Parent object
     public Transform HOME;
 
     //Distance to maintain towards the player
     public float DISTANCE = 0.2f;
+
+    //Vector3 OFFSET
+    public Vector3 OFFSET = Vector3.zero;
 
     //Position of the object
     Vector3 POSITION;
@@ -33,6 +37,7 @@ public class UI_Controller : MonoBehaviour {
     {
         HOME = transform.parent;
         POSITION = transform.position;
+        
     }
 
     void Update()
@@ -44,7 +49,7 @@ public class UI_Controller : MonoBehaviour {
             Vector3 DIR_TO_PLAYER = (TARGET.position - HOME.position).normalized;
 
             //Calculate the position we should be in
-            Vector3 TARGET_POSITION = HOME.position + DIR_TO_PLAYER * DISTANCE;
+            Vector3 TARGET_POSITION = HOME.position + DIR_TO_PLAYER * DISTANCE + OFFSET;
 
             //Smooth damp to target position
             POSITION = Vector3.SmoothDamp(POSITION, TARGET_POSITION, ref REF_VELOCITY, 0.5f);
@@ -53,7 +58,7 @@ public class UI_Controller : MonoBehaviour {
             transform.position = POSITION;
 
             //Look at target
-            transform.LookAt(TARGET);
+            transform.LookAt(FACE_TARGET);
         }
 
         //If showing

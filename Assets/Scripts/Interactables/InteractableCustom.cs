@@ -44,7 +44,9 @@ public class InteractableCustom : Interactable{
             //Spawn the image at our position plus offset at the calculated rot, in our transform.
             GameObject temp = Instantiate(UI_PREFAB, (transform.position + UI_OFFSET) + DIR_TO_PLAYER * DIST_TO_PLAYER, ROT, transform);
             temp.GetComponent<UI_Controller>().TARGET = PLAYER;
+            temp.GetComponent<UI_Controller>().FACE_TARGET = PLAYER;
             temp.GetComponent<UI_Controller>().IS_SHOWING = true;
+            temp.GetComponent<UI_Controller>().OFFSET = UI_OFFSET;
             IMG = temp;
         }
     }
