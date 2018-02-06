@@ -94,7 +94,7 @@ public class PhoneLinker : MonoBehaviour {
                     ClearApp();
 
                     //Transition to the second screen to the selected.
-                    TransitionTo(SECOND_SCREEN, SELECTED_ICON);
+                    TransitionToApp(SECOND_SCREEN, SELECTED_ICON);
                 }
             }
 
@@ -118,7 +118,7 @@ public class PhoneLinker : MonoBehaviour {
             ALL_APP_SCREENS.transform.localPosition = Vector3.SmoothDamp(ALL_APP_SCREENS.transform.localPosition, TARGET_POS, ref REF_VELOCITY, DAMP_STRENGTH);
             //Debug.Log(ALL_APP_SCREENS.transform.position);
             //When we're close enough just finish it and go to our next state.
-            Debug.Log(Vector3.Distance(ALL_APP_SCREENS.transform.localPosition, TARGET_POS));
+            //Debug.Log(Vector3.Distance(ALL_APP_SCREENS.transform.localPosition, TARGET_POS));
             if(Vector3.Distance(ALL_APP_SCREENS.transform.localPosition, TARGET_POS) <= 0.1f)
             {
                 ALL_APP_SCREENS.transform.localPosition = TARGET_POS;
@@ -155,9 +155,18 @@ public class PhoneLinker : MonoBehaviour {
         }
     }
 
+    //Helper function that helps us transition  between different screens
+    public void TransitionTo(Transform SCREEN)
+    {
+        RunState = PhoneState.Transition;
+        NEXT_STATE = PhoneState.App;
+        TARGET_SCREEN = SCREEN;
+        TARGET_POS = -TARGET_SCREEN.localPosition;
+    }
+
     //Helper functions
     //Transitions to a different screen. The transform is the icon for the app on the home screen
-    public void TransitionTo(Transform SCREEN, Transform ICON)
+    public void TransitionToApp(Transform SCREEN, Transform ICON)
     {
         //Go to transition state
         RunState = PhoneState.Transition;
@@ -185,6 +194,6 @@ public class PhoneLinker : MonoBehaviour {
     public void TransitionHome()
     {
         //Transition to the home screen
-        TransitionTo(HOME_SCREEN, null);
+        TransitionToApp(HOME_SCREEN, null);
     }
 }

@@ -29,7 +29,7 @@ public class PlayerPhone : MonoBehaviour {
     public GameObject PHONE;
 
     //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false;
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, ANY_DIRECTIONAL = false;
 
     // Use this for initialization
     void Start() {
@@ -50,7 +50,16 @@ public class PlayerPhone : MonoBehaviour {
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
             TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
-            
+
+            //Any directional lets us know if any directions were pressed at all.
+            if (LEFT || RIGHT || UP || DOWN)
+            {
+                ANY_DIRECTIONAL = true;
+            }
+            else
+            {
+                ANY_DIRECTIONAL = false;
+            }
         }
         else if (SHOW == ShowState.Hand2)
         {
@@ -61,6 +70,16 @@ public class PlayerPhone : MonoBehaviour {
             UP = hand2.GetTrackpadPressUp();
             DOWN = hand2.GetTrackpadPressDown();
             TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+
+            //Any directional lets us know if any directions were pressed at all.
+            if (LEFT || RIGHT || UP || DOWN)
+            {
+                ANY_DIRECTIONAL = true;
+            }
+            else
+            {
+                ANY_DIRECTIONAL = false;
+            }
         }
     }
 

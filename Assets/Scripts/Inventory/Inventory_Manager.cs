@@ -198,7 +198,6 @@ public static class  Inventory_Manager {
 
 }
 
-
 static class ListExtensions
 {
     static void MoveItemToFrontOfList<T>(this List<T> list, int index)
