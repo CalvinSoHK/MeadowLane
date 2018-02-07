@@ -2603,6 +2603,8 @@ MonoBehaviour:
   closeTimeBetween: 1
   destination: {fileID: 0}
   player: {fileID: 0}
+  isOpen: 0
+  isClosed: 0
 --- !u!124 &228451982
 Behaviour:
   m_ObjectHideFlags: 0

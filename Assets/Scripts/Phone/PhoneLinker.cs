@@ -131,7 +131,8 @@ public class PhoneLinker : MonoBehaviour {
     //Function that inits the app we're on
     public void InitApp()
     {
-        if(RunState == PhoneState.App)
+        //Only inits the app if we're in app state. If we are in transition it fails
+        if(RunState == PhoneState.App || (RunState == PhoneState.Transition && NEXT_STATE == PhoneState.App))
         {
             SELECTED_APP.GetComponentInChildren<BasicApp>().InitializeApp(PHONE, this);
         }

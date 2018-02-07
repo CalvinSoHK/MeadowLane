@@ -103,7 +103,7 @@ public class PlayerPhone : MonoBehaviour {
 
         if (VIBRATE_NEXT)
         {
-            if(STIE.GetCurrentState() == ScreenTransitionImageEffect.Gamestate.wait)
+            if(STIE.isOpen)
             {
                 if (VibratePhone(0.5f, 300, VibrationHand.Both))
                 {

@@ -38,6 +38,9 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     //Whether or not we want to anchor
     private bool isAnchored = false;
 
+    //Public bools for other scripts to reference
+    public bool isOpen, isClosed;
+
 
     Material material
     {
@@ -86,6 +89,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
         {
             case Gamestate.wait:
                 time = 0.0f;
+                isOpen = false;
                 break;
             case Gamestate.close:
                 runEffect = false;
@@ -93,6 +97,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 maskValue = Mathf.SmoothStep(0.77f, 1.5f, time);
                 if (getStateElapsed() > closeTimeBetween)
                 {
+                    isClosed = true;
                     setCurrentState(Gamestate.open);
                     player.transform.position = destination.position;
                     if (isFlipped)
@@ -123,10 +128,12 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 }
                 break;
             case Gamestate.open:
+                isClosed = false;
                 time += Time.deltaTime / openSpeedModifier;
                 maskValue = Mathf.SmoothStep(1.5f, 0.0f, time);
                 if (getStateElapsed() > openTimeBetween)
                 {
+                    isOpen = true;
                     setCurrentState(Gamestate.wait);
                     //destination = null;
                     //player = null;
