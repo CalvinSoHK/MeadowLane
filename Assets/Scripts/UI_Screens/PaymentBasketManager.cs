@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class PaymentBasketManager : MonoBehaviour {
 
     //All objects in this basket
-    List<GameObject> OBJECT_LIST = new List<GameObject>();
+    public List<GameObject> OBJECT_LIST = new List<GameObject>();
 
     //Entry manager this basket is linked to
     public ShopEntryManager ENTRIES_MANAGER;

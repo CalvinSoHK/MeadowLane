@@ -38,11 +38,21 @@ public class PlayerPhone : MonoBehaviour {
     public bool VIBRATE_NEXT = false;
     public ScreenTransitionImageEffect STIE;
 
+    //Tutorial script
+    public TutorialManager TUT_INFO;
+
     // Use this for initialization
     void Start() {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
+
+        //Check to see if we have done the first tutorial. If not, fire the event
+        if (!TUT_INFO.IsComplete("Start"))
+        {
+            TUT_INFO.SetComplete("Start");
+            LoadConversation("Triangle/Tutorial");
+        }
     }
 
     private void Update()
@@ -95,8 +105,10 @@ public class PlayerPhone : MonoBehaviour {
         {
             if(STIE.GetCurrentState() == ScreenTransitionImageEffect.Gamestate.wait)
             {
-                VIBRATE_NEXT = false;
-                VibratePhone(0.5f, 300, VibrationHand.Both);
+                if (VibratePhone(0.5f, 300, VibrationHand.Both))
+                {
+                    VIBRATE_NEXT = false;
+                }           
             }
         }
     }
@@ -110,6 +122,8 @@ public class PlayerPhone : MonoBehaviour {
             //If we are in the NONE show state, just show the phone on this hand
             if (SHOW == ShowState.None)
             {
+                //Init the app if its on an app
+                PHONE.GetComponent<PhoneLinker>().InitApp();
                 ShowPhone(hand);
                 if (hand == hand1)
                 {
@@ -144,38 +158,40 @@ public class PlayerPhone : MonoBehaviour {
     }
 
     //Helper function to vibrate the phone + controller
-    public void VibratePhone(float DURATION, float STRENGTH)
+    public bool VibratePhone(float DURATION, float STRENGTH)
     {
         if (SHOW == ShowState.Hand1)
         {
-            hand1.TriggerHaptic(DURATION,STRENGTH);
+            return hand1.TriggerHaptic(DURATION,STRENGTH);
         }
         else if (SHOW == ShowState.Hand2)
         {
-            hand2.TriggerHaptic(DURATION, STRENGTH);
+            return hand2.TriggerHaptic(DURATION, STRENGTH);
         }
         else
         {
             Debug.Log("ERROR: No hand to vibrate.");
+            return false;
         }
     }
 
     //Override for vibrate to vibrate a certain hand or both
-    public void VibratePhone(float DURATION, float STRENGTH, VibrationHand HAND)
+    public bool VibratePhone(float DURATION, float STRENGTH, VibrationHand HAND)
     {
         if (HAND == VibrationHand.Hand1)
         {
-            hand1.TriggerHaptic(DURATION, STRENGTH);
+            return hand1.TriggerHaptic(DURATION, STRENGTH);
         }
         else if (HAND == VibrationHand.Hand2)
         {
-            hand2.TriggerHaptic(DURATION, STRENGTH);
+            return hand2.TriggerHaptic(DURATION, STRENGTH);
         }
         else if(HAND== VibrationHand.Both)
         {
             hand1.TriggerHaptic(DURATION, STRENGTH);
-            hand2.TriggerHaptic(DURATION, STRENGTH);
+            return hand2.TriggerHaptic(DURATION, STRENGTH);
         }
+        return false;
     }
 
     //Notification vibration for the phone
@@ -192,6 +208,20 @@ public class PlayerPhone : MonoBehaviour {
     {        
         NotifyPlayerVibrate();
         TextMessageManager.LoadConversation(KEY);
+    }
+
+    //Function that checks if a tutorial needs to be done 
+    public void LoadTutorial(string KEY)
+    {
+        //Separate our tutorial name from the key
+        string[] KEY_SEP = KEY.Split('/');
+
+        //Check if that tutorial has been done yet
+        if (!TUT_INFO.IsComplete(KEY_SEP[1]))
+        {
+            LoadConversation(KEY);
+            TUT_INFO.SetComplete(KEY_SEP[1]);
+        }
     }
 
 

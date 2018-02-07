@@ -128,6 +128,15 @@ public class PhoneLinker : MonoBehaviour {
        
     }
 
+    //Function that inits the app we're on
+    public void InitApp()
+    {
+        if(RunState == PhoneState.App)
+        {
+            SELECTED_APP.GetComponentInChildren<BasicApp>().InitializeApp(PHONE, this);
+        }
+    }
+
     //Helper function that loads in an app on a different screen
     public void LoadApp(Transform SCREEN, Transform APP)
     {
