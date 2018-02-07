@@ -31,4 +31,12 @@ public class PlayerStats : MonoBehaviour {
     {
         return MONEY;
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            TextMessageManager.LoadConversation("Triangle/Tutorial");
+        }
+    }
 }

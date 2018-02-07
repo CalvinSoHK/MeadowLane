@@ -36,13 +36,13 @@ public class InteractableCustom : Interactable{
         if(IMG == null && UI_PREFAB != null)
         {
             //Calculate the direction towards the player
-            Vector3 DIR_TO_PLAYER = (PLAYER.position - transform.position + UI_OFFSET);
+            Vector3 DIR_TO_PLAYER = (PLAYER.position - transform.position);
 
             //Calculate the rotation to face the player
             Quaternion ROT = Quaternion.LookRotation(DIR_TO_PLAYER);
 
             //Spawn the image at our position plus offset at the calculated rot, in our transform.
-            GameObject temp = Instantiate(UI_PREFAB, (transform.position + UI_OFFSET) + DIR_TO_PLAYER * DIST_TO_PLAYER, ROT, transform);
+            GameObject temp = Instantiate(UI_PREFAB, (transform.position), ROT, transform);
             temp.GetComponent<UI_Controller>().TARGET = PLAYER;
             temp.GetComponent<UI_Controller>().FACE_TARGET = PLAYER;
             temp.GetComponent<UI_Controller>().IS_SHOWING = true;

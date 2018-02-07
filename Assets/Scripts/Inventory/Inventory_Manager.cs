@@ -41,8 +41,12 @@ public static class  Inventory_Manager {
             {
                 InventorySeedCount.Add(itemInfo.KEY, itemInfo.gameObject.GetComponent<PourObject>().COUNT); //add the seeds to the key value (dictionary)
             }
+            //Get the path for the icon of this item
+            Sprite ICON = Resources.Load(itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
+            Sprite CAT_ICON = Resources.Load("CategoryIcons/" + itemInfo.CATEGORY, typeof(Sprite)) as Sprite;
+
             //add the item in the category at the end of the list
-            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, itemInfo.ICON, itemInfo.CATEGORY_ICON));
+            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));
         }else //item type is already in inventory
         {
             //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
@@ -195,7 +199,6 @@ public static class  Inventory_Manager {
         
         return InventorySeedCount[key];
     }
-
 }
 
 static class ListExtensions

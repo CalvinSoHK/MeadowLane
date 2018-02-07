@@ -25,7 +25,7 @@ public class CardreaderManager : MonoBehaviour {
             //If the phone is in the money app.
             if(PHONE.RUNNING_APP != null)
             {
-                if (PHONE.RUNNING_APP.name.Equals("Money"))
+                if (PHONE.RUNNING_APP.name.Equals("MoneyApp(Clone)"))
                 {
                     Debug.Log("Money app running.");
                     //Money app reference

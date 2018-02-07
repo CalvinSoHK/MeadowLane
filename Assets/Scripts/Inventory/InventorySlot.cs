@@ -10,8 +10,8 @@ public class InventorySlot {
     //(IF WE ARE KEEPING TRACK OF AN IMAGE SHOULD WE KEEP TRACK OF THE ABOVE AS A GAME OBJECT RATHER THAT STRING)
     private int p_TotalNum; //total number of this item in inventory
     private int p_Key; //key representing item
-    private Image p_Icon;//itemIcon  
-    private Image p_CategoryIcon;   
+    private Sprite p_Icon;//itemIcon  
+    private Sprite p_CategoryIcon;   
 
     /// <summary>
     /// Create a new object of type Inventoty Slot. 
@@ -23,7 +23,7 @@ public class InventorySlot {
     /// <param name="prefabRef"></param>
     /// <param name="key"></param>
     /// <param name="icon"></param>
-    public InventorySlot(string name, string category, int key, Image icon, Image cIcon)
+    public InventorySlot(string name, string category, int key, Sprite icon, Sprite cIcon)
     {
         p_Name = name;
         p_Category = category;
@@ -59,7 +59,7 @@ public class InventorySlot {
         }
     }
 
-    public Image Icon
+    public Sprite Icon
     {
         get
         {
@@ -67,7 +67,7 @@ public class InventorySlot {
         }
     }
 
-    public Image cIcon
+    public Sprite cIcon
     {
         get
         {

@@ -1008,7 +1008,6 @@ namespace Valve.VR.InteractionSystem
                 //Debug.Log(controller.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad));
                 return controller.GetPressDown(EVRButtonId.k_EButton_Axis0);
             }
-
             return false;
         }
 
@@ -1024,7 +1023,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if(input.y > 0.6f)
+                if(input.y > 0.5f)
                 {
                     return true;
                 }
@@ -1048,7 +1047,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.y < -0.6f)
+                if (input.y < -0.5f)
                 {
                     return true;
                 }
@@ -1072,7 +1071,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.x < -0.6f)
+                if (input.x < -0.5f)
                 {
                     return true;
                 }
@@ -1096,7 +1095,7 @@ namespace Valve.VR.InteractionSystem
             else if (controller != null)
             {
                 Vector2 input = controller.GetAxis(EVRButtonId.k_EButton_Axis0);
-                if (input.x > 0.6f)
+                if (input.x > 0.5f)
                 {
                     return true;
                 }

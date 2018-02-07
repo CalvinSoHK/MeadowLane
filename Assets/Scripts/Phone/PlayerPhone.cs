@@ -16,6 +16,9 @@ public class PlayerPhone : MonoBehaviour {
     public enum ShowState { None, Hand1, Hand2 };
     public ShowState SHOW = ShowState.None;
 
+    //Vibration enum
+    public enum VibrationHand { Both, Hand1, Hand2 };
+
     //Pos offset for the phone on being called
     public Vector3 POS_OFFSET;
 
@@ -29,7 +32,11 @@ public class PlayerPhone : MonoBehaviour {
     public GameObject PHONE;
 
     //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, ANY_DIRECTIONAL = false;
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false;
+
+    //Bool to notify the player the next time the player's eyes are open
+    public bool VIBRATE_NEXT = false;
+    public ScreenTransitionImageEffect STIE;
 
     // Use this for initialization
     void Start() {
@@ -50,6 +57,7 @@ public class PlayerPhone : MonoBehaviour {
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
             TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
+            HOLD_DOWN = hand1.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
             if (LEFT || RIGHT || UP || DOWN)
@@ -70,6 +78,7 @@ public class PlayerPhone : MonoBehaviour {
             UP = hand2.GetTrackpadPressUp();
             DOWN = hand2.GetTrackpadPressDown();
             TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+            HOLD_DOWN = hand2.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
             if (LEFT || RIGHT || UP || DOWN)
@@ -79,6 +88,15 @@ public class PlayerPhone : MonoBehaviour {
             else
             {
                 ANY_DIRECTIONAL = false;
+            }
+        }
+
+        if (VIBRATE_NEXT)
+        {
+            if(STIE.GetCurrentState() == ScreenTransitionImageEffect.Gamestate.wait)
+            {
+                VIBRATE_NEXT = false;
+                VibratePhone(0.5f, 300, VibrationHand.Both);
             }
         }
     }
@@ -140,6 +158,40 @@ public class PlayerPhone : MonoBehaviour {
         {
             Debug.Log("ERROR: No hand to vibrate.");
         }
+    }
+
+    //Override for vibrate to vibrate a certain hand or both
+    public void VibratePhone(float DURATION, float STRENGTH, VibrationHand HAND)
+    {
+        if (HAND == VibrationHand.Hand1)
+        {
+            hand1.TriggerHaptic(DURATION, STRENGTH);
+        }
+        else if (HAND == VibrationHand.Hand2)
+        {
+            hand2.TriggerHaptic(DURATION, STRENGTH);
+        }
+        else if(HAND== VibrationHand.Both)
+        {
+            hand1.TriggerHaptic(DURATION, STRENGTH);
+            hand2.TriggerHaptic(DURATION, STRENGTH);
+        }
+    }
+
+    //Notification vibration for the phone
+    public void NotifyPlayerVibrate()
+    {
+        VIBRATE_NEXT = true;
+
+        //Other effects if we need it
+
+    }
+
+    //Load conversation
+    public void LoadConversation(string KEY)
+    {        
+        NotifyPlayerVibrate();
+        TextMessageManager.LoadConversation(KEY);
     }
 
 

@@ -20,8 +20,8 @@ public class BaseItem : MonoBehaviour {
     public int KEY;
 
     //Image that is shown in the inventory
-    public Image ICON;
-    public Image CATEGORY_ICON;
+    //public Sprite ICON;
+    //public Sprite CATEGORY_ICON;
 
     //Owner of the Object
     public enum Owner { None, NPC, Player };
@@ -61,9 +61,6 @@ public class BaseItem : MonoBehaviour {
 
     //Rotation offset
     public Vector3 rotOffset;
-
-
-
 
     //Helper functions below
 
