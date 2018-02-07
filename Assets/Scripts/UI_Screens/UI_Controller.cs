@@ -52,7 +52,7 @@ public class UI_Controller : MonoBehaviour {
             Vector3 TARGET_POSITION = HOME.position + DIR_TO_PLAYER * DISTANCE + OFFSET;
 
             //Smooth damp to target position
-            POSITION = Vector3.SmoothDamp(POSITION, TARGET_POSITION, ref REF_VELOCITY, 0.5f);
+            POSITION = Vector3.SmoothDamp(POSITION, TARGET_POSITION, ref REF_VELOCITY, 0.25f);
 
             //Apply the position
             transform.position = POSITION;

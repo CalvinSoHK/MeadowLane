@@ -422,6 +422,7 @@ MonoBehaviour:
   CONVO_SCREEN: {fileID: 1788850887470210, guid: a1f0655403b45ac48ba9d123bd9ef268,
     type: 2}
   STATE: 0
+  SCROLL_SENSITIVITY: 0.1
 --- !u!114 &114563478920157464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -516,6 +517,7 @@ MonoBehaviour:
   SELECTION: {fileID: 0}
   CONVO_SCREEN: {fileID: 0}
   STATE: 0
+  SCROLL_SENSITIVITY: 0.5
 --- !u!114 &114762826729506586
 MonoBehaviour:
   m_ObjectHideFlags: 1

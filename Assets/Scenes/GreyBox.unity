@@ -8076,6 +8076,7 @@ MonoBehaviour:
   PRESS_UP: 0
   TRIGGER_DOWN: 0
   ANY_DIRECTIONAL: 0
+  HOLD_DOWN: 0
 --- !u!114 &637642981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10499,8 +10500,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UI_PREFAB: {fileID: 1988234003215910, guid: 8151276a68e8bf048ae468dde8554fe7, type: 2}
-  UI_OFFSET: {x: 0, y: 0, z: 0}
-  DIST_TO_PLAYER: 0.5
+  UI_OFFSET: {x: 0, y: 0.8, z: 0}
+  DIST_TO_PLAYER: 0.7
   SHOW_UI: 1
 --- !u!1 &859401700
 GameObject:
@@ -18443,6 +18444,37 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300002, guid: 830a062d645b8dc41800f95b08c3d107, type: 3}
+--- !u!114 &1532990523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1532990498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39994a167ad7d5f428d8aa8664593e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
+  OnInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 637642980}
+        m_MethodName: LoadConversation
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Triangle/Tutorial
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1535885402
 GameObject:
   m_ObjectHideFlags: 0
