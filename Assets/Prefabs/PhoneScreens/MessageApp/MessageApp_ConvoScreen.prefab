@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 224025450276060012}
   - component: {fileID: 222275084695505956}
   - component: {fileID: 114084821825814162}
+  - component: {fileID: 114213441113133388}
   m_Layer: 0
   m_Name: MessageApp_ConvoScreen
   m_TagString: Untagged
@@ -294,7 +295,7 @@ MonoBehaviour:
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
-  m_FillCenter: 1
+  m_FillCenter: 0
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
@@ -330,6 +331,18 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114213441113133388
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1788850887470210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b62f91830eb314686d3dc7894dce06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  REF: {fileID: 1360204310437786}
 --- !u!114 &114216466192104222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -347,10 +360,12 @@ MonoBehaviour:
   LEFT_MESSAGE_NOPIC: {fileID: 0}
   RIGHT_MESSAGE: {fileID: 0}
   RIGHT_MESSAGE_NOPIC: {fileID: 0}
-  CONTACT_ENTRY: {fileID: 0}
-  CONTACT_LIST: {fileID: 0}
+  CONVO_ENTRY: {fileID: 0}
+  CONVO_LIST: {fileID: 0}
   CONVERSATION_CONTENT: {fileID: 0}
+  SELECTION: {fileID: 0}
   CONVO_SCREEN: {fileID: 0}
+  STATE: 0
 --- !u!114 &114371450455995440
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -389,8 +404,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114860300569747116}
   m_HandleRect: {fileID: 224359640449998532}
   m_Direction: 2
-  m_Value: 0.9999343
-  m_Size: 0
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -503,7 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 10
     m_Right: 0
     m_Top: 10
     m_Bottom: 0
@@ -840,8 +855,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.9, y: -77.928}
-  m_SizeDelta: {x: 576.5, y: 904.3}
+  m_AnchoredPosition: {x: 8.2, y: -77.928}
+  m_SizeDelta: {x: 589.1, y: 904.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224916842035031278
 RectTransform:

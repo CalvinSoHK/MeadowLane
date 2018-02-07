@@ -53,7 +53,7 @@ public class StallManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato") as GameObject).GetComponent<BaseItem>());
+            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
         }
 
         //We manage our customers regardless if its closed or not because some customers can show up right at the end.

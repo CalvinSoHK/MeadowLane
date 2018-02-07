@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Messaging app
 public class MessageApp : BasicApp {
@@ -25,6 +26,13 @@ public class MessageApp : BasicApp {
     //Our contact list
     List<GameObject> CONVO_ENTRIES = new List<GameObject>();
 
+    //Our scroll bar
+    ScrollRect SCROLL, CONVO_SCROLL;
+    float TARGET_NORMALIZEDPOSITION = 1, DAMP_REF;
+
+    //Scroll bar sensitivity
+    public float SCROLL_SENSITIVITY = 0.5f;
+
     //Override base init
     public override void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
     {
@@ -33,19 +41,17 @@ public class MessageApp : BasicApp {
 
         //Spawn the second convo screen on the THIRD SCREEn
         Transform TEMP = (Instantiate(CONVO_SCREEN, LINKER.THIRD_SCREEN.position, LINKER.THIRD_SCREEN.rotation, LINKER.THIRD_SCREEN) as GameObject).transform;
+        CONVERSATION_CONTENT = TEMP.GetComponent<ReferencePasser>().REF;
+        CONVO_SCROLL = CONVERSATION_CONTENT.transform.parent.parent.GetComponent<ScrollRect>();
 
         //Populate the contacts list
         PopulateConvoList();
 
-        //Enable selection if there are contacts
-        if(CONVO_ENTRIES.Count > 0)
-        {
-            SELECTION.SetActive(true);
-            SELECTION.transform.localPosition = CONVO_ENTRIES[0].transform.localPosition;
-        }
-
         //Reset index
         INDEX = 0;
+
+        //Get the scroll bar
+        SCROLL = transform.Find("Scroll View").GetComponent<ScrollRect>();
     }
 
     public override void RunApp()
@@ -62,34 +68,112 @@ public class MessageApp : BasicApp {
                 if(INDEX < CONVO_ENTRIES.Count - 1)
                 {
                     INDEX++;
+                    Debug.Log(INDEX);
+                    //Place the selection on the right index
+                    if (CONVO_ENTRIES.Count > 0)
+                    {
+                        if (CONVO_ENTRIES.Count > 2 && INDEX != 0)
+                        {
+                            //The total distance between the first and last entry
+                            float DISTANCE = Vector3.Distance(CONVO_ENTRIES[0].GetComponent<RectTransform>().anchoredPosition, CONVO_ENTRIES[CONVO_ENTRIES.Count - 1].GetComponent<RectTransform>().anchoredPosition + 
+                                new Vector2(0, CONVO_ENTRIES[CONVO_ENTRIES.Count - 1].GetComponent<RectTransform>().rect.height));
+                            //float DIST_TO = Vector3.Distance(CONVO_ENTRIES[0].GetComponent<RectTransform>().anchoredPosition, CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().anchoredPosition);
+                            float HEIGHT = CONVO_ENTRIES[0].GetComponent<RectTransform>().rect.height + CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing; //Account for spacing
+                            //DISTANCE += (HEIGHT - CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing);
+                            TARGET_NORMALIZEDPOSITION -= HEIGHT / DISTANCE;
+                            //Debug.Log("Scroll position: " + SCROLL.verticalNormalizedPosition);
+                        }
+
+                        if (INDEX == CONVO_ENTRIES.Count)
+                        {
+                            Debug.Log("Go to zero.");
+                            TARGET_NORMALIZEDPOSITION = 0;
+                        }
+                    }
                 }
             }
             else if (PHONE.UP && PHONE.PRESS_DOWN)
             {
-                if(INDEX > 0)
+                if (INDEX > 0)
                 {
                     INDEX--;
+                    Debug.Log(INDEX);
+                    //Place the selection on the right index
+                    if (CONVO_ENTRIES.Count > 0)
+                    {
+                        //Debug.Log("Local y position: " + SELECTION.GetComponent<RectTransform>().anchoredPosition.y);
+                        //If we have more than two entries, and the selected is not 0 calculate our total distance we have to map each entry to
+                        if (CONVO_ENTRIES.Count > 2 && INDEX != 0)
+                        {
+                            //The total distance between the first and last entry
+                            float DISTANCE = Vector3.Distance(CONVO_ENTRIES[0].GetComponent<RectTransform>().anchoredPosition, CONVO_ENTRIES[CONVO_ENTRIES.Count - 1].GetComponent<RectTransform>().anchoredPosition +
+                                new Vector2(0, CONVO_ENTRIES[CONVO_ENTRIES.Count - 1].GetComponent<RectTransform>().rect.height));
+                            //float DIST_TO = Vector3.Distance(CONVO_ENTRIES[0].GetComponent<RectTransform>().anchoredPosition, CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().anchoredPosition);
+                            float HEIGHT = CONVO_ENTRIES[0].GetComponent<RectTransform>().rect.height + CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing; //Account for spacing
+                            DISTANCE += (HEIGHT - CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing);
+                            TARGET_NORMALIZEDPOSITION += HEIGHT / DISTANCE;
+                            //Debug.Log("Scroll position: " + SCROLL.verticalNormalizedPosition);
+                        }
+                        if (INDEX == 0)
+                        {
+                            TARGET_NORMALIZEDPOSITION = 1;
+                        }
+                    }
                 }
             }
 
-            //Place the selection on the right index
+            //Smooth damp the scroll view
+            SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
+
+            //If we're close to the position, just set it
+            if(Mathf.Abs(SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
+            {
+                SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
+            }
+
             if(CONVO_ENTRIES.Count > 0)
             {
-                SELECTION.transform.localPosition = CONVO_ENTRIES[INDEX].transform.localPosition;
-                if(SELECTION.transform.localPosition.y < -750f)
-                {
-
-                }
+                SELECTION.GetComponent<RectTransform>().position = CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().position;
+                SELECTION.SetActive(true);
             }
-         
+        
+
             //If we press down on the button AND no directional presses were done.
             if (PHONE.PRESS_DOWN && !PHONE.ANY_DIRECTIONAL)
             {
+                //Clear the messages if there are any sitting around
+                if (CONVERSATION_CONTENT.transform.childCount > 0)
+                {
+                    //Clear the message screen
+                    ClearConversation();  
+                }
+
+                //Make the first image with the profile pic
+                GameObject TEMP = Instantiate(LEFT_MESSAGE, CONVERSATION_CONTENT.transform);
+                TEMP.GetComponent<TextPasser>().SetText(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES[0]);
+                TEMP.GetComponent<TextPasser>().SetProfile(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite);
+
                 //Populate convo screen
+                bool ignore = true; //Helps us skip the first line
+                foreach (string MESSAGE in CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES)
+                {
+                    if (!ignore)
+                    {
+                        TEMP = Instantiate(LEFT_MESSAGE_NOPIC, CONVERSATION_CONTENT.transform);
+                        TEMP.GetComponent<TextPasser>().SetText(MESSAGE);
+                    }
+                    else { ignore = false; }        
+                }
 
                 //Transition to convo screen
+                TARGET_NORMALIZEDPOSITION = 1;
                 LINKER.TransitionTo(LINKER.THIRD_SCREEN);
                 STATE = MESSAGE_APP_STATE.Conversation;
+
+                //Mark the current message as viewed
+                CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().SetNotification(false);
+                ConvoInfo TEMP_INFO = new ConvoInfo(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().TEXT.text, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES);
+                TextMessageManager.MoveConvo(TEMP_INFO);
             }
 
         }
@@ -102,23 +186,94 @@ public class MessageApp : BasicApp {
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
                 STATE = MESSAGE_APP_STATE.ConvoList;
             }
+            else if (PHONE.HOLD_DOWN)
+            {
+                if (PHONE.UP)
+                {
+                    if(TARGET_NORMALIZEDPOSITION < 1)
+                    {
+                        TARGET_NORMALIZEDPOSITION += 0.05f;
+                        if(TARGET_NORMALIZEDPOSITION >= 1)
+                        {
+                            TARGET_NORMALIZEDPOSITION = 1;
+                        }
+                    }
+                }
+                else if (PHONE.DOWN)
+                {
+                    Debug.Log(TARGET_NORMALIZEDPOSITION);
+                    if (TARGET_NORMALIZEDPOSITION > -0.1f)
+                    {
+                        TARGET_NORMALIZEDPOSITION -= 0.05f;
+                        if(TARGET_NORMALIZEDPOSITION <= -0.1f)
+                        {
+                            TARGET_NORMALIZEDPOSITION = -0.1f;
+                        }
+                    }
+                }
+            }
 
+            //Smooth damp the scroll view
+            CONVO_SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(CONVO_SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
+
+            //If we're close to the position, just set it
+            if (Mathf.Abs(CONVO_SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
+            {
+                CONVO_SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
+            }
+        }
+    }
+
+    public void ClearConversation()
+    {
+        //Get all messages and delete them all
+        Transform[] ALL_MESSAGES = CONVERSATION_CONTENT.GetComponentsInChildren<Transform>();
+        for(int i = 1; i < ALL_MESSAGES.Length; i++)
+        {
+            Destroy(ALL_MESSAGES[i].gameObject);
         }
     }
 
     public void PopulateConvoList()
     {
-        //Get old and new conversations from some data structure
+        //Clear all our contacts if we have any
+        for(int i = CONVO_ENTRIES.Count-1; i > 0; i--)
+        {
+            Destroy(CONVO_ENTRIES[i].gameObject);
+        }
+
+        //Get conversations from some data structure
         //Remember to populate from newest to oldest.
-        
+        foreach(ConvoInfo INFO in TextMessageManager.NewPhoneConversations)
+        {
+            //Create a new entry
+            GameObject TEMP = Instantiate(CONVO_ENTRY, CONVO_LIST.transform);
 
+            //Assign all the important variables
+            TEMP.GetComponent<TextPasser>().SetNotification(true);
+            TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
+        }
 
+        //Get old conversations from some data structure
+        //Remember to populate from newest to oldest.
+        foreach (ConvoInfo INFO in TextMessageManager.OldPhoneConversations)
+        {
+            //Create a new entry
+            GameObject TEMP = Instantiate(CONVO_ENTRY, CONVO_LIST.transform);
 
+            //Assign all the important variables
+            TEMP.GetComponent<TextPasser>().SetNotification(false);
+            TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
+        }
 
         //Fill our list so we have a reference to each
-        foreach (Transform ENTRY in CONVO_LIST.GetComponentInChildren<Transform>())
+        foreach (TextPasser ENTRY in CONVO_LIST.GetComponentsInChildren<TextPasser>())
         {
-            CONVO_ENTRIES.Add(ENTRY.gameObject);
+            CONVO_ENTRIES.Add(ENTRY.gameObject);         
         }
     }
 
