@@ -42,7 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 11
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -54,7 +54,7 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 8
+    serializedVersion: 9
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
@@ -88,7 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigma: 1
   m_LightingDataAsset: {fileID: 112000012, guid: 58d7a235653806b4bb2aefa3e6de7976,
     type: 2}
-  m_ShadowMaskMode: 2
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -437,6 +437,87 @@ Transform:
   m_Father: {fileID: 2118429968}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &263572344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 263572345}
+  - component: {fileID: 263572348}
+  - component: {fileID: 263572347}
+  - component: {fileID: 263572346}
+  m_Layer: 0
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &263572345
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263572344}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 718754021}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -248.3, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &263572346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263572344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d27dd2ea012cbb479418e4014dcec05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notificationImage: {fileID: 263572347}
+--- !u!114 &263572347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263572344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: 39e2fc9d33dba2c4f89251334d273dc6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &263572348
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 263572344}
 --- !u!1 &294879763
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +930,8 @@ MonoBehaviour:
   closeTimeBetween: 4
   destination: {fileID: 0}
   player: {fileID: 0}
+  isOpen: 0
+  isClosed: 0
 --- !u!92 &462373066
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1173,10 +1256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Potato
   CATEGORY: 
-  PREFAB_REF: {fileID: 0}
   KEY: 0
-  ICON: {fileID: 0}
-  CATEGORY_ICON: {fileID: 0}
   _OWNER: 0
   _VALUE: 0
   _TAGS: 0
@@ -1623,9 +1703,19 @@ Prefab:
       propertyPath: DebugInventory.Array.data[4]
       value: 
       objectReference: {fileID: 1750813551}
+    - target: {fileID: 114504441719735524, guid: 175a1210687ac44458d769cd02ec6ebc,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 175a1210687ac44458d769cd02ec6ebc, type: 2}
   m_IsPrefabParent: 0
+--- !u!224 &718754021 stripped
+RectTransform:
+  m_PrefabParentObject: {fileID: 224031542874490358, guid: 175a1210687ac44458d769cd02ec6ebc,
+    type: 2}
+  m_PrefabInternal: {fileID: 688816705}
 --- !u!1 &784215833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1838,6 +1928,20 @@ Light:
   m_Lightmapping: 2
   m_AreaSize: {x: 0.96866584, y: 8.207056}
   m_BounceIntensity: 0.33
+  m_FalloffTable:
+    m_Table[0]: 0
+    m_Table[1]: 0
+    m_Table[2]: 0
+    m_Table[3]: 0
+    m_Table[4]: 0
+    m_Table[5]: 0
+    m_Table[6]: 0
+    m_Table[7]: 0
+    m_Table[8]: 0
+    m_Table[9]: 0
+    m_Table[10]: 0
+    m_Table[11]: 0
+    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
@@ -2058,10 +2162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Cucumber
   CATEGORY: 
-  PREFAB_REF: {fileID: 0}
   KEY: 0
-  ICON: {fileID: 0}
-  CATEGORY_ICON: {fileID: 0}
   _OWNER: 0
   _VALUE: 0
   _TAGS: 0
@@ -2303,11 +2404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Apple
   CATEGORY: Produce
-  PREFAB_REF: {fileID: 1904774736883932, guid: 98cc38b9034b20d44b99b98422ce8156, type: 2}
   KEY: 1
-  ICON: {fileID: 114159059632907062, guid: 667a611e85194b4419771231ad979bae, type: 2}
-  CATEGORY_ICON: {fileID: 114734633757209476, guid: 5983f33fc00b0b64fa8842a5f9bd0e38,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 0
@@ -2550,6 +2647,20 @@ Light:
   m_Lightmapping: 2
   m_AreaSize: {x: 1.6176475, y: 8.207056}
   m_BounceIntensity: 0.33
+  m_FalloffTable:
+    m_Table[0]: 0
+    m_Table[1]: 0
+    m_Table[2]: 0
+    m_Table[3]: 0
+    m_Table[4]: 0
+    m_Table[5]: 0
+    m_Table[6]: 0
+    m_Table[7]: 0
+    m_Table[8]: 0
+    m_Table[9]: 0
+    m_Table[10]: 0
+    m_Table[11]: 0
+    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
@@ -2599,11 +2710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Potato
   CATEGORY: Produce
-  PREFAB_REF: {fileID: 1904774736883932, guid: 98cc38b9034b20d44b99b98422ce8156, type: 2}
   KEY: 3
-  ICON: {fileID: 114321233015246938, guid: 9a69d65e7b12bab4e9e0ab32af6d1cc4, type: 2}
-  CATEGORY_ICON: {fileID: 114734633757209476, guid: 5983f33fc00b0b64fa8842a5f9bd0e38,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 0
@@ -2847,10 +2954,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Apple
   CATEGORY: 
-  PREFAB_REF: {fileID: 0}
   KEY: 0
-  ICON: {fileID: 0}
-  CATEGORY_ICON: {fileID: 0}
   _OWNER: 0
   _VALUE: 0
   _TAGS: 0
@@ -2968,11 +3072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Map
   CATEGORY: KeyItems
-  PREFAB_REF: {fileID: 1904774736883932, guid: 98cc38b9034b20d44b99b98422ce8156, type: 2}
   KEY: 2
-  ICON: {fileID: 114349614010513688, guid: f9e4b4160af7b9a4ab159effadcc273d, type: 2}
-  CATEGORY_ICON: {fileID: 114982470879540210, guid: ba4d5efd20566d846ba10bde7d661e76,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 0
@@ -3075,11 +3175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: PickAxe
   CATEGORY: Tools
-  PREFAB_REF: {fileID: 1904774736883932, guid: 98cc38b9034b20d44b99b98422ce8156, type: 2}
   KEY: 5
-  ICON: {fileID: 114240299444986708, guid: 6bc45e29c27e5cb43a1c0f48fa6e0835, type: 2}
-  CATEGORY_ICON: {fileID: 114442329531564028, guid: 75dd526c6da6fa245abd177745b4e661,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 0
@@ -3430,6 +3526,20 @@ Light:
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
+  m_FalloffTable:
+    m_Table[0]: 0
+    m_Table[1]: 0
+    m_Table[2]: 0
+    m_Table[3]: 0
+    m_Table[4]: 0
+    m_Table[5]: 0
+    m_Table[6]: 0
+    m_Table[7]: 0
+    m_Table[8]: 0
+    m_Table[9]: 0
+    m_Table[10]: 0
+    m_Table[11]: 0
+    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
@@ -3549,11 +3659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Shovel
   CATEGORY: Tools
-  PREFAB_REF: {fileID: 1904774736883932, guid: 98cc38b9034b20d44b99b98422ce8156, type: 2}
   KEY: 4
-  ICON: {fileID: 114190836664430774, guid: e64d93d52c62e904092f894f818b4e00, type: 2}
-  CATEGORY_ICON: {fileID: 114442329531564028, guid: 75dd526c6da6fa245abd177745b4e661,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 0
