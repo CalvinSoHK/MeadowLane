@@ -36,13 +36,18 @@ public class MessageApp : BasicApp {
     //Override base init
     public override void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
     {
+        Debug.Log("State of message app: " + STATE);
+
         //Get the phone and linker
         base.InitializeApp(_PHONE, _LINKER);
 
         //Spawn the second convo screen on the THIRD SCREEn
-        Transform TEMP = (Instantiate(CONVO_SCREEN, LINKER.THIRD_SCREEN.position, LINKER.THIRD_SCREEN.rotation, LINKER.THIRD_SCREEN) as GameObject).transform;
-        CONVERSATION_CONTENT = TEMP.GetComponent<ReferencePasser>().REF;
-        CONVO_SCROLL = CONVERSATION_CONTENT.transform.parent.parent.GetComponent<ScrollRect>();
+        if(CONVERSATION_CONTENT == null)
+        {
+            Transform TEMP = (Instantiate(CONVO_SCREEN, LINKER.THIRD_SCREEN.position, LINKER.THIRD_SCREEN.rotation, LINKER.THIRD_SCREEN) as GameObject).transform;
+            CONVERSATION_CONTENT = TEMP.GetComponent<ReferencePasser>().REF;
+            CONVO_SCROLL = CONVERSATION_CONTENT.transform.parent.parent.GetComponent<ScrollRect>();
+        }  
 
         //Populate the contacts list
         PopulateConvoList();
@@ -177,7 +182,6 @@ public class MessageApp : BasicApp {
                     ConvoInfo TEMP_INFO = new ConvoInfo(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().TEXT.text, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES);
                     TextMessageManager.MoveConvo(TEMP_INFO);
                 }
-
             }
         }
         else if (STATE == MESSAGE_APP_STATE.Conversation) // WHen we're viewing a conversation
@@ -196,7 +200,7 @@ public class MessageApp : BasicApp {
                     if (TARGET_NORMALIZEDPOSITION < 1)
                     {
                         TARGET_NORMALIZEDPOSITION += 0.05f;
-                        if (TARGET_NORMALIZEDPOSITION >= 1)
+                        if (TARGET_NORMALIZEDPOSITION > 1)
                         {
                             TARGET_NORMALIZEDPOSITION = 1;
                         }
@@ -205,12 +209,12 @@ public class MessageApp : BasicApp {
                 else if (PHONE.DOWN)
                 {
                     Debug.Log(TARGET_NORMALIZEDPOSITION);
-                    if (TARGET_NORMALIZEDPOSITION > -0.1f)
+                    if (TARGET_NORMALIZEDPOSITION > 0)
                     {
                         TARGET_NORMALIZEDPOSITION -= 0.05f;
-                        if (TARGET_NORMALIZEDPOSITION <= -0.1f)
+                        if (TARGET_NORMALIZEDPOSITION < 0)
                         {
-                            TARGET_NORMALIZEDPOSITION = -0.1f;
+                            TARGET_NORMALIZEDPOSITION = 0;
                         }
                     }
                 }
