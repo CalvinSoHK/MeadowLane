@@ -8,7 +8,6 @@ public class PlayerStats : MonoBehaviour {
     //How much money they have.
     public int MONEY;
 
-
     //Check to see if player has enough money
     public bool HasMoney(int i)
     {

@@ -44,7 +44,7 @@ public class Container : MonoBehaviour {
             if (collision.gameObject.GetComponent<BaseItem>().CONTAINABLE)
             {
                 //If this is the players container, put it in our inventory
-                if (OWNER == BaseItem.Owner.Player)
+                if (OWNER == BaseItem.Owner.Player && collision.gameObject.GetComponent<BaseItem>()._OWNER == OWNER)
                 {
                     Debug.Log("Firing");
                     Inventory_Manager.AddItemToInventory(collision.gameObject.GetComponent<BaseItem>());
@@ -76,6 +76,11 @@ public class Container : MonoBehaviour {
                         ejectFromContainer(collision.gameObject);
                     }
                 }
+            }
+            else //if it shouldn't be put in your inventory because it is not containable
+            {
+                //Eject the object from the container
+                ejectFromContainer(collision.gameObject);
             }
         }
         else //The object we tried to throw in isn't a base item and isn't in the right layer.

@@ -1558,7 +1558,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0f671d644af8e724098f643aa2d638b0, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2300002, guid: 0f671d644af8e724098f643aa2d638b0, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -3784,7 +3784,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4049446798992970, guid: 5cb960a54f54277438639822fcf258bb, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 114389707700076710, guid: 5cb960a54f54277438639822fcf258bb,
         type: 2}
@@ -7183,7 +7183,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4969850772833750, guid: f6cd4057f90d1a84ebf15215d915c1ad, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 114440805770978862, guid: f6cd4057f90d1a84ebf15215d915c1ad,
         type: 2}
@@ -7194,6 +7194,11 @@ Prefab:
         type: 2}
       propertyPath: COUNT
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114440805770978862, guid: f6cd4057f90d1a84ebf15215d915c1ad,
+        type: 2}
+      propertyPath: _TAGS
+      value: 258
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f6cd4057f90d1a84ebf15215d915c1ad, type: 2}
@@ -8077,6 +8082,9 @@ MonoBehaviour:
   TRIGGER_DOWN: 0
   ANY_DIRECTIONAL: 0
   HOLD_DOWN: 0
+  VIBRATE_NEXT: 0
+  STIE: {fileID: 228451981}
+  TUT_INFO: {fileID: 664984165}
 --- !u!114 &637642981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8288,7 +8296,7 @@ Transform:
   - {fileID: 1013835105}
   - {fileID: 370021574}
   m_Father: {fileID: 1738468711}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -180.00002, z: 0}
 --- !u!1 &660180585
 GameObject:
@@ -8402,6 +8410,7 @@ GameObject:
   - component: {fileID: 664984162}
   - component: {fileID: 664984163}
   - component: {fileID: 664984164}
+  - component: {fileID: 664984165}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8508,6 +8517,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PLAYER: {fileID: 0}
+--- !u!114 &664984165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 664984157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14f19d5946e40f4aa9a406b35d1a8bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TUTORIAL_ARRAY:
+  - COMPLETE: 0
+    NAME: Start
+  - COMPLETE: 0
+    NAME: Farm
+  - COMPLETE: 0
+    NAME: Bus
+  - COMPLETE: 0
+    NAME: HappyMart
+  - COMPLETE: 0
+    NAME: MarketStall
 --- !u!1001 &670885051
 Prefab:
   m_ObjectHideFlags: 0
@@ -10221,6 +10252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a418b2c5f7ba3418fe37f7e62dcec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OBJECT_LIST: []
   ENTRIES_MANAGER: {fileID: 1227301116}
   ON_OBJ_ENTER:
     m_PersistentCalls:
@@ -11974,6 +12006,7 @@ GameObject:
   - component: {fileID: 976842666}
   - component: {fileID: 976842664}
   - component: {fileID: 976842662}
+  - component: {fileID: 976842663}
   m_Layer: 8
   m_Name: pCube54
   m_TagString: Untagged
@@ -11999,6 +12032,37 @@ MonoBehaviour:
   destination: {fileID: 936585222}
   FLIP: 0
   ANCHOR: 0
+--- !u!114 &976842663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 976842661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39994a167ad7d5f428d8aa8664593e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
+  OnInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 637642980}
+        m_MethodName: LoadTutorial
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Triangle/HappyMart
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!65 &976842664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14721,6 +14785,7 @@ MonoBehaviour:
   ENTRYU_UI_ARRAY: []
   TOTAL: 0
   IS_DELIVERY: 0
+  BASKET: {fileID: 825342185}
 --- !u!1 &1244971366
 GameObject:
   m_ObjectHideFlags: 0
@@ -18463,14 +18528,45 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 637642980}
-        m_MethodName: LoadConversation
+        m_MethodName: LoadTutorial
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Triangle/Tutorial
+          m_StringArgument: Triangle/Farm
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &1532990524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1532990497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39994a167ad7d5f428d8aa8664593e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
+  OnInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 637642980}
+        m_MethodName: LoadTutorial
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Triangle/Bus
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
@@ -20562,8 +20658,8 @@ Transform:
   - {fileID: 1156756385}
   - {fileID: 1845967198}
   - {fileID: 936585222}
-  - {fileID: 2129781134}
   - {fileID: 647764125}
+  - {fileID: 2129781134}
   - {fileID: 842757963}
   - {fileID: 1356622412}
   - {fileID: 535825037}
@@ -22917,6 +23013,7 @@ GameObject:
   - component: {fileID: 1950845885}
   - component: {fileID: 1950845884}
   - component: {fileID: 1950845883}
+  - component: {fileID: 1950845887}
   m_Layer: 8
   m_Name: Stall
   m_TagString: Untagged
@@ -23012,6 +23109,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.5649867, y: 3.910087, z: 0.521113}
   m_Center: {x: -2.6249914, y: 1.3096653, z: 3.3545845}
+--- !u!114 &1950845887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1950845881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39994a167ad7d5f428d8aa8664593e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
+  OnInteractEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 637642980}
+        m_MethodName: LoadTutorial
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Triangle/MarketStall
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1958661831
 GameObject:
   m_ObjectHideFlags: 0

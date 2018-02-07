@@ -1108,9 +1108,15 @@ namespace Valve.VR.InteractionSystem
         }
 
         //Helper function to trigger haptic feedback with a float of intensity
-        public void TriggerHaptic(float DURATION, float STRENGTH)
+        public bool TriggerHaptic(float DURATION, float STRENGTH)
         {
-            StartCoroutine(TriggerHapticRoutine(DURATION, STRENGTH));
+            if (controller != null)
+            {
+                StartCoroutine(TriggerHapticRoutine(DURATION, STRENGTH));
+                return true;
+            }
+            return false;
+          
         }
 
         IEnumerator TriggerHapticRoutine(float DURATION, float STRENGTH)

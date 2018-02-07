@@ -8,6 +8,8 @@ public class ShopEntryManager : BasicEntryManager {
     //Whether or not we want the items to be delivered next day or given immediately.
     public bool IS_DELIVERY;
 
+    public PaymentBasketManager BASKET;
+
 	// Update is called once per frame
 	void Update () {
 
@@ -60,19 +62,19 @@ public class ShopEntryManager : BasicEntryManager {
     public void DeliverItems()
     {
         //For all entries
-        foreach(Entry ENTRY in ENTRY_LIST)
+        foreach(GameObject OBJ in BASKET.OBJECT_LIST)
         {
-            for(int i = 0; i < ENTRY.COUNT; i++)
+            for(int i = 0; i < BASKET.OBJECT_LIST.Count; i++)
             {
                 if (IS_DELIVERY)
                 {
                     //If delivery for tomorrow
-                    DeliveryManager.Instance.AddItem(Resources.Load(ENTRY.CATEGORY + "/" + ENTRY.NAME) as GameObject);
+                    DeliveryManager.Instance.AddItem(OBJ);
                 }
                 else
                 {
                     //else add it now
-                    Inventory_Manager.AddItemToInventory((Resources.Load(ENTRY.CATEGORY + "/" + ENTRY.NAME) as GameObject).GetComponent<BaseItem>());
+                    Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
                 }   
             }
         }

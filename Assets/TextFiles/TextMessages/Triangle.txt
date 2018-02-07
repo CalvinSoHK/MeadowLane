@@ -23,3 +23,30 @@ But make sure to hit the dirt with your hoe to plant the seeds properly.
 And remember, your plants need to be watered everyday if you want them to grow!
 Once you are done, you can put the seed packet in your inventory (the floating barrel around you) and then go to bed :)
 _Farm_
+_Bus_
+I see you want to explore some more of the town.
+Public transportation  will let you get where you want to go.
+Just select which destination you want to go to on the vending machine (the same way you selected the door to exit)
+To pay for your ticket, take out your phone, go to your money app, and scan it.
+All you need to do then is pick up your ticket, and you’ll be on your way!
+_Bus_
+_HappyMart_
+If you want to grow new produce, you’ll have to buy seeds.
+Happy Mart is the place to do so!
+Just grab any of the seed packet and drop them in the container by the vending machine.
+Once you are done, you can just pay the same way than when you bought your bus ticket.
+Your purchase will automatically be added to your inventory!
+_HappyMart_
+_MarketStall_
+Once you feel like you have grown enough produce, you can come here, the town square, and sell them.
+Just go inside of your stall.
+Once there, you should see various empty containers.
+After you press the button to open your stall and start selling, the produce inside your inventory will automatically fill those containers.
+Each container is assigned one type of produce.
+Customers will start approaching you asking for specific products.
+The recipes for each product will be posted on the walls inside your stall.
+You can use those as a reference to know exactly what kind of produce the customer wants.
+Just grab the produce from the corresponding container, and place it in front of the right customer.
+Make sure to provide all the right produce in a timely manner so that you get paid, otherwise the customer will just leave.
+Customers will keep coming until you have sold all your inventory 
+_MarketStall_
