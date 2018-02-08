@@ -57,6 +57,8 @@ public class MessageApp : BasicApp {
 
         //Get the scroll bar
         SCROLL = transform.Find("Scroll View").GetComponent<ScrollRect>();
+
+        TextMessageManager.NewMessageReceived = false;
     }
 
     public override void RunApp()
@@ -65,7 +67,6 @@ public class MessageApp : BasicApp {
         if (TextMessageManager.NewMessageReceived)
         {
             InitializeApp(PHONE,LINKER);
-            TextMessageManager.NewMessageReceived = false;
         }
 
         //When we are manipulating the contact list
@@ -260,6 +261,9 @@ public class MessageApp : BasicApp {
 
     public void PopulateConvoList()
     {
+        //Disable all of the entries
+        CONVO_LIST.SetActive(false);
+
         //Clear all our contacts if we have any
         for(int i = CONVO_ENTRIES.Count-1; i >= 0; i--)
         {
@@ -303,6 +307,8 @@ public class MessageApp : BasicApp {
         {
             SELECTION.SetActive(true);
         }
+
+        CONVO_LIST.SetActive(true);
 
         //Fill our list so we have a reference to each
         /*foreach (TextPasser ENTRY in CONVO_LIST.GetComponentsInChildren<TextPasser>())
