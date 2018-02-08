@@ -239,6 +239,12 @@ public class MessageApp : BasicApp {
 
             //Smooth damp the scroll view
             CONVO_SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(CONVO_SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
+            if(Mathf.Abs(TARGET_NORMALIZEDPOSITION - CONVO_SCROLL.verticalNormalizedPosition) <= 0.01f && TARGET_NORMALIZEDPOSITION == 0)
+            {
+                CONVO_SCROLL.verticalNormalizedPosition = 0;
+                Debug.Log("Our vertical normalized position: " + CONVO_SCROLL.verticalNormalizedPosition);
+            }
+           
         }
     }
 
