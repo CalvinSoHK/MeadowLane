@@ -49,11 +49,11 @@ Shader "Valve/VR/Silhouette"
 			PS_INPUT o;
 			o.vPositionOs.xyzw = i.vPositionOs.xyzw;
 			o.vNormalOs.xyz = i.vNormalOs.xyz;
-#if UNITY_VERSION >= 540
+			#if UNITY_VERSION >= 540
 			o.vPositionPs = UnityObjectToClipPos( i.vPositionOs.xyzw );
-#else
+			#else
 			o.vPositionPs = mul( UNITY_MATRIX_MVP, i.vPositionOs.xyzw );
-#endif
+			#endif
 			return o;
 		}
 
@@ -147,7 +147,7 @@ Shader "Valve/VR/Silhouette"
 			ZWrite Off
 			Stencil
 			{
-				Ref 1
+				Ref 2
 				Comp always
 				Pass replace
 			}
@@ -169,7 +169,7 @@ Shader "Valve/VR/Silhouette"
 			ZWrite On
 			Stencil
 			{
-				Ref 1
+				Ref 2
 				Comp notequal
 				Pass keep
 				Fail keep

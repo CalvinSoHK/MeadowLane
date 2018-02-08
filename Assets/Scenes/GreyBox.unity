@@ -3003,7 +3003,6 @@ GameObject:
   - component: {fileID: 254426598}
   - component: {fileID: 254426596}
   - component: {fileID: 254426597}
-  - component: {fileID: 254426601}
   - component: {fileID: 254426599}
   - component: {fileID: 254426600}
   m_Layer: 26
@@ -3213,44 +3212,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
---- !u!114 &254426601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 254426594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fcb0016e9e0bcf4d85663582f37e963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnMenuButtonPress:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 637642980}
-        m_MethodName: HidePhone
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 254426598}
-          m_ObjectArgumentAssemblyTypeName: Valve.VR.InteractionSystem.Hand, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 637642981}
-        m_MethodName: HideInventory
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 254426598}
-          m_ObjectArgumentAssemblyTypeName: Valve.VR.InteractionSystem.Hand, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!1 &256898064
 GameObject:
   m_ObjectHideFlags: 0
@@ -3350,6 +3311,220 @@ Prefab:
     - target: {fileID: 4484481470508240, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1834916072910442, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 229.09998
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 579.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 929.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 229.09998
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 579.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224426452892241062, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224667648329158454, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224852839843915240, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -550
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224694943973021796, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -550
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224850545882868068, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 224303780256466166, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224303780256466166, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224387818510497374, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224387818510497374, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224244186717087158, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224244186717087158, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224244186717087158, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
+    - target: {fileID: 224244186717087158, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: -17
+      objectReference: {fileID: 0}
+    - target: {fileID: 224537348229660082, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224537348229660082, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
+    - target: {fileID: 224093089069150130, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224093089069150130, guid: 03dd77205c79dac43b42ec350c8eb1c8,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: -17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 03dd77205c79dac43b42ec350c8eb1c8, type: 2}
@@ -8030,6 +8205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af06828fa90f76f47a7f919aa5fbd02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hand1: {fileID: 0}
+  hand2: {fileID: 0}
   PLAYER_STATS: {fileID: 0}
   SHOW: 0
   POS_OFFSET: {x: 0.06, y: 0, z: 0.075}
@@ -8043,8 +8220,10 @@ MonoBehaviour:
   PRESS_DOWN: 0
   PRESS_UP: 0
   TRIGGER_DOWN: 0
+  TRIGGER_UP: 0
   ANY_DIRECTIONAL: 0
   HOLD_DOWN: 0
+  TRIGGER_HOLD_DOWN: 0
   VIBRATE_NEXT: 0
   STIE: {fileID: 228451981}
   TUT_INFO: {fileID: 664984165}
@@ -21609,7 +21788,6 @@ GameObject:
   - component: {fileID: 1825245640}
   - component: {fileID: 1825245638}
   - component: {fileID: 1825245639}
-  - component: {fileID: 1825245641}
   - component: {fileID: 1825245642}
   - component: {fileID: 1825245643}
   m_Layer: 26
@@ -21766,44 +21944,6 @@ MonoBehaviour:
   controllerPrefab: {fileID: 168468, guid: 3f39fc63a93686e4a8e9168ee73f24d9, type: 2}
   showDebugText: 0
   spewDebugText: 0
---- !u!114 &1825245641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1825245636}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fcb0016e9e0bcf4d85663582f37e963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnMenuButtonPress:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 637642980}
-        m_MethodName: HidePhone
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1825245640}
-          m_ObjectArgumentAssemblyTypeName: Valve.VR.InteractionSystem.Hand, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 637642981}
-        m_MethodName: HideInventory
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1825245640}
-          m_ObjectArgumentAssemblyTypeName: Valve.VR.InteractionSystem.Hand, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!114 &1825245642
 MonoBehaviour:
   m_ObjectHideFlags: 0
