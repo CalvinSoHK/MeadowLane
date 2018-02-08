@@ -1,14 +1,14 @@
-_Tutorial_
+_Start_
 Hey there!
-I'm glad you finally made to East Lula :)
+I'm glad you finally made it to East Lula :)
 I'm surprised you went with a house on Meadow Lane, though I guess there aren't other places that come with a farm...
-Can you see it from your window? Must be a nice sight in the morning
-Actually, why don't you try going there now
-Holding down on the controller's trigger will enable you to interact with objects
+Can you see it from your window? Must be a nice sight in the morning.
+Actually, why don't you try going there now?
+Holding down on the controller's trigger will enable you to interact with objects.
 Just point towards the door to your farm and press the trigger to go there!
-Oh! And if you want to put your phone away, just press the menu button
+Oh! And if you want to put your phone away, just press the menu button.
 If you want to review this conversation, you can bring your phone back up by pressing up on the D-Pad.
-_Tutorial_
+_Start_
 _Farm_
 Nice!
 Looks like you already have a couple farm plots ready to go.
@@ -26,19 +26,19 @@ _Farm_
 _Bus_
 I see you want to explore some more of the town.
 Public transportation  will let you get where you want to go.
-Just select which destination you want to go to on the vending machine (the same way you selected the door to exit)
+Just select which destination you want to go to on the vending machine (the same way you selected the door to exit).
 To pay for your ticket, take out your phone, go to your money app, and scan it.
-All you need to do then is pick up your ticket, and you’ll be on your way!
+All you need to do then is pick up your ticket, and you'll be on your way!
 _Bus_
 _HappyMart_
-If you want to grow new produce, you’ll have to buy seeds.
+If you want to grow new produce, you'll have to buy seeds.
 Happy Mart is the place to do so!
-Just grab any of the seed packet and drop them in the container by the vending machine.
-Once you are done, you can just pay the same way than when you bought your bus ticket.
+Just grab any of the seed packets and drop them in the container by the vending machine.
+Once you are done, you can just pay the same way as when you bought the bus ticket.
 Your purchase will automatically be added to your inventory!
 _HappyMart_
 _MarketStall_
-Once you feel like you have grown enough produce, you can come here, the town square, and sell them.
+Once you feel like you have grown enough produce, you can come here, the Town Square, and sell them.
 Just go inside of your stall.
 Once there, you should see various empty containers.
 After you press the button to open your stall and start selling, the produce inside your inventory will automatically fill those containers.
@@ -48,5 +48,5 @@ The recipes for each product will be posted on the walls inside your stall.
 You can use those as a reference to know exactly what kind of produce the customer wants.
 Just grab the produce from the corresponding container, and place it in front of the right customer.
 Make sure to provide all the right produce in a timely manner so that you get paid, otherwise the customer will just leave.
-Customers will keep coming until you have sold all your inventory 
+Customers will keep coming until you have sold all your inventory... so be ready to sell! 
 _MarketStall_

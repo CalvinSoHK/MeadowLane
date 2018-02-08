@@ -11,6 +11,9 @@ public static class TextMessageManager {
     public static List<ConvoInfo> NewPhoneConversations = new List<ConvoInfo>(); //List that will hold all the current convos on phone
     public static List<ConvoInfo> OldPhoneConversations = new List<ConvoInfo>(); //List that will hold all old convos on the phone
 
+    //Bool that signifies if we need to update
+    public static bool NewMessageReceived = false;
+
     //Public function that loads in messages into the queue
     //KEY: name/event
     public static void LoadConversation(string KEY)

@@ -51,7 +51,7 @@ public class TutorialInfo
     public string NAME = "";
 }
 
-
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(TutorialInfo))]
 public class TutorialInfoDrawer : PropertyDrawer
 {
@@ -81,3 +81,4 @@ public class TutorialInfoDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+#endif

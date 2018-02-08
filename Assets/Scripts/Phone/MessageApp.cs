@@ -36,7 +36,7 @@ public class MessageApp : BasicApp {
     //Override base init
     public override void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
     {
-        Debug.Log("State of message app: " + STATE);
+        //Debug.Log("State of message app: " + STATE);
 
         //Get the phone and linker
         base.InitializeApp(_PHONE, _LINKER);
@@ -61,13 +61,22 @@ public class MessageApp : BasicApp {
 
     public override void RunApp()
     {
+        //No matter what state we're in, if we get a new messagwe should update
+        if (TextMessageManager.NewMessageReceived)
+        {
+            InitializeApp(PHONE,LINKER);
+            TextMessageManager.NewMessageReceived = false;
+        }
+
         //When we are manipulating the contact list
         if (STATE == MESSAGE_APP_STATE.ConvoList)
         {
-            //Allows for exiting with trigger down
-            base.RunApp();
+            if (GetTriggerUp())
+            {
+                ExitApp();
+            }
 
-            if (CONVO_ENTRIES[0] != null)
+            if (CONVO_ENTRIES != null && CONVO_ENTRIES[0] != null)
             {
                 //Allow us to select a contact
                 if (PHONE.DOWN && PHONE.PRESS_DOWN)
@@ -140,11 +149,13 @@ public class MessageApp : BasicApp {
 
                 if (CONVO_ENTRIES.Count > 0)
                 {
-                    Debug.Log("Index: " + INDEX + " Selection: " + SELECTION);
-                    Debug.Log("Problem line: " + CONVO_ENTRIES[INDEX]);
+                    //Debug.Log("Index: " + INDEX + " Selection: " + SELECTION);
+                    //Debug.Log("Problem line: " + CONVO_ENTRIES[INDEX]);
+                    //Debug.Log("Object attached to is: " + CONVO_ENTRIES[INDEX].name);
                     SELECTION.GetComponent<RectTransform>().position = CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().position;
-                    SELECTION.SetActive(true);
+                    //SELECTION.SetActive(true);
                 }
+
                 //If we press down on the button AND no directional presses were done.
                 if (PHONE.PRESS_DOWN && !PHONE.ANY_DIRECTIONAL)
                 {
@@ -153,6 +164,12 @@ public class MessageApp : BasicApp {
                     {
                         //Clear the message screen
                         ClearConversation();
+
+                        //Reset the scroll
+                        CONVO_SCROLL.verticalNormalizedPosition = 1;
+
+                        //Reset velocity
+                        DAMP_REF = 0;
                     }
 
                     //Make the first image with the profile pic
@@ -187,7 +204,7 @@ public class MessageApp : BasicApp {
         else if (STATE == MESSAGE_APP_STATE.Conversation) // WHen we're viewing a conversation
         {
             //Allow for exitinbg back to contact list on trigger down.
-            if (PHONE.TRIGGER_DOWN)
+            if (GetTriggerUp())
             {
                 //Go back to message screen
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
@@ -208,7 +225,7 @@ public class MessageApp : BasicApp {
                 }
                 else if (PHONE.DOWN)
                 {
-                    Debug.Log(TARGET_NORMALIZEDPOSITION);
+                    //Debug.Log(TARGET_NORMALIZEDPOSITION);
                     if (TARGET_NORMALIZEDPOSITION > 0)
                     {
                         TARGET_NORMALIZEDPOSITION -= 0.05f;
@@ -222,12 +239,6 @@ public class MessageApp : BasicApp {
 
             //Smooth damp the scroll view
             CONVO_SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(CONVO_SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
-
-            //If we're close to the position, just set it
-            if (Mathf.Abs(CONVO_SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
-            {
-                CONVO_SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
-            }
         }
     }
 
@@ -280,6 +291,11 @@ public class MessageApp : BasicApp {
             TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
             TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
             CONVO_ENTRIES.Add(TEMP);
+        }
+
+        if (!SELECTION.activeSelf)
+        {
+            SELECTION.SetActive(true);
         }
 
         //Fill our list so we have a reference to each

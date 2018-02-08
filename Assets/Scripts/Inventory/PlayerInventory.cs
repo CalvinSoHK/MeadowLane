@@ -252,6 +252,10 @@ public class PlayerInventory : MonoBehaviour {
                 UP = hand1.GetTrackpadPressUp();
                 DOWN = hand1.GetTrackpadPressDown();
                 TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
+                if (TRIGGER_DOWN)
+                {
+                    HideInventory(hand1);
+                }
 
             }
             else if (SHOW == ShowState.Hand2)
@@ -263,6 +267,10 @@ public class PlayerInventory : MonoBehaviour {
                 UP = hand2.GetTrackpadPressUp();
                 DOWN = hand2.GetTrackpadPressDown();
                 TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+                if (TRIGGER_DOWN)
+                {
+                    HideInventory(hand2);
+                }
             }
 
             if (LEFT && PRESS_DOWN) { //if we press left on the D-Pad

@@ -98,6 +98,11 @@ public class PhoneLinker : MonoBehaviour {
                 }
             }
 
+            if (PHONE.TRIGGER_DOWN)
+            {
+                PHONE.HidePhone();
+            }
+
             //Clear the second screen if we're on OS
 
 

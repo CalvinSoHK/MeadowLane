@@ -7,7 +7,7 @@ using Valve.VR.InteractionSystem;
 public class PlayerPhone : MonoBehaviour {
 
     //Both hands
-    Hand hand1, hand2;
+    public Hand hand1, hand2;
 
     //Player stats
     public PlayerStats PLAYER_STATS;
@@ -32,7 +32,7 @@ public class PlayerPhone : MonoBehaviour {
     public GameObject PHONE;
 
     //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false;
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, TRIGGER_UP = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false, TRIGGER_HOLD_DOWN = false;
 
     //Bool to notify the player the next time the player's eyes are open
     public bool VIBRATE_NEXT = false;
@@ -40,6 +40,10 @@ public class PlayerPhone : MonoBehaviour {
 
     //Tutorial script
     public TutorialManager TUT_INFO;
+    string TUT_KEY;
+
+    //Notification object
+    public GameObject NOTIFICATION_OBJ;
 
     // Use this for initialization
     void Start() {
@@ -47,12 +51,7 @@ public class PlayerPhone : MonoBehaviour {
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
 
-        //Check to see if we have done the first tutorial. If not, fire the event
-        if (!TUT_INFO.IsComplete("Start"))
-        {
-            TUT_INFO.SetComplete("Start");
-            LoadConversation("Triangle/Tutorial");
-        }
+        LoadConversationNow("Triangle/Start");
     }
 
     private void Update()
@@ -66,7 +65,9 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand1.GetTrackpadPressRight();
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
+            TRIGGER_UP = hand1.GetStandardInteractionButtonUp();
             TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
+            TRIGGER_HOLD_DOWN = hand1.GetStandardInteractionButton();
             HOLD_DOWN = hand1.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
@@ -87,7 +88,9 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand2.GetTrackpadPressRight();
             UP = hand2.GetTrackpadPressUp();
             DOWN = hand2.GetTrackpadPressDown();
+            TRIGGER_UP = hand2.GetStandardInteractionButtonUp();
             TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+            TRIGGER_HOLD_DOWN = hand2.GetStandardInteractionButton();
             HOLD_DOWN = hand2.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
@@ -107,6 +110,8 @@ public class PlayerPhone : MonoBehaviour {
             {
                 if (VibratePhone(0.5f, 300, VibrationHand.Both))
                 {
+                    NOTIFICATION_OBJ.SetActive(true);
+                    LoadConversation(TUT_KEY);
                     VIBRATE_NEXT = false;
                 }           
             }
@@ -194,20 +199,40 @@ public class PlayerPhone : MonoBehaviour {
         return false;
     }
 
-    //Notification vibration for the phone
-    public void NotifyPlayerVibrate()
+    /// <summary>
+    /// Notifies the player that they have received something on their phone.
+    /// If true, waits till next travel to notify player.
+    /// If false, notifies immediately.
+    /// </summary>
+    /// <param name="WAIT"></param>
+    public void NotifyPlayer(bool WAIT)
     {
-        VIBRATE_NEXT = true;
-
-        //Other effects if we need it
-
+        if (WAIT)
+        {
+            //Fire them when vibrate next is viable
+            VIBRATE_NEXT = true;
+        }
+        else
+        {
+            //All the notification things should fire now
+            VibratePhone(0.5f, 300, VibrationHand.Both);
+            NOTIFICATION_OBJ.SetActive(true);
+        }
     }
+
+    //Load conversation and notify the player
+    public void LoadConversationNow(string KEY)
+    {
+        NotifyPlayer(false);
+        LoadConversation(KEY);
+    }
+
 
     //Load conversation
     public void LoadConversation(string KEY)
     {        
-        NotifyPlayerVibrate();
         TextMessageManager.LoadConversation(KEY);
+        TextMessageManager.NewMessageReceived = true;
     }
 
     //Function that checks if a tutorial needs to be done 
@@ -219,7 +244,8 @@ public class PlayerPhone : MonoBehaviour {
         //Check if that tutorial has been done yet
         if (!TUT_INFO.IsComplete(KEY_SEP[1]))
         {
-            LoadConversation(KEY);
+            NotifyPlayer(true);
+            TUT_KEY = KEY;
             TUT_INFO.SetComplete(KEY_SEP[1]);
         }
     }
@@ -237,6 +263,13 @@ public class PlayerPhone : MonoBehaviour {
         PHONE.transform.localPosition = POS_OFFSET;
         PHONE.transform.localRotation = Quaternion.identity;
         PHONE.SetActive(true);
+
+        //Disable the notification obj if its on
+        if (NOTIFICATION_OBJ.activeSelf)
+        {
+            NOTIFICATION_OBJ.SetActive(false);
+        }
+
         //StartCoroutine(FadeIn(PHONE, FADE_TIME));
 
         PHONE.GetComponent<PhoneLinker>().PHONE = this;
@@ -253,6 +286,23 @@ public class PlayerPhone : MonoBehaviour {
             PHONE.SetActive(false);
         }
      
+    }
+
+    public void HidePhone()
+    {
+        //Checks show state and hides the correct phone
+        if (SHOW == ShowState.Hand1)
+        {
+            hand1.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            SHOW = ShowState.None;
+            PHONE.SetActive(false);
+        }
+        else if(SHOW == ShowState.Hand2)
+        {
+            hand2.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            SHOW = ShowState.None;
+            PHONE.SetActive(false);
+        }
     }
 
     
