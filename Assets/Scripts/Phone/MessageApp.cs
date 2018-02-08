@@ -149,9 +149,11 @@ public class MessageApp : BasicApp {
                 {
                     //Debug.Log("Index: " + INDEX + " Selection: " + SELECTION);
                     //Debug.Log("Problem line: " + CONVO_ENTRIES[INDEX]);
+                    //Debug.Log("Object attached to is: " + CONVO_ENTRIES[INDEX].name);
                     SELECTION.GetComponent<RectTransform>().position = CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().position;
-                    SELECTION.SetActive(true);
+                    //SELECTION.SetActive(true);
                 }
+
                 //If we press down on the button AND no directional presses were done.
                 if (PHONE.PRESS_DOWN && !PHONE.ANY_DIRECTIONAL)
                 {
@@ -287,6 +289,11 @@ public class MessageApp : BasicApp {
             TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
             TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
             CONVO_ENTRIES.Add(TEMP);
+        }
+
+        if (!SELECTION.activeSelf)
+        {
+            SELECTION.SetActive(true);
         }
 
         //Fill our list so we have a reference to each
