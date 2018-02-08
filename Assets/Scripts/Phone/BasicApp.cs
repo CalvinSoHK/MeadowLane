@@ -15,15 +15,60 @@ public class BasicApp : MonoBehaviour {
     public PlayerPhone PHONE;
     public PhoneLinker LINKER;
 
+    //Timer for holding down the trigger
+    float EXIT_TIME = 1f, TIMER = 0f;
+
+    bool downInitiated = false;
+
     //Function that will be called by the PhoneLinker if the app is running
 	public virtual void RunApp()
     {
-        Debug.Log("RUN APP");
-        //By default allow for exit on trigger
-        if (PHONE.TRIGGER_DOWN)
+        if (PHONE.TRIGGER_HOLD_DOWN && downInitiated)
         {
+            if (Time.time - TIMER >= EXIT_TIME)
+            {
+                //Drop phone
+                downInitiated = false;
+                PHONE.HidePhone();
+            }
+        }
+        else if (PHONE.TRIGGER_HOLD_DOWN && !downInitiated)
+        {
+            TIMER = Time.time;
+            downInitiated = true;
+        }
+        else if (PHONE.TRIGGER_UP)
+        {
+            //Exit app
+            downInitiated = false;
             ExitApp();
         }
+    }
+
+    //Function that will allow us to drop the phone where we are but still use trigger
+    public bool GetTriggerUp()
+    {
+        if (PHONE.TRIGGER_HOLD_DOWN && downInitiated)
+        {
+            if (Time.time - TIMER >= EXIT_TIME)
+            {
+                //Drop phone
+                downInitiated = false;
+                PHONE.HidePhone();
+            }
+        }
+        else if (PHONE.TRIGGER_HOLD_DOWN && !downInitiated)
+        {
+            TIMER = Time.time;
+            downInitiated = true;
+        }
+        else if (PHONE.TRIGGER_UP)
+        {
+            //Exit app
+            downInitiated = false;
+            return true;
+        }
+        return false;
     }
 
     //Helper functions that will be called in RunApp

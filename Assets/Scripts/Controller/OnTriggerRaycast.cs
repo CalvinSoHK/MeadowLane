@@ -41,7 +41,7 @@ public class OnTriggerRaycast : MonoBehaviour {
 
 
         //When we get Trigger down...
-        if (hand.GetStandardInteractionButtonDown())
+        if (hand.GetStandardInteractionButtonDown() && ENABLED)
         {
             //Start raycasting
             raycast = true;

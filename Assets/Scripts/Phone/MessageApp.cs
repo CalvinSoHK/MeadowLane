@@ -71,8 +71,10 @@ public class MessageApp : BasicApp {
         //When we are manipulating the contact list
         if (STATE == MESSAGE_APP_STATE.ConvoList)
         {
-            //Allows for exiting with trigger down
-            base.RunApp();
+            if (GetTriggerUp())
+            {
+                ExitApp();
+            }
 
             if (CONVO_ENTRIES != null && CONVO_ENTRIES[0] != null)
             {
@@ -202,7 +204,7 @@ public class MessageApp : BasicApp {
         else if (STATE == MESSAGE_APP_STATE.Conversation) // WHen we're viewing a conversation
         {
             //Allow for exitinbg back to contact list on trigger down.
-            if (PHONE.TRIGGER_DOWN)
+            if (GetTriggerUp())
             {
                 //Go back to message screen
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);

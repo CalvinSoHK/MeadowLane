@@ -7,7 +7,7 @@ using Valve.VR.InteractionSystem;
 public class PlayerPhone : MonoBehaviour {
 
     //Both hands
-    Hand hand1, hand2;
+    public Hand hand1, hand2;
 
     //Player stats
     public PlayerStats PLAYER_STATS;
@@ -32,7 +32,7 @@ public class PlayerPhone : MonoBehaviour {
     public GameObject PHONE;
 
     //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false;
+    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, TRIGGER_UP = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false, TRIGGER_HOLD_DOWN = false;
 
     //Bool to notify the player the next time the player's eyes are open
     public bool VIBRATE_NEXT = false;
@@ -65,7 +65,9 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand1.GetTrackpadPressRight();
             UP = hand1.GetTrackpadPressUp();
             DOWN = hand1.GetTrackpadPressDown();
+            TRIGGER_UP = hand1.GetStandardInteractionButtonUp();
             TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
+            TRIGGER_HOLD_DOWN = hand1.GetStandardInteractionButton();
             HOLD_DOWN = hand1.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
@@ -86,7 +88,9 @@ public class PlayerPhone : MonoBehaviour {
             RIGHT = hand2.GetTrackpadPressRight();
             UP = hand2.GetTrackpadPressUp();
             DOWN = hand2.GetTrackpadPressDown();
+            TRIGGER_UP = hand2.GetStandardInteractionButtonUp();
             TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
+            TRIGGER_HOLD_DOWN = hand2.GetStandardInteractionButton();
             HOLD_DOWN = hand2.GetTrackpad();
 
             //Any directional lets us know if any directions were pressed at all.
@@ -282,6 +286,23 @@ public class PlayerPhone : MonoBehaviour {
             PHONE.SetActive(false);
         }
      
+    }
+
+    public void HidePhone()
+    {
+        //Checks show state and hides the correct phone
+        if (SHOW == ShowState.Hand1)
+        {
+            hand1.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            SHOW = ShowState.None;
+            PHONE.SetActive(false);
+        }
+        else if(SHOW == ShowState.Hand2)
+        {
+            hand2.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            SHOW = ShowState.None;
+            PHONE.SetActive(false);
+        }
     }
 
     
