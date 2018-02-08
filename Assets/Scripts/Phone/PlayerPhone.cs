@@ -40,6 +40,7 @@ public class PlayerPhone : MonoBehaviour {
 
     //Tutorial script
     public TutorialManager TUT_INFO;
+    string TUT_KEY;
 
     // Use this for initialization
     void Start() {
@@ -107,6 +108,7 @@ public class PlayerPhone : MonoBehaviour {
             {
                 if (VibratePhone(0.5f, 300, VibrationHand.Both))
                 {
+                    LoadConversation(TUT_KEY);
                     VIBRATE_NEXT = false;
                 }           
             }
@@ -208,6 +210,7 @@ public class PlayerPhone : MonoBehaviour {
     {        
         NotifyPlayerVibrate();
         TextMessageManager.LoadConversation(KEY);
+        TextMessageManager.NewMessageReceived = true;
     }
 
     //Function that checks if a tutorial needs to be done 
@@ -219,7 +222,8 @@ public class PlayerPhone : MonoBehaviour {
         //Check if that tutorial has been done yet
         if (!TUT_INFO.IsComplete(KEY_SEP[1]))
         {
-            LoadConversation(KEY);
+            NotifyPlayerVibrate();
+            TUT_KEY = KEY;
             TUT_INFO.SetComplete(KEY_SEP[1]);
         }
     }

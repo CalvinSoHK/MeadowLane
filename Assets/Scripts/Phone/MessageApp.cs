@@ -61,6 +61,13 @@ public class MessageApp : BasicApp {
 
     public override void RunApp()
     {
+        //No matter what state we're in, if we get a new messagwe should update
+        if (TextMessageManager.NewMessageReceived)
+        {
+            InitializeApp(PHONE,LINKER);
+            TextMessageManager.NewMessageReceived = false;
+        }
+
         //When we are manipulating the contact list
         if (STATE == MESSAGE_APP_STATE.ConvoList)
         {
