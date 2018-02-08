@@ -1,4 +1,4 @@
-_Tutorial_
+_Start_
 Hey there!
 I'm glad you finally made it to East Lula :)
 I'm surprised you went with a house on Meadow Lane, though I guess there aren't other places that come with a farm...
@@ -8,7 +8,7 @@ Holding down on the controller's trigger will enable you to interact with object
 Just point towards the door to your farm and press the trigger to go there!
 Oh! And if you want to put your phone away, just press the menu button.
 If you want to review this conversation, you can bring your phone back up by pressing up on the D-Pad.
-_Tutorial_
+_Start_
 _Farm_
 Nice!
 Looks like you already have a couple farm plots ready to go.

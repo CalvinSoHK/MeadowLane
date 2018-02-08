@@ -36,7 +36,7 @@ public class MessageApp : BasicApp {
     //Override base init
     public override void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
     {
-        Debug.Log("State of message app: " + STATE);
+        //Debug.Log("State of message app: " + STATE);
 
         //Get the phone and linker
         base.InitializeApp(_PHONE, _LINKER);
@@ -74,7 +74,7 @@ public class MessageApp : BasicApp {
             //Allows for exiting with trigger down
             base.RunApp();
 
-            if (CONVO_ENTRIES[0] != null)
+            if (CONVO_ENTRIES != null && CONVO_ENTRIES[0] != null)
             {
                 //Allow us to select a contact
                 if (PHONE.DOWN && PHONE.PRESS_DOWN)
@@ -147,8 +147,8 @@ public class MessageApp : BasicApp {
 
                 if (CONVO_ENTRIES.Count > 0)
                 {
-                    Debug.Log("Index: " + INDEX + " Selection: " + SELECTION);
-                    Debug.Log("Problem line: " + CONVO_ENTRIES[INDEX]);
+                    //Debug.Log("Index: " + INDEX + " Selection: " + SELECTION);
+                    //Debug.Log("Problem line: " + CONVO_ENTRIES[INDEX]);
                     SELECTION.GetComponent<RectTransform>().position = CONVO_ENTRIES[INDEX].GetComponent<RectTransform>().position;
                     SELECTION.SetActive(true);
                 }
@@ -160,6 +160,12 @@ public class MessageApp : BasicApp {
                     {
                         //Clear the message screen
                         ClearConversation();
+
+                        //Reset the scroll
+                        CONVO_SCROLL.verticalNormalizedPosition = 1;
+
+                        //Reset velocity
+                        DAMP_REF = 0;
                     }
 
                     //Make the first image with the profile pic
@@ -215,7 +221,7 @@ public class MessageApp : BasicApp {
                 }
                 else if (PHONE.DOWN)
                 {
-                    Debug.Log(TARGET_NORMALIZEDPOSITION);
+                    //Debug.Log(TARGET_NORMALIZEDPOSITION);
                     if (TARGET_NORMALIZEDPOSITION > 0)
                     {
                         TARGET_NORMALIZEDPOSITION -= 0.05f;
@@ -229,12 +235,6 @@ public class MessageApp : BasicApp {
 
             //Smooth damp the scroll view
             CONVO_SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(CONVO_SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
-
-            //If we're close to the position, just set it
-            if (Mathf.Abs(CONVO_SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
-            {
-                CONVO_SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
-            }
         }
     }
 

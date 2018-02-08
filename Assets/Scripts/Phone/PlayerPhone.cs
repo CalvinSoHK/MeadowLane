@@ -42,18 +42,16 @@ public class PlayerPhone : MonoBehaviour {
     public TutorialManager TUT_INFO;
     string TUT_KEY;
 
+    //Notification object
+    public GameObject NOTIFICATION_OBJ;
+
     // Use this for initialization
     void Start() {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
 
-        //Check to see if we have done the first tutorial. If not, fire the event
-        if (!TUT_INFO.IsComplete("Start"))
-        {
-            TUT_INFO.SetComplete("Start");
-            LoadConversation("Triangle/Tutorial");
-        }
+        LoadConversationNow("Triangle/Start");
     }
 
     private void Update()
@@ -108,6 +106,7 @@ public class PlayerPhone : MonoBehaviour {
             {
                 if (VibratePhone(0.5f, 300, VibrationHand.Both))
                 {
+                    NOTIFICATION_OBJ.SetActive(true);
                     LoadConversation(TUT_KEY);
                     VIBRATE_NEXT = false;
                 }           
@@ -196,19 +195,38 @@ public class PlayerPhone : MonoBehaviour {
         return false;
     }
 
-    //Notification vibration for the phone
-    public void NotifyPlayerVibrate()
+    /// <summary>
+    /// Notifies the player that they have received something on their phone.
+    /// If true, waits till next travel to notify player.
+    /// If false, notifies immediately.
+    /// </summary>
+    /// <param name="WAIT"></param>
+    public void NotifyPlayer(bool WAIT)
     {
-        VIBRATE_NEXT = true;
-
-        //Other effects if we need it
-
+        if (WAIT)
+        {
+            //Fire them when vibrate next is viable
+            VIBRATE_NEXT = true;
+        }
+        else
+        {
+            //All the notification things should fire now
+            VibratePhone(0.5f, 300, VibrationHand.Both);
+            NOTIFICATION_OBJ.SetActive(true);
+        }
     }
+
+    //Load conversation and notify the player
+    public void LoadConversationNow(string KEY)
+    {
+        NotifyPlayer(false);
+        LoadConversation(KEY);
+    }
+
 
     //Load conversation
     public void LoadConversation(string KEY)
     {        
-        NotifyPlayerVibrate();
         TextMessageManager.LoadConversation(KEY);
         TextMessageManager.NewMessageReceived = true;
     }
@@ -222,7 +240,7 @@ public class PlayerPhone : MonoBehaviour {
         //Check if that tutorial has been done yet
         if (!TUT_INFO.IsComplete(KEY_SEP[1]))
         {
-            NotifyPlayerVibrate();
+            NotifyPlayer(true);
             TUT_KEY = KEY;
             TUT_INFO.SetComplete(KEY_SEP[1]);
         }
@@ -241,6 +259,13 @@ public class PlayerPhone : MonoBehaviour {
         PHONE.transform.localPosition = POS_OFFSET;
         PHONE.transform.localRotation = Quaternion.identity;
         PHONE.SetActive(true);
+
+        //Disable the notification obj if its on
+        if (NOTIFICATION_OBJ.activeSelf)
+        {
+            NOTIFICATION_OBJ.SetActive(false);
+        }
+
         //StartCoroutine(FadeIn(PHONE, FADE_TIME));
 
         PHONE.GetComponent<PhoneLinker>().PHONE = this;
