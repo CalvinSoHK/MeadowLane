@@ -274,7 +274,6 @@ public class PlayerInventory : MonoBehaviour {
             }
 
             if (LEFT && PRESS_DOWN) { //if we press left on the D-Pad
-                Debug.Log("LEFT");
                 Inventory_Manager.currentCategorySlotsIndex -= 1; //move the inventory item to the left
                 if (Inventory_Manager.currentCategorySlotsIndex < 0) // if you go beyond the left most item rotate back to the right
                 {
@@ -283,7 +282,6 @@ public class PlayerInventory : MonoBehaviour {
                 UpdateImage(false, true, false); // update the image of the item
             } else if (RIGHT && PRESS_DOWN) //if we press Right on the D-Pad
             {
-                Debug.Log("RIGHT");
                 Inventory_Manager.currentCategorySlotsIndex += 1; //move the inventory item to the right
                 if (Inventory_Manager.currentCategorySlotsIndex >= TotalItemForCategory) //if you go beyond the right most item rotate back to the left
                 {
@@ -470,15 +468,15 @@ public class PlayerInventory : MonoBehaviour {
     {
         if (!isInventoryOn) //if player presses space and the inventory is off
         {
-            Debug.Log("is this getting accessed");
+            //Debug.Log("is this getting accessed");
             int CategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, true); //we check to see which, from the last selected category, contains an item
             if (CategoryIndex != -1) //if the category index is not equal to -1 (meaning all categories are empty)
             {
-                Debug.Log("-1 you is not: " + CategoryIndex);
+                //Debug.Log("-1 you is not: " + CategoryIndex);
                 Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
                 Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in category
-                Debug.Log("Count: " + TotalItemForCategory);
+                //Debug.Log("Count: " + TotalItemForCategory);
                 UpdateImage(true, true, true); //update both the category and item image
                 CheckInventoryUI(true); //Inventory will only open if there is something in it
                 return true;

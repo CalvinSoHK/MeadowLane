@@ -43,7 +43,7 @@ public class SeedItem : BaseItem {
     private void OnCollisionEnter(Collision collision)
     {
         //Retrieve the collided object
-        Debug.Log("on collision enter count: " + tempCount);
+        //Debug.Log("on collision enter count: " + tempCount);
         tempCount += 1;
         GameObject target = collision.collider.gameObject;
 

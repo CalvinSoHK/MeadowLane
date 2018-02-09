@@ -43,10 +43,16 @@ public class Container : MonoBehaviour {
             //If containable, try to put it in
             if (collision.gameObject.GetComponent<BaseItem>().CONTAINABLE)
             {
+                if(collision.gameObject.GetComponent<InteractionPickup>() != null)
+                {
+                    if (collision.gameObject.GetComponent<InteractionPickup>().isHeld)
+                    {
+                        return;
+                    }
+                }
                 //If this is the players container, put it in our inventory
                 if (OWNER == BaseItem.Owner.Player && collision.gameObject.GetComponent<BaseItem>()._OWNER == OWNER)
                 {
-                    Debug.Log("Firing");
                     Inventory_Manager.AddItemToInventory(collision.gameObject.GetComponent<BaseItem>());
                     Destroy(collision.gameObject);
                 }
