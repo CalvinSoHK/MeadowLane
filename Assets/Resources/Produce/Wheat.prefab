@@ -39,9 +39,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1055901880804612}
-  m_LocalRotation: {x: -0.10115605, y: -0, z: -0, w: 0.99487066}
-  m_LocalPosition: {x: 0.38058305, y: 10.018, z: 13.7649}
-  m_LocalScale: {x: 0.3394744, y: 0.33947447, z: 0.33947447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -139,15 +139,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85cc8d2b2cade8a4e8e9aaf6a36e98ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NAME: Wheat Ear
+  _NAME: Wheat
   CATEGORY: Produce
   KEY: 1002
   _OWNER: 2
   _VALUE: 30
   _TAGS: 8
   CONTAINABLE: 1
-  offset: {x: 0, y: 0, z: 0}
-  rotOffset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 0, z: -0.1}
+  rotOffset: {x: 90, y: 0, z: 0}
 --- !u!114 &114522973587812364
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -196,13 +196,10 @@ MonoBehaviour:
   _NAME: WateringCan
   CATEGORY: Tools
   KEY: 6002
-  ICON: {fileID: 114918588241752128, guid: 74885e2db90188b4bba8b27a6978a0e5, type: 2}
-  CATEGORY_ICON: {fileID: 114442329531564028, guid: 75dd526c6da6fa245abd177745b4e661,
-    type: 2}
   _OWNER: 2
   _VALUE: 100
   _TAGS: 66
-  CONTAINABLE: 0
+  CONTAINABLE: 1
   offset: {x: 0, y: -0.2, z: 0.15}
   rotOffset: {x: 0, y: 90, z: 0}
 --- !u!114 &114547083192291424

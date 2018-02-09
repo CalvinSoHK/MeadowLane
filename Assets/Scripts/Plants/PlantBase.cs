@@ -250,7 +250,8 @@ public class PlantBase : MonoBehaviour {
         //If no next stage, go straight to death.
         if (NEXT_STAGE == null)
         {
-            next = Instantiate(DEAD_STAGE, transform.position, transform.rotation, transform.parent);
+            BeDead();
+            return;
         }
         else
         {
@@ -275,15 +276,19 @@ public class PlantBase : MonoBehaviour {
     //Go to dead function
     public virtual void BeDead()
     {
+        GameObject next;
         //Spawn replacement plant.
-        GameObject next = Instantiate(DEAD_STAGE, transform.position, transform.rotation, transform.parent);
+        if (DEAD_STAGE != null)
+        {
+            next = Instantiate(DEAD_STAGE, transform.position, transform.rotation, transform.parent);
+        }
+        else
+        {
+            next = Instantiate(Resources.Load("Hidden/Dead_Plant_Standin", typeof(GameObject)) as GameObject);
+        }
 
-        //Transfer relevant details to new plant.
-        next.GetComponent<PlantBase>().QUALITY = QUALITY;
-        next.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
-
-        //Init new plant
-        next.GetComponent<PlantBase>().Init(gameObject);
+        next.transform.parent = transform.parent;
+        next.transform.localPosition = new Vector3(0, 0.06f, 0);
 
         //Remove this stage.
         Destroy(gameObject);

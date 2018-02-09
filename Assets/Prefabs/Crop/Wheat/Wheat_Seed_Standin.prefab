@@ -189,5 +189,5 @@ MonoBehaviour:
   velocityMutiplier: 1
   isAnchored: 0
   isHeld: 0
-  isKin: 0
+  isKin: 1
   debug: 0
