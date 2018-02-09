@@ -31,4 +31,12 @@ public class PlayerStats : MonoBehaviour {
         return MONEY;
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Wheat", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
+            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
+        }
+    }
 }

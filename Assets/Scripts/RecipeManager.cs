@@ -45,7 +45,7 @@ public static class RecipeManager{
             while (!READER.EndOfStream)
             {
                 //Read in the text 
-                string TEMP_NAME = READER.ReadLine(); //i.e ApplePie
+                string TEMP_NAME = READER.ReadLine(); //i.e Apple Pie
                 string TEMP_WEIGHT_AND_PRICE = READER.ReadLine(); // 0.1
                 string TEMP_LIST_TEXT = READER.ReadLine(); //i.e. Produce/Tomatoes Produce/Apples
 
@@ -63,7 +63,8 @@ public static class RecipeManager{
                 //Load in through path names
                 for (int i = 0; i < TEMP_ARRAY.Length; i++)
                 {
-                    GameObject TEMP = Resources.Load(TEMP_ARRAY[i]) as GameObject;
+                    Debug.Log(TEMP_ARRAY[i]);
+                    GameObject TEMP = Resources.Load(TEMP_ARRAY[i], typeof(GameObject)) as GameObject;
                     TEMP_LIST.Add(TEMP.GetComponent<BaseItem>());
                 }
 

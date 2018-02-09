@@ -266,7 +266,7 @@ public class StallManager : MonoBehaviour {
         //If we have any items at all.
         if (ITEM_COUNT.Count > 0)
         {
-            Debug.Log("Tomato count: " + ITEM_COUNT[0]);
+            //Debug.Log("Tomato count: " + ITEM_COUNT[0]);
             //Index of the bool if we want to change it
             int index = 0;
 
@@ -397,15 +397,14 @@ public class StallManager : MonoBehaviour {
         //Copy of our item count so we can reset it
         Dictionary<int, int> TEMP_DICTIONARY = new Dictionary<int, int>();
 
-        //Make a deep copy of the dictionary.
-        foreach(KeyValuePair<int,int> ENTRY in ITEM_COUNT)
-        {
-            TEMP_DICTIONARY.Add(ENTRY.Key, ENTRY.Value);
-        }
-
         //Each recipe...
         foreach (Recipe RECIPE in LIST)
         {
+            //Make a deep copy of the dictionary.
+            foreach (KeyValuePair<int, int> ENTRY in ITEM_COUNT)
+            {
+                TEMP_DICTIONARY.Add(ENTRY.Key, ENTRY.Value);
+            }
 
             bool isValid = true;
 
@@ -428,13 +427,6 @@ public class StallManager : MonoBehaviour {
 
             //Reset the Dictionary
             TEMP_DICTIONARY.Clear();
-
-            //Make a deep copy of the dictionary.
-            foreach (KeyValuePair<int, int> ENTRY in ITEM_COUNT)
-            {
-                TEMP_DICTIONARY.Add(ENTRY.Key, ENTRY.Value);
-            }
-
         }
         return RETURN_LIST;
     }

@@ -1,18 +1,18 @@
 Candied Tomato
-0.1 10
+0.1 5
 Produce/Tomato
+Bread
+0.1 5
+Produce/Wheat
 Pizza
-0.2 20
-Produce/Tomato Produce/Tomato
+0.2 15
+Produce/Tomato Produce/Wheat
 Tomato Soup
+0.3 15
+Produce/Tomato Produce/Tomato
+Porridge
+0.2 15
+Produce/Wheat Produce/Wheat
+Spaghetti
 0.3 30
-Produce/Tomato Produce/Tomato Produce/Tomato
-Tomato Dip
-0.4 40
-Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
-Tomato Jam
-0.5 50
-Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
-Tomato Salad
-0.6 60
-Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato Produce/Tomato
+Produce/Tomato Produce/Wheat Produce/Wheat
