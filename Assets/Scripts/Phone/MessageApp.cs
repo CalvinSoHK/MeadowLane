@@ -85,7 +85,7 @@ public class MessageApp : BasicApp {
                     if (INDEX < CONVO_ENTRIES.Count - 1)
                     {
                         INDEX++;
-                        Debug.Log(INDEX);
+                        //Debug.Log(INDEX);
                         //Place the selection on the right index
                         if (CONVO_ENTRIES.Count > 0)
                         {
@@ -103,7 +103,7 @@ public class MessageApp : BasicApp {
 
                             if (INDEX == CONVO_ENTRIES.Count)
                             {
-                                Debug.Log("Go to zero.");
+                                //Debug.Log("Go to zero.");
                                 TARGET_NORMALIZEDPOSITION = 0;
                             }
                         }
@@ -114,7 +114,7 @@ public class MessageApp : BasicApp {
                     if (INDEX > 0)
                     {
                         INDEX--;
-                        Debug.Log(INDEX);
+                        //Debug.Log(INDEX);
                         //Place the selection on the right index
                         if (CONVO_ENTRIES.Count > 0)
                         {
@@ -129,6 +129,11 @@ public class MessageApp : BasicApp {
                                 float HEIGHT = CONVO_ENTRIES[0].GetComponent<RectTransform>().rect.height + CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing; //Account for spacing
                                 DISTANCE += (HEIGHT - CONVO_LIST.GetComponent<VerticalLayoutGroup>().spacing);
                                 TARGET_NORMALIZEDPOSITION += HEIGHT / DISTANCE;
+                                //If we're close to the position, just set it
+                                if (Mathf.Abs(SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
+                                {
+                                    SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
+                                }
                                 //Debug.Log("Scroll position: " + SCROLL.verticalNormalizedPosition);
                             }
                             if (INDEX == 0)
@@ -142,11 +147,7 @@ public class MessageApp : BasicApp {
                 //Smooth damp the scroll view
                 SCROLL.verticalNormalizedPosition = Mathf.SmoothDamp(SCROLL.verticalNormalizedPosition, TARGET_NORMALIZEDPOSITION, ref DAMP_REF, SCROLL_SENSITIVITY);
 
-                //If we're close to the position, just set it
-                if (Mathf.Abs(SCROLL.verticalNormalizedPosition - TARGET_NORMALIZEDPOSITION) <= 0.005f)
-                {
-                    SCROLL.verticalNormalizedPosition = TARGET_NORMALIZEDPOSITION;
-                }
+           
 
                 if (CONVO_ENTRIES.Count > 0)
                 {
@@ -243,7 +244,7 @@ public class MessageApp : BasicApp {
             if(Mathf.Abs(TARGET_NORMALIZEDPOSITION - CONVO_SCROLL.verticalNormalizedPosition) <= 0.01f && TARGET_NORMALIZEDPOSITION == 0)
             {
                 CONVO_SCROLL.verticalNormalizedPosition = 0;
-                Debug.Log("Our vertical normalized position: " + CONVO_SCROLL.verticalNormalizedPosition);
+                //Debug.Log("Our vertical normalized position: " + CONVO_SCROLL.verticalNormalizedPosition);
             }
            
         }

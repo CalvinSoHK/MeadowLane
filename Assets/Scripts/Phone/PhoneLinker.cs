@@ -146,7 +146,7 @@ public class PhoneLinker : MonoBehaviour {
     //Helper function that loads in an app on a different screen
     public void LoadApp(Transform SCREEN, Transform APP)
     {
-        Debug.Log("Loading app");
+        //Debug.Log("Loading app");
 
         //Instantiate and set the app
         Transform TEMP = Instantiate(APP, SCREEN.position, SCREEN.rotation, SCREEN);
@@ -204,7 +204,7 @@ public class PhoneLinker : MonoBehaviour {
 
         //Calculate target pos. Should be the reverse of the actual position.
         TARGET_POS = -TARGET_SCREEN.localPosition;      
-        Debug.Log(TARGET_POS);
+        //Debug.Log(TARGET_POS);
     }
 
     //Helper function to transition back to home screen

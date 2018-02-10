@@ -39,7 +39,7 @@ public static class  Inventory_Manager {
             
             if (itemInfo.hasTag(BaseItem.ItemTags.Container)) //check if the item added to inventory is a container
             {
-                Debug.Log("Number of seeds added to inv: " + itemInfo.gameObject.GetComponent<PourObject>().COUNT);
+                //Debug.Log("Number of seeds added to inv: " + itemInfo.gameObject.GetComponent<PourObject>().COUNT);
                 InventorySeedCount.Add(itemInfo.KEY, itemInfo.gameObject.GetComponent<PourObject>().COUNT); //add the seeds to the key value (dictionary)
             }
             //Get the path for the icon of this item

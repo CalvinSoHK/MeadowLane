@@ -22,7 +22,7 @@ public class OnTriggerRaycast : MonoBehaviour {
     public bool ENABLED = true;
 
     //Raycasted object
-    GameObject obj;
+    public GameObject obj;
 
     //The player object
     Transform PLAYER;
@@ -190,7 +190,7 @@ public class OnTriggerRaycast : MonoBehaviour {
     public void DropObj(GameObject OBJECT)
     {
         hand.DetachObject(OBJECT);
-        ENABLED = true;
+        ENABLED = true; 
         obj = null;
     }
 

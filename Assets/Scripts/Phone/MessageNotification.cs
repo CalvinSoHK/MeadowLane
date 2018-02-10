@@ -11,7 +11,6 @@ public class MessageNotification : MonoBehaviour {
     // Use this for initialization
     private void OnEnable()
     {
-        Debug.Log("Hello.");
         startTime = Time.time;
         journeyLength = 1;
         tmp = notificationImage.color;
@@ -21,7 +20,6 @@ public class MessageNotification : MonoBehaviour {
     }
 
     void Start () {
-        Debug.Log("Start");
         startTime = Time.time;
         journeyLength = 1;
 	}

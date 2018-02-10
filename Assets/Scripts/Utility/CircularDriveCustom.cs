@@ -8,9 +8,13 @@ public class CircularDriveCustom : CircularDrive {
     //The hand that is driving this steering wheel
     public Hand drivingHand = null;
 
+    //Whether or not we should follow or not
+    bool FOLLOW = false;
+
     //New function that just follows the hand given
     public void FollowHand(Hand hand)
     {
+
         //Set the hand to this hand
         drivingHand = hand;
 
@@ -28,6 +32,7 @@ public class CircularDriveCustom : CircularDrive {
 
             if (drivingHand.GetStandardInteractionButtonDown())
             {
+                drivingHand.GetComponent<OnTriggerRaycast>().obj = null;
                 drivingHand.GetComponent<OnTriggerRaycast>().ENABLED = true;
                 drivingHand = null;
             }
