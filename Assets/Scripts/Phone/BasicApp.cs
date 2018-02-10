@@ -75,7 +75,7 @@ public class BasicApp : MonoBehaviour {
     //Initializes the app
     public virtual void InitializeApp(PlayerPhone _PHONE, PhoneLinker _LINKER)
     {
-        Debug.Log("Init the phone: " + _PHONE.name + _LINKER.name);
+        //Debug.Log("Init the phone: " + _PHONE.name + _LINKER.name);
 
         //Base should set the references, and enable all children
         PHONE = _PHONE;
@@ -85,7 +85,7 @@ public class BasicApp : MonoBehaviour {
     //Exits the app back to the home screen
     public virtual void ExitApp()
     {
-        Debug.Log("exit app");
+        //Debug.Log("exit app");
         //Should end in returning to home screen
         LINKER.TransitionHome();
     }

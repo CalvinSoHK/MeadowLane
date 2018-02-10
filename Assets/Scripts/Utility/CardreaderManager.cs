@@ -18,7 +18,7 @@ public class CardreaderManager : MonoBehaviour {
         //If it is the smart phone
         if (col.gameObject.GetComponent<PhoneLinker>() != null)
         {
-            Debug.Log("Is the phone");
+            //Debug.Log("Is the phone");
             //Set the phone
             PhoneLinker PHONE = col.gameObject.GetComponent<PhoneLinker>();
 
@@ -27,7 +27,7 @@ public class CardreaderManager : MonoBehaviour {
             {
                 if (PHONE.RUNNING_APP.name.Equals("MoneyApp(Clone)"))
                 {
-                    Debug.Log("Money app running.");
+                    //Debug.Log("Money app running.");
                     //Money app reference
                     MoneyApp APP = PHONE.RUNNING_APP.GetComponent<MoneyApp>();
 

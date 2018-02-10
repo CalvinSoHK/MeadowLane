@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4792526708769114}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SpawnPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 33598192082238344}
   - component: {fileID: 23281509665571472}
   - component: {fileID: 136378265221911752}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Stem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 4856426934862852}
   - component: {fileID: 33997187509851170}
   - component: {fileID: 23549504776367000}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Leaves
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4497010419949036}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SpawnPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4926539511466360}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4923971460998820}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4949044156824002}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SpawnPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

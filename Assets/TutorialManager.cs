@@ -36,6 +36,15 @@ public class TutorialManager : MonoBehaviour {
         }
     }
 
+    //Load tutorial
+    public void LoadTutorial(string key)
+    {
+        if(PlayerPointer.Instance.PLAYER != null)
+        {
+            PlayerPointer.Instance.PLAYER.GetComponent<PlayerPhone>().LoadTutorial(key);
+        }
+    }
+
     //Function that saves this to a text file
     public void SaveTutValues()
     {
@@ -72,7 +81,7 @@ public class TutorialInfoDrawer : PropertyDrawer
         //GUIContent COMPLETE_LABEL = new GUIContent("Complete", "Whether or not this tutorial has been done.");
 
         //Draw fields
-        EditorGUI.PropertyField(NAME_RECT, property.FindPropertyRelative("NAME"), NAME_LABEL);
+        EditorGUI.PropertyField(NAME_RECT, property.FindPropertyRelative("NAME"), GUIContent.none);
         EditorGUI.PropertyField(COMPLETE_RECT, property.FindPropertyRelative("COMPLETE"), GUIContent.none);
 
         //Go back to previous indent

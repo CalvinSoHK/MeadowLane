@@ -308,6 +308,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67eaf5184b631d24b98bdbdf92f8e9c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RECIPE:
+    NAME: 
+    INGREDIENTS: []
+    DISCOVERED: 0
+    WEIGHT: 0
+    PRICE: 0
   INGREDIENTS: []
   BASKET: {fileID: 0}
   isDone: 0

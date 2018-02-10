@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 //Manages all recipes
 public static class RecipeManager{
 
     //Master list of all recipes, discovered or not
     public static List<Recipe> MASTER_LIST = new List<Recipe>();
+
+    public static TextAsset ASSET;
 
     //Whether or not the list has been init
     static bool LIST_INIT;
@@ -21,7 +26,7 @@ public static class RecipeManager{
     //      Apple Pie
     //      0.1 10
     //      Produce/Apple Produce/Sugar
-    static string TRUE_TXT_LOCATION = "Assets/TextFiles/MasterRecipeList.txt", FALSE_TXT_LOCATION = "Assets/TextFiles/MasterRecipeList.txt"; //REMEMBER TO WRITE THE DESTINATION HERE!!!!!!!!!
+    static string TRUE_TXT_LOCATION = Application.dataPath + "/TextFiles/MasterRecipeList.txt", FALSE_TXT_LOCATION =  Application.dataPath + "TextFiles/MasterRecipeList.txt"; //REMEMBER TO WRITE THE DESTINATION HERE!!!!!!!!!
     
 
     //Helper function that inits the master list
@@ -39,13 +44,13 @@ public static class RecipeManager{
     public static void LoadItems(string PATH, bool DISCOVERED)
     {
         //Stream read the text
-        using (StreamReader READER = new StreamReader(PATH))
+        using (StreamReader READER = new StreamReader(Application.dataPath + PATH))
         {
             //While we haven't reached the end of this text file
             while (!READER.EndOfStream)
             {
                 //Read in the text 
-                string TEMP_NAME = READER.ReadLine(); //i.e ApplePie
+                string TEMP_NAME = READER.ReadLine(); //i.e Apple Pie
                 string TEMP_WEIGHT_AND_PRICE = READER.ReadLine(); // 0.1
                 string TEMP_LIST_TEXT = READER.ReadLine(); //i.e. Produce/Tomatoes Produce/Apples
 
@@ -55,7 +60,7 @@ public static class RecipeManager{
                 int TEMP_PRICE = int.Parse(TEMP_ARRAY[1]);
 
                 //Split the ingredients
-                TEMP_ARRAY = TEMP_LIST_TEXT.Split(' ');       
+                TEMP_ARRAY = TEMP_LIST_TEXT.Split(' ');
 
                 //List we will be adding to
                 List<BaseItem> TEMP_LIST = new List<BaseItem>();
@@ -63,7 +68,8 @@ public static class RecipeManager{
                 //Load in through path names
                 for (int i = 0; i < TEMP_ARRAY.Length; i++)
                 {
-                    GameObject TEMP = Resources.Load(TEMP_ARRAY[i]) as GameObject;
+                    Debug.Log(TEMP_ARRAY[i]);
+                    GameObject TEMP = Resources.Load(TEMP_ARRAY[i], typeof(GameObject)) as GameObject;
                     TEMP_LIST.Add(TEMP.GetComponent<BaseItem>());
                 }
 
@@ -101,6 +107,7 @@ public static class RecipeManager{
 }
 
 //Recipe class. Stores important information
+[System.Serializable]
 public class Recipe
 {
     //Name of the recipe
@@ -128,3 +135,38 @@ public class Recipe
         PRICE = PRICE_T;
     }
 }
+
+
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(Recipe))]
+public class RecipeInfoDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        EditorGUI.BeginProperty(position, label, property);
+
+        //Indent 
+        var indent = EditorGUI.indentLevel;
+        //EditorGUI.indentLevel++;
+
+        //Calculate rects
+        var NAME_RECT = new Rect(position.x, position.y, 200, position.height);
+        var DISCOVERED_RECT = new Rect(position.x + 200, position.y, 30, position.height);
+        var WEIGHT_RECT = new Rect(position.x + 230, position.y, 30, position.height);
+        var PRICE_RECT = new Rect(position.x + 260, position.y, 30, position.height);
+
+        //GUIContent COMPLETE_LABEL = new GUIContent("Complete", "Whether or not this tutorial has been done.");
+
+        //Draw fields
+        EditorGUI.PropertyField(NAME_RECT, property.FindPropertyRelative("NAME"), GUIContent.none);
+        EditorGUI.PropertyField(DISCOVERED_RECT, property.FindPropertyRelative("DISCOVERED"), GUIContent.none);
+        EditorGUI.PropertyField(WEIGHT_RECT, property.FindPropertyRelative("WEIGHT"), GUIContent.none);
+
+
+        //Go back to previous indent
+        EditorGUI.indentLevel = indent;
+
+        EditorGUI.EndProperty();
+    }
+}
+#endif

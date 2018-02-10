@@ -341,11 +341,8 @@ MonoBehaviour:
   _NAME: Tomato_Seed_Dispenser
   CATEGORY: Tools
   KEY: 6003
-  ICON: {fileID: 114343863046605762, guid: 6539f78cf00e0534099593037f8b52aa, type: 2}
-  CATEGORY_ICON: {fileID: 114442329531564028, guid: 75dd526c6da6fa245abd177745b4e661,
-    type: 2}
   _OWNER: 2
-  _VALUE: 100
+  _VALUE: 50
   _TAGS: 386
   CONTAINABLE: 1
   offset: {x: 0.05, y: 0, z: 0}

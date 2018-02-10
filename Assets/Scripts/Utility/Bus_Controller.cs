@@ -57,7 +57,7 @@ public class Bus_Controller : MonoBehaviour {
             }
             else if(!isBlinking)
             {
-                Debug.Log("Blink");
+                //Debug.Log("Blink");
                 VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().BlinkEyes();
                 isBlinking = true;
             }
@@ -72,7 +72,7 @@ public class Bus_Controller : MonoBehaviour {
             transform.rotation = DESTINATION_ROT;
             SceneManager.UnloadSceneAsync(TRANSITION_INDEX + 1);
             isBlinking = false;
-            Debug.Log("Blink finished");
+            //Debug.Log("Blink finished");
         }
        
        
@@ -102,7 +102,7 @@ public class Bus_Controller : MonoBehaviour {
     {
         //Find the index of the given location
         int index = MANAGER.STOP_LIST.IndexOf(DESTINATION);
-        Debug.Log(index + DESTINATION);
+        //Debug.Log(index + DESTINATION);
 
         //Get the transition type from the destination
         BusEntryManager STOP = Bus_Stop_Manager.Instance.GetBusStop(DESTINATION);

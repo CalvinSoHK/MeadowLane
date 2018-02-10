@@ -141,10 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Tomato
   CATEGORY: Produce
-  KEY: 0
-  ICON: {fileID: 114159059632907062, guid: 667a611e85194b4419771231ad979bae, type: 2}
-  CATEGORY_ICON: {fileID: 114734633757209476, guid: 5983f33fc00b0b64fa8842a5f9bd0e38,
-    type: 2}
+  KEY: 1001
   _OWNER: 2
   _VALUE: 20
   _TAGS: 8

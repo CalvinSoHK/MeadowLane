@@ -43,7 +43,7 @@ public class SeedItem : BaseItem {
     private void OnCollisionEnter(Collision collision)
     {
         //Retrieve the collided object
-        Debug.Log("on collision enter count: " + tempCount);
+        //Debug.Log("on collision enter count: " + tempCount);
         tempCount += 1;
         GameObject target = collision.collider.gameObject;
 
@@ -62,7 +62,7 @@ public class SeedItem : BaseItem {
             }
             else //If not, sit as a normal object.
             {
-                Debug.Log("Can't plant, not tilled or already has seed." + gameObject.name);
+                //Debug.Log("Can't plant, not tilled or already has seed." + gameObject.name);
             }
            
         }

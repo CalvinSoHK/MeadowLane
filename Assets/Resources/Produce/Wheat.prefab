@@ -9,50 +9,49 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1187298167059300}
+  m_RootGameObject: {fileID: 1055901880804612}
   m_IsPrefabParent: 1
---- !u!1 &1187298167059300
+--- !u!1 &1055901880804612
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4652423607174480}
-  - component: {fileID: 33599215964298504}
-  - component: {fileID: 23258447978706004}
-  - component: {fileID: 95950716092865688}
-  - component: {fileID: 114018915487701776}
-  - component: {fileID: 54218653282917562}
-  - component: {fileID: 114174710602870734}
-  - component: {fileID: 114893201491558790}
-  - component: {fileID: 64956437314913508}
+  - component: {fileID: 4800741730004022}
+  - component: {fileID: 33309470248082890}
+  - component: {fileID: 23563156088348878}
+  - component: {fileID: 114370701670637872}
+  - component: {fileID: 114298270270960770}
+  - component: {fileID: 54351773983335574}
+  - component: {fileID: 114522973587812364}
+  - component: {fileID: 64049599978554224}
   m_Layer: 8
-  m_Name: Tomato_Seed
+  m_Name: Wheat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4652423607174480
+--- !u!4 &4800741730004022
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
-  m_LocalRotation: {x: -0, y: -0.15643446, z: -0, w: 0.98768836}
-  m_LocalPosition: {x: 0.065000206, y: 0.17699984, z: -0.19099998}
-  m_LocalScale: {x: 1, y: 0.2612824, z: 1}
+  m_GameObject: {fileID: 1055901880804612}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23258447978706004
+--- !u!23 &23563156088348878
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
+  m_GameObject: {fileID: 1055901880804612}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,7 +59,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 39e3d8448d2bc0b4498b56f70d597879, type: 2}
+  - {fileID: 2100000, guid: 893844fbd0ca1204aa2262c14b4792db, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,19 +78,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33599215964298504
+--- !u!33 &33309470248082890
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
-  m_Mesh: {fileID: 4300000, guid: 132ce838062ec024281fd3796d4054d4, type: 3}
---- !u!54 &54218653282917562
+  m_GameObject: {fileID: 1055901880804612}
+  m_Mesh: {fileID: 4300000, guid: 81287916accfdb94a90a361d9837bfa1, type: 3}
+--- !u!54 &54351773983335574
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
+  m_GameObject: {fileID: 1055901880804612}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -99,14 +98,14 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
---- !u!64 &64956437314913508
+--- !u!64 &64049599978554224
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
+  m_GameObject: {fileID: 1055901880804612}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -114,30 +113,13 @@ MeshCollider:
   m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: 132ce838062ec024281fd3796d4054d4, type: 3}
---- !u!95 &95950716092865688
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 132ce838062ec024281fd3796d4054d4, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114018915487701776
+  m_Mesh: {fileID: 4300000, guid: 81287916accfdb94a90a361d9837bfa1, type: 3}
+--- !u!114 &114298270270960770
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
+  m_GameObject: {fileID: 1055901880804612}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 783750eec4c41da428b7651515146d14, type: 3}
@@ -146,40 +128,43 @@ MonoBehaviour:
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 11
   estimateOnAwake: 0
---- !u!114 &114174710602870734
+--- !u!114 &114370701670637872
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
+  m_GameObject: {fileID: 1055901880804612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85cc8d2b2cade8a4e8e9aaf6a36e98ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NAME: Wheat
+  CATEGORY: Produce
+  KEY: 1002
+  _OWNER: 2
+  _VALUE: 30
+  _TAGS: 8
+  CONTAINABLE: 1
+  offset: {x: 0, y: 0, z: -0.1}
+  rotOffset: {x: 90, y: 0, z: 0}
+--- !u!114 &114522973587812364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1055901880804612}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b204f1c4b369b3f4ea607a1fe66f0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   velocityMutiplier: 1
-  isAnchored: 0
+  isAnchored: 1
   isHeld: 0
   isKin: 1
   debug: 0
---- !u!114 &114893201491558790
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1187298167059300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5511b24d3dda1b439193c1be7b67f70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _NAME: TomatoSeed
-  _VALUE: 20
-  _TAGS: 130
-  _THUMBNAIL: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0}
-  rotOffset: {x: 0, y: 0, z: 0}
-  plantPrefab: {fileID: 1529964924123954, guid: 8cc3fc01414dcb94ea95e08e1779beec,
-    type: 2}
-  prefabPosOffset: {x: 0, y: 0.02, z: 0}
-  prefabRotOffset: {x: 0, y: 0, z: 0}

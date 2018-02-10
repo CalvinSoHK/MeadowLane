@@ -63,6 +63,9 @@ public class PlantBase : MonoBehaviour {
     public float heightFactor = 0.5f;
     public float widthFactor = 0.5f;
 
+    //List of produce under our plant
+    List<GameObject> PRODUCE_LIST = new List<GameObject>();
+
     //Convert quality to a text
     public string GetQualityString()
     {
@@ -101,7 +104,7 @@ public class PlantBase : MonoBehaviour {
         if (BIRTHS_PRODUCE)
         {
             //Generate number of produce
-            PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+            PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE + 1);
 
             //Spawn produce in children
             BirthProduce();
@@ -171,6 +174,7 @@ public class PlantBase : MonoBehaviour {
         {
             //Debug.Log("Spawn!");
             GameObject obj = Instantiate(PRODUCE, ChosenList[i].transform.position, ChosenList[i].transform.rotation, ChosenList[i].transform);
+            PRODUCE_LIST.Add(obj);
 
             //Set owner of objects to player
             obj.GetComponent<BaseItem>()._OWNER = BaseItem.Owner.Player;
@@ -193,9 +197,31 @@ public class PlantBase : MonoBehaviour {
         }
     }
 
+    public void CheckForHarvestDeath()
+    {
+        if(DEATH_ON_HARVEST && PRODUCE_LIST.Count > 0)
+        {
+            int COUNT = 0;
+            foreach(GameObject PRODUCE in PRODUCE_LIST)
+            {
+                if(PRODUCE == null)
+                {
+                    COUNT++;
+                }
+            }
+            if(COUNT == PRODUCE_NUMBER)
+            {
+                isDead = true;
+            }
+        }
+    }
+
     //End of day function. Tallies growth and resets for a new day.
     public virtual void DayEnd()
     {
+        //Sets isDead to true if we have harvested everything off this plant.
+        CheckForHarvestDeath();
+
         //If we're dead, be dead.
         if (isDead)
         {
@@ -250,12 +276,16 @@ public class PlantBase : MonoBehaviour {
         //If no next stage, go straight to death.
         if (NEXT_STAGE == null)
         {
-            next = Instantiate(DEAD_STAGE, transform.position, transform.rotation, transform.parent);
+            BeDead();
+            return;
         }
         else
         {
+            //Randomize rotation
+            float RAND_ROT = Random.Range(0f, 1f) * 360;
+
             //Spawn replacement plant.
-            next = Instantiate(NEXT_STAGE, transform.position, transform.rotation, transform.parent);
+            next = Instantiate(NEXT_STAGE, transform.position, Quaternion.Euler(0,RAND_ROT,0) , transform.parent);
         }
 
         //Transfer relevant details to new plant.
@@ -275,15 +305,22 @@ public class PlantBase : MonoBehaviour {
     //Go to dead function
     public virtual void BeDead()
     {
+        GameObject next;
+
+        //Randomize rotation
+        float RAND_ROT = Random.Range(0f, 1f) * 360;
         //Spawn replacement plant.
-        GameObject next = Instantiate(DEAD_STAGE, transform.position, transform.rotation, transform.parent);
+        if (DEAD_STAGE != null)
+        {
+            next = Instantiate(DEAD_STAGE, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
+        }
+        else
+        {
+            next = Instantiate(Resources.Load("Hidden/Dead_Plant_Standin", typeof(GameObject)) as GameObject, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
+        }
 
-        //Transfer relevant details to new plant.
-        next.GetComponent<PlantBase>().QUALITY = QUALITY;
-        next.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
-
-        //Init new plant
-        next.GetComponent<PlantBase>().Init(gameObject);
+        next.transform.parent = transform.parent;
+        next.transform.localPosition = new Vector3(0, 0.06f, 0);
 
         //Remove this stage.
         Destroy(gameObject);

@@ -64,8 +64,6 @@ public class ShopEntryManager : BasicEntryManager {
         //For all entries
         foreach(GameObject OBJ in BASKET.OBJECT_LIST)
         {
-            for(int i = 0; i < BASKET.OBJECT_LIST.Count; i++)
-            {
                 if (IS_DELIVERY)
                 {
                     //If delivery for tomorrow
@@ -76,7 +74,6 @@ public class ShopEntryManager : BasicEntryManager {
                     //else add it now
                     Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
                 }   
-            }
         }
         ENTRY_LIST.Clear();
     }
@@ -104,7 +101,7 @@ public class ShopEntryManager : BasicEntryManager {
     {
         foreach(Entry ENTRY in ENTRY_LIST)
         {
-            if(ENTRY.NAME == obj._NAME)
+            if(ENTRY.Equals(obj))
             {
                 return true;
             }
@@ -123,7 +120,7 @@ public class ShopEntryManager : BasicEntryManager {
     {
         foreach (Entry ENTRY in ENTRY_LIST)
         {
-            if (ENTRY.NAME == obj._NAME)
+            if (ENTRY.Equals(obj))
             {
                 return ENTRY_LIST.IndexOf(ENTRY);
             }
@@ -144,7 +141,11 @@ public class ShopEntryManager : BasicEntryManager {
         }
         else
         {
-            ENTRY_LIST.Add(new Entry(1, obj._VALUE, obj._NAME, obj.CATEGORY));
+            //Filter the obj name so it doesnt have underscores
+            string NAME_INPUT = obj._NAME;
+            NAME_INPUT = NAME_INPUT.Replace('_', ' ');
+
+            ENTRY_LIST.Add(new Entry(1, obj._VALUE, NAME_INPUT, obj.CATEGORY));
         }
     }
 
@@ -208,5 +209,25 @@ public class Entry
         COUNT = COUNT_T;
         PRICE = PRICE_T;
         NAME = NAME_T;
+    }
+
+    public bool Equals(Entry OBJ)
+    {
+        //Count isn't the same because that's how many of that object we have not how many seeds are in it.
+        if(OBJ.NAME.Equals(NAME.Replace('_', ' ')) && OBJ.PRICE == PRICE && OBJ.CATEGORY.Equals(CATEGORY))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool Equals(BaseItem ITEM)
+    {
+        if(ITEM._NAME.Replace('_', ' ').Trim().Equals(NAME.Trim()) && ITEM._VALUE == PRICE && ITEM.CATEGORY.Trim().Equals(CATEGORY.Trim()))
+        {
+            return true;
+        }
+        //Debug.Log("Item name: " + ITEM._NAME + "    other item name: " + NAME);
+        return false;
     }
 }
