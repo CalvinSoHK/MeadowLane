@@ -605,6 +605,7 @@ Transform:
   - {fileID: 670885052}
   - {fileID: 1100730304}
   - {fileID: 117039827}
+  - {fileID: 1367071521}
   m_Father: {fileID: 2107762116}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8691,7 +8692,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.26700962
+      value: -0.447
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16289,6 +16290,94 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300040, guid: 830a062d645b8dc41800f95b08c3d107, type: 3}
+--- !u!1001 &1367071520
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 50452216}
+    m_Modifications:
+    - target: {fileID: 2300000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.092
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11000013
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.1199932
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70710576
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710784
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 27ee25fd5cb21b048bb75e0c3c9824b8, type: 2}
+    - target: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_Name
+      value: Chair_Standin (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0d2d3eee1624b214b882c6aa2c96a975, type: 2}
+    - target: {fileID: 2300000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: df44b472840f8824a9e6f846fc7d3951, type: 2}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+  m_IsPrefabParent: 0
+--- !u!4 &1367071521 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+  m_PrefabInternal: {fileID: 1367071520}
+--- !u!1 &1367071522 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
+  m_PrefabInternal: {fileID: 1367071520}
+--- !u!64 &1367071523
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1367071522}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: da0690a210fee1b43acdbcf395bd7476, type: 3}
 --- !u!1001 &1382229396
 Prefab:
   m_ObjectHideFlags: 0
