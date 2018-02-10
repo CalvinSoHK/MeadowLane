@@ -16,10 +16,13 @@ public class Produce_Basket_Controller : InteractableCustom {
     public void InitBasket()
     {
         //Get the category index for our produce
+        
         int CATEGORY_INDEX = Inventory_Manager.checkItemCategoryIndex(PRODUCE.CATEGORY);
-
-        //Get the total number from its inventory index.
-        COUNT = Inventory_Manager.CategorySlots[CATEGORY_INDEX][Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX)].TotalNum;
+        if (Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX) != -1)
+        {
+            //Get the total number from its inventory index.
+            COUNT = Inventory_Manager.CategorySlots[CATEGORY_INDEX][Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX)].TotalNum;
+        }
     }
 
     //Function to call on spawning on an object
@@ -49,5 +52,11 @@ public class Produce_Basket_Controller : InteractableCustom {
                 Destroy(col.collider.gameObject);
             }
         }
+    }
+
+    //Empty the container
+    public void EmptyBasket()
+    {
+        COUNT = 0;
     }
 }

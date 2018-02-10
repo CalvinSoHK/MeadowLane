@@ -15,11 +15,19 @@ public class TVInfo : MonoBehaviour {
 
     public void Update()
     {
-        string inDate = TM.date.day + " , " + TM.date.month + " " + TM.date.dayNumber + " , " + TM.date.year;
-        DATE.text = inDate;
+        if(TM != null)
+        {
+            string inDate = TM.date.day + " , " + TM.date.month + " " + TM.date.dayNumber + " , " + TM.date.year;
+            DATE.text = inDate;
 
-        string inTime = TM.time;
-        TIME.text = inTime;
+            string inTime = TM.time;
+            TIME.text = inTime;
+        }
+        else
+        {
+            TM = GameObject.Find("GameManager").GetComponent<Scheduler>();
+        }
+      
 
     }
 

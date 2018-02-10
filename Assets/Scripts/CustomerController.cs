@@ -23,7 +23,7 @@ public class CustomerController : MonoBehaviour {
     float INTERNAL_TIME, LERP_TIMER = 0;
 
     //State machine
-    public enum CustomerState { Approaching, Waiting, Result, Leaving };
+    public enum CustomerState { Approaching, Waiting, Result, Leaving, KillSelf, Finished};
     public CustomerState STATE;
 
     //Animator controller of the person
@@ -100,13 +100,24 @@ public class CustomerController : MonoBehaviour {
                 DD.DeActivateShop();
                 if (LERP_TIMER >= 1)
                 {
-                    Destroy(gameObject);
+                    SetState(CustomerState.Finished);
                 }
+                break;
+            case CustomerState.Finished:
+                
+                break;
+            case CustomerState.KillSelf:
+                KillSelf();
                 break;
             default:
                 Debug.Log("Error: Invalid state.");
                 break;
         }
+    }
+
+    public void KillSelf()
+    {
+        Destroy(gameObject);
     }
 
     //Setter for the state machine
@@ -235,16 +246,32 @@ public class CustomerController : MonoBehaviour {
     }
 
     //Remove all items in our basket
-    public void ClearBasket()
+    public bool ClearBasket()
     {
         //Debug.Log("Number of Ingredients before clear: " + INGREDIENTS.Count);
 
         //Clears the basket.
-        foreach(BaseItem ITEM in INGREDIENTS)
+        bool RETURN = false;
+        if(INGREDIENTS.Count > 0)
         {
-            //Debug.Log("are the objects getting destroyed?");
-            Destroy(ITEM.gameObject);
+            foreach (BaseItem ITEM in INGREDIENTS)
+            {
+                if(ITEM != null)
+                {
+                    //Debug.Log("are the objects getting destroyed?");
+                    Destroy(ITEM.gameObject);
+                    RETURN = true;
+                }
+                else
+                {
+                    Debug.Log("WTF: " + INGREDIENTS.Count);
+                }
+              
+            }
+            INGREDIENTS.Clear();
         }
+
+        return RETURN;
     }
 
     //Pays the player the amount of money they deserve

@@ -544,10 +544,12 @@ public class PlayerInventory : MonoBehaviour {
             if (SHOW == ShowState.Hand1)
             {
                 hand1.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
+                hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
             else if (SHOW == ShowState.Hand2)
             {
                 hand2.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
+                hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
 
             TEMP_STATE = ShowState.None;

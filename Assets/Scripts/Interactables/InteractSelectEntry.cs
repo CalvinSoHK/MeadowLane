@@ -13,7 +13,7 @@ public class InteractSelectEntry : InteractableCustom {
 
     public override void Use(Hand hand)
     {
-        Debug.Log("setting to true.");
+        //Debug.Log("setting to true.");
         SELECTED = true;
     }
 }

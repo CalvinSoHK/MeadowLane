@@ -54,15 +54,22 @@ public class PaymentBasketManager : MonoBehaviour {
         return OBJECT_LIST;
     }
 
+    //Clear the list
+    public void ClearList()
+    {
+        OBJECT_LIST.Clear();
+    }
+
     /// <summary>
     /// Function that will package our items with a flourish. Juice primarily.
     /// Destroys the objects as well.
     /// </summary>
     public void PackageItems()
-    {
+    {      
        for(int i = OBJECT_LIST.Count - 1; i > -1; i--)
         {
             Destroy(OBJECT_LIST[i]);
         }
+        ClearList();
     }
 }

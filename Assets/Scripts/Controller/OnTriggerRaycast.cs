@@ -190,7 +190,7 @@ public class OnTriggerRaycast : MonoBehaviour {
     public void DropObj(GameObject OBJECT)
     {
         hand.DetachObject(OBJECT);
-        ENABLED = true;
+        ENABLED = true; 
         obj = null;
     }
 

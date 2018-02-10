@@ -35,7 +35,7 @@ public class Container : MonoBehaviour {
         OWNER = transform.parent.GetComponent<BaseItem>()._OWNER;
 	}
 
-    void OnTriggerEnter(Collider collision)
+    void OnTriggerStay(Collider collision)
     {
         //If the object is an Item, AND is interactable 
         if (collision.gameObject.GetComponent<BaseItem>() != null && collision.gameObject.layer == 8)

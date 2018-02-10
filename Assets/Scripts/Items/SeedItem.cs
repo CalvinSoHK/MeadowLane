@@ -62,7 +62,7 @@ public class SeedItem : BaseItem {
             }
             else //If not, sit as a normal object.
             {
-                Debug.Log("Can't plant, not tilled or already has seed." + gameObject.name);
+                //Debug.Log("Can't plant, not tilled or already has seed." + gameObject.name);
             }
            
         }

@@ -20,8 +20,8 @@ public class StallManager : MonoBehaviour {
     //List of each current customer
     List<CustomerController> CUSTOMER_LIST = new List<CustomerController>();
 
-    //List of all recipes valid for this game
-    public List<Recipe> RECIPE_LIST = new List<Recipe>();
+    //List of the recipes valid in this moment, and a list of all the discovered recipess
+    public List<Recipe> RECIPE_LIST = new List<Recipe>(), ALL_RECIPES_LIST = new List<Recipe>();
 
     //Dictionary of all base items and the number they have
     Dictionary<int, int> ITEM_COUNT = new Dictionary<int, int>();
@@ -36,7 +36,7 @@ public class StallManager : MonoBehaviour {
     public Transform[] SLOT_LOCATIONS;
 
     //Whether or not a slot is open for a customer
-    List<bool> CUSTOMER_SLOTS = new List<bool>();
+    public List<bool> CUSTOMER_SLOTS = new List<bool>();
 
     //Baskets for each customer
     public GameObject[] SHOPPING_BASKET_LIST = new GameObject[3];
@@ -44,6 +44,10 @@ public class StallManager : MonoBehaviour {
     //Timer info for spawning intervals for customrs
     float SPAWN_TIMER = 0;
     public float MAX_TIME, COIN_VALUE;
+
+    //Timer for the whole game
+    public float GAME_TIMER;
+    public float WHOLE_GAME_TIMER = 20f;
 
     //Index for how far up the deck we have traveled
     int CARD_INDEX = 0;
@@ -56,14 +60,19 @@ public class StallManager : MonoBehaviour {
             Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
         }
 
-        //We manage our customers regardless if its closed or not because some customers can show up right at the end.
-        ManageCustomers();
+      
 
         //If the stall is open
         if(STATE == StallState.Open)
         {
+            //Countdown on time
+            GAME_TIMER -= Time.deltaTime;
+
+            //We manage our customers regardless if its closed or not because some customers can show up right at the end???
+            ManageCustomers();
+
             //Start with spawn first. Timer will be 0 at the beginning
-            if(SPAWN_TIMER <= 0)
+            if (SPAWN_TIMER <= 0)
             {
                 //Spawn a customer
                 SpawnCustomer();
@@ -77,8 +86,8 @@ public class StallManager : MonoBehaviour {
                 SPAWN_TIMER -= Time.deltaTime;
             }
 
-            //If we run out of produce
-            if (ITEM_COUNT.Count == 0 && NoCustomersHere())
+            //If we a. run out of produce and have no customers OR we run out of time, end the game
+            if ((ITEM_COUNT.Count == 0 || GAME_TIMER <= 0)  && NoCustomersHere())
             {
                 //Problem
                 STATE = StallState.Return;
@@ -139,13 +148,11 @@ public class StallManager : MonoBehaviour {
                         }
                     }
 
-                    //Pay the money
-                    CC.PayMoney();
-
-
-                    //Clear the basket
-                    CC.ClearBasket();
-
+                    // Clear it. If clearing actually goes through then pay.
+                    if (CC.ClearBasket())
+                    {
+                        CC.PayMoney();
+                    }
                 }
                 else //We failed to complete the recipe. Add the ingredients we failed to use back to our item count
                 {
@@ -155,14 +162,18 @@ public class StallManager : MonoBehaviour {
                     }
                 }
 
-
                 //Make the customer leave.
                 CC.SetState(CustomerController.CustomerState.Leaving);
-
+            }
+            else if(CC.STATE == CustomerController.CustomerState.Finished)
+            {
                 //Set the bool for that customer's slot back to true
                 CUSTOMER_SLOTS[CC.SLOT_NUMBER] = true;
+
+                CC.SetState(CustomerController.CustomerState.KillSelf);
             }
         }
+
     }
 
     //Get random valid recipe
@@ -217,7 +228,7 @@ public class StallManager : MonoBehaviour {
             //Swap cards
             Recipe TEMP = LIST[i];
             LIST[i] = LIST[RAND_INDEX];
-            LIST[RAND_INDEX] = LIST[i];
+            LIST[RAND_INDEX] = TEMP;
         }
     }
 
@@ -264,14 +275,14 @@ public class StallManager : MonoBehaviour {
     {
         Debug.Log("ITEM COUNT: " + ITEM_COUNT.Count);
         //If we have any items at all.
-        if (ITEM_COUNT.Count > 0)
+        if (ITEM_COUNT.Count > 0 && GAME_TIMER > 0)
         {
             //Debug.Log("Tomato count: " + ITEM_COUNT[0]);
             //Index of the bool if we want to change it
             int index = 0;
 
             //Filter the list for all ingredients
-            RECIPE_LIST = FilterRecipeList(RECIPE_LIST);
+            RECIPE_LIST = FilterRecipeList(ALL_RECIPES_LIST);
 
             //Check recipe list length.
             if(RECIPE_LIST.Count > 0)
@@ -324,6 +335,9 @@ public class StallManager : MonoBehaviour {
     //Function to be called when we start the game
     public void StartGame()
     {
+        //Set the timer
+        GAME_TIMER = WHOLE_GAME_TIMER;
+
         //Get all the produce the player has
         GetProduce();
 
@@ -335,6 +349,11 @@ public class StallManager : MonoBehaviour {
 
             //Get the list of recipes the player has already discovered.
             RECIPE_LIST = RecipeManager.GetDiscovered();
+            ALL_RECIPES_LIST.Clear();
+            foreach(Recipe TEMP in RECIPE_LIST)
+            {
+                ALL_RECIPES_LIST.Add(TEMP);
+            }
 
 
             //Init baskets
@@ -344,7 +363,7 @@ public class StallManager : MonoBehaviour {
             Inventory_Manager.RemoveAllItemsFromCategory(Inventory_Manager.checkItemCategoryIndex("Produce"));
 
             //Further reduce the list to the recipes the player can actually make with their items.
-            RECIPE_LIST = FilterRecipeList(RECIPE_LIST);
+            RECIPE_LIST = FilterRecipeList(ALL_RECIPES_LIST);
 
             //Shuffle the list.
             GeoWeightedShuffle(RECIPE_LIST, COIN_VALUE);
@@ -412,11 +431,21 @@ public class StallManager : MonoBehaviour {
             foreach(BaseItem INGREDIENT in RECIPE.INGREDIENTS)
             {
                 //If the player has more than 
-                if(TEMP_DICTIONARY[INGREDIENT.KEY] > 0)
+                if (TEMP_DICTIONARY.ContainsKey(INGREDIENT.KEY))
                 {
-                    TEMP_DICTIONARY[INGREDIENT.KEY]--;
+                    if (TEMP_DICTIONARY[INGREDIENT.KEY] > 0)
+                    {
+                        TEMP_DICTIONARY[INGREDIENT.KEY]--;
+                    }
+                    else {
+                        Debug.Log("Not enough of the ingredient: " + TEMP_DICTIONARY[INGREDIENT.KEY]);
+                        isValid = false; break; }
                 }
-                else { isValid = false; break; }
+                else
+                {
+                    Debug.Log("Don't have any of that ingredient anymore: " + INGREDIENT.KEY);
+                    isValid = false; break;
+                }
             }
 
             //If we are valid add to list.
@@ -485,13 +514,22 @@ public class StallManager : MonoBehaviour {
         }
     }
 
+    //Function that empties out all our baskets
+    public void EmptyBaskets()
+    {
+        for(int i = 0; i <PRODUCE_BASKET_LIST.Length; i++)
+        {
+            PRODUCE_BASKET_LIST[i].EmptyBasket();
+        }
+    }
+
     //Returns all produce back to inventory
     public void ReturnToInventory()
     {
         //Load in inventory
         foreach(string NAME in ALL_PRODUCE)
-        {
-            GameObject TEMP = Resources.Load("Produce/" + NAME) as GameObject;
+        { 
+            GameObject TEMP = Resources.Load("Produce/" + NAME, typeof(GameObject)) as GameObject;
 
             if (ITEM_COUNT.ContainsKey(TEMP.GetComponent<BaseItem>().KEY))
             {
@@ -499,6 +537,12 @@ public class StallManager : MonoBehaviour {
                 RemoveItem(TEMP.GetComponent<BaseItem>());
             }
         }
+
+        //Clear all the produce baskets
+        EmptyBaskets();
+
+        //Clear the list for a second run.
+        ALL_PRODUCE.Clear();
     }
 }
 
