@@ -18,11 +18,7 @@ public class InteractionTravel : InteractableCustom {
     //The travel point we are managing
     public TravelPointController TPC;
 
-    private void Awake()
-    {
-        //Debug.Log(destination.name);
-        TPC = destination.GetComponent<TravelPointController>();
-    }
+    TravelPointManager TPM;
 
     //Override use function to move the player rig
     public override void Use(Hand hand)
@@ -42,8 +38,18 @@ public class InteractionTravel : InteractableCustom {
 
             destination.GetComponent<TravelPointController>().isValid = false;
 
-            TravelPointManager.Instance.ResetValid();
-            TravelPointManager.Instance.SetIndex(TravelPointManager.Instance.GetIndex(TPC));
+            if(TPM == null)
+            {
+                TPM = GameManagerPointer.Instance.TRAVEL_POINT_MANAGER;
+            }
+
+            if(TPC == null)
+            {
+                TPC = destination.GetComponent<TravelPointController>();
+            }
+
+            TPM.ResetValid();
+            TPM.SetIndex(TPM.GetIndex(TPC));
         }
         base.Use(hand);
 

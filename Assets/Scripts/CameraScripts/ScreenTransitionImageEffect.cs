@@ -41,6 +41,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
     //Public bools for other scripts to reference
     public bool isOpen, isClosed;
 
+    LightingManager LM;
 
     Material material
     {
@@ -100,6 +101,11 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                     isClosed = true;
                     setCurrentState(Gamestate.open);
                     System.GC.Collect();
+                    if(LM == null)
+                    {
+                        LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
+                    }
+                    LM.UpdateLight();
                     player.transform.position = destination.position;
                     if (isFlipped)
                     {

@@ -5,32 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Bus_Stop_Manager : MonoBehaviour {
 
-  
-
-    //Singleton code.
-    private static Bus_Stop_Manager _instance;
-
-    public static Bus_Stop_Manager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-
-        }
-    }
-
     //List of all stop names. Used to load into the bus stops.
     public List<BusStopInfo> STOP_LIST = new List<BusStopInfo>();
 

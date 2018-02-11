@@ -21,31 +21,6 @@ public class Scheduler : MonoBehaviour {
     [HideInInspector]
     int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    //Singleton code.
-    private static Scheduler _instance;
-
-    public static Scheduler Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-
-        }
-    }
-
-
     //Class for a date
     public class Date
     {

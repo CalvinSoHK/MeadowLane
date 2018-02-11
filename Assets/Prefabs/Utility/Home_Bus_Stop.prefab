@@ -39,10 +39,10 @@ GameObject:
   - component: {fileID: 33585318835625258}
   - component: {fileID: 65882558379008298}
   - component: {fileID: 23322662377721756}
-  - component: {fileID: 114389707700076710}
   - component: {fileID: 95958389415127220}
   - component: {fileID: 114067178158979366}
   - component: {fileID: 114023292369137514}
+  - component: {fileID: 114462432112990714}
   m_Layer: 0
   m_Name: Ticket
   m_TagString: Untagged
@@ -75,7 +75,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4821332731057918}
-  - component: {fileID: 114163710204888000}
   m_Layer: 0
   m_Name: BusArrival
   m_TagString: Untagged
@@ -889,8 +888,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1094820882373452}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029653306}
-  m_LocalPosition: {x: -17.416, y: 0.54833126, z: 15.815323}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0.0000029504295}
+  m_LocalPosition: {x: 4.9, y: 0.25, z: 29.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4668958042908996}
@@ -899,7 +898,7 @@ Transform:
   - {fileID: 4821332731057918}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180.00002, z: 0}
 --- !u!4 &4077212307626616
 Transform:
   m_ObjectHideFlags: 1
@@ -948,13 +947,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1895257192995322}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.15, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
+  m_LocalPosition: {x: -2.1499996, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4049446798992970}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
 --- !u!4 &4668958042908996
 Transform:
   m_ObjectHideFlags: 1
@@ -977,7 +976,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1023373674322862}
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071069}
-  m_LocalPosition: {x: -8.09, y: 0, z: -4.18}
+  m_LocalPosition: {x: 2.8, y: 0, z: -3.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4049446798992970}
@@ -1708,6 +1707,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114080213479623628}
+        m_MethodName: ResetMachine
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!114 &114067178158979366
@@ -1909,7 +1919,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -1919,19 +1929,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '  ENTRY0'
---- !u!114 &114163710204888000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1023373674322862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90f7546f496e1974b94d56a04cdb5f30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isValid: 1
-  TARGET: {fileID: 1394902871745522}
 --- !u!114 &114224414380521758
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2052,9 +2049,8 @@ MonoBehaviour:
   - Happy Mart
   - Lighthouse
   PRICE_LIST: 00000000000000000a000000
-  Location: Town Square
+  Location: Player Home
   BUS_ARRIVAL: {fileID: 4821332731057918}
-  TRANSITION_TO: 0
 --- !u!114 &114360350338938364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2136,24 +2132,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114389707700076710
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1019736107329858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UI_PREFAB: {fileID: 0}
-  UI_OFFSET: {x: 0, y: 0, z: 0}
-  DIST_TO_PLAYER: 0.5
-  SHOW_UI: 0
-  destination: {fileID: 0}
-  FLIP: 0
-  ANCHOR: 1
 --- !u!114 &114404696865749226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2232,6 +2210,25 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ' 999999999'
+--- !u!114 &114462432112990714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1019736107329858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8cceb1de6458a746a64fe410661566f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
+  destination: {fileID: 0}
+  FLIP: 0
+  ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!114 &114475222854595404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2361,6 +2358,7 @@ MonoBehaviour:
   destination: {fileID: 4481426396166862}
   FLIP: 0
   ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!114 &114573913085884148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2418,7 +2416,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -2505,7 +2503,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -2592,7 +2590,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -2641,7 +2639,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -2707,7 +2705,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3
@@ -2903,6 +2901,7 @@ MonoBehaviour:
   destination: {fileID: 4481426396166862}
   FLIP: 0
   ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!114 &114963028833194456
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2960,7 +2959,7 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 72
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 7
     m_MaxSize: 72
     m_Alignment: 3

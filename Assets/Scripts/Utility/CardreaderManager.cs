@@ -52,13 +52,9 @@ public class CardreaderManager : MonoBehaviour {
         }
     }
 
-    //If they get rid of the phone this will break.
-    private void OnTriggerExit(Collider other)
+    public void ResetMachine()
     {
-        if (other.gameObject.GetComponent<PhoneLinker>() != null)
-        {
-            PAID = false;
-        }
+        PAID = false;
     }
 
 }

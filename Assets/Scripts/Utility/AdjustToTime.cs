@@ -17,6 +17,8 @@ public class AdjustToTime : MonoBehaviour {
     //Internal beginning rot for the sun
     private Vector3 BEGIN_ROT;
 
+    Scheduler SCHEDULER;
+
     private void Start()
     {
         //Save the beginning rot for the sun
@@ -29,7 +31,11 @@ public class AdjustToTime : MonoBehaviour {
     //Function that gets called to change the rotation
     public void ChangeRotation()
     {
-        transform.rotation = GetRotation(Scheduler.Instance.CLOCK);
+        if(SCHEDULER == null)
+        {
+            SCHEDULER = GameManagerPointer.Instance.SCHEDULER;
+        }
+        transform.rotation = GetRotation(SCHEDULER.CLOCK);
     }
 
     //Helper function that calculates at what rotation we should be at based on the time of day.

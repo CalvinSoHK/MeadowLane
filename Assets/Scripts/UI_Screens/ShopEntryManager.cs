@@ -10,8 +10,15 @@ public class ShopEntryManager : BasicEntryManager {
 
     public PaymentBasketManager BASKET;
 
-	// Update is called once per frame
-	void Update () {
+    DeliveryManager DM;
+
+    private void Awake()
+    {
+        DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+    }
+
+    // Update is called once per frame
+    void Update () {
 
     
         //Maintain total
@@ -64,16 +71,20 @@ public class ShopEntryManager : BasicEntryManager {
         //For all entries
         foreach(GameObject OBJ in BASKET.OBJECT_LIST)
         {
-                if (IS_DELIVERY)
-                {
+           if (IS_DELIVERY)
+           {
                     //If delivery for tomorrow
-                    DeliveryManager.Instance.AddItem(OBJ);
-                }
-                else
+                if(DM == null)
                 {
+                    DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+                }
+                DM.AddItem(OBJ);
+           }
+           else
+           {
                     //else add it now
-                    Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
-                }   
+                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
+           }   
         }
         ENTRY_LIST.Clear();
     }

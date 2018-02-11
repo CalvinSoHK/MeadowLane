@@ -29,7 +29,7 @@ public class BusEntryManager : BasicEntryManager {
     public override void Start()
     {
         base.Start();
-        BSM = Bus_Stop_Manager.Instance;
+        BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
         SetEntries();
 
     }
@@ -85,7 +85,7 @@ public class BusEntryManager : BasicEntryManager {
     public void GiveToBus()
     {
         //Debug.Log(SELECTED.name);
-        Bus_Stop_Manager.Instance.BUS.MoveTo(SELECTED.NAME);
+        BSM.BUS.MoveTo(SELECTED.NAME);
         ClearSelected();
     }
 

@@ -9,15 +9,9 @@ public class InteractionDayEnd : InteractableCustom {
     //Link to the farm manager
     public FarmManager FM;
 
-    public void Update()
-    {
-        //Debug command
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FM.DayEndAll();
-            Scheduler.Instance.NextDay();
-        }
-    }
+    Scheduler SCHEDULER;
+    DeliveryManager DM;
+    LightingManager LM;
 
     public override void Use(Hand hand)
     {
@@ -40,7 +34,13 @@ public class InteractionDayEnd : InteractableCustom {
             yield return new WaitForEndOfFrame();
         }
         FM.DayEndAll();
-        Scheduler.Instance.NextDay(Scheduler.Instance.date);
-        DeliveryManager.Instance.ManageDeliveries();
+        if (SCHEDULER == null || DM == null | LM == null)
+        {
+            SCHEDULER = GameManagerPointer.Instance.SCHEDULER;
+            DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+            LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
+        }
+        SCHEDULER.NextDay();
+        DM.ManageDeliveries();
     }
 }

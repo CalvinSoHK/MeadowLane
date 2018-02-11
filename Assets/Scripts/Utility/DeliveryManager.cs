@@ -5,29 +5,6 @@ using UnityEngine;
 //Manager that keeps track of items that need to be delivered to the player and sends it to the player first thing in a day.
 public class DeliveryManager : MonoBehaviour
 {
-    //Singleton code.
-    private static DeliveryManager _instance;
-
-    public static DeliveryManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if(_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-    }
-
 
     //The string array of every item in the game and its information.
     public List<GameObject> ITEMS_LIST;

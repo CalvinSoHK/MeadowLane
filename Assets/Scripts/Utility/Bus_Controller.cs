@@ -21,20 +21,28 @@ public class Bus_Controller : MonoBehaviour {
     float timer = 3f;
 
     //Stop manager
-    Bus_Stop_Manager MANAGER;
+    Bus_Stop_Manager BSM;
 
     //Stop info for our target destination
     BusStopInfo NEW_STOP_INFO;
+
+    //Bus point we are moving to.
+    GameObject BUS_POINT;
 
     void Start()
     {
         //Might be problematic if it changes.
         VR_CAMERA = GameObject.Find("VRCamera");
-        MANAGER = Bus_Stop_Manager.Instance;
+        BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
     }
 
     void Update()
     {
+        if(BSM == null)
+        {
+            BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
+        }
+
         //If we have finished loading
         if (isTransitionLoaded && VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open)
         {
@@ -43,15 +51,15 @@ public class Bus_Controller : MonoBehaviour {
             //Debug.Log("Scene loaded");
 
             //Place us on the bus in the right position
-            GameObject BUS_POINT = GameObject.Find("BusPoint");
+            BUS_POINT = GameObject.Find("BusPoint");
             transform.rotation = BUS_POINT.transform.rotation;
             transform.position = BUS_POINT.transform.position;
             timer = MIN_LOAD_TIME;
 
             //Start unloading the old scene
-            SceneManager.UnloadSceneAsync(Bus_Stop_Manager.Instance.CURRENT_STOP.GetName());
+            SceneManager.UnloadSceneAsync(BSM.CURRENT_STOP.GetName());
 
-            Bus_Stop_Manager.Instance.CURRENT_STOP = NEW_STOP_INFO;
+            BSM.CURRENT_STOP = NEW_STOP_INFO;
 
             //When the old scene is unloaded fire the event old scene unloaded.
             SceneManager.sceneUnloaded += OldSceneUnloaded;
@@ -62,7 +70,7 @@ public class Bus_Controller : MonoBehaviour {
         //If we should be moving
         if (isMoving)
         {
-            transform.position += transform.forward * MANAGER.MAX_SPEED * Time.deltaTime;
+            transform.position += transform.forward * BSM.MAX_SPEED * Time.deltaTime;
             timer -= Time.deltaTime;
         }
 
@@ -89,7 +97,7 @@ public class Bus_Controller : MonoBehaviour {
             transform.rotation = BUS_ARRIVAL.rotation;
 
             //Unload the transition scene
-            Debug.Log(TRANSITION_SCENE);
+            //Debug.Log(TRANSITION_SCENE);
             SceneManager.UnloadSceneAsync(TRANSITION_SCENE);
         }
     }
@@ -135,16 +143,16 @@ public class Bus_Controller : MonoBehaviour {
     {
         //Find the index of the given location
         //int index = 0;
-         int index = MANAGER.GetIndexOf(DESTINATION);
+         int index = BSM.GetIndexOf(DESTINATION);
         //Debug.Log(index + DESTINATION);
 
         //Get the stop info we want to go to
-        NEW_STOP_INFO = Bus_Stop_Manager.Instance.STOP_LIST[index];
+        NEW_STOP_INFO = BSM.STOP_LIST[index];
 
         //If index is -1, its not in the list and we have an error, else do the right thing.
         if(index != -1)
         {
-            TRANSITION_SCENE = Bus_Stop_Manager.Instance.GetTransitionSceneName(NEW_STOP_INFO.TRANSITION);
+            TRANSITION_SCENE = BSM.GetTransitionSceneName(NEW_STOP_INFO.TRANSITION);
             SceneManager.LoadSceneAsync(TRANSITION_SCENE, LoadSceneMode.Additive);
             SceneManager.sceneLoaded += TransitionLoaded;
         }

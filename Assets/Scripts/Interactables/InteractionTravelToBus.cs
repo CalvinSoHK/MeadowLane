@@ -10,7 +10,7 @@ public class InteractionTravelToBus : InteractionTravel {
     {
         ANCHOR = true;
         //Debug.Log(Bus_Stop_Manager.Instance.name);
-        destination = Bus_Stop_Manager.Instance.BUS.gameObject.transform.Find("TravelPoint");
+        destination = GameManagerPointer.Instance.BUS_STOP_MANAGER.BUS.gameObject.transform.Find("TravelPoint");
 
         //Debug.Log(destination.name);
         TPC = destination.GetComponent<TravelPointController>();
