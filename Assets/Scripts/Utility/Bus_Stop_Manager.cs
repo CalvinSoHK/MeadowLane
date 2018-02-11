@@ -86,6 +86,9 @@ public class BusStopInfo
     //The transition for this stop
     public TransitionType TRANSITION;
 
+    //How much this stop costs
+    public int PRICE;
+
     //The bus's position and rotation on arriving in this location
     public Vector3 BUS_POSITION, BUS_ROTATION;
 

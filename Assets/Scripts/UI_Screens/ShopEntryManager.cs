@@ -10,6 +10,9 @@ public class ShopEntryManager : BasicEntryManager {
 
     public PaymentBasketManager BASKET;
 
+    public GameObject ENTRY_PREFAB;
+    GameObject TEMP;
+
     DeliveryManager DM;
 
     private void Awake()
@@ -19,49 +22,10 @@ public class ShopEntryManager : BasicEntryManager {
 
     // Update is called once per frame
     void Update () {
-
-    
         //Maintain total
         TOTAL = CalculateTotal();
-
-        UpdateEntries();
-
 	}
 
-    /// <summary>
-    /// Updated the function to update entries correctly for this entry manager.
-    /// </summary>
-    public override void UpdateEntries()
-    {
-        //Keep track of index
-        int index = 0;
-
-
-        //For every entry
-        foreach (Entry ENTRY in ENTRY_LIST)
-        {
-            //Display the entry.
-            SetEntry(index, ENTRY.COUNT, ENTRY.PRICE, ENTRY.NAME);
-
-            //Increment index after a pass
-            index++;
-        }
-
-        //For every other entry past this index, empty them
-        for (; index < ENTRYU_UI_ARRAY.Length; index++)
-        {
-            //For every entry except the last one.
-            if (index != ENTRYU_UI_ARRAY.Length - 1)
-            {
-                ENTRYU_UI_ARRAY[index].gameObject.SetActive(false);
-            }
-            else
-            {
-                SetEntry(index, 0, TOTAL, "TOTAL");
-            }
-
-        }
-    }
 
     /// <summary>
     /// Delivers all items in our basket into the delivery service.
@@ -96,7 +60,7 @@ public class ShopEntryManager : BasicEntryManager {
     public override int CalculateTotal()
     {
         int TOTAL = 0;
-        foreach (Entry ENTRY in ENTRY_LIST)
+        foreach (SingleEntryManager ENTRY in ENTRY_LIST)
         {
             TOTAL += ENTRY.COUNT * ENTRY.PRICE;
         }
@@ -110,9 +74,9 @@ public class ShopEntryManager : BasicEntryManager {
     /// <returns></returns>
     public bool HasEntry(BaseItem obj)
     {
-        foreach(Entry ENTRY in ENTRY_LIST)
+        foreach(SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if(ENTRY.Equals(obj))
+            if(ENTRY.NAME.Equals(obj._NAME))
             {
                 return true;
             }
@@ -129,9 +93,9 @@ public class ShopEntryManager : BasicEntryManager {
     /// <returns></returns>
     public int GetIndexOf(BaseItem obj)
     {
-        foreach (Entry ENTRY in ENTRY_LIST)
+        foreach (SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if (ENTRY.Equals(obj))
+            if (ENTRY.NAME.Equals(obj._NAME))
             {
                 return ENTRY_LIST.IndexOf(ENTRY);
             }
@@ -156,7 +120,11 @@ public class ShopEntryManager : BasicEntryManager {
             string NAME_INPUT = obj._NAME;
             NAME_INPUT = NAME_INPUT.Replace('_', ' ');
 
-            ENTRY_LIST.Add(new Entry(1, obj._VALUE, NAME_INPUT, obj.CATEGORY));
+            TEMP = Instantiate(ENTRY_PREFAB, transform);
+            TEMP.GetComponent<SingleEntryManager>().NAME = NAME_INPUT;
+            TEMP.GetComponent<SingleEntryManager>().COUNT = 1;
+            TEMP.GetComponent<SingleEntryManager>().PRICE = obj._VALUE;
+            ENTRY_LIST.Add(TEMP.GetComponent<SingleEntryManager>());
         }
     }
 
@@ -180,30 +148,13 @@ public class ShopEntryManager : BasicEntryManager {
             //IF less than or equal to zero, remove completely.
             if(ENTRY_LIST[index].COUNT <= 0)
             {
+                Destroy(ENTRY_LIST[index]);
                 ENTRY_LIST.RemoveAt(index);
             }
         }
         else
         {
             Debug.Log("ERROR: Tried to remove an object that isn't already in the list.");
-        }
-    }
-
-    /// <summary>
-    /// Helper function that just sets the ui entries to the correct values.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="COUNT"></param>
-    /// <param name="PRICE"></param>
-    /// <param name="NAME"></param>
-    public void SetEntry(int index, int COUNT, int PRICE, string NAME)
-    {
-        ENTRYU_UI_ARRAY[index].COUNT = COUNT;
-        ENTRYU_UI_ARRAY[index].PRICE = PRICE;
-        ENTRYU_UI_ARRAY[index].NAME = NAME;
-        if (!ENTRYU_UI_ARRAY[index].gameObject.activeSelf)
-        {
-            ENTRYU_UI_ARRAY[index].gameObject.SetActive(true);
         }
     }
 }

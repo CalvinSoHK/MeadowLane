@@ -1443,14 +1443,17 @@ MonoBehaviour:
   STOP_LIST:
   - SCENE_NAME: Player Home
     TRANSITION: 0
+    PRICE: 0
     BUS_POSITION: {x: 1.6, y: 8, z: 40.4}
     BUS_ROTATION: {x: 0, y: 90, z: 0}
   - SCENE_NAME: Happy Mart
     TRANSITION: 0
+    PRICE: 10
     BUS_POSITION: {x: 8.5, y: 8, z: 143}
     BUS_ROTATION: {x: 0, y: 270, z: 0}
   - SCENE_NAME: Town Square
     TRANSITION: 0
+    PRICE: 0
     BUS_POSITION: {x: -36, y: 0, z: 0}
     BUS_ROTATION: {x: 0, y: 0, z: 0}
   STOP_PRICES: 00000000000000000a000000
@@ -1461,6 +1464,7 @@ MonoBehaviour:
   CURRENT_STOP:
     SCENE_NAME: PlayerHome
     TRANSITION: 0
+    PRICE: 0
     BUS_POSITION: {x: 0, y: 0, z: 0}
     BUS_ROTATION: {x: 0, y: 0, z: 0}
 --- !u!114 &664984163
