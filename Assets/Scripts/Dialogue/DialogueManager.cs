@@ -10,14 +10,47 @@ public static class DialogueManager{
     public static string[] greetings = { "Hey there! I'm here to pick up a RECIPE please", "Yo! I need a RECIPE ASAP!", "Hello, could I get one RECIPE please",
         "Hey, how is it going? One RECIPE please" };
 
+    static TextAsset CURRENT;
+
     /// <summary>
     /// Will parse through the dialogue text file to find the appropriate dialogue lines based on the character name and the current situation they are in
     /// </summary>
     /// <param name="characterName"></param>
     /// <param name="currentSituation"></param>
     /// <param name="shopOwner"></param>
+    ///   //Parse  through text asset
+   
     public static void setUpCurrentDialogue(string characterName, string currentSituation, bool shopOwner)
     {
+
+        //Example path: TextFiles/CharacterSpeech/Mayor
+         CURRENT = Resources.Load("TextAssets/CharacterSpeech/" + characterName, typeof(TextAsset)) as TextAsset;
+         string[] TEMP_MESSAGE_ARRAY = CURRENT.text.Split('\n');
+         int index = -1, i = 0;
+         for(; i<TEMP_MESSAGE_ARRAY.Length; i++)
+         {
+            //Search for the relevant event. i.e. _Tutorial_
+            if (TEMP_MESSAGE_ARRAY[i].Trim().Equals("_" + currentSituation + "_"))
+               {
+                   index = i + 1;
+                   break;
+               }
+         }
+
+        for(i = index; i<TEMP_MESSAGE_ARRAY.Length; i++)
+        {
+            //Debug.Log(TEMP_MESSAGE_ARRAY[i]);
+            if (!TEMP_MESSAGE_ARRAY[i].Trim().Equals("_" + currentSituation + "_"))
+            {
+                currentDialogueForCharacter.Add(TEMP_MESSAGE_ARRAY[i]);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        /*Outdated code. Streamreader sucks.
         using (StreamReader reader = new StreamReader("Assets/TextFiles/AllDialogue.txt"))
         {
             while (!reader.ReadLine().Trim().Equals(characterName.Trim()))
@@ -41,7 +74,7 @@ public static class DialogueManager{
                     currentDialogueForCharacter.Add(line);
                 }
             }
-        }
+        }*/
     }
 
     public static void setUpCurrentDialogueForShop(string recipe)

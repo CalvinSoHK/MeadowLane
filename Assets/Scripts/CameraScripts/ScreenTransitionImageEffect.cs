@@ -99,6 +99,7 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 {
                     isClosed = true;
                     setCurrentState(Gamestate.open);
+                    System.GC.Collect();
                     player.transform.position = destination.position;
                     if (isFlipped)
                     {

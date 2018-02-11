@@ -16,7 +16,7 @@ public class InteractionTravel : InteractableCustom {
     public bool ANCHOR = false;
 
     //The travel point we are managing
-    TravelPointController TPC;
+    public TravelPointController TPC;
 
     private void Awake()
     {

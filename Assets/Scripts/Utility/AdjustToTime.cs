@@ -5,9 +5,6 @@ using UnityEngine;
 //Adjusts the lighting based on time
 public class AdjustToTime : MonoBehaviour {
 
-    //Reference to the scheduler so we know what time it is
-    public Scheduler SCHEDULER;
-
     //Start and end rotations
     public float ROT_START = 180, ROT_END = 360;
 
@@ -32,7 +29,7 @@ public class AdjustToTime : MonoBehaviour {
     //Function that gets called to change the rotation
     public void ChangeRotation()
     {
-        transform.rotation = GetRotation(SCHEDULER.CLOCK);
+        transform.rotation = GetRotation(Scheduler.Instance.CLOCK);
     }
 
     //Helper function that calculates at what rotation we should be at based on the time of day.

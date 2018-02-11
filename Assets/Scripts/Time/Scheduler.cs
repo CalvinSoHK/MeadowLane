@@ -21,6 +21,31 @@ public class Scheduler : MonoBehaviour {
     [HideInInspector]
     int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+    //Singleton code.
+    private static Scheduler _instance;
+
+    public static Scheduler Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+
+        }
+    }
+
+
     //Class for a date
     public class Date
     {
@@ -87,10 +112,10 @@ public class Scheduler : MonoBehaviour {
 	}
 	
 	//Helper function to go next day
-    public Date NextDay(Date input)
+    public Date NextDay()
     {
         //Take input.
-        Date var = input;
+        Date var = date;
 
         //Day always just goes next.
         //If it isn't Saturday, just go next.

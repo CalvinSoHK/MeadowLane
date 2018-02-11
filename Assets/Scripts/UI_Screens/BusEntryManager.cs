@@ -25,9 +25,6 @@ public class BusEntryManager : BasicEntryManager {
     //The bus location on arrival
     public Transform BUS_ARRIVAL;
 
-    //The type of transition we need to go here
-    public enum TransitionType { Village, Outskirts, Beachside };
-    public TransitionType TRANSITION_TO;
 
     public override void Start()
     {
@@ -49,12 +46,12 @@ public class BusEntryManager : BasicEntryManager {
     {
         int index = 0;
         //For every entry in the stop list
-        foreach(string ENTRY in BSM.STOP_LIST)
+        foreach(BusStopInfo ENTRY in BSM.STOP_LIST)
         {
             //If we aren't that location, add it to our entry list.
-             if(Location != BSM.STOP_LIST[index])
+             if(!Location.Equals(BSM.STOP_LIST[index].SCENE_NAME))
              {
-                SetEntry(BSM.STOP_LIST[index], BSM.STOP_PRICES[index]);
+                SetEntry(BSM.STOP_LIST[index].SCENE_NAME, BSM.STOP_PRICES[index]);
              }
             index++;
         }
