@@ -1,2 +1,0 @@
-Tomato 8 Prefabs/Crop/Tomato/Tomato_Produce
-Tomato_Seed_Dispenser 20 Prefabs/Tools/Tomato_Seed_Dispenser

@@ -11,6 +11,8 @@ public class TutorialManager : MonoBehaviour {
     //Array that stores whether or not a tutorial has been done
     public TutorialInfo[] TUTORIAL_ARRAY;
 
+    GameObject PLAYER;
+
     //Helper function to check if a given name is true
     public bool IsComplete(string TUT_NAME)
     {
@@ -39,9 +41,14 @@ public class TutorialManager : MonoBehaviour {
     //Load tutorial
     public void LoadTutorial(string key)
     {
-        if(PlayerPointer.Instance.PLAYER != null)
+        if(PLAYER == null)
         {
-            PlayerPointer.Instance.PLAYER.GetComponent<PlayerPhone>().LoadTutorial(key);
+            PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER;
+        }
+
+        if(PLAYER != null)
+        {
+           PLAYER.GetComponent<PlayerPhone>().LoadTutorial(key);
         }
     }
 

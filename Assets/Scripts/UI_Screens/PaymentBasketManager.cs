@@ -71,5 +71,6 @@ public class PaymentBasketManager : MonoBehaviour {
             Destroy(OBJECT_LIST[i]);
         }
         ClearList();
+    
     }
 }

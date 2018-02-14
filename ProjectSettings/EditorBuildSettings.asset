@@ -5,12 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/TestScene.unity
-    guid: d098b66a73a563241b83290d1c25d45d
   - enabled: 1
-    path: Assets/Scenes/GreyBox.unity
-    guid: 4e077a99aa4df89479ac9166bc7fef13
+    path: Assets/Scenes/Player.unity
+    guid: fd978069ad78cd0469fa10007ca1c448
+  - enabled: 1
+    path: Assets/Scenes/PlayerHome.unity
+    guid: d7f0c846359030241bb9b8d6d88faeca
+  - enabled: 1
+    path: Assets/Scenes/TownSquare.unity
+    guid: f9d9550e5ab9f6343b8bedfbba85bfed
+  - enabled: 1
+    path: Assets/Scenes/HappyMart.unity
+    guid: 72eef33de15f13d48b0863246cd4f67a
   - enabled: 1
     path: Assets/Scenes/Transition_Village.unity
     guid: 3498cb5ae7ff98244820ac112445e734

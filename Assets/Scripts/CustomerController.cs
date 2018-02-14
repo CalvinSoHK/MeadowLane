@@ -38,6 +38,10 @@ public class CustomerController : MonoBehaviour {
     //The display dialogue script
     DisplayDialogue DD;
 
+    //The player's stats
+    PlayerStats PS;
+    
+
     void Start()
     {
         //Customer model
@@ -280,8 +284,11 @@ public class CustomerController : MonoBehaviour {
         if (isDone)
         {
             //Get the player
-            PlayerStats STATS = PlayerPointer.Instance.PLAYER.GetComponent<PlayerStats>();
-            STATS.AddMoney(RECIPE.PRICE);
+            if(PS == null)
+            {
+                PS = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerStats>();
+            }         
+            PS.AddMoney(RECIPE.PRICE);
         }
       
     }

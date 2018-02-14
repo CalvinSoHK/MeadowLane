@@ -87,10 +87,10 @@ public class Scheduler : MonoBehaviour {
 	}
 	
 	//Helper function to go next day
-    public Date NextDay(Date input)
+    public Date NextDay()
     {
         //Take input.
-        Date var = input;
+        Date var = date;
 
         //Day always just goes next.
         //If it isn't Saturday, just go next.

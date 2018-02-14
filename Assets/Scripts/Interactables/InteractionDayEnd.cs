@@ -6,21 +6,12 @@ using Valve.VR.InteractionSystem;
 //Interact script that calls end of day on use.
 public class InteractionDayEnd : InteractableCustom {
 
-    //Link to the farm manager.
+    //Link to the farm manager
     public FarmManager FM;
 
-    //Link to the scheduler
-    public Scheduler TM;
-
-    public void Update()
-    {
-        //Debug command
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FM.DayEndAll();
-            TM.NextDay(TM.date);
-        }
-    }
+    Scheduler SCHEDULER;
+    DeliveryManager DM;
+    LightingManager LM;
 
     public override void Use(Hand hand)
     {
@@ -43,7 +34,13 @@ public class InteractionDayEnd : InteractableCustom {
             yield return new WaitForEndOfFrame();
         }
         FM.DayEndAll();
-        TM.NextDay(TM.date);
-        DeliveryManager.Instance.ManageDeliveries();
+        if (SCHEDULER == null || DM == null | LM == null)
+        {
+            SCHEDULER = GameManagerPointer.Instance.SCHEDULER;
+            DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+            LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
+        }
+        SCHEDULER.NextDay();
+        DM.ManageDeliveries();
     }
 }

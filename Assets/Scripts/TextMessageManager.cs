@@ -32,12 +32,38 @@ public static class TextMessageManager {
          * Use the menu button to exit the phone
          * _Tutorial_
          */
-        string MESSAGE_PATH = "Assets/TextFiles/TextMessages/" + NAME + ".txt";
+        TextAsset MESSAGE = Resources.Load("TextAssets/TextMessages/" + NAME, typeof(TextAsset)) as TextAsset;
         Sprite PROFILE_PIC = Resources.Load("ProfilePics/" + NAME, typeof(Sprite)) as Sprite;
 
         List<string> MESSAGES = new List<string>();
 
         //Parse  through text asset
+        string[] TEMP_MESSAGE_ARRAY = MESSAGE.text.Split('\n');
+        int index = -1, i = 0;
+        for(; i < TEMP_MESSAGE_ARRAY.Length; i++)
+        {
+            //Debug.Log(TEMP_MESSAGE_ARRAY[i]);
+            if (TEMP_MESSAGE_ARRAY[i].Trim().Equals(EVENT))
+            {
+                index = i + 1;
+                break;
+            }
+        }
+
+        for(i = index; i < TEMP_MESSAGE_ARRAY.Length; i++)
+        {
+            //Debug.Log(TEMP_MESSAGE_ARRAY[i]);
+            if (!TEMP_MESSAGE_ARRAY[i].Trim().Equals(EVENT))
+            {
+                MESSAGES.Add(TEMP_MESSAGE_ARRAY[i]);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        /* Outdated. Streamreader doesn't play nice on build.
         using (StreamReader READER = new StreamReader(MESSAGE_PATH))
         {
             //While we aren't on the right line, just keep reading.
@@ -61,7 +87,7 @@ public static class TextMessageManager {
                     MESSAGES.Add(LINE);
                 }
             }
-        }
+        }*/
 
         //Finished parsing, make new convoInfo and add to new messages
         ConvoInfo TEMP_CONVO = new ConvoInfo(NAME, PROFILE_PIC, MESSAGES);

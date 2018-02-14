@@ -5,35 +5,6 @@ using UnityEngine;
 //Travel point manager. Has a list of all possible travel points.
 public class TravelPointManager : MonoBehaviour {
 
-    //Singleton code.
-    private static TravelPointManager _instance;
-
-    public static TravelPointManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-            TravelPointController[] TPC_ARRAY = FindObjectsOfType<TravelPointController>();
-            for (int i = 0; i < TPC_ARRAY.Length; i++)
-            {
-                TRAVEL_POINT_LIST.Add(TPC_ARRAY[i]);
-            }
-        }
-    }
-
-
     //List of all travel points
     public List<TravelPointController> TRAVEL_POINT_LIST;
 

@@ -26,7 +26,8 @@ public static class RecipeManager{
     //      Apple Pie
     //      0.1 10
     //      Produce/Apple Produce/Sugar
-    static string TRUE_TXT_LOCATION = Application.dataPath + "/TextFiles/MasterRecipeList.txt", FALSE_TXT_LOCATION =  Application.dataPath + "TextFiles/MasterRecipeList.txt"; //REMEMBER TO WRITE THE DESTINATION HERE!!!!!!!!!
+    //static 
+    static string TRUE_TXT_LOCATION = Application.dataPath + "/SaveData/MasterRecipeList.txt", FALSE_TXT_LOCATION =  Application.dataPath + "/SaveData/MasterRecipeList.txt"; //REMEMBER TO WRITE THE DESTINATION HERE!!!!!!!!!
     
 
     //Helper function that inits the master list
@@ -34,7 +35,8 @@ public static class RecipeManager{
     {
         //If we haven't been init
         if (!LIST_INIT)
-        {        
+        {
+            Debug.Log(TRUE_TXT_LOCATION + " APPLICATION DATA PATH: " + Application.dataPath);
             LoadItems(TRUE_TXT_LOCATION, true);
             LoadItems(FALSE_TXT_LOCATION, false);
         }
@@ -44,7 +46,7 @@ public static class RecipeManager{
     public static void LoadItems(string PATH, bool DISCOVERED)
     {
         //Stream read the text
-        using (StreamReader READER = new StreamReader(Application.dataPath + PATH))
+        using (StreamReader READER = new StreamReader(PATH))
         {
             //While we haven't reached the end of this text file
             while (!READER.EndOfStream)

@@ -6,117 +6,154 @@ using UnityEngine.SceneManagement;
 //NOTE: Script doesnt work if the target is Vector3.zero.
 public class Bus_Controller : MonoBehaviour {
 
-    //Target location
-    Vector3 DESTINATION_POS= Vector3.zero;
-    Quaternion DESTINATION_ROT = Quaternion.identity;
-
     //Moving bool
-    bool isMoving = false, isBlinking = false, isLoaded = false;
+    bool isMoving = false, isBlinking = false, isTransitionLoaded = false, isSceneLoaded = false;
 
     //Reference to the transition index
     int TRANSITION_INDEX = 0;
 
     //The VR camera
     GameObject VR_CAMERA;
+    string TRANSITION_SCENE;
 
     //For now use a timer in the transition screen. Remove when the other code is ready
-    float timer = 8f;
+    public float MIN_LOAD_TIME = 3f;
+    float timer = 3f;
 
     //Stop manager
-    Bus_Stop_Manager MANAGER;
+    Bus_Stop_Manager BSM;
+
+    //Stop info for our target destination
+    BusStopInfo NEW_STOP_INFO;
+
+    //Bus point we are moving to.
+    GameObject BUS_POINT;
 
     void Start()
     {
         //Might be problematic if it changes.
         VR_CAMERA = GameObject.Find("VRCamera");
-        MANAGER = Bus_Stop_Manager.Instance;
+        BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
     }
 
     void Update()
     {
+        if(BSM == null)
+        {
+            BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
+        }
 
         //If we have finished loading
-        if (isLoaded && VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open)
+        if (isTransitionLoaded && VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open)
         {
-            isLoaded = false;
+            //Set is loaded to false
+            isTransitionLoaded = false;
             //Debug.Log("Scene loaded");
-            GameObject BUS_POINT = GameObject.Find("BusPoint");
+
+            //Place us on the bus in the right position
+            BUS_POINT = GameObject.Find("BusPoint");
             transform.rotation = BUS_POINT.transform.rotation;
             transform.position = BUS_POINT.transform.position;
-            isMoving = true;
+            timer = MIN_LOAD_TIME;
 
+            //Start unloading the old scene
+            SceneManager.UnloadSceneAsync(BSM.CURRENT_STOP.GetName());
+
+            BSM.CURRENT_STOP = NEW_STOP_INFO;
+
+            //When the old scene is unloaded fire the event old scene unloaded.
+            SceneManager.sceneUnloaded += OldSceneUnloaded;
+
+            isMoving = true;
         }
 
         //If we should be moving
         if (isMoving)
         {
-            transform.position += transform.forward * MANAGER.MAX_SPEED * Time.deltaTime;
-            if(timer > 0)
-            {
-                timer -= Time.deltaTime;
-            }
-            else if(!isBlinking)
-            {
-                //Debug.Log("Blink");
-                VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().BlinkEyes();
-                isBlinking = true;
-            }
+            transform.position += transform.forward * BSM.MAX_SPEED * Time.deltaTime;
+            timer -= Time.deltaTime;
         }
 
-        //If it finished blinking and we just finish blinking, move us to our final destination
-        if(VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open && isBlinking)
+        if(timer <= 0 && isSceneLoaded)
         {
-            timer = 8f;
-            isMoving = false;
-            transform.position = DESTINATION_POS;
-            transform.rotation = DESTINATION_ROT;
-            SceneManager.UnloadSceneAsync(TRANSITION_INDEX + 1);
-            isBlinking = false;
-            //Debug.Log("Blink finished");
+            Debug.Log("Blink!");
+            isBlinking = true;
+            isSceneLoaded = false;
+            VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().BlinkEyes();
         }
-       
-       
+
+     
+
+        //If it finished blinking and we just finish blinking, move us to our final destination
+        if (VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open && isBlinking)
+        {
+            isMoving = false;
+            isBlinking = false;
+
+            //Set the bus in the right position.
+            //Find the transform we need to use
+            Transform BUS_ARRIVAL = GameObject.Find("BusArrival").transform;
+            transform.position = BUS_ARRIVAL.position;
+            transform.rotation = BUS_ARRIVAL.rotation;
+
+            //Unload the transition scene
+            //Debug.Log(TRANSITION_SCENE);
+            SceneManager.UnloadSceneAsync(TRANSITION_SCENE);
+        }
     }
 
     //Function called when transition is done loading
     //Has to take those inputs to be a function added to the scene loaded function.
     public void TransitionLoaded(Scene scene, LoadSceneMode mode)
     {
-        isLoaded = true;
-        SceneManager.sceneLoaded -= TransitionLoaded;
-        //Now load the destination scene. Not yet ready for that format but this is where it would be.
-        //NOTE: Load the destination scene. Add a the function DestinationLoaded to sceneloaded.
+        //Set isLoaded to true so we move the player to the bus
+        isTransitionLoaded = true;
 
+        //Remove this function from sceneLoaded event
+        SceneManager.sceneLoaded -= TransitionLoaded;
+    }
+
+    //Function called when the old scene is done unloading
+    //Needs those inputs to be added to the scene unloaded function
+    public void OldSceneUnloaded(Scene scene)
+    {
+        SceneManager.sceneUnloaded -= OldSceneUnloaded;
+
+        //Start loading the new scene
+        SceneManager.LoadSceneAsync(NEW_STOP_INFO.GetName(), LoadSceneMode.Additive);
+   
+
+        //When this scene is finished loading, fire off the destination loaded event.
+        SceneManager.sceneLoaded += DestinationLoaded;
     }
 
     //Function called when the destination is done loading
     //Has to take those inputs to be a function added to the scene loaded function.
     public void DestinationLoaded(Scene scene, LoadSceneMode mode)
     {
+        SceneManager.sceneLoaded -= DestinationLoaded;
 
+        isSceneLoaded = true;
+      
     }
 
-    //Function that acts as though we are taking the bus to given location. Transition type denotes
+    //Function that acts as though we are taking the bus to given location. Transition type denotes what transition scene to load.
     //First we figure out which location we are going to. The index of that corresponds to the other indexes.
     public void MoveTo(string DESTINATION)
     {
         //Find the index of the given location
-        int index = MANAGER.STOP_LIST.IndexOf(DESTINATION);
+        //int index = 0;
+         int index = BSM.GetIndexOf(DESTINATION);
         //Debug.Log(index + DESTINATION);
 
-        //Get the transition type from the destination
-        BusEntryManager STOP = Bus_Stop_Manager.Instance.GetBusStop(DESTINATION);
-        TRANSITION_INDEX = (int)STOP.TRANSITION_TO;
+        //Get the stop info we want to go to
+        NEW_STOP_INFO = BSM.STOP_LIST[index];
 
         //If index is -1, its not in the list and we have an error, else do the right thing.
         if(index != -1)
         {
-            //Get the position of our final destination
-            DESTINATION_POS = STOP.BUS_ARRIVAL.transform.position;
-            DESTINATION_ROT = STOP.BUS_ARRIVAL.transform.rotation;
-
-            //Load the scene
-            SceneManager.LoadSceneAsync(TRANSITION_INDEX + 1, LoadSceneMode.Additive);
+            TRANSITION_SCENE = BSM.GetTransitionSceneName(NEW_STOP_INFO.TRANSITION);
+            SceneManager.LoadSceneAsync(TRANSITION_SCENE, LoadSceneMode.Additive);
             SceneManager.sceneLoaded += TransitionLoaded;
         }
         else

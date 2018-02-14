@@ -44,10 +44,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4633940749401798}
   - component: {fileID: 65978061570911760}
-  - component: {fileID: 114769389105763908}
   m_Layer: 0
   m_Name: Blade_Collider
-  m_TagString: Untagged
+  m_TagString: LinkingObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,7 +71,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1147348205903048}
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
-  m_LocalPosition: {x: -1.5443175, y: 0.028, z: 2.29}
+  m_LocalPosition: {x: -0.36431754, y: 1.3549998, z: 12.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4633940749401798}
@@ -256,9 +255,6 @@ MonoBehaviour:
   _NAME: Basic_Hoe
   CATEGORY: Tools
   KEY: 6001
-  ICON: {fileID: 114979237171830706, guid: ee5306a03038da946bb4faa66ba92a01, type: 2}
-  CATEGORY_ICON: {fileID: 114442329531564028, guid: 75dd526c6da6fa245abd177745b4e661,
-    type: 2}
   _OWNER: 2
   _VALUE: 0
   _TAGS: 66
@@ -267,7 +263,10 @@ MonoBehaviour:
   rotOffset: {x: 90, y: 90, z: 90}
   _TYPE: 0
   isValid: 0
-  maxVelocity: 0
+  maxVelocity: -1
+  BLADE: {fileID: 1802086925127858}
+  velocity: 0
+  intervals: 0.25
 --- !u!114 &114277772228215000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,20 +301,6 @@ MonoBehaviour:
   velocityAverageFrames: 5
   angularVelocityAverageFrames: 11
   estimateOnAwake: 0
---- !u!114 &114769389105763908
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1802086925127858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35d2003c2f361574a9b7ab58a4c88643, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  infoObj: {fileID: 4733258471895578}
-  velocity: 0
-  intervals: 0.25
 --- !u!136 &136236144920502492
 CapsuleCollider:
   m_ObjectHideFlags: 1
