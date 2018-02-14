@@ -10,7 +10,8 @@ public class SingleEntryManager : MonoBehaviour {
     public Text COUNT_TEXT, NAME_TEXT, PRICE_TEXT;
 
     //Statistics to keep track of
-    public int COUNT, PRICE;
+    [HideInInspector]
+    public int COUNT, PRICE, CONTAINER_COUNT;
     public string NAME;
 
     //Bool to change the values inside or not

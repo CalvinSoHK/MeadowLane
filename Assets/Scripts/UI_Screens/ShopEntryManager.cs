@@ -13,17 +13,21 @@ public class ShopEntryManager : BasicEntryManager {
     public GameObject ENTRY_PREFAB;
     GameObject TEMP;
 
+    public GameObject TOTAL_OBJ;
+
     DeliveryManager DM;
 
     private void Awake()
     {
         DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+        TOTAL_OBJ.GetComponent<SingleEntryManager>().NAME = "Total";
     }
 
     // Update is called once per frame
     void Update () {
         //Maintain total
-        TOTAL = CalculateTotal();
+      
+        TOTAL_OBJ.GetComponent<SingleEntryManager>().PRICE_TEXT.text = " " + CalculateTotal();
 	}
 
 
@@ -49,6 +53,10 @@ public class ShopEntryManager : BasicEntryManager {
                     //else add it now
                 Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
            }   
+        }
+        for(int i = ENTRY_LIST.Count - 1; i >= 0; i--)
+        {
+            Destroy(ENTRY_LIST[i].gameObject);
         }
         ENTRY_LIST.Clear();
     }
@@ -76,9 +84,17 @@ public class ShopEntryManager : BasicEntryManager {
     {
         foreach(SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if(ENTRY.NAME.Equals(obj._NAME))
+            if(ENTRY.NAME.Trim().Equals(obj._NAME.Replace("_", " ").Trim()))
             {
-                return true;
+                if (!obj.hasTag(BaseItem.ItemTags.Container))
+                {
+                    return true;
+                }
+                else if(obj.GetComponent<PourObject>().COUNT == ENTRY.CONTAINER_COUNT)
+                {
+                    return true;
+                }
+               
             }
         }
 
@@ -95,9 +111,17 @@ public class ShopEntryManager : BasicEntryManager {
     {
         foreach (SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if (ENTRY.NAME.Equals(obj._NAME))
+            if (ENTRY.NAME.Equals(obj._NAME.Replace("_", " ")))
             {
-                return ENTRY_LIST.IndexOf(ENTRY);
+                if (!obj.hasTag(BaseItem.ItemTags.Container))
+                {
+                    return ENTRY_LIST.IndexOf(ENTRY);
+                }
+                else if (obj.GetComponent<PourObject>().COUNT == ENTRY.CONTAINER_COUNT)
+                {
+                    return ENTRY_LIST.IndexOf(ENTRY);
+                }
+
             }
         }
         return -1;
@@ -124,6 +148,10 @@ public class ShopEntryManager : BasicEntryManager {
             TEMP.GetComponent<SingleEntryManager>().NAME = NAME_INPUT;
             TEMP.GetComponent<SingleEntryManager>().COUNT = 1;
             TEMP.GetComponent<SingleEntryManager>().PRICE = obj._VALUE;
+            if (obj.hasTag(BaseItem.ItemTags.Container))
+            {
+                TEMP.GetComponent<SingleEntryManager>().CONTAINER_COUNT = obj.GetComponent<PourObject>().COUNT;
+            }
             ENTRY_LIST.Add(TEMP.GetComponent<SingleEntryManager>());
         }
     }
@@ -148,7 +176,7 @@ public class ShopEntryManager : BasicEntryManager {
             //IF less than or equal to zero, remove completely.
             if(ENTRY_LIST[index].COUNT <= 0)
             {
-                Destroy(ENTRY_LIST[index]);
+                Destroy(ENTRY_LIST[index].gameObject);
                 ENTRY_LIST.RemoveAt(index);
             }
         }
@@ -164,6 +192,7 @@ public class Entry
     public int COUNT, PRICE;
     public string NAME;
     public string CATEGORY;
+
 
     public Entry(int COUNT_T, int PRICE_T, string NAME_T, string CATEGORY_T)
     {
