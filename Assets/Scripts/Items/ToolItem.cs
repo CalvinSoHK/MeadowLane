@@ -5,7 +5,7 @@ using UnityEngine;
 public class ToolItem : BaseItem {
 
     //Type of possible tools
-    public enum ToolType { Hoe, Axe, Pickaxe, Scythe };
+    public enum ToolType { Hoe, Axe, Pickaxe, Sickle};
 
     //Type of the current tool
     public ToolType _TYPE = ToolType.Hoe;
@@ -22,8 +22,14 @@ public class ToolItem : BaseItem {
     }
 
     //Function that resets isValid. Called when an action is used
-    public virtual void resetValid()
+    public virtual void ResetValid()
     {
         isValid = false;
+    }
+
+    //Function called to apply something to a gameobject
+    public virtual void ApplyTool(GameObject obj)
+    {
+
     }
 }

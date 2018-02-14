@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //Hoe item script.
-public class HoeItem : ToolItem {
-
+public class SickleItem: ToolItem
+{
     //Minimum blade velocity to be valid.
     public float maxVelocity = 1;
 
@@ -25,7 +25,7 @@ public class HoeItem : ToolItem {
 
     private void Update()
     {
-        if(GetComponent<InteractionPickup>() != null)
+        if (GetComponent<InteractionPickup>() != null)
         {
             //Tell the linker to calculate is valid, then pass it up.
             if (GetComponent<InteractionPickup>().isHeld)
@@ -72,12 +72,14 @@ public class HoeItem : ToolItem {
         //If the tool is valid.
         if (isValid)
         {
-            if(obj.GetComponent<FarmBlockInfo>() != null)
+            if (obj.GetComponent<FarmBlockInfo>() != null)
             {
-                if (!obj.GetComponent<FarmBlockInfo>().TILLED)
+                if (obj.GetComponent<FarmBlockInfo>().PLANT != null)
                 {
-                    GetComponent<AudioSource>().Play();
-                    obj.GetComponent<FarmBlockInfo>().TILLED = true;
+                    Destroy(obj.GetComponent<FarmBlockInfo>().PLANT.gameObject);
+                    obj.GetComponent<FarmBlockInfo>().PLANT = null;
+                    obj.GetComponent<FarmBlockInfo>().TILLED = false;
+
                 }
             }
         }

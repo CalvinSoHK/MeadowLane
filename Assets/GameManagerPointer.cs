@@ -30,6 +30,7 @@ public class GameManagerPointer : MonoBehaviour {
             TRAVEL_POINT_MANAGER = GetComponent<TravelPointManager>();
             PLAYER_POINTER = GetComponent<PlayerPointer>();
             TUTORIAL_MANAGER = GetComponent<TutorialManager>();
+            TUTORIAL_MANAGER.LoadTutorial("Triangle/Start");
             LIGHTING_MANAGER = GetComponent<LightingManager>();
         }
     }

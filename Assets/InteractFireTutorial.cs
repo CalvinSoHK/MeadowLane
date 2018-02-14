@@ -8,9 +8,24 @@ public class InteractFireTutorial : InteractableCustom {
 
     public string TUTORIAL_KEY;
 
+    TutorialManager TM;
+
+    private void Awake()
+    {
+        TM = GameManagerPointer.Instance.TUTORIAL_MANAGER;
+    }
+
     //Override to fire the tutorial
     public override void Use(Hand hand)
     {
-        //TutorialManager
+        if(TM != null)
+        {
+            if (!TM.IsComplete(TUTORIAL_KEY))
+            {
+                TM.LoadTutorial(TUTORIAL_KEY);
+                TM.SetComplete(TUTORIAL_KEY);
+            }
+        }
+    
     }
 }

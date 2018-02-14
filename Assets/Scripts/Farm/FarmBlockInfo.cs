@@ -8,6 +8,7 @@ public class FarmBlockInfo : MonoBehaviour {
     //The plant in the farm block
     //If null, no plant.
     public Transform PLANT;
+    Transform TOOL_OBJ = null;
 
     //States of the block
     public bool WATERED = false, TILLED = false, FERTILE = false, HAS_SEED = false;
@@ -46,6 +47,11 @@ public class FarmBlockInfo : MonoBehaviour {
             GetComponent<Renderer>().material = Resources.Load("Materials/FarmBlock/Dirt_Tilled", typeof(Material)) as Material;
             currentFarmBlockColor = GetComponent<Renderer>().material.color;
         }
+        else
+        {
+            GetComponent<Renderer>().material = Resources.Load("Materials/FarmBlock/Dirt_Default", typeof(Material)) as Material;
+            currentFarmBlockColor = GetComponent<Renderer>().material.color;
+        }
         if(waterCount >= waterMax)
         {
             WATERED = true;
@@ -68,20 +74,15 @@ public class FarmBlockInfo : MonoBehaviour {
         GameObject obj = collision.collider.gameObject;
         //Debug.Log(obj.name);
         //If the collided object has an infolinker...
-        if(obj.GetComponent<InfoLinker>() != null)
+        if(obj.CompareTag("LinkingObject"))
         {
             //Check info for tool type
-            Transform mainObj = obj.GetComponent<InfoLinker>().infoObj;
+            TOOL_OBJ = obj.transform.parent;
 
-            //If a hoe, till the earth.
-            if(mainObj.GetComponent<ToolItem>()._TYPE == ToolItem.ToolType.Hoe &&
-                mainObj.GetComponent<ToolItem>().isValid)
+            //If it is a tool, call the apply tool function.
+            if(TOOL_OBJ.GetComponent<ToolItem>() != null)
             {
-                if (!TILLED)
-                {
-                    mainObj.GetComponent<AudioSource>().Play();
-                    TILLED = true;
-                }
+                TOOL_OBJ.GetComponent<ToolItem>().ApplyTool(gameObject);
             }
         }
     }
