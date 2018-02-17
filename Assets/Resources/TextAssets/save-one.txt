@@ -1,0 +1,45 @@
+/Date
+02/16/2018
+/
+/Money
+100
+/
+/Messages
+_Tutorial_
+_Farm_
+_HappyMart_
+_Stall_
+/
+/Inventory
+Tools\BasicHoe 1
+Produce\Tomato 5
+Produce\Wheat 50
+/
+/Recipes
+Candied Tomatoes
+Tomato Soup
+Pizza
+Spaghetti
+/
+/Farm
+Plot1
+A1 (Tilled)true (Plant)Tomato_StageOne (Time to next)2 (Produce Number)0 (Days to die)4
+...
+E5 true Tomato_StageTwo 1 3 4
+Plot2
+...
+/Decoration
+Deco\Chairs\Basic (position) 150 50 10 (rotation) 0 90 0
+/
+/Relationships
+(status in relationship) 8
+3
+2
+/
+/Town
+Casino (if they have a level)3
+Fishing Hut
+/
+
+
+

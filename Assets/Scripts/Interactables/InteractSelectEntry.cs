@@ -9,11 +9,19 @@ using Valve.VR.InteractionSystem;
 /// </summary>
 public class InteractSelectEntry : InteractableCustom {
 
-    public bool SELECTED = false;
+    public BusEntryManager BEM;
+
+    void Awake()
+    {
+        if (BEM == null)
+        {
+            BEM = transform.parent.GetComponent<BusEntryManager>();
+        }
+    }
 
     public override void Use(Hand hand)
     {
         //Debug.Log("setting to true.");
-        SELECTED = true;
+        BEM.SelectEntry(GetComponent<SingleEntryManager>());
     }
 }

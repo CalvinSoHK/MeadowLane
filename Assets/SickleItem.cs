@@ -14,8 +14,8 @@ public class SickleItem: ToolItem
     //Velocity of the blade, where the hoe linker is attached.
     public float velocity;
 
-    //Previous y position
-    private float previousY = 0;
+    //Previous position
+    private Vector3 previous;
 
     //Timer for checks
     private float timer;
@@ -45,10 +45,9 @@ public class SickleItem: ToolItem
     {
         if (timer < 0)
         {
-            velocity = (BLADE.transform.position.y - previousY) * 100f;
-            previousY = BLADE.transform.position.y;
+            velocity = Vector3.Distance(new Vector3(BLADE.transform.position.x, 0, BLADE.transform.position.z), previous) * 100f;
+            previous = new Vector3(BLADE.transform.position.x, 0, BLADE.transform.position.z);
 
-            Debug.Log("Velocity: " + velocity);
             timer = intervals;
         }
         else
@@ -56,7 +55,7 @@ public class SickleItem: ToolItem
             timer -= Time.deltaTime;
         }
 
-        if (velocity <= maxVelocity)
+        if (velocity >= maxVelocity)
         {
             return true;
         }
@@ -76,11 +75,17 @@ public class SickleItem: ToolItem
             {
                 if (obj.GetComponent<FarmBlockInfo>().PLANT != null)
                 {
-                    Destroy(obj.GetComponent<FarmBlockInfo>().PLANT.gameObject);
-                    obj.GetComponent<FarmBlockInfo>().PLANT = null;
-                    obj.GetComponent<FarmBlockInfo>().TILLED = false;
+                    //Destroy(obj.GetComponent<FarmBlockInfo>().PLANT.gameObject);
+                    //obj.GetComponent<FarmBlockInfo>().PLANT = null;
+                    //obj.GetComponent<FarmBlockInfo>().TILLED = false;
 
                 }
+            }
+            else if(obj.GetComponent<PlantBase>() != null)
+            {
+                obj.transform.parent.GetComponent<FarmBlockInfo>().PLANT = null;
+                obj.transform.parent.GetComponent<FarmBlockInfo>().TILLED = false;
+                Destroy(obj);
             }
         }
     }

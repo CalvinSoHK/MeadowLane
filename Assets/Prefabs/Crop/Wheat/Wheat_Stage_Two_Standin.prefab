@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 23419512078639128}
   - component: {fileID: 64158478451085750}
   - component: {fileID: 114885125601759102}
+  - component: {fileID: 136132774737277438}
   m_Layer: 5
   m_Name: Wheat_Stage_Two_Standin
   m_TagString: Untagged
@@ -123,3 +124,16 @@ MonoBehaviour:
   heightFactor: 0.1
   widthFactor: 0.1
   SpawnPoints: {fileID: 0}
+--- !u!136 &136132774737277438
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1704703708227776}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.05
+  m_Height: 1.0767194
+  m_Direction: 1
+  m_Center: {x: 0.01428175, y: 0.5383597, z: -0.028365225}

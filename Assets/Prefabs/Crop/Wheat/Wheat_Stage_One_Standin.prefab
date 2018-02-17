@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 95733718342370422}
   - component: {fileID: 64241256523347792}
   - component: {fileID: 114566082444208102}
+  - component: {fileID: 136228572137983386}
   m_Layer: 5
   m_Name: Wheat_Stage_One_Standin
   m_TagString: Untagged
@@ -141,3 +142,16 @@ MonoBehaviour:
   heightFactor: 0.1
   widthFactor: 0.1
   SpawnPoints: {fileID: 0}
+--- !u!136 &136228572137983386
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1888600183752880}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.03
+  m_Height: 0.5980103
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.3, z: 0}

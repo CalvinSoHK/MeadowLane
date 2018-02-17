@@ -398,10 +398,12 @@ public class PlayerInventory : MonoBehaviour {
                 hand.GetComponent<OnTriggerRaycast>().PickUpObj(UICanvas.gameObject);
                 if (hand == hand1)
                 {
+                    UICanvas.gameObject.SetActive(true);
                     TEMP_STATE = ShowState.Hand1;
                 }
                 else
                 {
+                    UICanvas.gameObject.SetActive(true);
                     TEMP_STATE = ShowState.Hand2;
                 }
             }
@@ -543,11 +545,13 @@ public class PlayerInventory : MonoBehaviour {
             turnOnArrows(false);
             if (SHOW == ShowState.Hand1)
             {
+                UICanvas.gameObject.SetActive(false);
                 hand1.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
                 hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
             else if (SHOW == ShowState.Hand2)
             {
+                UICanvas.gameObject.SetActive(false);
                 hand2.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
                 hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }

@@ -21,6 +21,9 @@ public class PlantBase : MonoBehaviour {
     //Dead plant prefab
     public GameObject DEAD_STAGE;
 
+    //Tool object that we are touching
+    GameObject TOOL_OBJ;
+
     //Time to next stage
     public float TIME_TO_NEXT;
 
@@ -324,5 +327,20 @@ public class PlantBase : MonoBehaviour {
 
         //Remove this stage.
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LinkingObject"))
+        {
+            TOOL_OBJ = other.transform.parent.gameObject;
+            if(TOOL_OBJ.GetComponent<ToolItem>() != null)
+            {
+                if(TOOL_OBJ.GetComponent<ToolItem>()._TYPE == ToolItem.ToolType.Sickle)
+                {
+                    TOOL_OBJ.GetComponent<ToolItem>().ApplyTool(gameObject);
+                }
+            }
+        }
     }
 }

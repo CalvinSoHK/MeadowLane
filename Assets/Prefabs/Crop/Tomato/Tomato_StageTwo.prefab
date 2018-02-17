@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4793135452612720}
   - component: {fileID: 33598192082238344}
   - component: {fileID: 23281509665571472}
-  - component: {fileID: 136378265221911752}
+  - component: {fileID: 64131470095631226}
   m_Layer: 5
   m_Name: Stem
   m_TagString: Untagged
@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 4742382550281616}
   - component: {fileID: 95122219580072350}
   - component: {fileID: 114872768800859400}
+  - component: {fileID: 136248968098905066}
   m_Layer: 5
   m_Name: Tomato_StageTwo
   m_TagString: Untagged
@@ -71,6 +72,7 @@ GameObject:
   - component: {fileID: 4856426934862852}
   - component: {fileID: 33997187509851170}
   - component: {fileID: 23549504776367000}
+  - component: {fileID: 64589991815672274}
   m_Layer: 5
   m_Name: Leaves
   m_TagString: Untagged
@@ -158,7 +160,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058316018840474}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.4652748, y: 7.3, z: 14.946098}
+  m_LocalPosition: {x: -2.630556, y: 8.718309, z: 17.16334}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4926539511466360}
@@ -327,6 +329,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1113042470848960}
   m_Mesh: {fileID: 4300002, guid: 014db5fbceb94ab429ab812e2183a710, type: 3}
+--- !u!64 &64131470095631226
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1038730730808254}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 014db5fbceb94ab429ab812e2183a710, type: 3}
+--- !u!64 &64589991815672274
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1113042470848960}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300002, guid: 014db5fbceb94ab429ab812e2183a710, type: 3}
 --- !u!95 &95122219580072350
 Animator:
   serializedVersion: 3
@@ -371,16 +401,16 @@ MonoBehaviour:
   heightFactor: 0.1
   widthFactor: 0.1
   SpawnPoints: {fileID: 4926539511466360}
---- !u!136 &136378265221911752
+--- !u!136 &136248968098905066
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1038730730808254}
+  m_GameObject: {fileID: 1058316018840474}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.06
-  m_Height: 0.3940373
+  m_Radius: 0.05
+  m_Height: 0.43
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.15, z: 0}
