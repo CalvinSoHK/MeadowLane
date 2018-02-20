@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlantBase : MonoBehaviour {
 
     //Name of plant
-    string NAME = "Base";
+    public string NAME = "Base";
 
     //Quality value
     [Range(0f,3f)]
@@ -100,8 +100,7 @@ public class PlantBase : MonoBehaviour {
         float randomX = 1 + Random.Range(-widthFactor, widthFactor);
 
         //Apply to local scale
-        transform.localScale = new Vector3(randomX, randomY, randomX);
-       
+        transform.localScale = new Vector3(randomX, randomY, randomX);   
 
         //Spawn produce
         if (BIRTHS_PRODUCE)
@@ -136,8 +135,11 @@ public class PlantBase : MonoBehaviour {
         //Spawn produce
         if (BIRTHS_PRODUCE)
         {
-            //Generate number of produce
-            PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+            if(PRODUCE_NUMBER == 0)
+            {
+                //Generate number of produce
+                PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+            }
 
             //Spawn produce
             BirthProduce();
@@ -291,18 +293,29 @@ public class PlantBase : MonoBehaviour {
             next = Instantiate(NEXT_STAGE, transform.position, Quaternion.Euler(0,RAND_ROT,0) , transform.parent);
         }
 
-        //Transfer relevant details to new plant.
-        next.GetComponent<PlantBase>().QUALITY = QUALITY;
-        next.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
-
-        //Change values in the farmBlockInfo
-        transform.parent.GetComponent<FarmBlockInfo>().PLANT = next.transform;
+        //Moves and transfers relevant things to the plant. Inits it as well.
+        PlantObj(next, transform.parent);
 
         //Init new plant
         next.GetComponent<PlantBase>().Init(gameObject);
 
         //Remove this stage.
         Destroy(gameObject);
+    }
+
+    //Moves the given object to the given block
+    public void PlantObj(GameObject OBJ, Transform BLOCK)
+    {
+        OBJ.transform.position = BLOCK.position;
+        OBJ.transform.rotation = Quaternion.identity;
+        OBJ.transform.parent = BLOCK;
+
+        //Transfer relevant details to new plant.
+        OBJ.GetComponent<PlantBase>().QUALITY = QUALITY;
+        OBJ.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
+
+        //Change values in the farmBlockInfo
+        BLOCK.GetComponent<FarmBlockInfo>().PLANT = OBJ.transform;
     }
 
     //Go to dead function
@@ -315,6 +328,7 @@ public class PlantBase : MonoBehaviour {
         //Spawn replacement plant.
         if (DEAD_STAGE != null)
         {
+           
             next = Instantiate(DEAD_STAGE, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
         }
         else
@@ -322,6 +336,7 @@ public class PlantBase : MonoBehaviour {
             next = Instantiate(Resources.Load("Hidden/Dead_Plant_Standin", typeof(GameObject)) as GameObject, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
         }
 
+        transform.parent.GetComponent<FarmBlockInfo>().DEAD = true;
         next.transform.parent = transform.parent;
         next.transform.localPosition = new Vector3(0, 0.06f, 0);
 

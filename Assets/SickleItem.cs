@@ -83,6 +83,7 @@ public class SickleItem: ToolItem
             }
             else if(obj.GetComponent<PlantBase>() != null)
             {
+                obj.transform.parent.GetComponent<FarmBlockInfo>().DEAD = false;
                 obj.transform.parent.GetComponent<FarmBlockInfo>().PLANT = null;
                 obj.transform.parent.GetComponent<FarmBlockInfo>().TILLED = false;
                 Destroy(obj);

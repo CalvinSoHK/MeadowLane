@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 64280929776716306}
   - component: {fileID: 114587180695573476}
   - component: {fileID: 136022654734004616}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Tomato_StageOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,6 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca916bfdb4cf640b3c28c7cc1042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NAME: Tomato_StageOne
   NEXT_STAGE: {fileID: 1058316018840474, guid: dde08e81e0581f84884edaa0b999dd92, type: 2}
   PRODUCE: {fileID: 1166997846139522, guid: ae7a47f4541366749960e83fe9bc36d1, type: 2}
   DEAD_STAGE: {fileID: 0}

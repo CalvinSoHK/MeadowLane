@@ -9,35 +9,35 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1529964924123954}
+  m_RootGameObject: {fileID: 1350617228086978}
   m_IsPrefabParent: 1
---- !u!1 &1529964924123954
+--- !u!1 &1350617228086978
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4018618180049166}
-  - component: {fileID: 33733720105223218}
-  - component: {fileID: 23201888951013596}
-  - component: {fileID: 95918442790038906}
-  - component: {fileID: 135608420102061404}
-  - component: {fileID: 114722289385527896}
-  - component: {fileID: 114759581639156378}
+  - component: {fileID: 4043802971206632}
+  - component: {fileID: 33942432208489360}
+  - component: {fileID: 23896669708176852}
+  - component: {fileID: 95575909162027022}
+  - component: {fileID: 135931858748997932}
+  - component: {fileID: 114808937661174618}
+  - component: {fileID: 114455963704477816}
   m_Layer: 5
-  m_Name: Tomato_StageZero
+  m_Name: Wheat_StageZero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4018618180049166
+--- !u!4 &4043802971206632
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.1, y: 4.5973054e-17, z: 17.35009}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -45,12 +45,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23201888951013596
+--- !u!23 &23896669708176852
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -77,20 +77,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33733720105223218
+--- !u!33 &33942432208489360
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
   m_Mesh: {fileID: 4300000, guid: 869b0edfabe7efc4ab690bfd15532108, type: 3}
---- !u!95 &95918442790038906
+--- !u!95 &95575909162027022
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 869b0edfabe7efc4ab690bfd15532108, type: 3}
   m_Controller: {fileID: 0}
@@ -101,21 +101,33 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114722289385527896
+--- !u!114 &114455963704477816
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea412d57b31015f4089bb356cbd34c9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114808937661174618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1350617228086978}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8ca916bfdb4cf640b3c28c7cc1042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NEXT_STAGE: {fileID: 1706118811683852, guid: 7f917d81626187644b21ef7f2a1d8ba0, type: 2}
+  NAME: Base
+  NEXT_STAGE: {fileID: 1888600183752880, guid: c8c662c9e761c7b4db7cdd9de4e1be9f, type: 2}
   PRODUCE: {fileID: 0}
   DEAD_STAGE: {fileID: 0}
-  TIME_TO_NEXT: 2
+  TIME_TO_NEXT: 1
   PRODUCE_NUMBER: 0
   GROWTH_TODAY: 1
   DEATH_ON_HARVEST: 1
@@ -128,23 +140,12 @@ MonoBehaviour:
   heightFactor: 0.1
   widthFactor: 0.1
   SpawnPoints: {fileID: 0}
---- !u!114 &114759581639156378
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea412d57b31015f4089bb356cbd34c9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!135 &135608420102061404
+--- !u!135 &135931858748997932
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1529964924123954}
+  m_GameObject: {fileID: 1350617228086978}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

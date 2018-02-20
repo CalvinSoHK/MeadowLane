@@ -198,7 +198,8 @@ public class MessageApp : BasicApp {
 
                     //Mark the current message as viewed
                     CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().SetNotification(false);
-                    ConvoInfo TEMP_INFO = new ConvoInfo(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().TEXT.text, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES);
+                    //Doesn't need event name because it isn't used to check if conversation is the same. Checks the actual messages and name. Doesn't save this passed value either.
+                    ConvoInfo TEMP_INFO = new ConvoInfo(CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().TEXT.text, "", CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().PROFILE_PIC.sprite, CONVO_ENTRIES[INDEX].GetComponent<TextPasser>().MESSAGES);
                     TextMessageManager.MoveConvo(TEMP_INFO);
                 }
             }
@@ -283,7 +284,7 @@ public class MessageApp : BasicApp {
             //Assign all the important variables
             TEMP.GetComponent<TextPasser>().SetNotification(true);
             TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
-            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONTACT_NAME);
             TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
             CONVO_ENTRIES.Add(TEMP);
         }
@@ -299,7 +300,7 @@ public class MessageApp : BasicApp {
             //Assign all the important variables
             TEMP.GetComponent<TextPasser>().SetNotification(false);
             TEMP.GetComponent<TextPasser>().SetProfile(INFO.PROFILE_PIC_PATH);
-            TEMP.GetComponent<TextPasser>().SetText(INFO.CONVO_NAME);
+            TEMP.GetComponent<TextPasser>().SetText(INFO.CONTACT_NAME);
             TEMP.GetComponent<TextPasser>().CopyMessages(INFO.CONVERSATION);
             CONVO_ENTRIES.Add(TEMP);
         }

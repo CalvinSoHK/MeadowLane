@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23383288211397714}
   - component: {fileID: 114157447482210688}
   - component: {fileID: 136042611444743470}
-  m_Layer: 5
+  m_Layer: 10
   m_Name: Wheat_Stage_Three_Standin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca916bfdb4cf640b3c28c7cc1042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NAME: Wheat_Stage_Three_Standin
   NEXT_STAGE: {fileID: 0}
   PRODUCE: {fileID: 1055901880804612, guid: dfaf346767d49d84daafa2ba6fbc79e4, type: 2}
   DEAD_STAGE: {fileID: 0}

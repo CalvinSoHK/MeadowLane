@@ -43,7 +43,7 @@ public class PlayerInventory : MonoBehaviour {
     public GameObject[] DebugInventory;
 	// Use this for initialization
 	void Start () {
-        Inventory_Manager.LoadPlayerInventory();
+        Inventory_Manager.InitPlayerInventory();
         totalCategory = Inventory_Manager.Category.Count; //get the total number of categorries in the inventory manager
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
