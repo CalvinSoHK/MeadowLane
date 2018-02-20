@@ -98,14 +98,21 @@ public class ScreenTransitionImageEffect : MonoBehaviour
                 maskValue = Mathf.SmoothStep(0.77f, 1.5f, time);
                 if (getStateElapsed() > closeTimeBetween)
                 {
+                    //Set to isClosed and start opening the eyes.
                     isClosed = true;
                     setCurrentState(Gamestate.open);
+
+                    //Garbage collection trigger on eyes closed
                     System.GC.Collect();
+
+                    //If we don't have  a lighting manager, get it, then update lighting based on time.
                     if(LM == null)
                     {
                         LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
                     }
                     LM.UpdateLight();
+
+                    //Set the player to the given position
                     player.transform.position = destination.position;
                     if (isFlipped)
                     {

@@ -29,6 +29,8 @@ public class Bus_Controller : MonoBehaviour {
     //Bus point we are moving to.
     GameObject BUS_POINT;
 
+    FarmManagerPointer FMP;
+
     void Start()
     {
         //Might be problematic if it changes.
@@ -80,9 +82,7 @@ public class Bus_Controller : MonoBehaviour {
             isBlinking = true;
             isSceneLoaded = false;
             VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().BlinkEyes();
-        }
-
-     
+        }   
 
         //If it finished blinking and we just finish blinking, move us to our final destination
         if (VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open && isBlinking)
@@ -121,7 +121,6 @@ public class Bus_Controller : MonoBehaviour {
 
         //Start loading the new scene
         SceneManager.LoadSceneAsync(NEW_STOP_INFO.GetName(), LoadSceneMode.Additive);
-   
 
         //When this scene is finished loading, fire off the destination loaded event.
         SceneManager.sceneLoaded += DestinationLoaded;
@@ -132,6 +131,20 @@ public class Bus_Controller : MonoBehaviour {
     public void DestinationLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= DestinationLoaded;
+
+        //If we are going to player home find the farm manager.
+        if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
+        {
+            if (FMP == null)
+            {
+                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
+            }
+            FMP.ENABLED = true;
+        }
+        else //If we aren't don't keep trying to find the manager.
+        {
+            FMP.ENABLED = false;
+        }
 
         isSceneLoaded = true;
       

@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca916bfdb4cf640b3c28c7cc1042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NAME: Base
   NEXT_STAGE: {fileID: 1706118811683852, guid: 7f917d81626187644b21ef7f2a1d8ba0, type: 2}
   PRODUCE: {fileID: 0}
   DEAD_STAGE: {fileID: 0}

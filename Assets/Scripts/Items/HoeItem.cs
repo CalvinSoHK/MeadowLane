@@ -48,7 +48,7 @@ public class HoeItem : ToolItem {
             velocity = (BLADE.transform.position.y - previousY) * 100f;
             previousY = BLADE.transform.position.y;
 
-            Debug.Log("Velocity: " + velocity);
+            //Debug.Log("Velocity: " + velocity);
             timer = intervals;
         }
         else

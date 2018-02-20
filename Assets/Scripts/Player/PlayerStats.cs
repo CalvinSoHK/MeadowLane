@@ -39,4 +39,14 @@ public class PlayerStats : MonoBehaviour {
             Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
         }
     }
+
+    public void SaveData()
+    {
+        SaveSystem.SaveTo(SaveSystem.SaveType.Money, "/Money\n" + MONEY.ToString() + "\n/");
+    }
+
+    public void LoadData(string DATA)
+    {
+        MONEY = int.Parse(DATA);
+    }
 }

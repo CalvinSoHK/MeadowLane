@@ -27,20 +27,24 @@ public class InteractionDayEnd : InteractableCustom {
 
     }
 
+    //Coroutine
     public IEnumerator EndDayAfterTransition()
     {
         while (Camera.main.GetComponent<ScreenTransitionImageEffect>().currentState != ScreenTransitionImageEffect.Gamestate.open)
         {
             yield return new WaitForEndOfFrame();
         }
-        FM.DayEndAll();
+        
+       
         if (SCHEDULER == null || DM == null | LM == null)
         {
             SCHEDULER = GameManagerPointer.Instance.SCHEDULER;
             DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
             LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
         }
+        FM.DayEndAll();
         SCHEDULER.NextDay();
         DM.ManageDeliveries();
+        GetComponent<InteractionSaveGame>().EYES_CLOSED = true;
     }
 }

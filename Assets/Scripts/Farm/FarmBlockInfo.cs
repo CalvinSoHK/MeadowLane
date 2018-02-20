@@ -11,7 +11,7 @@ public class FarmBlockInfo : MonoBehaviour {
     Transform TOOL_OBJ = null;
 
     //States of the block
-    public bool WATERED = false, TILLED = false, FERTILE = false, HAS_SEED = false;
+    public bool WATERED = false, TILLED = false, FERTILE = false, HAS_SEED = false, DEAD = false;
 
     //how much the block has been watered
     public float waterCount = 0;

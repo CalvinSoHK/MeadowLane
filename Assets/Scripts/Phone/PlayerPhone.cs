@@ -231,7 +231,7 @@ public class PlayerPhone : MonoBehaviour {
     //Load conversation
     public void LoadConversation(string KEY)
     {        
-        TextMessageManager.LoadConversation(KEY);
+        TextMessageManager.LoadConversation(KEY, true);
         TextMessageManager.NewMessageReceived = true;
     }
 

@@ -34,7 +34,6 @@ public class BusEntryManager : BasicEntryManager {
 
     private void Update()
     {
-        UpdateEntries();
         UpdateUIOutline();
     }
 
@@ -80,15 +79,6 @@ public class BusEntryManager : BasicEntryManager {
     //Clear selected
     public void ClearSelected()
     {
-        //Check for a selected entry.
-        foreach (SingleEntryManager ENTRY in ENTRY_LIST)
-        {
-            if (ENTRY.GetComponent<InteractSelectEntry>() != null)
-            {
-                 ENTRY.GetComponent<InteractSelectEntry>().SELECTED = false;
-            }
-        }
-
         SELECTED = null;
     }
 
@@ -118,26 +108,10 @@ public class BusEntryManager : BasicEntryManager {
         }
     }
 
-    //Manage entries. Only allow for one selected.
-    public override void UpdateEntries()
+    //Select ther given entry
+    public void SelectEntry(SingleEntryManager ENTRY)
     {
-        //Check for a selected entry.
-       foreach(SingleEntryManager ENTRY in ENTRY_LIST)
-       {
-            if(ENTRY.GetComponent<InteractSelectEntry>() != null)
-            {
-                //If this one is selected.
-                if (ENTRY.GetComponent<InteractSelectEntry>().SELECTED)
-                {
-                    //if we already have something selected, set that one to false.
-                    if(SELECTED != null)
-                    {
-                        ENTRY_LIST[GetIndexOf(SELECTED)].GetComponent<InteractSelectEntry>().SELECTED = false;
-                    }
-                    SELECTED = ENTRY;            
-                }
-            }
-       }
+        SELECTED = ENTRY;
     }
 
     /// <summary>

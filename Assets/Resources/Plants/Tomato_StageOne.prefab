@@ -56,7 +56,8 @@ GameObject:
   - component: {fileID: 95598666321807794}
   - component: {fileID: 64280929776716306}
   - component: {fileID: 114587180695573476}
-  m_Layer: 5
+  - component: {fileID: 136022654734004616}
+  m_Layer: 10
   m_Name: Tomato_StageOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,6 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ca916bfdb4cf640b3c28c7cc1042d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NAME: Tomato_StageOne
   NEXT_STAGE: {fileID: 1058316018840474, guid: dde08e81e0581f84884edaa0b999dd92, type: 2}
   PRODUCE: {fileID: 1166997846139522, guid: ae7a47f4541366749960e83fe9bc36d1, type: 2}
   DEAD_STAGE: {fileID: 0}
@@ -310,3 +312,16 @@ MonoBehaviour:
   heightFactor: 0.1
   widthFactor: 0.1
   SpawnPoints: {fileID: 0}
+--- !u!136 &136022654734004616
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706118811683852}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.03
+  m_Height: 0.34
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.12, z: 0}

@@ -14,9 +14,76 @@ public static class TextMessageManager {
     //Bool that signifies if we need to update
     public static bool NewMessageReceived = false;
 
+    //Saves all the conversations the player has
+    public static void SaveData()
+    {
+        string DATA = "";
+
+        //As long as we have new conversations
+        if(NewPhoneConversations.Count > 0)
+        {
+            //Marker for new convos below
+            DATA += "[NEW]\n";
+
+            //Add all the keys to load them in next time
+            foreach(ConvoInfo CONVO in NewPhoneConversations)
+            {
+                DATA += CONVO.CONTACT_NAME + "/" + CONVO.EVENT_NAME +"\n";
+            }        
+        }
+
+        //As long as we have old conversations
+        if(OldPhoneConversations.Count > 0)
+        {
+            //Marker for old convos below
+            DATA += "[OLD]\n";
+
+            //Add all keys to load them in next time
+            foreach (ConvoInfo CONVO in OldPhoneConversations)
+            {
+                DATA += CONVO.CONTACT_NAME + "/" + CONVO.EVENT_NAME + "\n";
+            }
+        }
+
+        //If for some reason there are no messages, save an empty in its place.
+        if(DATA.Length == 0)
+        {
+            DATA = "EMPTY\n";
+        }
+
+        SaveSystem.SaveTo(SaveSystem.SaveType.Messages, "/Messages\n" + DATA + "/");
+    }
+
+    public static void LoadData(string DATA)
+    {
+        string[] INPUT = DATA.Split('\n');
+        int i = 0;
+
+        //Length is less one because the less index in the array is blank since every line ends in \n.
+        for(; i < INPUT.Length - 1; i++)
+        {
+            if (INPUT[i].Equals("[NEW]"))
+            {
+                i++;
+                break;
+            }
+            else
+            {
+                LoadConversation(INPUT[i], false);
+            }
+        }
+
+        //Length is less one because the less index in the array is blank since every line ends in \n.
+        for (; i < INPUT.Length - 1; i++)
+        {
+            LoadConversation(INPUT[i], true);
+        }
+
+    }
+
     //Public function that loads in messages into the queue
     //KEY: name/event
-    public static void LoadConversation(string KEY)
+    public static void LoadConversation(string KEY, bool isNew)
     {
         //Split the path files we need to use
         string NAME, EVENT;
@@ -63,35 +130,17 @@ public static class TextMessageManager {
             }
         }
 
-        /* Outdated. Streamreader doesn't play nice on build.
-        using (StreamReader READER = new StreamReader(MESSAGE_PATH))
-        {
-            //While we aren't on the right line, just keep reading.
-            while (!READER.ReadLine().Trim().Equals(EVENT))
-            {
-                //Does nothing. Parsing text.
-            }
-
-            while (true)
-            {
-                //Keep line reference
-                string LINE = READER.ReadLine();
-
-                //As long as we're not at the end of the event, keep adding to list
-                if (LINE.Trim().Equals(EVENT))
-                {
-                    break;
-                }
-                else
-                {
-                    MESSAGES.Add(LINE);
-                }
-            }
-        }*/
-
         //Finished parsing, make new convoInfo and add to new messages
-        ConvoInfo TEMP_CONVO = new ConvoInfo(NAME, PROFILE_PIC, MESSAGES);
-        NewPhoneConversations.Add(TEMP_CONVO);
+        ConvoInfo TEMP_CONVO = new ConvoInfo(NAME, TEMP[1], PROFILE_PIC, MESSAGES);
+        if (isNew)
+        {
+            NewPhoneConversations.Add(TEMP_CONVO);
+        }
+        else
+        {
+            OldPhoneConversations.Add(TEMP_CONVO);
+        }
+      
     }
 
     //Function that will move a new phone convo to the old one
@@ -113,7 +162,7 @@ public static class TextMessageManager {
         if(index >= 0)
         {
             //Move it over to the next one
-            ConvoInfo TEMP = new ConvoInfo(NewPhoneConversations[index].CONVO_NAME, NewPhoneConversations[index].PROFILE_PIC_PATH, NewPhoneConversations[index].CONVERSATION);
+            ConvoInfo TEMP = new ConvoInfo(NewPhoneConversations[index].CONTACT_NAME, NewPhoneConversations[index].EVENT_NAME, NewPhoneConversations[index].PROFILE_PIC_PATH, NewPhoneConversations[index].CONVERSATION);
             NewPhoneConversations.RemoveAt(index);
             OldPhoneConversations.Add(TEMP);
         }
@@ -129,7 +178,10 @@ public static class TextMessageManager {
 public class ConvoInfo
 {
     //Conversation name that shows up in the list
-    public string CONVO_NAME;
+    public string CONTACT_NAME;
+
+    //Event name
+    public string EVENT_NAME;
 
     //Path for the profile pic of the image and contact
     public Sprite PROFILE_PIC_PATH;
@@ -139,10 +191,11 @@ public class ConvoInfo
     public List<string> CONVERSATION = new List<string>();
 
     //Constructor
-    public ConvoInfo(string name, Sprite pp_Path, List<string> messages)
+    public ConvoInfo(string name, string temp_event, Sprite pp_Path, List<string> messages)
     {
         //Assign the proper variables
-        CONVO_NAME = name;
+        CONTACT_NAME = name;
+        EVENT_NAME = temp_event;
         PROFILE_PIC_PATH = pp_Path;
         
         //Deep copy from the beginning
@@ -155,7 +208,7 @@ public class ConvoInfo
     public bool Equals(ConvoInfo INFO)
     {
         //If the convo names arent the same we can return false
-        if (INFO.CONVO_NAME.Equals(this.CONVO_NAME))
+        if (INFO.CONTACT_NAME.Equals(this.CONTACT_NAME))
         {
             //If the message count is different we can return false
             if(INFO.CONVERSATION.Count == this.CONVERSATION.Count)

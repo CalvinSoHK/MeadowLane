@@ -430,7 +430,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224164885364051868}
-  - component: {fileID: 114245634790192660}
   - component: {fileID: 114813165294541638}
   m_Layer: 0
   m_Name: Entry4
@@ -1302,7 +1301,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114934710536571620}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114013294146448294
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1602,7 +1603,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114780322358922822}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114207392286353964
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1756,17 +1759,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '  TOTAL'
---- !u!114 &114245634790192660
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1292288300875822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114246434793546066
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2285,7 +2277,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114122682808701674}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114534238549923596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2356,7 +2350,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114231929954960932}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114556740122114278
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2368,6 +2364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33a418b2c5f7ba3418fe37f7e62dcec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OBJECT_LIST: []
   ENTRIES_MANAGER: {fileID: 0}
   ON_OBJ_ENTER:
     m_PersistentCalls:
@@ -2811,7 +2808,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114086119614464230}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114818136544531240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2828,7 +2827,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114716797402720224}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114831628350307556
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2921,7 +2922,9 @@ MonoBehaviour:
   PRICE_TEXT: {fileID: 114379668460085426}
   COUNT: 0
   PRICE: 0
+  CONTAINER_COUNT: 0
   NAME: 
+  CHANGE_PROPERTIES: 1
 --- !u!114 &114918250797445292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2934,8 +2937,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CM: {fileID: 114955314625589264}
-  ENTRYU_UI_ARRAY: []
+  ENTRY_LIST: []
   TOTAL: 0
+  IS_DELIVERY: 0
+  BASKET: {fileID: 0}
+  ENTRY_PREFAB: {fileID: 0}
+  TOTAL_OBJ: {fileID: 0}
 --- !u!114 &114934710536571620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3024,6 +3031,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   TOTAL: 0
+  EXIT_RESET: 0
 --- !u!222 &222007818540204440
 CanvasRenderer:
   m_ObjectHideFlags: 1
