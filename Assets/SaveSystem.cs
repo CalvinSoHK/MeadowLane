@@ -7,8 +7,10 @@ using System.IO;
 public static class SaveSystem {
 
     public enum SaveType { Date, Money, Messages, Inventory, Recipes, Farm, Decoration, Relationships, TownState };
+    public enum TempType { Farm, HappyMart };
 
-    static string PATH_TO = Application.dataPath + "/SaveData/save-one.txt";
+    static string PATH_TO_MAIN = Application.dataPath + "/SaveData/save-one.txt",
+        PATH_TO_TEMP = Application.dataPath + "/SaveData/save-temp.txt";
 
     //Save data array
     /*  0 - Date
@@ -21,7 +23,7 @@ public static class SaveSystem {
      *  7 - Relationships
      *  8 - Town State
      */
-    static string[] SAVE_DATA = new string[9];
+    static string[] SAVE_DATA = new string[9], TEMP_DATA = new string[2];
     static string[] LINES;
 
     //Clears all indexes in the array
@@ -30,6 +32,14 @@ public static class SaveSystem {
         for(int i = 0; i < SAVE_DATA.Length; i++)
         {
             SAVE_DATA[i] = "";
+        }
+    }
+
+    public static void ClearTempData()
+    {
+        for(int i = 0; i < TEMP_DATA.Length; i++)
+        {
+            TEMP_DATA[i] = "";
         }
     }
 
@@ -48,6 +58,24 @@ public static class SaveSystem {
             }
         }
         return false;      
+    }
+
+    //Overload function to save temp type as well.
+    //Saves to the given index, returns false if there is data there already.
+    public static bool SaveTo(TempType type, string data)
+    {
+        if (TEMP_DATA != null && TEMP_DATA[(int)type] != null)
+        {
+            //If the save doesn't exist
+            if (TEMP_DATA[(int)type].Length == 0)
+            {
+                //Debug.Log(data);
+                TEMP_DATA[(int)type] = data;
+                //Debug.Log(SAVE_DATA[(int)type]);
+                return true;
+            }
+        }
+        return false;
     }
 
     //Fills data for stuff that we haven't implemented yet.
@@ -80,7 +108,7 @@ public static class SaveSystem {
     public static void WriteData()
     {
         //File stream that will create a new file if path doesn't exist, or it will overwrite it.
-        FileStream FS = File.Open(PATH_TO, FileMode.Create);
+        FileStream FS = File.Open(PATH_TO_MAIN, FileMode.Create);
 
         //Use stream writer at the given path.
         using (StreamWriter SW = new StreamWriter(FS))
@@ -96,11 +124,31 @@ public static class SaveSystem {
         }
     }
 
+    //Writes temp save data
+    public static void WriteTempData()
+    {
+        //File stream that will create a new file if path doesn't exist, or it will overwrite it.
+        FileStream FS = File.Open(PATH_TO_TEMP, FileMode.Create);
+
+        //Use stream writer at the given path.
+        using (StreamWriter SW = new StreamWriter(FS))
+        {
+            foreach (string DATA in TEMP_DATA)
+            {
+                LINES = DATA.Split('\n');
+                foreach (string LINE in LINES)
+                {
+                    SW.WriteLine(LINE);
+                }
+            }
+        }
+    }
+
     //Retrieves the given info and separates it into the necessary indexes.
     public static void LoadData()
     {
         //Read in the file
-        using (StreamReader SR = new StreamReader(PATH_TO))
+        using (StreamReader SR = new StreamReader(PATH_TO_MAIN))
         {
             string LINE, DATA = "";
             SaveType TYPE = SaveType.Date;
@@ -216,4 +264,41 @@ public static class SaveSystem {
                 
         }
     }
+
+    //Retrieves the given info and separates it into the necessary indexes.
+    public static void LoadTempData()
+    {
+        //Read in the file
+        using (StreamReader SR = new StreamReader(PATH_TO_TEMP))
+        {
+            string LINE, DATA = "";
+            TempType TYPE = TempType.Farm;
+            while ((LINE = SR.ReadLine()) != null)
+            {
+                switch (TYPE)
+                {
+                    case TempType.Farm:
+                        if (!LINE.Contains("/Farm"))
+                        {
+                            if (!LINE.Equals("/"))
+                            {
+                                DATA += LINE + "\n";
+                            }
+                            else
+                            {
+                                GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
+                                DATA = "";
+                                TYPE = TempType.HappyMart;
+                            }
+                        }
+                        break;
+                    default:
+                        Debug.Log("Not written yet: " + TYPE);
+                        break;
+                }
+            }
+
+        }
+    }
+
 }

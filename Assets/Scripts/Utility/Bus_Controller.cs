@@ -36,6 +36,9 @@ public class Bus_Controller : MonoBehaviour {
         //Might be problematic if it changes.
         VR_CAMERA = GameObject.Find("VRCamera");
         BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
+        NEW_STOP_INFO = BSM.STOP_LIST[BSM.GetIndexOf("Player Home")];
+        SaveSystem.ClearTempData();
+
     }
 
     void Update()
@@ -78,7 +81,7 @@ public class Bus_Controller : MonoBehaviour {
 
         if(timer <= 0 && isSceneLoaded)
         {
-            Debug.Log("Blink!");
+            //Debug.Log("Blink!");
             isBlinking = true;
             isSceneLoaded = false;
             VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().BlinkEyes();
@@ -109,6 +112,7 @@ public class Bus_Controller : MonoBehaviour {
         //Set isLoaded to true so we move the player to the bus
         isTransitionLoaded = true;
 
+
         //Remove this function from sceneLoaded event
         SceneManager.sceneLoaded -= TransitionLoaded;
     }
@@ -133,6 +137,7 @@ public class Bus_Controller : MonoBehaviour {
         SceneManager.sceneLoaded -= DestinationLoaded;
 
         //If we are going to player home find the farm manager.
+        //Should be rewritten so we just call loadTempData and it is handled on that side.
         if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
         {
             if (FMP == null)
@@ -140,9 +145,14 @@ public class Bus_Controller : MonoBehaviour {
                 FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
             }
             FMP.ENABLED = true;
+            FMP.LOAD_ON_FIND = true;
         }
         else //If we aren't don't keep trying to find the manager.
         {
+            if (FMP == null)
+            {
+                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
+            }
             FMP.ENABLED = false;
         }
 
@@ -158,6 +168,21 @@ public class Bus_Controller : MonoBehaviour {
         //int index = 0;
          int index = BSM.GetIndexOf(DESTINATION);
         //Debug.Log(index + DESTINATION);
+
+        //Before replacing new stop info, use it to determine 
+        //Save temp data if we need to
+        Debug.Log(NEW_STOP_INFO.GetName());
+        if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
+        {
+            Debug.Log("Save");
+            if (FMP == null)
+            {
+                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
+            }
+            FMP.FM.GetComponent<FarmManager>().SaveTempData();
+        }
+        SaveSystem.WriteTempData();
+
 
         //Get the stop info we want to go to
         NEW_STOP_INFO = BSM.STOP_LIST[index];

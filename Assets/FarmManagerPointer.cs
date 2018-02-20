@@ -7,7 +7,7 @@ public class FarmManagerPointer : MonoBehaviour {
 
     public FarmManager FM;
 
-    public bool ENABLED = false;
+    public bool ENABLED = false, LOAD_ON_FIND = false;
 
 	// Update is called once per frame
 	void Update () {
@@ -19,10 +19,12 @@ public class FarmManagerPointer : MonoBehaviour {
             {
                 FM = GameObject.Find("FarmManager").GetComponent<FarmManager>();
                 ENABLED = false;
-            }
-            else //Else, we shouldn't be trying to find it.
-            {
-                ENABLED = false;
+                if (LOAD_ON_FIND)
+                {
+                    SaveSystem.LoadTempData();
+                    LOAD_ON_FIND = false;
+                }
+              
             }
         }
 	}
