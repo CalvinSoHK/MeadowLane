@@ -15,9 +15,8 @@ public class BusEntryManager : BasicEntryManager {
     //The outline image we are going to move around to select things.
     public GameObject UI_SELECT_OUTLINE;
 
-    //The list of locations and prices
-    public List<string> LOCATION_LIST = new List<string>();
-    public List<int> PRICE_LIST = new List<int>();
+    //The prefab we add for new entries. Temp is used for instantiation
+    public GameObject ENTRY_PREFAB, TEMP;
 
     //The location we are at
     public string Location;
@@ -25,85 +24,61 @@ public class BusEntryManager : BasicEntryManager {
     //The bus location on arrival
     public Transform BUS_ARRIVAL;
 
-    //The type of transition we need to go here
-    public enum TransitionType { Village, Outskirts, Beachside };
-    public TransitionType TRANSITION_TO;
 
-    public override void Start()
+    public void Start()
     {
-        base.Start();
-        BSM = Bus_Stop_Manager.Instance;
+        BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
         SetEntries();
 
     }
 
     private void Update()
     {
-        UpdateEntries();
         UpdateUIOutline();
     }
 
 
     //Puts in entries for the locations for us.
     public void SetEntries()
-    {
-        int index = 0;
-        //For every entry in the stop list
-        foreach(string ENTRY in BSM.STOP_LIST)
+    { 
+        //Remove everything on the list
+        for(int i = 0; i < ENTRY_LIST.Count; i++)
+        {
+            Destroy(ENTRY_LIST[i].gameObject);
+        }
+        ENTRY_LIST.Clear();
+
+        //For every stop in the stop list
+        foreach(BusStopInfo STOP in BSM.STOP_LIST)
         {
             //If we aren't that location, add it to our entry list.
-             if(Location != BSM.STOP_LIST[index])
+             if(!Location.Equals(STOP.SCENE_NAME))
              {
-                SetEntry(BSM.STOP_LIST[index], BSM.STOP_PRICES[index]);
+                SetEntry(STOP.SCENE_NAME, STOP.PRICE);
              }
-            index++;
-        }
-
-        //For every entry that isn't set, set them inactive
-        foreach(SingleEntryManager ENTRY in ENTRYU_UI_ARRAY)
-        {
-            if(ENTRY.NAME == "")
-            {
-                ENTRY.gameObject.SetActive(false);
-            }
         }
     }
 
     //Puts in the earliest empty entry
     public void SetEntry(string NAME_T, int PRICE_T)
     {
-        //Find the earliest one that is empty
-        foreach(SingleEntryManager ENTRY in ENTRYU_UI_ARRAY)
-        {
-            if(ENTRY.NAME == "")
-            {
-                ENTRY.NAME = NAME_T;
-                ENTRY.PRICE = PRICE_T;
-                return;
-            }     
-        }
+        TEMP = Instantiate(ENTRY_PREFAB, transform);
+        TEMP.GetComponent<SingleEntryManager>().NAME = NAME_T;
+        TEMP.GetComponent<SingleEntryManager>().PRICE = PRICE_T;
+        ENTRY_LIST.Add(TEMP.GetComponent<SingleEntryManager>());
     }
 
     //Invoke the bus and give it our selected. Then clear.
     public void GiveToBus()
     {
         //Debug.Log(SELECTED.name);
-        Bus_Stop_Manager.Instance.BUS.MoveTo(SELECTED.NAME);
+        BSM.BUS.MoveTo(SELECTED.NAME);
         ClearSelected();
     }
 
     //Clear selected
     public void ClearSelected()
     {
-        //Check for a selected entry.
-        foreach (SingleEntryManager ENTRY in ENTRYU_UI_ARRAY)
-        {
-            if (ENTRY.GetComponent<InteractSelectEntry>() != null)
-            {
-                 ENTRY.GetComponent<InteractSelectEntry>().SELECTED = false;
-            }
-        }
-
         SELECTED = null;
     }
 
@@ -133,26 +108,10 @@ public class BusEntryManager : BasicEntryManager {
         }
     }
 
-    //Manage entries. Only allow for one selected.
-    public override void UpdateEntries()
+    //Select ther given entry
+    public void SelectEntry(SingleEntryManager ENTRY)
     {
-        //Check for a selected entry.
-       foreach(SingleEntryManager ENTRY in ENTRYU_UI_ARRAY)
-       {
-            if(ENTRY.GetComponent<InteractSelectEntry>() != null)
-            {
-                //If this one is selected.
-                if (ENTRY.GetComponent<InteractSelectEntry>().SELECTED)
-                {
-                    //if we already have something selected, set that one to false.
-                    if(SELECTED != null)
-                    {
-                        ENTRYU_UI_ARRAY[GetIndexOf(SELECTED)].GetComponent<InteractSelectEntry>().SELECTED = false;
-                    }
-                    SELECTED = ENTRY;            
-                }
-            }
-       }
+        SELECTED = ENTRY;
     }
 
     /// <summary>
@@ -163,9 +122,9 @@ public class BusEntryManager : BasicEntryManager {
     public int GetIndexOf(SingleEntryManager OBJ)
     {
         int index = 0;
-        foreach(SingleEntryManager ENTRY in ENTRYU_UI_ARRAY)
+        foreach(SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if(ENTRY == OBJ)
+            if(ENTRY.NAME == OBJ.NAME)
             {
                 return index;
             }

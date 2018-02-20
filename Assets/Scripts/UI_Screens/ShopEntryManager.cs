@@ -10,51 +10,26 @@ public class ShopEntryManager : BasicEntryManager {
 
     public PaymentBasketManager BASKET;
 
-	// Update is called once per frame
-	void Update () {
+    public GameObject ENTRY_PREFAB;
+    GameObject TEMP;
 
-    
+    public GameObject TOTAL_OBJ;
+
+    DeliveryManager DM;
+
+    private void Awake()
+    {
+        DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+        TOTAL_OBJ.GetComponent<SingleEntryManager>().NAME = "Total";
+    }
+
+    // Update is called once per frame
+    void Update () {
         //Maintain total
-        TOTAL = CalculateTotal();
-
-        UpdateEntries();
-
+      
+        TOTAL_OBJ.GetComponent<SingleEntryManager>().PRICE_TEXT.text = " " + CalculateTotal();
 	}
 
-    /// <summary>
-    /// Updated the function to update entries correctly for this entry manager.
-    /// </summary>
-    public override void UpdateEntries()
-    {
-        //Keep track of index
-        int index = 0;
-
-
-        //For every entry
-        foreach (Entry ENTRY in ENTRY_LIST)
-        {
-            //Display the entry.
-            SetEntry(index, ENTRY.COUNT, ENTRY.PRICE, ENTRY.NAME);
-
-            //Increment index after a pass
-            index++;
-        }
-
-        //For every other entry past this index, empty them
-        for (; index < ENTRYU_UI_ARRAY.Length; index++)
-        {
-            //For every entry except the last one.
-            if (index != ENTRYU_UI_ARRAY.Length - 1)
-            {
-                ENTRYU_UI_ARRAY[index].gameObject.SetActive(false);
-            }
-            else
-            {
-                SetEntry(index, 0, TOTAL, "TOTAL");
-            }
-
-        }
-    }
 
     /// <summary>
     /// Delivers all items in our basket into the delivery service.
@@ -64,16 +39,24 @@ public class ShopEntryManager : BasicEntryManager {
         //For all entries
         foreach(GameObject OBJ in BASKET.OBJECT_LIST)
         {
-                if (IS_DELIVERY)
-                {
+           if (IS_DELIVERY)
+           {
                     //If delivery for tomorrow
-                    DeliveryManager.Instance.AddItem(OBJ);
-                }
-                else
+                if(DM == null)
                 {
+                    DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
+                }
+                DM.AddItem(OBJ);
+           }
+           else
+           {
                     //else add it now
-                    Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
-                }   
+                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
+           }   
+        }
+        for(int i = ENTRY_LIST.Count - 1; i >= 0; i--)
+        {
+            Destroy(ENTRY_LIST[i].gameObject);
         }
         ENTRY_LIST.Clear();
     }
@@ -85,7 +68,7 @@ public class ShopEntryManager : BasicEntryManager {
     public override int CalculateTotal()
     {
         int TOTAL = 0;
-        foreach (Entry ENTRY in ENTRY_LIST)
+        foreach (SingleEntryManager ENTRY in ENTRY_LIST)
         {
             TOTAL += ENTRY.COUNT * ENTRY.PRICE;
         }
@@ -99,11 +82,19 @@ public class ShopEntryManager : BasicEntryManager {
     /// <returns></returns>
     public bool HasEntry(BaseItem obj)
     {
-        foreach(Entry ENTRY in ENTRY_LIST)
+        foreach(SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if(ENTRY.Equals(obj))
+            if(ENTRY.NAME.Trim().Equals(obj._NAME.Replace("_", " ").Trim()))
             {
-                return true;
+                if (!obj.hasTag(BaseItem.ItemTags.Container))
+                {
+                    return true;
+                }
+                else if(obj.GetComponent<PourObject>().COUNT == ENTRY.CONTAINER_COUNT)
+                {
+                    return true;
+                }
+               
             }
         }
 
@@ -118,11 +109,19 @@ public class ShopEntryManager : BasicEntryManager {
     /// <returns></returns>
     public int GetIndexOf(BaseItem obj)
     {
-        foreach (Entry ENTRY in ENTRY_LIST)
+        foreach (SingleEntryManager ENTRY in ENTRY_LIST)
         {
-            if (ENTRY.Equals(obj))
+            if (ENTRY.NAME.Equals(obj._NAME.Replace("_", " ")))
             {
-                return ENTRY_LIST.IndexOf(ENTRY);
+                if (!obj.hasTag(BaseItem.ItemTags.Container))
+                {
+                    return ENTRY_LIST.IndexOf(ENTRY);
+                }
+                else if (obj.GetComponent<PourObject>().COUNT == ENTRY.CONTAINER_COUNT)
+                {
+                    return ENTRY_LIST.IndexOf(ENTRY);
+                }
+
             }
         }
         return -1;
@@ -145,7 +144,15 @@ public class ShopEntryManager : BasicEntryManager {
             string NAME_INPUT = obj._NAME;
             NAME_INPUT = NAME_INPUT.Replace('_', ' ');
 
-            ENTRY_LIST.Add(new Entry(1, obj._VALUE, NAME_INPUT, obj.CATEGORY));
+            TEMP = Instantiate(ENTRY_PREFAB, transform);
+            TEMP.GetComponent<SingleEntryManager>().NAME = NAME_INPUT;
+            TEMP.GetComponent<SingleEntryManager>().COUNT = 1;
+            TEMP.GetComponent<SingleEntryManager>().PRICE = obj._VALUE;
+            if (obj.hasTag(BaseItem.ItemTags.Container))
+            {
+                TEMP.GetComponent<SingleEntryManager>().CONTAINER_COUNT = obj.GetComponent<PourObject>().COUNT;
+            }
+            ENTRY_LIST.Add(TEMP.GetComponent<SingleEntryManager>());
         }
     }
 
@@ -169,30 +176,13 @@ public class ShopEntryManager : BasicEntryManager {
             //IF less than or equal to zero, remove completely.
             if(ENTRY_LIST[index].COUNT <= 0)
             {
+                Destroy(ENTRY_LIST[index].gameObject);
                 ENTRY_LIST.RemoveAt(index);
             }
         }
         else
         {
             Debug.Log("ERROR: Tried to remove an object that isn't already in the list.");
-        }
-    }
-
-    /// <summary>
-    /// Helper function that just sets the ui entries to the correct values.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="COUNT"></param>
-    /// <param name="PRICE"></param>
-    /// <param name="NAME"></param>
-    public void SetEntry(int index, int COUNT, int PRICE, string NAME)
-    {
-        ENTRYU_UI_ARRAY[index].COUNT = COUNT;
-        ENTRYU_UI_ARRAY[index].PRICE = PRICE;
-        ENTRYU_UI_ARRAY[index].NAME = NAME;
-        if (!ENTRYU_UI_ARRAY[index].gameObject.activeSelf)
-        {
-            ENTRYU_UI_ARRAY[index].gameObject.SetActive(true);
         }
     }
 }
@@ -202,6 +192,7 @@ public class Entry
     public int COUNT, PRICE;
     public string NAME;
     public string CATEGORY;
+
 
     public Entry(int COUNT_T, int PRICE_T, string NAME_T, string CATEGORY_T)
     {

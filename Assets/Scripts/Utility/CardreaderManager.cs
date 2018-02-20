@@ -12,11 +12,14 @@ public class CardreaderManager : MonoBehaviour {
     //Total value of the thing we are trying to do
     public int TOTAL;
 
+    public bool EXIT_RESET = false;
+    bool PAID = false;
+
     //On trigger enter
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
         //If it is the smart phone
-        if (col.gameObject.GetComponent<PhoneLinker>() != null)
+        if (col.gameObject.GetComponent<PhoneLinker>() != null && !PAID)
         {
             //Debug.Log("Is the phone");
             //Set the phone
@@ -38,14 +41,34 @@ public class CardreaderManager : MonoBehaviour {
                     if (APP.PayMoney(TOTAL))
                     {
                         ORDER_VALID.Invoke();
+                        
                     }
                     else
                     {
                         //Failed to buy. Do nothing.
                     }
                 }
+                PAID = true;
             }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        //If it is the smart phone
+        if (EXIT_RESET)
+        {
+            if (other.gameObject.GetComponent<PhoneLinker>() != null && PAID)
+            {
+                PAID = false;
+            }
+        }
+       
+    }
+
+    public void ResetMachine()
+    {
+        PAID = false;
     }
 
 }

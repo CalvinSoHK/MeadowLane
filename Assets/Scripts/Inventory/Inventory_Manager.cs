@@ -11,17 +11,103 @@ public static class  Inventory_Manager {
     public static Dictionary<int, GameObject> InventoryItemInScene = new Dictionary<int, GameObject>(); //referene to all inventory items in scenes
     public static Dictionary<int, int> InventorySeedCount = new Dictionary<int, int>(); //reference the seeds for individual seed-boxes currently in inventory
 
-    public static void LoadPlayerInventory()
+    //Init the slots
+    public static void InitPlayerInventory()
     {
-        //do stuff with the textFile here...
         for(int i = 0; i < Category.Count; i++)
         {
             CategorySlots[i] = new List<InventorySlot>();
         }
     }
+
+    //Load inventory from save data
+    public static void LoadPlayerInventory(string DATA)
+    {
+        //Debug.Log(DATA);
+        string[] INPUT = DATA.Split('\n'), TEMP;
+        GameObject OBJ;
+
+        //Read each line from input
+        //Length is less one because the less index in the array is blank since every line ends in \n.
+        for (int i = 0; i < INPUT.Length - 1; i++)
+        {
+            //Split each line by spaces
+            TEMP = INPUT[i].Split(' ');
+            //If we have a length greater than one than we are a dispenser
+            if (TEMP.Length > 1)
+            {
+                //Load the object. Add it to inventory, and adjust values afterwards.
+                OBJ = Resources.Load(TEMP[0], typeof(GameObject)) as GameObject;
+                BaseItem BASE = OBJ.GetComponent<BaseItem>();
+                AddItemToInventory(BASE);
+
+                //If it is a container,change the seed count
+                if (BASE.hasTag(BaseItem.ItemTags.Container))
+                {
+                    InventorySeedCount[BASE.KEY] = int.Parse(TEMP[1]);
+
+                }   //If it is a produce, change the totalNum
+                else if(BASE.hasTag(BaseItem.ItemTags.Produce))
+                {
+                    CategorySlots[0][checkItemInvetorySlot(BASE.KEY, 0)].TotalNum = int.Parse(TEMP[1]);
+                }
+            }
+            else
+            {
+                //For everything else, just add the item to inventory
+                //Debug.Log(TEMP[0]);
+                OBJ = Resources.Load(TEMP[0], typeof(GameObject)) as GameObject;
+                //Debug.Log(OBJ);
+                AddItemToInventory(OBJ.GetComponent<BaseItem>());
+            }
+        }
+
+      
+
+        //do stuff with the textFile here...
+        /*for(int i = 0; i < Category.Count; i++)
+        {
+            CategorySlots[i] = new List<InventorySlot>();
+        }*/
+    }
+
     public static void SavePlayerInventory()
     {
+        //Save string
+        string DATA = "";
+
         //do stuff with the player inventory here.
+        //Go through each category
+        for(int i = 0; i < CategorySlots.Length; i++)
+        { 
+            //Go through all items in that category
+            for(int j = 0; j < CategorySlots[i].Count; j++)
+            {
+                //Produce, save count as well
+                if(i == 0)
+                {
+                    DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + CategorySlots[i][j].TotalNum + "\n";
+                }
+                else if(i == 1)
+                {
+                    if (InventorySeedCount.ContainsKey(CategorySlots[i][j].Key))
+                    {
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + InventorySeedCount[CategorySlots[i][j].Key] + "\n";
+                    }
+                    else
+                    {
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
+                    }     
+                }
+                else
+                {
+                    DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
+                }
+            }
+        }
+
+        //Save to the arrays
+        SaveSystem.SaveTo(SaveSystem.SaveType.Inventory, "/Inventory\n" + DATA + "/");
     }
 
     /// <summary>

@@ -8,7 +8,7 @@ public class PlotManager : MonoBehaviour {
 
     //Array of all elements in plot
     public GameObject[] plotBlocks;
-    public GameObject[] testBlocks;
+    //public GameObject[] testBlocks;
 
     //Size of the given plot
     public int length = 0;
@@ -30,12 +30,50 @@ public class PlotManager : MonoBehaviour {
         length = (int)Mathf.Sqrt(plotBlocks.Length);
 	}
 	
-	// Update is called once per frame
-	void Update () {
+    //Gives us the string save info for the given block
+    public string GetSaveInfo(GameObject BLOCK)
+    {
+        string DATA = "";
+        FarmBlockInfo FBI = BLOCK.GetComponent<FarmBlockInfo>();
+      
+        if(FBI.PLANT != null && !FBI.DEAD)
+        {
+            PlantBase PB = FBI.PLANT.GetComponent<PlantBase>();
+            DATA += PB.NAME + " " + FBI.TILLED + " " + PB.TIME_TO_NEXT + " " + PB.GetProduceNumber() + " " + PB.DAYS_TO_DIE + "\n";
+        }
+        else if (FBI.DEAD)
+        {
+            //Will always load default dead dirt mound. Won't use other prefabs.
+            DATA += "DEAD\n";
+        }
+        else
+        {
+            DATA += "EMPTY\n";
+        }
+        return DATA;
+    }
 
+    //Should set values based on the given string at the given X,Y coordinate
+    //Doesn't account for, random sizing, random rotations
+    public void SetBlockTo(string DATA, int INDEX)
+    {
+        string[] INPUT = DATA.Split(' ');
+        Debug.Log(gameObject + " " + INDEX + " " + DATA);
+        FarmBlockInfo FBI = plotBlocks[INDEX].GetComponent<FarmBlockInfo>();
+        FBI.TILLED = bool.Parse(INPUT[1]);
+
+        //Instantiate the plant and save its referene to the script.
+        //Debug.Log(INPUT[0]);
+        PlantBase PB = (Instantiate(Resources.Load("Plants/" + INPUT[0], typeof(GameObject)) as GameObject).GetComponent<PlantBase>());
+        PB.PlantObj(PB.gameObject, FBI.transform);
+
+        //Assign all important variables, then actually init the plant so it has our values applied.
+        PB.TIME_TO_NEXT = int.Parse(INPUT[2]);
+        PB.PRODUCE_NUMBER = int.Parse(INPUT[3]);
+        PB.DAYS_TO_DIE = int.Parse(INPUT[4]);
+        PB.Init();
         
-
-	}
+    }
 
     //Retrieves a block given coordinates from the array
     //Null if no possible block.
@@ -127,3 +165,4 @@ public class PlotManager : MonoBehaviour {
         }
     }
 }
+

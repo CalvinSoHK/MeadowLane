@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlantBase : MonoBehaviour {
 
     //Name of plant
-    string NAME = "Base";
+    public string NAME = "Base";
 
     //Quality value
     [Range(0f,3f)]
@@ -21,6 +21,9 @@ public class PlantBase : MonoBehaviour {
     //Dead plant prefab
     public GameObject DEAD_STAGE;
 
+    //Tool object that we are touching
+    GameObject TOOL_OBJ;
+
     //Time to next stage
     public float TIME_TO_NEXT;
 
@@ -28,7 +31,7 @@ public class PlantBase : MonoBehaviour {
     float TIME_PLANTED;
 
     //Number of produce gained
-    public int PRODUCE_NUMBER = 0;
+    public int PRODUCE_NUMBER = -1;
 
     //Day's time decrement (growth for today)
     [HideInInspector]
@@ -97,8 +100,7 @@ public class PlantBase : MonoBehaviour {
         float randomX = 1 + Random.Range(-widthFactor, widthFactor);
 
         //Apply to local scale
-        transform.localScale = new Vector3(randomX, randomY, randomX);
-       
+        transform.localScale = new Vector3(randomX, randomY, randomX);   
 
         //Spawn produce
         if (BIRTHS_PRODUCE)
@@ -133,8 +135,11 @@ public class PlantBase : MonoBehaviour {
         //Spawn produce
         if (BIRTHS_PRODUCE)
         {
-            //Generate number of produce
-            PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+            if(PRODUCE_NUMBER == -1)
+            {
+                //Generate number of produce
+                PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
+            }
 
             //Spawn produce
             BirthProduce();
@@ -197,22 +202,25 @@ public class PlantBase : MonoBehaviour {
         }
     }
 
+    public int GetProduceNumber()
+    {
+        for(int i = 0; i < PRODUCE_LIST.Count; i++)
+        {
+            if (PRODUCE_LIST[i] == null)
+            {
+                PRODUCE_LIST.RemoveAt(i);
+                i--;
+            }
+        }
+        PRODUCE_NUMBER = PRODUCE_LIST.Count;
+        return PRODUCE_LIST.Count;
+    }
+
     public void CheckForHarvestDeath()
     {
-        if(DEATH_ON_HARVEST && PRODUCE_LIST.Count > 0)
+        if(DEATH_ON_HARVEST && GetProduceNumber() == 0)
         {
-            int COUNT = 0;
-            foreach(GameObject PRODUCE in PRODUCE_LIST)
-            {
-                if(PRODUCE == null)
-                {
-                    COUNT++;
-                }
-            }
-            if(COUNT == PRODUCE_NUMBER)
-            {
-                isDead = true;
-            }
+            isDead = true;
         }
     }
 
@@ -288,18 +296,29 @@ public class PlantBase : MonoBehaviour {
             next = Instantiate(NEXT_STAGE, transform.position, Quaternion.Euler(0,RAND_ROT,0) , transform.parent);
         }
 
-        //Transfer relevant details to new plant.
-        next.GetComponent<PlantBase>().QUALITY = QUALITY;
-        next.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
-
-        //Change values in the farmBlockInfo
-        transform.parent.GetComponent<FarmBlockInfo>().PLANT = next.transform;
+        //Moves and transfers relevant things to the plant. Inits it as well.
+        PlantObj(next, transform.parent);
 
         //Init new plant
         next.GetComponent<PlantBase>().Init(gameObject);
 
         //Remove this stage.
         Destroy(gameObject);
+    }
+
+    //Moves the given object to the given block
+    public void PlantObj(GameObject OBJ, Transform BLOCK)
+    {
+        OBJ.transform.position = BLOCK.position;
+        OBJ.transform.rotation = Quaternion.identity;
+        OBJ.transform.parent = BLOCK;
+
+        //Transfer relevant details to new plant.
+        OBJ.GetComponent<PlantBase>().QUALITY = QUALITY;
+        OBJ.GetComponent<PlantBase>().PRODUCE_NUMBER = PRODUCE_NUMBER;
+
+        //Change values in the farmBlockInfo
+        BLOCK.GetComponent<FarmBlockInfo>().PLANT = OBJ.transform;
     }
 
     //Go to dead function
@@ -312,6 +331,7 @@ public class PlantBase : MonoBehaviour {
         //Spawn replacement plant.
         if (DEAD_STAGE != null)
         {
+           
             next = Instantiate(DEAD_STAGE, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
         }
         else
@@ -319,10 +339,26 @@ public class PlantBase : MonoBehaviour {
             next = Instantiate(Resources.Load("Hidden/Dead_Plant_Standin", typeof(GameObject)) as GameObject, transform.position, Quaternion.Euler(0, RAND_ROT, 0), transform.parent);
         }
 
+        transform.parent.GetComponent<FarmBlockInfo>().DEAD = true;
         next.transform.parent = transform.parent;
         next.transform.localPosition = new Vector3(0, 0.06f, 0);
 
         //Remove this stage.
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LinkingObject"))
+        {
+            TOOL_OBJ = other.transform.parent.gameObject;
+            if(TOOL_OBJ.GetComponent<ToolItem>() != null)
+            {
+                if(TOOL_OBJ.GetComponent<ToolItem>()._TYPE == ToolItem.ToolType.Sickle)
+                {
+                    TOOL_OBJ.GetComponent<ToolItem>().ApplyTool(gameObject);
+                }
+            }
+        }
     }
 }

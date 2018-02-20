@@ -62,13 +62,18 @@ public class Scheduler : MonoBehaviour {
         //Print function
         public void Print()
         {
-            Debug.Log(season + " | " + month + " " + dayNumber + " | " + day + " | Year " +  year);
+            Debug.Log((int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " Year " +  year);
+        }
+
+        public override string ToString()
+        {
+            return (int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " " + year;
         }
 
     }
 
     //The current date of the game
-    public Date        date;
+    public Date date;
 
     //The current time for the game. 
     public float CLOCK = 0;
@@ -87,10 +92,10 @@ public class Scheduler : MonoBehaviour {
 	}
 	
 	//Helper function to go next day
-    public Date NextDay(Date input)
+    public Date NextDay()
     {
         //Take input.
-        Date var = input;
+        Date var = date;
 
         //Day always just goes next.
         //If it isn't Saturday, just go next.
@@ -211,6 +216,19 @@ public class Scheduler : MonoBehaviour {
         {
             return Cycle.Midnight;
         }
+    }
+
+    //Function that saves the date
+    public void SaveData()
+    {
+        SaveSystem.SaveTo(SaveSystem.SaveType.Date, "/Date\n" + date.ToString() + "\n/");
+    }
+
+    public void LoadData(string DATA)
+    {
+        string[] INPUT = DATA.Split(' ');
+        //Debug.Log(DATA);
+        date = new Date((Season)(int.Parse(INPUT[0])), (Month)(int.Parse(INPUT[1])), (Day)(int.Parse(INPUT[3])), int.Parse(INPUT[2]), int.Parse(INPUT[4]));
     }
 
     void Update()

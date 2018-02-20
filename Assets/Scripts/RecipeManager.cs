@@ -11,6 +11,7 @@ public static class RecipeManager{
 
     //Master list of all recipes, discovered or not
     public static List<Recipe> MASTER_LIST = new List<Recipe>();
+    static List<string> KNOWN_LIST = new List<string>();
 
     public static TextAsset ASSET;
 
@@ -26,38 +27,55 @@ public static class RecipeManager{
     //      Apple Pie
     //      0.1 10
     //      Produce/Apple Produce/Sugar
-    static string TRUE_TXT_LOCATION = Application.dataPath + "/TextFiles/MasterRecipeList.txt", FALSE_TXT_LOCATION =  Application.dataPath + "TextFiles/MasterRecipeList.txt"; //REMEMBER TO WRITE THE DESTINATION HERE!!!!!!!!!
-    
+    //static 
+    static string MASTER_TXT_LOCATION = Application.dataPath + "/SaveData/MasterRecipeList.txt";
 
     //Helper function that inits the master list
     public static void InitList()
     {
-        //If we haven't been init
-        if (!LIST_INIT)
-        {        
-            LoadItems(TRUE_TXT_LOCATION, true);
-            LoadItems(FALSE_TXT_LOCATION, false);
-        }
+        Debug.Log("Don't use this anymore");
     }
 
-    //Function that adds items from the set txt location and sets it to that discovery state.
-    public static void LoadItems(string PATH, bool DISCOVERED)
+    public static void LoadData(string DATA)
     {
+        //Compare loaded strings to the master list and set them to discovered
+        string[] INPUT = DATA.Split('/');
+
+        for(int i = 0; i < INPUT.Length; i++)
+        {
+            KNOWN_LIST.Add(INPUT[i]);
+        }
+
+        //Load master list
+        LoadItems(MASTER_TXT_LOCATION);
+    }
+
+    //Function that adds items to the master list of items.
+    public static void LoadItems(string PATH)
+    {
+        string TEMP_NAME, TEMP_WEIGHT_AND_PRICE, TEMP_LIST_TEXT;
+
+        //Split weight and price
+        string[] TEMP_ARRAY;
+        float TEMP_WEIGHT;
+        int TEMP_PRICE;
+        bool DISCOVERED;
+
         //Stream read the text
-        using (StreamReader READER = new StreamReader(Application.dataPath + PATH))
+        using (StreamReader READER = new StreamReader(PATH))
         {
             //While we haven't reached the end of this text file
             while (!READER.EndOfStream)
             {
                 //Read in the text 
-                string TEMP_NAME = READER.ReadLine(); //i.e Apple Pie
-                string TEMP_WEIGHT_AND_PRICE = READER.ReadLine(); // 0.1
-                string TEMP_LIST_TEXT = READER.ReadLine(); //i.e. Produce/Tomatoes Produce/Apples
+                TEMP_NAME = READER.ReadLine(); //i.e Apple Pie
+                TEMP_WEIGHT_AND_PRICE = READER.ReadLine(); // 0.1
+                TEMP_LIST_TEXT = READER.ReadLine(); //i.e. Produce/Tomatoes Produce/Apples
 
                 //Split weight and price
-                string[] TEMP_ARRAY = TEMP_WEIGHT_AND_PRICE.Split();
-                float TEMP_WEIGHT = float.Parse(TEMP_ARRAY[0]);
-                int TEMP_PRICE = int.Parse(TEMP_ARRAY[1]);
+                TEMP_ARRAY = TEMP_WEIGHT_AND_PRICE.Split();
+                TEMP_WEIGHT = float.Parse(TEMP_ARRAY[0]);
+                TEMP_PRICE = int.Parse(TEMP_ARRAY[1]);
 
                 //Split the ingredients
                 TEMP_ARRAY = TEMP_LIST_TEXT.Split(' ');
@@ -68,9 +86,19 @@ public static class RecipeManager{
                 //Load in through path names
                 for (int i = 0; i < TEMP_ARRAY.Length; i++)
                 {
-                    Debug.Log(TEMP_ARRAY[i]);
                     GameObject TEMP = Resources.Load(TEMP_ARRAY[i], typeof(GameObject)) as GameObject;
                     TEMP_LIST.Add(TEMP.GetComponent<BaseItem>());
+                }
+
+                DISCOVERED = false;
+                for(int i = 0; i < KNOWN_LIST.Count; i++)
+                {
+                    if (KNOWN_LIST[i].Equals(TEMP_NAME))
+                    {
+                        DISCOVERED = true;
+                        KNOWN_LIST.RemoveAt(i);
+                         break;
+                    }
                 }
 
                 //Add to master list.
@@ -103,6 +131,24 @@ public static class RecipeManager{
             }
         }
         return null;
+    }
+
+    //Save data for recipes
+    public static void SaveData()
+    {
+        string DATA = "";
+        foreach(Recipe RECIPE in MASTER_LIST)
+        {
+            if (!RECIPE.DISCOVERED)
+            {
+                break;
+            }
+            else
+            {
+                DATA += RECIPE.NAME + "\n";   
+            }
+        }
+        SaveSystem.SaveTo(SaveSystem.SaveType.Recipes, "/Recipe\n" + DATA + "/");
     }
 }
 

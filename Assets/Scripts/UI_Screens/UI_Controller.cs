@@ -85,7 +85,7 @@ public class UI_Controller : MonoBehaviour {
             //Once alpha reaches 0, destroy image
             if(IMG.color.a <= 0.01f)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
 
