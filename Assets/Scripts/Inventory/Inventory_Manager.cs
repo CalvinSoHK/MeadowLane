@@ -4,12 +4,17 @@ using UnityEngine;
 
 public static class  Inventory_Manager {
 
-    static TextAsset playerInventorySave; //Text Asset Loaded and Saved to know what the player's inventory is between scenes/loads
+    //Variables specifically usedd for the regular player inventory
     public static List<string> Category = new List<string>(new string[] { "Produce", "Tools", "Deco", "Gifts", "KeyItems", "Misc" }); //all categories
     public static List<InventorySlot>[] CategorySlots = new List<InventorySlot>[6]; //all items within each category
     public static int currentCategoryIndex = 0, currentCategorySlotsIndex = 0; //current index for the diplay of category and item.
     public static Dictionary<int, GameObject> InventoryItemInScene = new Dictionary<int, GameObject>(); //referene to all inventory items in scenes
     public static Dictionary<int, int> InventorySeedCount = new Dictionary<int, int>(); //reference the seeds for individual seed-boxes currently in inventory
+
+    //Variables used for the furniture inventory
+    public static List<string> FurnitureCategory = new List<string>(new string[] { "Chair", "Table", "Storage", "Beds", "Floor", "Electronic", "Plants", "Trophies", "Mounted", "Misc" }); //all furniture categories
+    public static List<InventorySlot>[] FurnitureCategorySlots = new List<InventorySlot>[10]; //all furniture items within each category
+    public static int currentFurnitureCategoryIndex = 0, currentFurnitureCategorySlotsIndex = 0; //current index for the diplay of furniture category and item.
 
     /// <summary>
     /// Init the category slots in the player inventory 
@@ -19,6 +24,17 @@ public static class  Inventory_Manager {
         for(int i = 0; i < Category.Count; i++)
         {
             CategorySlots[i] = new List<InventorySlot>();
+        }
+    }
+
+    /// <summary>
+    /// Init the furniture category slots in the player inventory
+    /// </summary>
+    public static void InitPlayerFurnitureInventory()
+    {
+        for(int i = 0; i < FurnitureCategory.Count; i++)
+        {
+            FurnitureCategorySlots[i] = new List<InventorySlot>();
         }
     }
 
@@ -119,12 +135,12 @@ public static class  Inventory_Manager {
     /// Adds an item to the player's inventory
     /// </summary>
     /// <param name="itemInfo"></param>
-     public static void AddItemToInventory(BaseItem itemInfo)
+     public static void AddItemToInventory(BaseItem itemInfo, List<string> currentCategories, List<InventorySlot>[] currentInventory)
     {
         //CategorySlots[0] = new List<InventorySlot>();
        // Debug.Log(CategorySlots[0]);
-        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim()); //get the index of the category for which the item will be placed in
-        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex); //get the index of the item within the category list (if it is already there)
+        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim(), currentCategories); //get the index of the category for which the item will be placed in
+        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex, currentInventory); //get the index of the item within the category list (if it is already there)
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             
@@ -204,17 +220,19 @@ public static class  Inventory_Manager {
     /// </summary>
     /// <param name="category"></param>
     /// <returns></returns>
-    public static int checkItemCategoryIndex(string category)
+    public static int checkItemCategoryIndex(string category, List<string> categoryArray)
     {
-        for(int i = 0; i < Category.Count; i++)
+        for(int i = 0; i < categoryArray.Count; i++)
         {
             if (category.Equals(Category[i]))
             {
                 return i;
             }
         }
+        Debug.Log("There was an error finding the category: " + category + " within the inventory category array. Please check the spelling");
         return -1;
     }
+
 
     /// <summary>
     /// Checks if item that needs to be added to inventory already has a reference within the list.
@@ -222,11 +240,11 @@ public static class  Inventory_Manager {
     /// <param name="key"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    public static int checkItemInvetorySlot(int key, int index)
+    public static int checkItemInvetorySlot(int key, int index, List<InventorySlot>[] currentInventory)
     {
-        for (int i = 0; i < CategorySlots[index].Count; i++)
+        for (int i = 0; i < currentInventory[index].Count; i++)
         {
-            if (key == CategorySlots[index][i].Key)
+            if (key == currentInventory[index][i].Key)
             {
                 
                 return i;
@@ -262,10 +280,10 @@ public static class  Inventory_Manager {
     /// </summary>
     /// <param name="CATEGORY_INDEX"></param>
     /// <returns></returns>
-    public static List<InventorySlot> GetCategory(string CATEGORY)
+    public static List<InventorySlot> GetCategory(string CATEGORY, List<string> categoryArray)
     {
         //Get index of the category given
-        int INDEX = checkItemCategoryIndex(CATEGORY);
+        int INDEX = checkItemCategoryIndex(CATEGORY, categoryArray);
 
         //Check if there is at least something in the category
         if(INDEX  != -1 && CategorySlots[INDEX].Count > 0)

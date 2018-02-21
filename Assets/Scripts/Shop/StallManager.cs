@@ -360,7 +360,7 @@ public class StallManager : MonoBehaviour {
             InitBaskets();
 
             //Wipe out the produce
-            Inventory_Manager.RemoveAllItemsFromCategory(Inventory_Manager.checkItemCategoryIndex("Produce"));
+            Inventory_Manager.RemoveAllItemsFromCategory(Inventory_Manager.checkItemCategoryIndex("Produce", Inventory_Manager.Category));
 
             //Further reduce the list to the recipes the player can actually make with their items.
             RECIPE_LIST = FilterRecipeList(ALL_RECIPES_LIST);
@@ -389,7 +389,7 @@ public class StallManager : MonoBehaviour {
     public void GetProduce()
     {
         //Get the produce
-        List<InventorySlot> PRODUCE_LIST =  Inventory_Manager.GetCategory("Produce");
+        List<InventorySlot> PRODUCE_LIST =  Inventory_Manager.GetCategory("Produce", Inventory_Manager.Category);
 
         //Check to see we have some produce of some kind
         if(PRODUCE_LIST != null)
