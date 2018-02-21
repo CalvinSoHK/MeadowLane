@@ -31,7 +31,7 @@ public class PlantBase : MonoBehaviour {
     float TIME_PLANTED;
 
     //Number of produce gained
-    public int PRODUCE_NUMBER = 0;
+    public int PRODUCE_NUMBER = -1;
 
     //Day's time decrement (growth for today)
     [HideInInspector]
@@ -135,7 +135,7 @@ public class PlantBase : MonoBehaviour {
         //Spawn produce
         if (BIRTHS_PRODUCE)
         {
-            if(PRODUCE_NUMBER == 0)
+            if(PRODUCE_NUMBER == -1)
             {
                 //Generate number of produce
                 PRODUCE_NUMBER = Random.Range(MIN_PRODUCE, MAX_PRODUCE);
@@ -202,22 +202,25 @@ public class PlantBase : MonoBehaviour {
         }
     }
 
+    public int GetProduceNumber()
+    {
+        for(int i = 0; i < PRODUCE_LIST.Count; i++)
+        {
+            if (PRODUCE_LIST[i] == null)
+            {
+                PRODUCE_LIST.RemoveAt(i);
+                i--;
+            }
+        }
+        PRODUCE_NUMBER = PRODUCE_LIST.Count;
+        return PRODUCE_LIST.Count;
+    }
+
     public void CheckForHarvestDeath()
     {
-        if(DEATH_ON_HARVEST && PRODUCE_LIST.Count > 0)
+        if(DEATH_ON_HARVEST && GetProduceNumber() == 0)
         {
-            int COUNT = 0;
-            foreach(GameObject PRODUCE in PRODUCE_LIST)
-            {
-                if(PRODUCE == null)
-                {
-                    COUNT++;
-                }
-            }
-            if(COUNT == PRODUCE_NUMBER)
-            {
-                isDead = true;
-            }
+            isDead = true;
         }
     }
 

@@ -23,7 +23,7 @@ public static class  Inventory_Manager {
     //Load inventory from save data
     public static void LoadPlayerInventory(string DATA)
     {
-        Debug.Log(DATA);
+        //Debug.Log(DATA);
         string[] INPUT = DATA.Split('\n'), TEMP;
         GameObject OBJ;
 
@@ -55,9 +55,9 @@ public static class  Inventory_Manager {
             else
             {
                 //For everything else, just add the item to inventory
-                Debug.Log(TEMP[0]);
+                //Debug.Log(TEMP[0]);
                 OBJ = Resources.Load(TEMP[0], typeof(GameObject)) as GameObject;
-                Debug.Log(OBJ);
+                //Debug.Log(OBJ);
                 AddItemToInventory(OBJ.GetComponent<BaseItem>());
             }
         }

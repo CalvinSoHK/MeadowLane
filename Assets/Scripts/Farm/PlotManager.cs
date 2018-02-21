@@ -30,12 +30,6 @@ public class PlotManager : MonoBehaviour {
         length = (int)Mathf.Sqrt(plotBlocks.Length);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-
-        
-	}
-
     //Gives us the string save info for the given block
     public string GetSaveInfo(GameObject BLOCK)
     {
@@ -45,7 +39,7 @@ public class PlotManager : MonoBehaviour {
         if(FBI.PLANT != null && !FBI.DEAD)
         {
             PlantBase PB = FBI.PLANT.GetComponent<PlantBase>();
-            DATA += PB.NAME + " " + FBI.TILLED + " " + PB.TIME_TO_NEXT + " " + PB.PRODUCE_NUMBER + " " + PB.DAYS_TO_DIE + "\n";
+            DATA += PB.NAME + " " + FBI.TILLED + " " + PB.TIME_TO_NEXT + " " + PB.GetProduceNumber() + " " + PB.DAYS_TO_DIE + "\n";
         }
         else if (FBI.DEAD)
         {
@@ -64,12 +58,12 @@ public class PlotManager : MonoBehaviour {
     public void SetBlockTo(string DATA, int INDEX)
     {
         string[] INPUT = DATA.Split(' ');
-
+        Debug.Log(gameObject + " " + INDEX + " " + DATA);
         FarmBlockInfo FBI = plotBlocks[INDEX].GetComponent<FarmBlockInfo>();
         FBI.TILLED = bool.Parse(INPUT[1]);
 
         //Instantiate the plant and save its referene to the script.
-        Debug.Log(INPUT[0]);
+        //Debug.Log(INPUT[0]);
         PlantBase PB = (Instantiate(Resources.Load("Plants/" + INPUT[0], typeof(GameObject)) as GameObject).GetComponent<PlantBase>());
         PB.PlantObj(PB.gameObject, FBI.transform);
 

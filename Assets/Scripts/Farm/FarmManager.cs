@@ -40,6 +40,26 @@ public class FarmManager : MonoBehaviour {
         SaveSystem.SaveTo(SaveSystem.SaveType.Farm, "/Farm\n" + DATA + "/");
     }
 
+    //Save to temp data.
+    public void SaveTempData()
+    {
+        string DATA = "";
+
+        //For all our plot managers.
+        for (int j = 0; j < PlotList.Count; j++)
+        {
+            //Add a denominator for this plot
+            DATA += "Plot" + j + "\n";
+
+            //For each block within this plot manager, get its string info and add it.
+            for (int i = 0; i < PlotList[j].plotBlocks.Length; i++)
+            {
+                DATA += PlotList[j].GetSaveInfo(PlotList[j].plotBlocks[i]);
+            }
+        }
+        SaveSystem.SaveTo(SaveSystem.TempType.Farm, "/Farm\n" + DATA + "/");
+    }
+
     //Loads our farm states
     public void LoadData(string DATA)
     {
