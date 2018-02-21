@@ -11,7 +11,9 @@ public static class  Inventory_Manager {
     public static Dictionary<int, GameObject> InventoryItemInScene = new Dictionary<int, GameObject>(); //referene to all inventory items in scenes
     public static Dictionary<int, int> InventorySeedCount = new Dictionary<int, int>(); //reference the seeds for individual seed-boxes currently in inventory
 
-    //Init the slots
+    /// <summary>
+    /// Init the category slots in the player inventory 
+    /// </summary>
     public static void InitPlayerInventory()
     {
         for(int i = 0; i < Category.Count; i++)
@@ -71,6 +73,9 @@ public static class  Inventory_Manager {
         }*/
     }
 
+    /// <summary>
+    /// save the player inventory
+    /// </summary>
     public static void SavePlayerInventory()
     {
         //Save string
@@ -88,18 +93,18 @@ public static class  Inventory_Manager {
                 {
                     DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + CategorySlots[i][j].TotalNum + "\n";
                 }
-                else if(i == 1)
+                else if(i == 1) //we are looking at the tools
                 {
-                    if (InventorySeedCount.ContainsKey(CategorySlots[i][j].Key))
+                    if (InventorySeedCount.ContainsKey(CategorySlots[i][j].Key)) //if this is a container
                     {
-                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + InventorySeedCount[CategorySlots[i][j].Key] + "\n";
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + InventorySeedCount[CategorySlots[i][j].Key] + "\n"; //add the seed cound to the data needed to be saved
                     }
-                    else
+                    else //if it is just a regular tool
                     {
-                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";  //add the tool info to the data to be saved 
                     }     
                 }
-                else
+                else //every other category item
                 {
                     DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
                 }

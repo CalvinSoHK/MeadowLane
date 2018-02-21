@@ -43,9 +43,9 @@ public class PlayerInventory : MonoBehaviour {
     public GameObject[] DebugInventory;
 	// Use this for initialization
 	void Start () {
-        Inventory_Manager.InitPlayerInventory();
+        Inventory_Manager.InitPlayerInventory(); //Initialize the static inventory categories
         totalCategory = Inventory_Manager.Category.Count; //get the total number of categorries in the inventory manager
-        hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
+        hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>(); //get a reference to the two player hands
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
     }
 	
@@ -53,47 +53,47 @@ public class PlayerInventory : MonoBehaviour {
 	void Update () {
 
 
-        switch (currentFadeState)
+        switch (currentFadeState) //swtich statement used to keep track of what fade state we are currently in fo rthe inventory
         {
-            case FadeState.Wait:
-                changeCategoryImage = false;
+            case FadeState.Wait: //nothing needs to happen in terms of fading
+                changeCategoryImage = false; //we are neither changing the category or item image
                 changeItemImage = false;
                 break;
 
-            case FadeState.FadeOut:
-                if (changeItemImage)
+            case FadeState.FadeOut: //we are fading out one of the inventory images
+                if (changeItemImage) //we are changing the item image
                 {
-                    Color tmp = currentCategory_Image.color;
-                    alphaValueCategory = INVISIBLE;
-                    tmp.a = alphaValueCategory;
-                    currentCategory_Image.color = tmp;
+                    Color tmp = currentCategory_Image.color; //get a reference to the category image
+                    alphaValueCategory = INVISIBLE; //alpha value for the category should be 0
+                    tmp.a = alphaValueCategory; //set it as so for the temp color
+                    currentCategory_Image.color = tmp; //update the category image and the up and down arrows to have a 0 alpha value
                     upArrow.color = tmp;
                     downArrow.color = tmp;
 
                 }
-                else if (changeCategoryImage)
+                else if (changeCategoryImage) //we are changing the category image
                 {
-                    Color tmp = currentItem_Image.color;
-                    alphaValueItem = INVISIBLE;
-                    tmp.a = alphaValueItem;
-                    currentItem_Image.color = tmp;
+                    Color tmp = currentItem_Image.color; //get a reference to the item image
+                    alphaValueItem = INVISIBLE; // alpha value for the category should be 0
+                    tmp.a = alphaValueItem; //set is as such for the temp color
+                    currentItem_Image.color = tmp; //update the category image and the up and down arrows and the item number count to have a 0 alpha value
                     rightArrow.color = tmp;
                     leftArrow.color = tmp;
                     currentCount.color = tmp;
                 }
 
                 
-
+                //if enough time has elapsed and either the alpha value of the category or image item is equal to 0
                 if (elapsedTime() > imageWaitTime && (alphaValueCategory == INVISIBLE || alphaValueItem == INVISIBLE))
                 {
-                    fadeOut = false; currentFadeState = FadeState.FadeIn; imageTimer = Time.time; alphaTime = 0f;
+                    fadeOut = false; currentFadeState = FadeState.FadeIn; imageTimer = Time.time; alphaTime = 0f; //we need to fade in the category or item image
                 }
                 break;
 
-            case FadeState.FadeIn:
-                if (changeItemImage)
+            case FadeState.FadeIn: //we are now fading in the category or item image
+                if (changeItemImage) //we are changing the item imgae
                 {
-                    alphaTime += Time.deltaTime;
+                    alphaTime += Time.deltaTime; //we are lerping the alpha value of the category image back to 1
                     Color tmp = currentCategory_Image.color;
                     alphaValueCategory = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
                     tmp.a = alphaValueCategory;
@@ -102,9 +102,9 @@ public class PlayerInventory : MonoBehaviour {
                     downArrow.color = tmp;
 
                 }
-                else if (changeCategoryImage)
+                else if (changeCategoryImage) //if we are changing the category image
                 {
-                    alphaTime += Time.deltaTime;
+                    alphaTime += Time.deltaTime; //we are lerping the alpha value of the item image back to 1
                     Color tmp = currentItem_Image.color;
                     alphaValueItem = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
                     tmp.a = alphaValueItem;
@@ -114,127 +114,24 @@ public class PlayerInventory : MonoBehaviour {
                     currentCount.color = tmp;
                 }
 
-                if (elapsedTime() > imageWaitTime && (alphaValueCategory == INVISIBLE || alphaValueItem == INVISIBLE))
+                //if enough time has elapsed and either the alpha value of the category or image item is equal to 0
+                if (elapsedTime() > imageWaitTime && (alphaValueCategory == VISIBLE || alphaValueItem == VISIBLE))
                 {
-                    fadeOut = false; currentFadeState = FadeState.Wait; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
+                    fadeIn = false; currentFadeState = FadeState.Wait; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f; //now we wait for the player to do something else
                 }
                 break;
 
             
         }
-       /* if (changeItemImage)
-        {
-            if (RIGHT)
-            {
-                rightArrow.gameObject.SetActive(true);
-                leftArrow.gameObject.SetActive(false);
-                upArrow.gameObject.SetActive(false);
-                downArrow.gameObject.SetActive(false);
-            }
-            else if (LEFT)
-            {
-                rightArrow.gameObject.SetActive(false);
-                leftArrow.gameObject.SetActive(true);
-                upArrow.gameObject.SetActive(false);
-                downArrow.gameObject.SetActive(false);
-            }
 
-            if (/*elapsedTime() > imageWaitTime &&*//* fadeOut)
-            {
-                alphaTime += Time.deltaTime;
-                Color tmp = currentCategory_Image.color;
-                alphaValue = Mathf.Lerp(VISIBLE, INVISIBLE, alphaTime);
-                tmp.a = alphaValue;
-                currentCategory_Image.color = tmp;
-            }
-            if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
-            {
-                fadeOut = false; fadeIn = true; imageTimer = Time.time; alphaTime = 0f;
-            }
-            if (fadeIn)
-            {
-                alphaTime += Time.deltaTime;
-                Color tmp = currentCategory_Image.color;
-                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
-                tmp.a = alphaValue;
-                currentCategory_Image.color = tmp;
-            }
-            if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
-            {
-                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
-            }
-        }
-        if (changeCategoryImage)
-        {
-            if (UP)
-            {
-                rightArrow.gameObject.SetActive(false);
-                leftArrow.gameObject.SetActive(false);
-                upArrow.gameObject.SetActive(true);
-                downArrow.gameObject.SetActive(false);
-            }
-            else if (DOWN)
-            {
-                rightArrow.gameObject.SetActive(false);
-                leftArrow.gameObject.SetActive(false);
-                upArrow.gameObject.SetActive(false);
-                downArrow.gameObject.SetActive(true);
-            }
 
-            if (fadeOut)
-            {
-                alphaTime += Time.deltaTime;
-                Color tmp = currentItem_Image.color;
-                alphaValue = Mathf.Lerp(VISIBLE, INVISIBLE, alphaTime);
-                tmp.a = alphaValue;
-                currentItem_Image.color = tmp;
-            }
-            if (elapsedTime() > imageWaitTime && alphaValue == INVISIBLE)
-            {
-                fadeOut = false; fadeIn = true; imageTimer = Time.time; alphaTime = 0f;
-            }
-            if (fadeIn)
-            {
-                alphaTime += Time.deltaTime;
-                Color tmp = currentItem_Image.color;
-                alphaValue = Mathf.Lerp(INVISIBLE, VISIBLE, alphaTime);
-                tmp.a = alphaValue;
-                currentItem_Image.color = tmp;
-            }
-            if (elapsedTime() > imageWaitTime && alphaValue == VISIBLE)
-            {
-                fadeOut = false; fadeIn = false; imageTimer = Time.time; changeItemImage = false; turnOnArrows(true); alphaTime = 0f;
-            }
-        }
-        */
-
-       
-
-        if (Input.GetKeyDown(KeyCode.X))
+        //OLD DEBUG STUFF. DOES NOT WORK ANYMORE
+        /*if (Input.GetKeyDown(KeyCode.X))
         {
             Debug.Log("inventory is being debugged");
             debugInventory();
-        }
-        /*
-        if (Input.GetKeyDown(KeyCode.Space) && !isInventoryOn) //if player presses space and the inventory is off
-        {
-            Debug.Log("is this getting accessed");
-            int CategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, true); //we check to see which, from the last selected category, contains an item
-            if (CategoryIndex != -1) //if the category index is not equal to -1 (meaning all categories are empty)
-            {
-                Debug.Log("-1 you is not");
-                Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
-                Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
-                TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in category
-                UpdateImage(true, true); //update both the category and item image
-                CheckInventoryUI(true); //Inventory will only open if there is something in it
-            }
-        }
-
-        else if (Input.GetKeyDown(KeyCode.Space) && isInventoryOn)// if we press space and the inventory is active
-        {
-            CheckInventoryUI(false); //then we turn off the inventory
         }*/
+      
 
         //If we're on AND we're not showing nothing.
         if (SHOW != ShowState.None && isInventoryOn)
@@ -306,12 +203,12 @@ public class PlayerInventory : MonoBehaviour {
                 Inventory_Manager.currentCategoryIndex -= 1; //get the previous category in the list
                 if (Inventory_Manager.currentCategoryIndex < 0) //if you go beyond the bottom most category rotate back to the bottom
                 {
-                    Debug.Log(Inventory_Manager.currentCategoryIndex);
+                    //Debug.Log(Inventory_Manager.currentCategoryIndex);
                     Inventory_Manager.currentCategoryIndex = totalCategory - 1;
-                    Debug.Log(Inventory_Manager.currentCategoryIndex);
+                    //Debug.Log(Inventory_Manager.currentCategoryIndex);
                 }
                 Inventory_Manager.currentCategoryIndex = CheckIfOpeningCategoryContainsItem(Inventory_Manager.currentCategoryIndex, false);
-                Debug.Log(Inventory_Manager.currentCategoryIndex);
+                //Debug.Log(Inventory_Manager.currentCategoryIndex);
                 TotalItemForCategory = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in the new category
                 Inventory_Manager.currentCategorySlotsIndex = 0; //go to the first object in that category
                 UpdateImage(true, true, false); //update the category and item image
@@ -339,21 +236,19 @@ public class PlayerInventory : MonoBehaviour {
                     SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                 }
                 
-                CheckInventoryUI(false); //turn off the Inventory UI
-
-                /*GameObject prefabRef = tempSlot.PrefabRef;
-                Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity);
-                Inventory_Manager.RemoveItemFromInventory(tempSlot);*/
+                CheckInventoryUI(false); //turn off the Inventory UI                
             }
 
             //Update the item count
             if (COUNT != 0)
             {
-                if (Inventory_Manager.InventorySeedCount.ContainsKey(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key))
+                //if the item beign displayed is a seed container
+                if (Inventory_Manager.InventorySeedCount.ContainsKey(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key)) 
                 {
+                    //curretn count should be displaying the number of seeds
                     currentCount.text = Inventory_Manager.getSeeds(Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Key) + "";
                 }
-                else
+                else //otherwise it will display the number of the current object
                 {
                     currentCount.text = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum + "";
                 }
@@ -364,9 +259,7 @@ public class PlayerInventory : MonoBehaviour {
         }
 
         //Change the state machine at the end of a frame. Prevents same input when opening the inventory up.
-        SHOW = TEMP_STATE;
-
-        
+        SHOW = TEMP_STATE;        
     }
 
     //Return the right hand
@@ -488,6 +381,10 @@ public class PlayerInventory : MonoBehaviour {
         return false;
     }
 
+
+    /// <summary>
+    /// I THINK THIS IS OLD AND OBSELETE. TREAD CAREFULLY
+    /// </summary>
     public void debugInventory()
     {
         for(int i = 0; i < DebugInventory.Length; i++)
@@ -504,11 +401,11 @@ public class PlayerInventory : MonoBehaviour {
     /// <param name="removeFromInventory"></param>
     public GameObject SpawnItemFromInventory(InventorySlot tempSlot, bool removeFromInventory)
     {
-        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name, typeof(GameObject)) as GameObject;
+        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name, typeof(GameObject)) as GameObject; //get a ref to the object from the resources folder
         GameObject ObjectRef = Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity); //Keep reference of instantiated object
-        if (ObjectRef.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Container))
+        if (ObjectRef.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Container)) //if the object is a container
         {
-            ObjectRef.GetComponent<PourObject>().COUNT = Inventory_Manager.getSeeds(ObjectRef.GetComponent<BaseItem>());
+            ObjectRef.GetComponent<PourObject>().COUNT = Inventory_Manager.getSeeds(ObjectRef.GetComponent<BaseItem>()); //then we need to get the number of seeds it needs
         }
         AttachObjectToHand(ObjectRef);//Attach the instantiated object to the player's hand
         if (removeFromInventory) //does it need to be removed from inventory
@@ -543,7 +440,7 @@ public class PlayerInventory : MonoBehaviour {
             currentItem_Image.gameObject.SetActive(false);
             currentCount.gameObject.SetActive(false);
             turnOnArrows(false);
-            if (SHOW == ShowState.Hand1)
+            if (SHOW == ShowState.Hand1) //turn off the inventory for the various hands
             {
                 UICanvas.gameObject.SetActive(false);
                 hand1.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
@@ -556,7 +453,7 @@ public class PlayerInventory : MonoBehaviour {
                 hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
 
-            TEMP_STATE = ShowState.None;
+            TEMP_STATE = ShowState.None; //we need to reset all the alpha values for all the components of the inventory.
             Color tmp = currentItem_Image.color;
             alphaValueItem = 1.0f;
             tmp.a = alphaValueItem;
@@ -576,7 +473,7 @@ public class PlayerInventory : MonoBehaviour {
         else //if true
         {
             currentCategory_Image.gameObject.SetActive(true); //turn UI images for inventory on
-            currentItem_Image.gameObject.SetActive(true);
+            currentItem_Image.gameObject.SetActive(true); //turn the rest of the inventory UI components on
             currentCount.gameObject.SetActive(true);
             turnOnArrows(true);
         }
@@ -667,16 +564,16 @@ public class PlayerInventory : MonoBehaviour {
             currentItem_Image.GetComponent<Image>().sprite = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].Icon; //update to the current item index
             imageTimer = Time.time;            
             
-            if (!changeItemImage)
+            if (!changeItemImage) //we were not currently changing the item image
             {
-                changeCategoryImage = true;
+                changeCategoryImage = true; //we are now changing the category image
             }
-            else
+            else //we were changing the item image
             {
-                changeItemImage = false;
-                changeCategoryImage = true;
-                Color tmp = currentCategory_Image.color;
-                Color tmp2 = currentItem_Image.color;
+                changeItemImage = false; //we are no longer changing the item image
+                changeCategoryImage = true; //we are now changing the category image
+                Color tmp = currentCategory_Image.color; //we need to set the alpha value of the category to 1 (same for up and down arrows)
+                Color tmp2 = currentItem_Image.color; //while the alpha value of the image is set to 0 and the rest of the relevant UI objects 
                 alphaValueCategory = 1.0f;
                 alphaValueItem = 0.0f;
                 tmp.a = alphaValueCategory;
@@ -694,13 +591,13 @@ public class PlayerInventory : MonoBehaviour {
             if (!changeCategoryImage) //if we are not changing the category and we are trying to change the item.
             {
                 //Debug.Log("Getting accessed.");
-                changeItemImage = true;
+                changeItemImage = true; //we can now change the item
             }
             else
             {
-                changeCategoryImage = false;
-                changeItemImage = true;
-                Color tmp = currentItem_Image.color;
+                changeCategoryImage = false; // we are no longer changing the category image
+                changeItemImage = true; //we can now change the item image
+                Color tmp = currentItem_Image.color; //we need to set the alpha values of the inventory UI elements
                 Color tmp2 = currentCategory_Image.color;
                 alphaValueItem = 1.0f;
                 alphaValueCategory = 0.0f;
@@ -713,23 +610,31 @@ public class PlayerInventory : MonoBehaviour {
                 currentCount.color = tmp;
             }           
         }
-        if (open)
+        if (open) // if we are opeing the inventory 
         {
-            changeCategoryImage = false;
+            changeCategoryImage = false; //we are neither changing the category or item image
             changeItemImage = false;
             
-            turnOnArrows(true);
-            currentFadeState = FadeState.Wait;
+            turnOnArrows(true); //arrows should be turned on 
+            currentFadeState = FadeState.Wait; // we wait for the player to do something (in regards to the inventory )
             return;    
         }
-        currentFadeState = FadeState.FadeOut;
+        currentFadeState = FadeState.FadeOut; //fade out one of the images
     }
 
+    /// <summary>
+    /// get the elapsed time
+    /// </summary>
+    /// <returns></returns>
     public float elapsedTime()
     {
         return Time.time - imageTimer;
     }
 
+    /// <summary>
+    /// set the UI arrowns on or off
+    /// </summary>
+    /// <param name="on"></param>
     public void turnOnArrows(bool on)
     {
         if (on)
@@ -748,6 +653,13 @@ public class PlayerInventory : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// set individual arrows on or off
+    /// </summary>
+    /// <param name="arrow1"></param>
+    /// <param name="arrow2"></param>
+    /// <param name="arrow3"></param>
+    /// <param name="arrow4"></param>
     public void setArrows(bool arrow1, bool arrow2, bool arrow3, bool arrow4)
     {
         rightArrow.gameObject.SetActive(arrow1);
