@@ -65,10 +65,6 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 0 7
 EMPTY
 EMPTY
 EMPTY
@@ -77,5 +73,19 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
+EMPTY
+EMPTY
+EMPTY
+EMPTY
+/
+
+/Decoration
+Chair/WoodenChair -1.04368,8.71,25.30793 0,26.99989,0
+Decoration/Basic_Bed -0.001000047,9.301001,23.845 0,0,0
+Decoration/WorkTable 1.351,8.763,25.337 0,269.9998,0
+Decoration/TV 0.55,9.981001,26.915 0,180.0003,0
+Decoration/BaseItem 0.5499988,9.918989,26.714 0,0,0
+Decoration/BaseItem 0.55,9.186,26.915 0,180,0
+Decoration/BaseItem -1.736,8.743,26.124 0,270,0
 /
 

@@ -139,25 +139,8 @@ public class Bus_Controller : MonoBehaviour {
         //If we are going to player home find the farm manager.
         //Should be rewritten so we just call loadTempData and it is handled on that side.
 
-        //SaveSystem.LoadTempData(NEW_STOP_INFO.GetName());
-
-        if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
-        {
-            if (FMP == null)
-            {
-                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
-            }
-            FMP.ENABLED = true;
-            FMP.LOAD_ON_FIND = true;
-        }
-        else //If we aren't don't keep trying to find the manager.
-        {
-            if (FMP == null)
-            {
-                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
-            }
-            FMP.ENABLED = false;
-        }
+        SaveSystem.LoadTempData(NEW_STOP_INFO.GetName());
+        GameManagerPointer.Instance.ManagePointers(NEW_STOP_INFO.GetName());
 
         isSceneLoaded = true;
       
@@ -175,15 +158,7 @@ public class Bus_Controller : MonoBehaviour {
         //Before replacing new stop info, use it to determine 
         //Save temp data if we need to
         Debug.Log(NEW_STOP_INFO.GetName());
-        if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
-        {
-            Debug.Log("Save");
-            if (FMP == null)
-            {
-                FMP = GameManagerPointer.Instance.FARM_MANAGER_POINTER;
-            }
-            FMP.FM.GetComponent<FarmManager>().SaveTempData();
-        }
+        SaveSystem.SaveTempData(NEW_STOP_INFO.GetName());
         SaveSystem.WriteTempData();
 
 

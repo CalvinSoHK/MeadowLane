@@ -21,8 +21,7 @@ public class FarmManagerPointer : MonoBehaviour {
                 ENABLED = false;
                 if (LOAD_ON_FIND)
                 {
-
-                    //SaveSystem.LoadTempData();
+                    SaveSystem.LoadTempData(SaveSystem.TempType.Farm);
                     LOAD_ON_FIND = false;
                 }
               

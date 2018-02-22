@@ -23,7 +23,7 @@ public static class SaveSystem {
      *  7 - Relationships
      *  8 - Town State
      */
-    static string[] SAVE_DATA = new string[9], TEMP_DATA = new string[2];
+    static string[] SAVE_DATA = new string[9], TEMP_DATA = new string[3];
     static string[] LINES;
 
     //Clears all indexes in the array
@@ -247,8 +247,19 @@ public static class SaveSystem {
                         }
                         break;
                     case SaveType.Decoration:
-                        Debug.Log("Haven't written Decoration loading yet.");
-                        TYPE = SaveType.Relationships;
+                        if (!LINE.Contains("/Decoration"))
+                        {
+                            if (!LINE.Equals("/"))
+                            {
+                                DATA += LINE + "\n";
+                            }
+                            else
+                            {
+                                GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.LoadData(DATA);
+                                DATA = "";
+                                TYPE = SaveType.Relationships;
+                            }
+                        }
                         break;
                     case SaveType.Relationships:
                         Debug.Log("Haven't written Relationships loading yet.");
@@ -264,6 +275,20 @@ public static class SaveSystem {
                 
         }
     }
+    //Function that saves the correct temp data based on the name of the stop given
+    public static void SaveTempData(string NAME)
+    {
+        switch (NAME)
+        {
+            case "PlayerHome":
+                GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.SaveTempData();
+                GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.SaveTempData();
+                break;
+            default:
+                Debug.Log("Nothing to save to temp");
+                break;
+        }
+    }
 
     //Function that loads the correct temp data based on the name of the stop given
     public static void LoadTempData(string NAME)
@@ -271,11 +296,13 @@ public static class SaveSystem {
         switch (NAME)
         {
             case "PlayerHome":
-                LoadTempData(TempType.Farm);
-                LoadTempData(TempType.Decoration);
+                GameManagerPointer.Instance.FARM_MANAGER_POINTER.ENABLED = true;
+                GameManagerPointer.Instance.FARM_MANAGER_POINTER.LOAD_ON_FIND = true;
+                GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.ENABLED = true;
+                GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.LOAD_ON_FIND = true;
                 break;
             case "HappyMart":
-                LoadTempData(TempType.HappyMart);
+                Debug.Log("TODO");
                 break;
             default:
                 Debug.Log("Invalid stop. Not loading anything.");
@@ -316,6 +343,7 @@ public static class SaveSystem {
                                 {
                                     GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
                                     DATA = "";
+                                    return;
                                 }
                             }
                             
@@ -342,6 +370,7 @@ public static class SaveSystem {
                                 {
                                     GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.LoadData(DATA);
                                     DATA = "";
+                                    return;
                                 }
                             }  
                         }

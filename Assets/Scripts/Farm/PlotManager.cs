@@ -58,7 +58,7 @@ public class PlotManager : MonoBehaviour {
     public void SetBlockTo(string DATA, int INDEX)
     {
         string[] INPUT = DATA.Split(' ');
-        Debug.Log(gameObject + " " + INDEX + " " + DATA);
+        //Debug.Log(gameObject + " " + INDEX + " " + DATA);
         FarmBlockInfo FBI = plotBlocks[INDEX].GetComponent<FarmBlockInfo>();
         FBI.TILLED = bool.Parse(INPUT[1]);
 

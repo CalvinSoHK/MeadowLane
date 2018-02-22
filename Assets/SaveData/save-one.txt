@@ -7,13 +7,8 @@
 /Messages
 [NEW]
 Triangle/Start
-Triangle/Farm
 /
 /Inventory
-Tools/Basic_Scythe
-Tools/Tomato_Seed_Dispenser 3
-Tools/WateringCan
-Tools/Basic_Hoe
 /
 /Recipe
 /
@@ -72,12 +67,12 @@ EMPTY
 EMPTY
 Plot2
 EMPTY
-DEAD
 EMPTY
 EMPTY
 EMPTY
 EMPTY
-DEAD
+EMPTY
+EMPTY
 EMPTY
 EMPTY
 EMPTY
@@ -98,7 +93,15 @@ EMPTY
 EMPTY
 /
 /Decoration
+Chair/WoodenChair -0.4888272,8.71,26.2899 0,155.9998,0
+Decoration/Basic_Bed -0.001000047,9.301001,23.845 0,0,0
+Decoration/WorkTable 1.351,8.763,25.337 0,269.9998,0
+Decoration/TV 0.55,9.981001,26.915 0,180.0003,0
+Decoration/BaseItem 0.5499988,9.918989,26.714 0,0,0
+Decoration/BaseItem 0.55,9.186,26.915 0,180,0
+Decoration/BaseItem -1.736,8.743,26.124 0,270,0
 /
+
 /Relationships
 /
 /Town

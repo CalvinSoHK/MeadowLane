@@ -21,7 +21,7 @@ public class FurnitureManagerPointer : MonoBehaviour {
                 ENABLED = false;
                 if (LOAD_ON_FIND)
                 {
-                    //SaveSystem.LoadTempData();
+                    SaveSystem.LoadTempData(SaveSystem.TempType.Decoration);
                     LOAD_ON_FIND = false;
                 }
 

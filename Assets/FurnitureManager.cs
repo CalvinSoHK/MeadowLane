@@ -23,9 +23,9 @@ public class FurnitureManager : MonoBehaviour {
         //For all of our furniture, save it to string
         for(int i = 0; i < FURNITURE.Length; i++)
         {
-            DATA += FURNITURE[i].CATEGORY + "/" + FURNITURE[i]._NAME + " " + 
-                transform.position.x + "," + transform.position.y + "," + transform.position.z + " " + 
-                transform.eulerAngles.x + "," + transform.eulerAngles.y + "," + transform.eulerAngles.z + "\n";
+            DATA += FURNITURE[i].CATEGORY + "/" + FURNITURE[i]._NAME + " " +
+                FURNITURE[i].transform.position.x + "," + FURNITURE[i].transform.position.y + "," + FURNITURE[i].transform.position.z + " " +
+                FURNITURE[i].transform.eulerAngles.x + "," + FURNITURE[i].transform.eulerAngles.y + "," + FURNITURE[i].transform.eulerAngles.z + "\n";
         }
 
         SaveSystem.SaveTo(SaveSystem.SaveType.Decoration, "/Decoration\n" + DATA + "/\n");
@@ -42,8 +42,8 @@ public class FurnitureManager : MonoBehaviour {
         for (int i = 0; i < FURNITURE.Length; i++)
         {
             DATA += FURNITURE[i].CATEGORY + "/" + FURNITURE[i]._NAME + " " +
-                transform.position.x + "," + transform.position.y + "," + transform.position.z + " " +
-                transform.eulerAngles.x + "," + transform.eulerAngles.y + "," + transform.eulerAngles.z + "\n";
+                FURNITURE[i].transform.position.x + "," + FURNITURE[i].transform.position.y + "," + FURNITURE[i].transform.position.z + " " +
+                FURNITURE[i].transform.eulerAngles.x + "," + FURNITURE[i].transform.eulerAngles.y + "," + FURNITURE[i].transform.eulerAngles.z + "\n";
         }
 
         SaveSystem.SaveTo(SaveSystem.TempType.Decoration, "/Decoration\n" + DATA + "/\n");
@@ -67,7 +67,7 @@ public class FurnitureManager : MonoBehaviour {
             ROT = new Vector3(float.Parse(VECTOR[0]), float.Parse(VECTOR[1]), float.Parse(VECTOR[2]));
 
             //Spawn the object in the right position and rot
-            LOADER = Instantiate(Resources.Load(LINE[0], typeof(GameObject)) as GameObject, POS, Quaternion.Euler(ROT),  transform);            
+            LOADER = Instantiate(Resources.Load("Deco/" + LINE[0], typeof(GameObject)) as GameObject, POS, Quaternion.Euler(ROT),  transform);            
         }
     }
 }

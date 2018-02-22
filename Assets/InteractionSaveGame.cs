@@ -8,6 +8,7 @@ public class InteractionSaveGame : InteractableCustom {
 
     //FarmManager reference
     public FarmManager FM;
+    public FurnitureManager FuM;
 
     //Whether or not we're attempting to save
     private bool ATTEMPT_SAVE = false, ATTEMPT_LOAD_DATA;
@@ -32,7 +33,7 @@ public class InteractionSaveGame : InteractableCustom {
             Inventory_Manager.SavePlayerInventory(); //Inventory
             RecipeManager.SaveData(); //Recipes
             FM.SaveData(); //Farm
-                           //Decoration
+            FuM.SaveData();//Decoration
                            //Relationships
                            //Town States
 

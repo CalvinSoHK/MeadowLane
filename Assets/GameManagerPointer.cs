@@ -47,4 +47,15 @@ public class GameManagerPointer : MonoBehaviour {
     public FarmManagerPointer FARM_MANAGER_POINTER;
     public FurnitureManagerPointer FURNITURE_MANAGER_POINTER;
 
+    //Turns on and off pointers based on the stop given.
+    //i.e. When going to happymart it disables farm/furniture pointers so they keep uselessly searching
+    public void ManagePointers(string STOP_NAME)
+    {
+        if (!STOP_NAME.Equals("PlayerHome"))
+        {
+            FURNITURE_MANAGER_POINTER.ENABLED = false;
+            FARM_MANAGER_POINTER.ENABLED = false;
+        }
+    }
+
 }
