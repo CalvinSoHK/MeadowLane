@@ -313,7 +313,11 @@ public static class  Inventory_Manager {
         
         return InventorySeedCount[key];
     }
-
+    /// <summary>
+    /// returns the current inventory we are dealing with
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
     public static List<InventorySlot>[] getCurrentInventory(PlayerInventory.InventoryState currentInvState)
     {
         switch (currentInvState)
@@ -328,6 +332,11 @@ public static class  Inventory_Manager {
         Debug.Log("ERROR: Are we trying to access an inventory type that does not exist?");
         return null;
     }
+    /// <summary>
+    /// returns the current category index with the relevant inventory
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
     public static int getCurrentCategoryIndex(PlayerInventory.InventoryState currentInvState)
     {
         switch (currentInvState)
@@ -342,6 +351,11 @@ public static class  Inventory_Manager {
         Debug.Log("ERROR: Are we trying to access an inventory type that does not exist?");
         return -1;
     }
+    /// <summary>
+    /// returns the current slot index within the relevant category and inventory
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
     public  static  int getCurrentCategorySlotIndex(PlayerInventory.InventoryState currentInvState)
     {
         switch (currentInvState)
@@ -357,6 +371,11 @@ public static class  Inventory_Manager {
         return -1;
     }
 
+    /// <summary>
+    /// adds to the category index to the relevant inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
     public static void changeIndex(PlayerInventory.InventoryState currentInvState, int value)
     {
         switch (currentInvState)
@@ -371,6 +390,11 @@ public static class  Inventory_Manager {
 
     }
 
+    /// <summary>
+    /// adds to the slot index to the relevant category and inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
     public static void changeIndexSlots(PlayerInventory.InventoryState currentInvState, int value)
     {
         switch (currentInvState)
@@ -384,6 +408,12 @@ public static class  Inventory_Manager {
         }
               
     }
+
+    /// <summary>
+    /// update the category index to the relevant inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
     public static void setIndex(PlayerInventory.InventoryState currentInvState, int value)
     {
         switch (currentInvState)
@@ -398,6 +428,11 @@ public static class  Inventory_Manager {
 
     }
 
+    /// <summary>
+    /// update the slot index to the relevant ategory and inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
     public static void setIndexSlots(PlayerInventory.InventoryState currentInvState, int value)
     {
         switch (currentInvState)
