@@ -18,10 +18,10 @@ public class Produce_Basket_Controller : InteractableCustom {
         //Get the category index for our produce
         
         int CATEGORY_INDEX = Inventory_Manager.checkItemCategoryIndex(PRODUCE.CATEGORY, Inventory_Manager.Category);
-        if (Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX) != -1)
+        if (Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX, Inventory_Manager.CategorySlots) != -1)
         {
             //Get the total number from its inventory index.
-            COUNT = Inventory_Manager.CategorySlots[CATEGORY_INDEX][Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX)].TotalNum;
+            COUNT = Inventory_Manager.CategorySlots[CATEGORY_INDEX][Inventory_Manager.checkItemInvetorySlot(PRODUCE.KEY, CATEGORY_INDEX, Inventory_Manager.CategorySlots)].TotalNum;
         }
     }
 

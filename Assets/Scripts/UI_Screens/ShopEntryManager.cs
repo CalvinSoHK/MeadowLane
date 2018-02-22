@@ -51,7 +51,7 @@ public class ShopEntryManager : BasicEntryManager {
            else
            {
                     //else add it now
-                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
+                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>(), Inventory_Manager.Category, Inventory_Manager.CategorySlots);
            }   
         }
         for(int i = ENTRY_LIST.Count - 1; i >= 0; i--)

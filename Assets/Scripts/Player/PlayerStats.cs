@@ -35,8 +35,8 @@ public class PlayerStats : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Wheat", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
-            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>());
+            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Wheat", typeof(GameObject)) as GameObject).GetComponent<BaseItem>(), Inventory_Manager.Category, Inventory_Manager.CategorySlots);
+            Inventory_Manager.AddItemToInventory((Resources.Load("Produce/Tomato", typeof(GameObject)) as GameObject).GetComponent<BaseItem>(), Inventory_Manager.Category, Inventory_Manager.CategorySlots);
         }
     }
 
