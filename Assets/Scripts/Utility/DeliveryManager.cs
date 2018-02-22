@@ -41,7 +41,14 @@ public class DeliveryManager : MonoBehaviour
         //For every obj
         foreach(GameObject OBJ in ITEMS_LIST)
         {
-            Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>());
+            if (OBJ.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration))
+            {
+                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>(), Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+            }
+            else
+            {
+                Inventory_Manager.AddItemToInventory(OBJ.GetComponent<BaseItem>(), Inventory_Manager.Category, Inventory_Manager.CategorySlots);
+            }            
         }
     }
 

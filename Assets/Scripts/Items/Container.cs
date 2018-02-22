@@ -53,7 +53,7 @@ public class Container : MonoBehaviour {
                 //If this is the players container, put it in our inventory
                 if (OWNER == BaseItem.Owner.Player && collision.gameObject.GetComponent<BaseItem>()._OWNER == OWNER)
                 {
-                    Inventory_Manager.AddItemToInventory(collision.gameObject.GetComponent<BaseItem>());
+                    Inventory_Manager.AddItemToInventory(collision.gameObject.GetComponent<BaseItem>(), Inventory_Manager.Category, Inventory_Manager.CategorySlots);
                     Destroy(collision.gameObject);
                 }
                 else //Normal behavior for other containers. Try to save what this container currently has.

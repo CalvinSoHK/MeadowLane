@@ -4,19 +4,41 @@ using UnityEngine;
 
 public static class  Inventory_Manager {
 
-    static TextAsset playerInventorySave; //Text Asset Loaded and Saved to know what the player's inventory is between scenes/loads
+    //Variables specifically usedd for the regular player inventory
     public static List<string> Category = new List<string>(new string[] { "Produce", "Tools", "Deco", "Gifts", "KeyItems", "Misc" }); //all categories
     public static List<InventorySlot>[] CategorySlots = new List<InventorySlot>[6]; //all items within each category
     public static int currentCategoryIndex = 0, currentCategorySlotsIndex = 0; //current index for the diplay of category and item.
     public static Dictionary<int, GameObject> InventoryItemInScene = new Dictionary<int, GameObject>(); //referene to all inventory items in scenes
     public static Dictionary<int, int> InventorySeedCount = new Dictionary<int, int>(); //reference the seeds for individual seed-boxes currently in inventory
 
-    //Init the slots
+    //Variables used for the furniture inventory
+    public static List<string> FurnitureCategory = new List<string>(new string[] { "Chair", "Table", "Storage", "Beds", "Floor", "Electronic", "Plants", "Trophies", "Mounted", "Misc" }); //all furniture categories
+    public static List<InventorySlot>[] FurnitureCategorySlots = new List<InventorySlot>[10]; //all furniture items within each category
+    public static int currentFurnitureCategoryIndex = 0, currentFurnitureCategorySlotsIndex = 0; //current index for the diplay of furniture category and item.
+
+    /// <summary>
+    /// Init the category slots in the player inventory 
+    /// </summary>
     public static void InitPlayerInventory()
     {
         for(int i = 0; i < Category.Count; i++)
         {
             CategorySlots[i] = new List<InventorySlot>();
+        }
+        for(int i = 0; i < FurnitureCategory.Count; i++)
+        {
+            FurnitureCategorySlots[i] = new List<InventorySlot>();
+        }
+    }
+
+    /// <summary>
+    /// Init the furniture category slots in the player inventory
+    /// </summary>
+    public static void InitPlayerFurnitureInventory()
+    {
+        for(int i = 0; i < FurnitureCategory.Count; i++)
+        {
+            FurnitureCategorySlots[i] = new List<InventorySlot>();
         }
     }
 
@@ -39,7 +61,7 @@ public static class  Inventory_Manager {
                 //Load the object. Add it to inventory, and adjust values afterwards.
                 OBJ = Resources.Load(TEMP[0], typeof(GameObject)) as GameObject;
                 BaseItem BASE = OBJ.GetComponent<BaseItem>();
-                AddItemToInventory(BASE);
+                AddItemToInventory(BASE, Category, CategorySlots);
 
                 //If it is a container,change the seed count
                 if (BASE.hasTag(BaseItem.ItemTags.Container))
@@ -49,7 +71,7 @@ public static class  Inventory_Manager {
                 }   //If it is a produce, change the totalNum
                 else if(BASE.hasTag(BaseItem.ItemTags.Produce))
                 {
-                    CategorySlots[0][checkItemInvetorySlot(BASE.KEY, 0)].TotalNum = int.Parse(TEMP[1]);
+                    CategorySlots[0][checkItemInvetorySlot(BASE.KEY, 0, CategorySlots)].TotalNum = int.Parse(TEMP[1]);
                 }
             }
             else
@@ -58,7 +80,7 @@ public static class  Inventory_Manager {
                 //Debug.Log(TEMP[0]);
                 OBJ = Resources.Load(TEMP[0], typeof(GameObject)) as GameObject;
                 //Debug.Log(OBJ);
-                AddItemToInventory(OBJ.GetComponent<BaseItem>());
+                AddItemToInventory(OBJ.GetComponent<BaseItem>(), Category, CategorySlots);
             }
         }
 
@@ -71,6 +93,9 @@ public static class  Inventory_Manager {
         }*/
     }
 
+    /// <summary>
+    /// save the player inventory
+    /// </summary>
     public static void SavePlayerInventory()
     {
         //Save string
@@ -88,18 +113,18 @@ public static class  Inventory_Manager {
                 {
                     DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + CategorySlots[i][j].TotalNum + "\n";
                 }
-                else if(i == 1)
+                else if(i == 1) //we are looking at the tools
                 {
-                    if (InventorySeedCount.ContainsKey(CategorySlots[i][j].Key))
+                    if (InventorySeedCount.ContainsKey(CategorySlots[i][j].Key)) //if this is a container
                     {
-                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + InventorySeedCount[CategorySlots[i][j].Key] + "\n";
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + " " + InventorySeedCount[CategorySlots[i][j].Key] + "\n"; //add the seed cound to the data needed to be saved
                     }
-                    else
+                    else //if it is just a regular tool
                     {
-                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
+                        DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";  //add the tool info to the data to be saved 
                     }     
                 }
-                else
+                else //every other category item
                 {
                     DATA += CategorySlots[i][j].Category + "/" + CategorySlots[i][j].Name + "\n";
                 }
@@ -114,12 +139,12 @@ public static class  Inventory_Manager {
     /// Adds an item to the player's inventory
     /// </summary>
     /// <param name="itemInfo"></param>
-     public static void AddItemToInventory(BaseItem itemInfo)
+     public static void AddItemToInventory(BaseItem itemInfo, List<string> currentCategories, List<InventorySlot>[] currentInventory)
     {
         //CategorySlots[0] = new List<InventorySlot>();
        // Debug.Log(CategorySlots[0]);
-        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim()); //get the index of the category for which the item will be placed in
-        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex); //get the index of the item within the category list (if it is already there)
+        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim(), currentCategories); //get the index of the category for which the item will be placed in
+        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex, currentInventory); //get the index of the item within the category list (if it is already there)
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             
@@ -133,7 +158,7 @@ public static class  Inventory_Manager {
             Sprite CAT_ICON = Resources.Load("CategoryIcons/" + itemInfo.CATEGORY, typeof(Sprite)) as Sprite;
 
             //add the item in the category at the end of the list
-            CategorySlots[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));
+            currentInventory[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));
         }else //item type is already in inventory
         {
             //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
@@ -144,7 +169,7 @@ public static class  Inventory_Manager {
                     InventorySeedCount[itemInfo.KEY] += itemInfo.gameObject.GetComponent<PourObject>().COUNT; //add the seeds to the key value (dictionary)
                 }
                 InventoryItemInScene.Remove(itemInfo.KEY); //remove that item from the dictionary
-                CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+                currentInventory[catergoryIndex][inventorySlotIndex].TotalNum += 1;
             }
             else
             {
@@ -164,12 +189,12 @@ public static class  Inventory_Manager {
     /// After item is spawned from inventory, removes that item instance from inventory if it is produce
     /// </summary>
     /// <param name="itemInfo"></param>
-    public static void RemoveItemFromInventory(InventorySlot itemInfo)
+    public static void RemoveItemFromInventory(InventorySlot itemInfo, List<InventorySlot>[] currentInventory, BaseItem currentItem)
     {
         itemInfo.TotalNum -= 1; //reduce the total number of that slot object
-        if(currentCategoryIndex == 0 && itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category and whether there are none left.
+        if((currentItem.hasTag(BaseItem.ItemTags.Decoration) || currentCategoryIndex == 0)&& itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category or if its furniture and whether there are none left.
         {
-            CategorySlots[currentCategoryIndex].Remove(itemInfo); //remove that item from the list
+            currentInventory[currentCategoryIndex].Remove(itemInfo); //remove that item from the list
         }
     }
 
@@ -177,20 +202,20 @@ public static class  Inventory_Manager {
     /// Removes all items from the given category slot
     /// </summary>
     /// <param name="INDEX"></param>
-    public static void RemoveAllItemsFromCategory(int INDEX)
+    public static void RemoveAllItemsFromCategory(int INDEX, List<InventorySlot>[] currentInventory)
     {
-        CategorySlots[INDEX].Clear();
+        currentInventory[INDEX].Clear();
     }
 
     /// <summary>
     /// Adds all items from a list of base items back into the inventory
     /// </summary>
     /// <param name="LIST"></param>
-    public static void AddAllItemsFromList(List<BaseItem> LIST)
+    public static void AddAllItemsFromList(List<BaseItem> LIST, List<string> currentCategories, List<InventorySlot>[] currentInventory)
     {
         foreach(BaseItem ITEM in LIST)
         {
-            AddItemToInventory(ITEM);
+            AddItemToInventory(ITEM, currentCategories, currentInventory);
         }
     }
 
@@ -199,17 +224,19 @@ public static class  Inventory_Manager {
     /// </summary>
     /// <param name="category"></param>
     /// <returns></returns>
-    public static int checkItemCategoryIndex(string category)
+    public static int checkItemCategoryIndex(string category, List<string> categoryArray)
     {
-        for(int i = 0; i < Category.Count; i++)
+        for(int i = 0; i < categoryArray.Count; i++)
         {
-            if (category.Equals(Category[i]))
+            if (category.Equals(categoryArray[i]))
             {
                 return i;
             }
         }
+        Debug.Log("There was an error finding the category: " + category + " within the inventory category array. Please check the spelling");
         return -1;
     }
+
 
     /// <summary>
     /// Checks if item that needs to be added to inventory already has a reference within the list.
@@ -217,11 +244,11 @@ public static class  Inventory_Manager {
     /// <param name="key"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    public static int checkItemInvetorySlot(int key, int index)
+    public static int checkItemInvetorySlot(int key, int index, List<InventorySlot>[] currentInventory)
     {
-        for (int i = 0; i < CategorySlots[index].Count; i++)
+        for (int i = 0; i < currentInventory[index].Count; i++)
         {
-            if (key == CategorySlots[index][i].Key)
+            if (key == currentInventory[index][i].Key)
             {
                 
                 return i;
@@ -257,15 +284,15 @@ public static class  Inventory_Manager {
     /// </summary>
     /// <param name="CATEGORY_INDEX"></param>
     /// <returns></returns>
-    public static List<InventorySlot> GetCategory(string CATEGORY)
+    public static List<InventorySlot> GetCategory(string CATEGORY, List<string> categoryArray, List<InventorySlot>[] currentInventory)
     {
         //Get index of the category given
-        int INDEX = checkItemCategoryIndex(CATEGORY);
+        int INDEX = checkItemCategoryIndex(CATEGORY, categoryArray);
 
         //Check if there is at least something in the category
-        if(INDEX  != -1 && CategorySlots[INDEX].Count > 0)
+        if(INDEX  != -1 && currentInventory[INDEX].Count > 0)
         {
-            return CategorySlots[INDEX];
+            return currentInventory[INDEX];
         }
         return null;
     }
@@ -286,6 +313,140 @@ public static class  Inventory_Manager {
         
         return InventorySeedCount[key];
     }
+    /// <summary>
+    /// returns the current inventory we are dealing with
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
+    public static List<InventorySlot>[] getCurrentInventory(PlayerInventory.InventoryState currentInvState)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                return CategorySlots;
+                //break;
+            case PlayerInventory.InventoryState.Furniture:
+                return FurnitureCategorySlots;
+                //break;
+        }
+        Debug.Log("ERROR: Are we trying to access an inventory type that does not exist?");
+        return null;
+    }
+    /// <summary>
+    /// returns the current category index with the relevant inventory
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
+    public static int getCurrentCategoryIndex(PlayerInventory.InventoryState currentInvState)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                return currentCategoryIndex;
+            //break;
+            case PlayerInventory.InventoryState.Furniture:
+                return currentFurnitureCategoryIndex;
+                //break;
+        }
+        Debug.Log("ERROR: Are we trying to access an inventory type that does not exist?");
+        return -1;
+    }
+    /// <summary>
+    /// returns the current slot index within the relevant category and inventory
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <returns></returns>
+    public  static  int getCurrentCategorySlotIndex(PlayerInventory.InventoryState currentInvState)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                return currentCategorySlotsIndex;
+            //break;
+            case PlayerInventory.InventoryState.Furniture:
+                return currentFurnitureCategorySlotsIndex;
+                //break;
+        }
+        Debug.Log("ERROR: Are we trying to access an inventory type that does not exist?");
+        return -1;
+    }
+
+    /// <summary>
+    /// adds to the category index to the relevant inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
+    public static void changeIndex(PlayerInventory.InventoryState currentInvState, int value)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                currentCategoryIndex += value;
+                break;
+            case PlayerInventory.InventoryState.Furniture:
+                currentFurnitureCategoryIndex += value;
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// adds to the slot index to the relevant category and inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
+    public static void changeIndexSlots(PlayerInventory.InventoryState currentInvState, int value)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                currentCategorySlotsIndex += value;
+                break;
+            case PlayerInventory.InventoryState.Furniture:
+                currentFurnitureCategorySlotsIndex += value;
+                break;
+        }
+              
+    }
+
+    /// <summary>
+    /// update the category index to the relevant inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
+    public static void setIndex(PlayerInventory.InventoryState currentInvState, int value)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                currentCategoryIndex = value;
+                break;
+            case PlayerInventory.InventoryState.Furniture:
+                currentFurnitureCategoryIndex = value;
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// update the slot index to the relevant ategory and inventory based on given value
+    /// </summary>
+    /// <param name="currentInvState"></param>
+    /// <param name="value"></param>
+    public static void setIndexSlots(PlayerInventory.InventoryState currentInvState, int value)
+    {
+        switch (currentInvState)
+        {
+            case PlayerInventory.InventoryState.Item:
+                currentCategorySlotsIndex = value;
+                break;
+            case PlayerInventory.InventoryState.Furniture:
+                currentFurnitureCategorySlotsIndex = value;
+                break;
+        }
+
+    }
+
 }
 
 static class ListExtensions

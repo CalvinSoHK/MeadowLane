@@ -43,10 +43,11 @@ public class BaseItem : MonoBehaviour {
         Decoration = 0x20,
         Tool = 0x40,
         Seed = 0x80,
-        Container = 0x100
-        //Wearable = 0x200,
-        //Money = 0x400,
-        //Dateable = 0x800
+        Container = 0x100,
+        Furniture = 0x200
+        //Wearable = 0x400,
+        //Money = 0x800,
+        //Dateable = 0x1000
     }
 
     [SerializeField]
