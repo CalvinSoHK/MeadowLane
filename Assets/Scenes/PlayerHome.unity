@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _NAME: WoodenChair
-  CATEGORY: Decoration
+  CATEGORY: Chair
   KEY: 8000
   _OWNER: 2
   _VALUE: 200

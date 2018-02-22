@@ -218,7 +218,7 @@ public class PlantBase : MonoBehaviour {
 
     public void CheckForHarvestDeath()
     {
-        if(DEATH_ON_HARVEST && GetProduceNumber() == 0)
+        if(DEATH_ON_HARVEST && GetProduceNumber() == 0 && BIRTHS_PRODUCE)
         {
             isDead = true;
         }

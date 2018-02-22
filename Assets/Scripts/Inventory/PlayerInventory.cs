@@ -45,7 +45,7 @@ public class PlayerInventory : MonoBehaviour {
 
     public GameObject[] DebugInventory;
     List<InventorySlot>[] currentInventory;
-    GameObject player;
+
     // Use this for initialization
     void Start () {
         Inventory_Manager.InitPlayerInventory(); //Initialize the static inventory categories
@@ -389,7 +389,7 @@ public class PlayerInventory : MonoBehaviour {
         if (!isInventoryOn) //if player presses space and the inventory is off
         {
             int currentCategoryIndex;
-            if (player.GetComponent<HomeCustomizationManager>().CustomizingHome())
+            if (GetComponent<HomeCustomizationManager>().CustomizingHome())
             {
                 currentInventoryState = InventoryState.Furniture;
                 currentCategoryIndex = Inventory_Manager.currentFurnitureCategoryIndex;
@@ -482,13 +482,13 @@ public class PlayerInventory : MonoBehaviour {
             {
                 UICanvas.gameObject.SetActive(false);
                 hand1.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
-                hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
+                //hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
             else if (SHOW == ShowState.Hand2)
             {
                 UICanvas.gameObject.SetActive(false);
                 hand2.GetComponent<OnTriggerRaycast>().DropObj(UICanvas.gameObject);
-                hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
+                //hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
             }
 
             TEMP_STATE = ShowState.None; //we need to reset all the alpha values for all the components of the inventory.

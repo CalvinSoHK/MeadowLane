@@ -2,13 +2,18 @@
 4 1 2 3 1
 /
 /Money
-150
+100
 /
 /Messages
 [NEW]
 Triangle/Start
+Triangle/Farm
 /
 /Inventory
+Tools/Basic_Scythe
+Tools/Tomato_Seed_Dispenser 3
+Tools/WateringCan
+Tools/Basic_Hoe
 /
 /Recipe
 /
@@ -67,6 +72,12 @@ EMPTY
 EMPTY
 Plot2
 EMPTY
+DEAD
+EMPTY
+EMPTY
+EMPTY
+EMPTY
+DEAD
 EMPTY
 EMPTY
 EMPTY
@@ -79,12 +90,6 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-EMPTY
-EMPTY
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 0 7
 EMPTY
 EMPTY
 EMPTY
