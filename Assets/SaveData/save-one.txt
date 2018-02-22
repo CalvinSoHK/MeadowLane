@@ -1,18 +1,14 @@
 /Date
-4 1 2 1 1
+4 1 2 3 1
 /
 /Money
-100
+150
 /
 /Messages
 [NEW]
 Triangle/Start
 /
 /Inventory
-Tools/Basic_Hoe
-Tools/WateringCan
-Tools/Basic_Scythe
-Tools/Tomato_Seed_Dispenser 10
 /
 /Recipe
 /
@@ -85,10 +81,10 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-EMPTY
-DEAD
-EMPTY
-EMPTY
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 0 7
 EMPTY
 EMPTY
 EMPTY

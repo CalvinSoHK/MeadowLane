@@ -138,6 +138,9 @@ public class Bus_Controller : MonoBehaviour {
 
         //If we are going to player home find the farm manager.
         //Should be rewritten so we just call loadTempData and it is handled on that side.
+
+        //SaveSystem.LoadTempData(NEW_STOP_INFO.GetName());
+
         if (NEW_STOP_INFO.GetName().Equals("PlayerHome"))
         {
             if (FMP == null)

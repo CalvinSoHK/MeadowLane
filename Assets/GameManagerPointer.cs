@@ -32,6 +32,7 @@ public class GameManagerPointer : MonoBehaviour {
             TUTORIAL_MANAGER = GetComponent<TutorialManager>();
             LIGHTING_MANAGER = GetComponent<LightingManager>();
             FARM_MANAGER_POINTER = GetComponent<FarmManagerPointer>();
+            FURNITURE_MANAGER_POINTER = GetComponent<FurnitureManagerPointer>();
         }
     }
 
@@ -44,5 +45,6 @@ public class GameManagerPointer : MonoBehaviour {
     public TutorialManager TUTORIAL_MANAGER;
     public LightingManager LIGHTING_MANAGER;
     public FarmManagerPointer FARM_MANAGER_POINTER;
+    public FurnitureManagerPointer FURNITURE_MANAGER_POINTER;
 
 }
