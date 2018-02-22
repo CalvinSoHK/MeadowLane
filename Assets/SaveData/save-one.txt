@@ -2,7 +2,7 @@
 4 1 2 3 1
 /
 /Money
-100
+150
 /
 /Messages
 [NEW]
@@ -81,10 +81,10 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 4 7
+Tomato_StageTwo True 7 0 7
 EMPTY
 EMPTY
 EMPTY

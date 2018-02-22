@@ -7,6 +7,12 @@ using Valve.VR.InteractionSystem;
 //Script that enables the controller to raycast trigger items
 public class OnTriggerRaycast : MonoBehaviour {
 
+    public enum RaycastMode { Default, Decorating };
+    public RaycastMode MODE = RaycastMode.Default;
+
+    enum State { Idle, Raycast, Select };
+    State STATE = State.Idle;
+
     //Layermask
     public LayerMask INTERACTABLE_LAYERS, HITTABLE_LAYERS, EDITABLE_LAYERS;
 
@@ -14,7 +20,7 @@ public class OnTriggerRaycast : MonoBehaviour {
     Hand hand;
 
     //Raycasting for interaction
-    bool raycast = false, customization = false;
+    bool customization = false;
 
     //Whether or not we are allowed to raycast
     public bool ENABLED = true;
@@ -28,6 +34,9 @@ public class OnTriggerRaycast : MonoBehaviour {
     //The player object
     Transform VR_CAMERA, PLAYER;
 
+    //Raycast hit info
+    RaycastHit HIT = new RaycastHit();
+
     void Start()
     {
         hand = GetComponent<Hand>();
@@ -38,279 +47,201 @@ public class OnTriggerRaycast : MonoBehaviour {
     //obj is the target we're raycasting.
     void Update()
     {
-        //Set line renderer to our position
-        GetComponent<LineRenderer>().SetPosition(0, transform.position);
-        if(PLAYER == null)
+        //Always try to have Player assigned to.
+        if (PLAYER == null)
         {
             PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.transform;
         }
-        customization = PLAYER.GetComponent<HomeCustomizationManager>().currentlyCustomizingHome;
 
-        //When we get Trigger down...
-        if (hand.GetStandardInteractionButtonDown() && ENABLED)
+        //State machine
+        switch (STATE)
         {
-            //Start raycasting
-            raycast = true;
-        }
-
-        //When we get Trigger up...
-        if (hand.GetStandardInteractionButtonUp())
-        {
-            if (obj != null)
-            {
-                //If we aren't doing customization, use all interaction scripts.
-                if (!customization)
+            //While idle
+            case State.Idle:
+                //If we get trigger down, move us to the raycast state
+                if(hand.GetStandardInteractionButtonDown())
                 {
-                    if (obj.GetComponent<InteractableCustom>())
+                    if (ENABLED)
                     {
-                        //Use every interact on an object.
-                        foreach (InteractableCustom interact in obj.GetComponents<InteractableCustom>())
-                        {
-                            interact.Use(hand);
+                        STATE = State.Raycast;
+                    }
+                    else
+                    {
+                        ENABLED = true;
+                    }                
+                }
+                break;
+            //While we need to raycast
+            case State.Raycast:
+                //Turn on the raycast renderer
+                GetComponent<LineRenderer>().enabled = true;
 
-                        }
+                //Set line renderer to our position
+                GetComponent<LineRenderer>().SetPosition(0, transform.position);
 
-                        Material[] array = new Material[1];
-                        array[0] = obj.GetComponent<Renderer>().materials[0];
-                        obj.GetComponent<Renderer>().materials = array;
-                        if (obj.GetComponent<InteractionPickup>())
-                        {
+                //Raycast real far forward from this hand and only hit hittable layers
+                if (Physics.Raycast(transform.position, transform.forward, out HIT, 1000f, HITTABLE_LAYERS))
+                {
+                    //Set the position of the line rendered wherever we hit, regardless of the mode
+                    GetComponent<LineRenderer>().SetPosition(1, HIT.point);
+
+                    //If the raycasted object is not the same as last frame, get rid of highlights off the old obj and the UI popup
+                    if (!HIT.collider.gameObject.Equals(obj) && obj != null)
+                    {
+                        RemoveHighlight(obj);
+                        DisableUI(obj);
+                        obj = null;
+                    }
+                    
+                    //Handle object validity based on mode.
+                    switch (MODE)
+                    {
+                        case RaycastMode.Default:
+                            //If it is within the interactable layers
+                            if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
+                            {
+                                //And has the interactable script.
+                                if (HIT.collider.gameObject.GetComponent<InteractableCustom>())
+                                {
+                                    obj = HIT.collider.gameObject;
+                                    ApplyHighlight(obj);
+                                    EnableUI(obj);
+                                }
+                            }
+                            break;
+                        case RaycastMode.Decorating:
+                            //If it is within our editable layer mask
+                            if (EDITABLE_LAYERS == (EDITABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
+                            {
+                                //If we are a base item with the decoration tag.
+                                if (HIT.collider.gameObject.GetComponent<BaseItem>() 
+                                    && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration) 
+                                    || HIT.collider.GetComponent<BaseItem>().CATEGORY.Equals("Decoration")))
+                                {
+                                    obj = HIT.collider.gameObject;
+                                    ApplyHighlight(obj);                                   
+                                }
+                            }
+                            break;
+                        default:
+                            Debug.Log("Invalid mode.");
+                            break;
+                    }
+                }
+                else //We aren't hitting anything but we still draw the line for players.
+                {
+                    //Render the line to its max distance.
+                    GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
+
+                    //If we had something highlighted before, turn it off.
+                    if (obj != null)
+                    {
+                        RemoveHighlight(obj);
+                        DisableUI(obj);
+                    }
+                    obj = null;
+                }
+
+                //Once we get button up we can move on to select.
+                if (hand.GetStandardInteractionButtonUp())
+                {
+                    STATE = State.Select;
+                }
+
+                break;
+            //When we are told to select.
+            case State.Select:
+                //Disable the raycast render
+                GetComponent<LineRenderer>().enabled = false;
+
+                //If we have an obj we can try to select
+                if (obj != null)
+                {
+                    //Depending on what mode we are trying to use
+                    switch (MODE)
+                    {
+                        //Default use. Fire all interaction scripts on use.
+                        case RaycastMode.Default:
+                            //If the object has at least one interactable script
+                            if (obj.GetComponent<InteractableCustom>())
+                            {
+                                //Use every interact on an object.
+                                foreach (InteractableCustom interact in obj.GetComponents<InteractableCustom>())
+                                {
+                                    interact.Use(hand);
+                                }
+
+                                //If the object has interaction pickup, disable raycasting.
+                                if (obj.GetComponent<InteractionPickup>())
+                                {
+                                    ENABLED = false;
+                                }
+                                else
+                                {
+                                    ENABLED = true;
+                                }
+                            }
+                            break;
+                        //Decoration. Communicate with home customizatioin manager.
+                        case RaycastMode.Decorating:
+
+                            //Set the use state to the right hand depending on who called it.
+                            if (hand.name.Contains("1"))
+                            {
+                                PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand1);
+                            }
+                            else
+                            {
+                                PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand2);
+                            }
+
+                            //Then tell the customization manager to select the given object.
+                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj);
+
+                            //Since we are "holding" that object, disable raycasting
                             ENABLED = false;
-                            obj = null;
-                        }
+                            break;
                     }
-                }
-                else if(ENABLED)
-                {
-                    Material[] array = new Material[1];
-                    array[0] = obj.GetComponent<Renderer>().materials[0];
-                    obj.GetComponent<Renderer>().materials = array;
 
-                    if (hand.name.Contains("1"))
-                    {
-                         PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand1);
-                    }
-                    else
-                    {
-                        PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand2);
-                    }
-                    PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj);
+                    //Remove the highlight effect
+                    RemoveHighlight(obj);
+
+                    //No matter what happens remove the selected object.
                     obj = null;
                 }
-               
-            }
-            else
-            {
-                if (!customization)
-                {
-                    ENABLED = true;
-                }              
-            }
 
-
-            //Stop raycasting
-            raycast = false;
-          
+                //After passing through once cut to idle again, regardless if there was valid select
+                STATE = State.Idle;
+                break;
+            default:
+                Debug.Log("Error: Non valid state.");
+                break;
         }
+    }
 
-        //If we need to raycast...
-        if (raycast && ENABLED)
+    public void ToggleMode()
+    {
+        if(MODE == RaycastMode.Default)
         {
-            GetComponent<LineRenderer>().enabled = true;
-            RaycastHit rayHit = new RaycastHit();
-            //Raycast, if we hit something...
-
-            //If we are customizing something
-            if (customization)
-            {
-                //Raycast real far forward from this hand
-                if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f, HITTABLE_LAYERS))
-                {
-                    //Set the position of the line rendered wherever we hit.
-                    GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
-
-                    //If it is within our editable layer mask
-                    if(EDITABLE_LAYERS == (EDITABLE_LAYERS | (1 << rayHit.collider.gameObject.layer)))
-                    {
-                        //If it is an item
-                        if (rayHit.collider.gameObject.GetComponent<BaseItem>() && (rayHit.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration) || rayHit.collider.GetComponent<BaseItem>().CATEGORY.Equals("Decoration")))
-                        {
-                            obj = rayHit.collider.gameObject;
-
-                            //If there is a renderer....
-                            if (rayHit.collider.gameObject.GetComponent<Renderer>() != null)
-                            {
-                                //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
-                                if (obj != null && obj != rayHit.collider.gameObject)
-                                {
-                                    if (obj.GetComponent<Renderer>())
-                                    {
-                                        //Remove highlight
-                                        RemoveHighlight(obj);
-
-                                        //Disable UI if possible
-                                        DisableUI(obj);
-                                    }
-
-                                }
-                                //Note: We always apply highlight to the new object
-                                //Apply highlight to the given object
-                                obj = rayHit.collider.gameObject;
-                                ApplyHighlight(obj);
-
-                                //Enable UI of object
-                                EnableUI(obj);
-                            }
-                            else //This else is for when we had models that had multiple colliders. The hit collider sometimes didnt have a renderer.
-                            {
-                                //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
-                                if (obj != null && obj != rayHit.collider.gameObject && obj.GetComponent<Renderer>() != null)
-                                {
-                                    RemoveHighlight(obj);
-                                    DisableUI(obj);
-                                }
-
-                                //Always set obj
-                                obj = rayHit.collider.gameObject;
-                            }
-                        }
-                        else//This is for if it is within our layers but doesnt have a baseItemScript
-                        {
-                            //If we previously had an object, get rid of its highlight.
-                            if (obj != null)
-                            {
-                                if (obj.GetComponent<Renderer>())
-                                {
-                                    RemoveHighlight(obj);
-                                    DisableUI(obj);
-                                }
-
-                            }
-                            obj = null;
-                        }
-                    }
-                    else
-                    {
-                        //If we previously had an object, get rid of its highlight.
-                        if (obj != null)
-                        {
-                            if (obj.GetComponent<Renderer>())
-                            {
-                                RemoveHighlight(obj);
-                                DisableUI(obj);
-                            }
-
-                        }
-                        obj = null;
-                    }
-                }
-                else //If we don't hit something...
-                {
-                    //Render the line to its max distance.
-                    GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
-                    //If we had something highlighted before, turn it off.
-                    if (obj != null)
-                    {
-                        if (obj.GetComponent<Renderer>() != null)
-                        {
-                            RemoveHighlight(obj);
-                            DisableUI(obj);
-                        }
-
-                    }
-                    obj = null;
-                }
-            }
-            else//Handle normal interactions below
-            {
-                if (Physics.Raycast(transform.position, transform.forward, out rayHit, 1000f, HITTABLE_LAYERS))
-                //if (Physics.SphereCast(transform.position, transform.forward, out rayHit, ))
-                {
-                    //Render the line to wherever the raycast ends.
-                    GetComponent<LineRenderer>().SetPosition(1, rayHit.point);
-
-                    //If it is in the interactable layer
-                    if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << rayHit.collider.gameObject.layer)))
-                    {
-                        //And has the interactable script.
-                        if (rayHit.collider.gameObject.GetComponent<InteractableCustom>())
-                        {
-                            //If there is a renderer....
-                            if (rayHit.collider.gameObject.GetComponent<Renderer>() != null)
-                            {
-                                //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
-                                if (obj != null && obj != rayHit.collider.gameObject)
-                                {
-                                    if (obj.GetComponent<Renderer>())
-                                    {
-                                        //Remove highlight
-                                        RemoveHighlight(obj);
-
-                                        //Disable UI if possible
-                                        DisableUI(obj);
-                                    }
-
-                                }
-                                //Note: We always apply highlight to the new object
-                                //Apply highlight to the given object
-                                obj = rayHit.collider.gameObject;
-                                ApplyHighlight(obj);
-
-                                //Enable UI of object
-                                EnableUI(obj);
-                            }
-                            else //This else is for when we had models that had multiple colliders. The hit collider sometimes didnt have a renderer.
-                            {
-                                //If we previously had an object AND it isnt the same as the thing we're looking at now, get rid of its highlight.
-                                if (obj != null && obj != rayHit.collider.gameObject && obj.GetComponent<Renderer>() != null)
-                                {
-                                    RemoveHighlight(obj);
-                                    DisableUI(obj);
-                                }
-
-                                //Always set obj
-                                obj = rayHit.collider.gameObject;
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        //If we previously had an object, get rid of its highlight.
-                        if (obj != null)
-                        {
-                            if (obj.GetComponent<Renderer>())
-                            {
-                                RemoveHighlight(obj);
-                                DisableUI(obj);
-                            }
-
-                        }
-                        obj = null;
-                    }
-                }
-                else //If we don't hit something...
-                {
-                    //Render the line to its max distance.
-                    GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
-                    //If we had something highlighted before, turn it off.
-                    if (obj != null)
-                    {
-                        if (obj.GetComponent<Renderer>() != null)
-                        {
-                            RemoveHighlight(obj);
-                            DisableUI(obj);
-                        }
-
-                    }
-                    obj = null;
-                }
-            }
+            MODE = RaycastMode.Decorating;
         }
-        else
+        else if(MODE == RaycastMode.Decorating)
         {
-            GetComponent<LineRenderer>().enabled = false;
+            MODE = RaycastMode.Default;
         }
+
+        //Clear object if we toggle mode just so if we are raycasting at something it doesnt trick it into thinking its valid.
+        obj = null;
+    }
+
+    public void SetMode(int MODE_INT)
+    {
+        MODE = (RaycastMode)MODE_INT;
+    }
+
+    public void SetMode(RaycastMode MODE_STATE)
+    {
+        MODE = MODE_STATE;
     }
 
     //Helper function to manually pick something up with script
@@ -332,35 +263,41 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Helper function that finds the interactable that shows UI and shows it
     public void EnableUI(GameObject OBJ)
     {
-        //Get all interactables in obj
-        InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
-
-        //Find the relevant object
-        foreach(InteractableCustom INTERACTABLE in LIST)
+        if (OBJ.GetComponent<InteractableCustom>())
         {
-            //IF it has show_UI enabled
-            if (INTERACTABLE.SHOW_UI)
+            //Get all interactables in obj
+            InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
+
+            //Find the relevant object
+            foreach (InteractableCustom INTERACTABLE in LIST)
             {
-                INTERACTABLE.DisplayUI(VR_CAMERA);
-                return;
+                //IF it has show_UI enabled
+                if (INTERACTABLE.SHOW_UI)
+                {
+                    INTERACTABLE.DisplayUI(VR_CAMERA);
+                    return;
+                }
             }
-        }
+        }  
     }
 
     //Helper function that finds the interactable that shows UI and disables it
     public void DisableUI(GameObject OBJ)
     {
-        //Get all interactables in obj
-        InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
-
-        //Find the relevant object
-        foreach (InteractableCustom INTERACTABLE in LIST)
+        if (OBJ.GetComponent<InteractableCustom>())
         {
-            //IF it has show_UI enabled
-            if (INTERACTABLE.SHOW_UI && INTERACTABLE.UI_PREFAB != null)
+            //Get all interactables in obj
+            InteractableCustom[] LIST = OBJ.GetComponents<InteractableCustom>();
+
+            //Find the relevant object
+            foreach (InteractableCustom INTERACTABLE in LIST)
             {
-                INTERACTABLE.HideUI();
-                return;
+                //IF it has show_UI enabled
+                if (INTERACTABLE.SHOW_UI && INTERACTABLE.UI_PREFAB != null)
+                {
+                    INTERACTABLE.HideUI();
+                    return;
+                }
             }
         }
     }
@@ -368,21 +305,27 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Helper function that applies the highlight to given obj
     public void ApplyHighlight(GameObject OBJ)
     {
-        //Make new material array with highlight as well
-        Material[] matArray = new Material[2];
+        if (OBJ.GetComponent<MeshRenderer>())
+        {
+            //Make new material array with highlight as well
+            Material[] matArray = new Material[2];
 
-        //Apply highlight
-        matArray[0] = OBJ.GetComponent<Renderer>().material;
-        matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
-        OBJ.GetComponent<Renderer>().materials = matArray;
+            //Apply highlight
+            matArray[0] = OBJ.GetComponent<Renderer>().material;
+            matArray[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
+            OBJ.GetComponent<Renderer>().materials = matArray;
+        }      
     }
 
     //Helper function that removes the highlight to a given obj
     public void RemoveHighlight(GameObject OBJ)
     {
-        //Remove highlight from previous
-        Material[] array = new Material[1];
-        array[0] = OBJ.GetComponent<Renderer>().materials[0];
-        OBJ.GetComponent<Renderer>().materials = array;
+        if (OBJ.GetComponent<MeshRenderer>())
+        {
+            //Remove highlight from previous
+            Material[] array = new Material[1];
+            array[0] = OBJ.GetComponent<Renderer>().materials[0];
+            OBJ.GetComponent<Renderer>().materials = array;
+        } 
     }
 }

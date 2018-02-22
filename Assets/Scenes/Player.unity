@@ -553,6 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679c80fe80830a2439b41a3a26ab990e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MODE: 0
   INTERACTABLE_LAYERS:
     serializedVersion: 2
     m_Bits: 1280
@@ -658,8 +659,8 @@ MonoBehaviour:
   OnMenuButtonPress:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 637642982}
-        m_MethodName: CustomizeHome
+      - m_Target: {fileID: 254426597}
+        m_MethodName: ToggleMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1397,7 +1398,7 @@ MonoBehaviour:
   SHOW_STATE: 0
   PLACEMENT_LAYERMASK:
     serializedVersion: 2
-    m_Bits: 4294963679
+    m_Bits: 4294965727
   RAYCAST_LAYERMASK:
     serializedVersion: 2
     m_Bits: 0
@@ -3251,6 +3252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679c80fe80830a2439b41a3a26ab990e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MODE: 0
   INTERACTABLE_LAYERS:
     serializedVersion: 2
     m_Bits: 1280
@@ -3302,8 +3304,8 @@ MonoBehaviour:
   OnMenuButtonPress:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 637642982}
-        m_MethodName: CustomizeHome
+      - m_Target: {fileID: 254426597}
+        m_MethodName: ToggleMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

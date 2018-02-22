@@ -39,6 +39,9 @@ public class HomeCustomizationManager : MonoBehaviour {
     Ray HAND_POINT = new Ray();
     RaycastHit HIT = new RaycastHit();
 
+    //Save the old layer just in case
+    int PREV_LAYER = -1;
+
     //Layermask for our raycast
     public LayerMask PLACEMENT_LAYERMASK, RAYCAST_LAYERMASK;
 
@@ -51,6 +54,153 @@ public class HomeCustomizationManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        //Retrieve hand inputs
+        RetrieveHandInputs();
+
+        if (currentlyCustomizingHome)
+        {
+            switch (currentCustomizeState)
+            {
+                case CustomizeState.Idle:
+                    //Make sure raycast is coming from the right hand/
+                    AssignRaycast();
+                    break;
+
+                case CustomizeState.Selected: //Make the object follow our raycast location
+                    //NOTE: Selected object is assigned in OnTriggerRaycast.
+                    //If we don't have a selectable object, its an error and move to the stop state.
+                    if(currentlySelectedObject == null)
+                    {
+                        Debug.Log("Error: Don't actually have a selected object.");
+                        SetCurrentHomeState(CustomizeState.Stop);
+                    }
+                    else
+                    {
+                        //Assign the right ray to raycast
+                        AssignRaycast();
+
+                        //As long as we're not none, and thus hand-pointer is not null.
+                        if(SHOW_STATE != UseState.None)
+                        {
+                            //If we hit a point
+                            if (Physics.Raycast(HAND_POINT, out HIT, 1000f, PLACEMENT_LAYERMASK))
+                            {
+                                hologramRefToSelectedObject.transform.position = HIT.point;
+                            }
+
+                            if (RIGHT)
+                            {
+                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, 1, 0));
+                            }
+                            else if(LEFT)
+                            {
+                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, -1, 0));
+                            }
+
+                            //Press down on trackpad to attempt to place it down.
+                            if (PRESS_DOWN)
+                            {
+                                //Assign the right layer back to the og object regardless of if it was moved or not
+                                currentlySelectedObject.layer = PREV_LAYER;
+
+                                if (hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IS_VALID)
+                                {
+                                    Debug.Log("Valid. Placing.");
+                                    placeObject();
+                                }
+                                else
+                                {
+                                    Debug.Log("Invalid. Destroyed.");
+                                    Destroy(hologramRefToSelectedObject.gameObject);
+                                }
+
+                                EnableRaycasting();
+                                SetCurrentHomeState(CustomizeState.Stop);
+                            }
+
+                            //Press trigger to exit this object place mode.
+                            if (TRIGGER_DOWN)
+                            {
+                                Destroy(hologramRefToSelectedObject.gameObject);
+                                SetCurrentHomeState(CustomizeState.Stop);
+                            }
+                        }
+                    }
+                    break;
+
+                case CustomizeState.Stop:
+                    if (SHOW_STATE == UseState.Hand1)
+                    {
+                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
+                    }
+                    else if (SHOW_STATE == UseState.Hand2)
+                    {
+                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
+                    }
+                    currentlyCustomizingHome = false;
+                    SetCurrentHomeState(CustomizeState.Idle);
+                    break;
+            }
+        }
+	}
+
+    /// <summary>
+    /// set whether or not we are currently customizing the home
+    /// should be activated on press of the top vive controller button
+    /// </summary>
+    /// <param name="customized"></param>
+    public void CustomizeHome()
+    {
+        if (currentlyCustomizingHome) // if the player is already in the customize state then turn it off
+        {
+            currentlyCustomizingHome = false;
+
+        }else // other set it to true
+        {
+            currentlyCustomizingHome = true;
+        }
+        
+    }
+    /// <summary>
+    /// getter to see if we are currently customizing the home
+    /// </summary>
+    /// <returns></returns>
+    public bool CustomizingHome()
+    {
+        return currentlyCustomizingHome;
+    }
+
+    //Re-enable being able to interact with things
+    public void EnableRaycasting()
+    {
+        //Assign the right ray to raycast
+        if (SHOW_STATE == UseState.Hand1)
+        {
+            hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
+        }
+        else if (SHOW_STATE == UseState.Hand2)
+        {
+            hand2.GetComponent<OnTriggerRaycast>().ENABLED = true;
+        }
+    }
+
+    //Assigns raycast to the right hand based on show state.
+    public void AssignRaycast()
+    {
+        //Assign the right ray to raycast
+        if (SHOW_STATE == UseState.Hand1)
+        {
+            HAND_POINT = new Ray(hand1.transform.position, hand1.transform.forward);
+        }
+        else if (SHOW_STATE == UseState.Hand2)
+        {
+            HAND_POINT = new Ray(hand2.transform.position, hand2.transform.forward);
+        }
+    }
+
+    //Receives all inputs
+    public void RetrieveHandInputs()
+    {
         //Update the directional bools based off of the current hand's trackpad
         if (SHOW_STATE == UseState.Hand1)
         {
@@ -98,118 +248,6 @@ public class HomeCustomizationManager : MonoBehaviour {
                 ANY_DIRECTIONAL = false;
             }
         }
-
-        if (currentlyCustomizingHome)
-        {
-            switch (currentCustomizeState)
-            {
-                case CustomizeState.Idle:
-                    //Assign the right ray to raycast
-                    if (SHOW_STATE == UseState.Hand1)
-                    {
-                        HAND_POINT = new Ray(hand1.transform.position, hand1.transform.forward);
-                    }
-                    else if (SHOW_STATE == UseState.Hand2)
-                    {
-                        HAND_POINT = new Ray(hand2.transform.position, hand2.transform.forward);
-                    }
-                    break;
-
-                case CustomizeState.Selected: //Make the object follow our raycast location
-                    //If we don't have a selectable object, its an error and move to the stop state.
-                    if(currentlySelectedObject == null)
-                    {
-                        Debug.Log("Error: Don't actually have a selected object.");
-                        SetCurrentHomeState(CustomizeState.Stop);
-                    }
-                    else
-                    {
-                        //Assign the right ray to raycast
-                        if(SHOW_STATE == UseState.Hand1)
-                        {
-                            HAND_POINT = new Ray(hand1.transform.position, hand1.transform.forward);
-                        }
-                        else if(SHOW_STATE == UseState.Hand2)
-                        {
-                            HAND_POINT = new Ray(hand2.transform.position, hand2.transform.forward);
-                        }
-
-                        //As long as we're not none, and thus hand-pointer is not null.
-                        if(SHOW_STATE != UseState.None)
-                        {
-                            //If we hit a point
-                            if (Physics.Raycast(HAND_POINT, out HIT, 1000f, PLACEMENT_LAYERMASK))
-                            {
-                                hologramRefToSelectedObject.transform.position = HIT.point;
-                            }
-
-                            if (RIGHT)
-                            {
-                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, 1, 0));
-                            }
-                            else if(LEFT)
-                            {
-                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, -1, 0));
-                            }
-
-                            if (PRESS_DOWN)
-                            {
-                                if (hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IS_VALID)
-                                {
-                                    Debug.Log("Valid. Placing.");
-                                    placeObject();
-                                }
-                                else
-                                {
-                                    Debug.Log("Invalid. Destroyed.");
-                                    Destroy(hologramRefToSelectedObject.gameObject);
-                                }
-                              
-                                SetCurrentHomeState(CustomizeState.Stop);
-                            }
-                        }
-                    }
-                    break;
-
-                case CustomizeState.Stop:
-                    if (SHOW_STATE == UseState.Hand1)
-                    {
-                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
-                    }
-                    else if (SHOW_STATE == UseState.Hand2)
-                    {
-                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
-                    }
-                    SetCurrentHomeState(CustomizeState.Idle);
-                    break;
-            }
-        }
-	}
-
-    /// <summary>
-    /// set whether or not we are currently customizing the home
-    /// should be activated on press of the top vive controller button
-    /// </summary>
-    /// <param name="customized"></param>
-    public void CustomizeHome()
-    {
-        if (currentlyCustomizingHome) // if the player is already in the customize state then turn it off
-        {
-            currentlyCustomizingHome = false;
-
-        }else // other set it to true
-        {
-            currentlyCustomizingHome = true;
-        }
-        
-    }
-    /// <summary>
-    /// getter to see if we are currently customizing the home
-    /// </summary>
-    /// <returns></returns>
-    public bool CustomizingHome()
-    {
-        return currentlyCustomizingHome;
     }
 
     public void SetCurrentHomeState(CustomizeState state)
@@ -230,6 +268,9 @@ public class HomeCustomizationManager : MonoBehaviour {
 
     public void selectObject(GameObject og)
     {
+        //Enable moving things around
+        currentlyCustomizingHome = true;
+
         //Disable raycasting
         hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
         hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
@@ -246,13 +287,25 @@ public class HomeCustomizationManager : MonoBehaviour {
         hologramMaterial[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
         hologramRefToSelectedObject.GetComponent<Renderer>().materials = hologramMaterial; //assign the new materials to the hologram object
         hologramRefToSelectedObject.AddComponent<CheckIfColliding>(); //Adds the script checkifcolliding.
-        if(hologramRefToSelectedObject.GetComponent<MeshCollider>() != null)
+        hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IgnoreCollision(currentlySelectedObject);
+
+        //Makes the collider compatible with the rigidbody.
+        if (hologramRefToSelectedObject.GetComponent<MeshCollider>() != null)
         {
             hologramRefToSelectedObject.GetComponent<MeshCollider>().convex = true;
             hologramRefToSelectedObject.GetComponent<MeshCollider>().isTrigger = true;
         }
+
+        //Change layer of hologram so we don't accidentally hit it with our raycast during placement
+        hologramRefToSelectedObject.layer = 5;
+
+        //Make the hologram have a rigidbody so its on trigger calls work. Kinematic so it isnt pushed around by things.
         hologramRefToSelectedObject.AddComponent<Rigidbody>();
         hologramRefToSelectedObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        //Make the original object the UI layer so we can adjust its position in the same place
+        PREV_LAYER = currentlySelectedObject.layer;
+        currentlySelectedObject.layer = 5;
       
         SetCurrentHomeState(CustomizeState.Selected); //Set the current state to the selected one
     }
