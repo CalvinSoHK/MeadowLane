@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 50452216}
   - component: {fileID: 50452217}
   m_Layer: 0
-  m_Name: Furniture
+  m_Name: FurnitureManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

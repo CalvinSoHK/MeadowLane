@@ -115,8 +115,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                             {
                                 //If we are a base item with the decoration tag.
                                 if (HIT.collider.gameObject.GetComponent<BaseItem>() 
-                                    && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration) 
-                                    || HIT.collider.GetComponent<BaseItem>().CATEGORY.Equals("Decoration")))
+                                    && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration)))
                                 {
                                     obj = HIT.collider.gameObject;
                                     ApplyHighlight(obj);                                   

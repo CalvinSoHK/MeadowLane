@@ -5,21 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class CheckIfColliding : MonoBehaviour {
 
-    public bool IS_VALID = true;
+    public bool IS_VALID = true, TOO_FAR = false;
 
-    Color VALID_COLOR = Color.green, INVALID_COLOR = Color.red;
+    Color VALID_COLOR = Color.green, INVALID_COLOR = Color.red, FAR_COLOR = Color.blue;
 
     private void Update()
     {
-        if (IS_VALID)
+        if (TOO_FAR)
         {
-            Debug.Log(GetComponent<MeshRenderer>().materials[1].GetColor("g_vOutlineColor"));
+            GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", FAR_COLOR);
+            GetComponent<MeshRenderer>().materials[1].SetColor("g_vOutlineColor", FAR_COLOR);
+        }
+        else if (IS_VALID)
+        {     
             GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", VALID_COLOR);
             GetComponent<MeshRenderer>().materials[1].SetColor("g_vOutlineColor", VALID_COLOR);
         }
         else
         {
-            Debug.Log(GetComponent<MeshRenderer>().materials[1].GetColor("g_vOutlineColor"));
             GetComponent<MeshRenderer>().materials[0].SetColor("_TintColor", INVALID_COLOR);
             GetComponent<MeshRenderer>().materials[1].SetColor("g_vOutlineColor", INVALID_COLOR);
         }
@@ -32,7 +35,6 @@ public class CheckIfColliding : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         IS_VALID = false;
     }
 

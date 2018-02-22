@@ -85,7 +85,12 @@ public class HomeCustomizationManager : MonoBehaviour {
                             //If we hit a point
                             if (Physics.Raycast(HAND_POINT, out HIT, 1000f, PLACEMENT_LAYERMASK))
                             {
+                                hologramRefToSelectedObject.GetComponent<CheckIfColliding>().TOO_FAR = false;
                                 hologramRefToSelectedObject.transform.position = HIT.point;
+                            }
+                            else
+                            {
+                                hologramRefToSelectedObject.GetComponent<CheckIfColliding>().TOO_FAR = true;
                             }
 
                             if (RIGHT)
@@ -105,12 +110,12 @@ public class HomeCustomizationManager : MonoBehaviour {
 
                                 if (hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IS_VALID)
                                 {
-                                    Debug.Log("Valid. Placing.");
+                                    //Debug.Log("Valid. Placing.");
                                     placeObject();
                                 }
                                 else
                                 {
-                                    Debug.Log("Invalid. Destroyed.");
+                                    //Debug.Log("Invalid. Destroyed.");
                                     Destroy(hologramRefToSelectedObject.gameObject);
                                 }
 
@@ -121,6 +126,9 @@ public class HomeCustomizationManager : MonoBehaviour {
                             //Press trigger to exit this object place mode.
                             if (TRIGGER_DOWN)
                             {
+                                //Assign the right layer back to the og object regardless of if it was moved or not
+                                currentlySelectedObject.layer = PREV_LAYER;
+
                                 Destroy(hologramRefToSelectedObject.gameObject);
                                 SetCurrentHomeState(CustomizeState.Stop);
                             }

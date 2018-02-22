@@ -7,7 +7,7 @@ using System.IO;
 public static class SaveSystem {
 
     public enum SaveType { Date, Money, Messages, Inventory, Recipes, Farm, Decoration, Relationships, TownState };
-    public enum TempType { Farm, HappyMart };
+    public enum TempType { Farm, HappyMart, Decoration};
 
     static string PATH_TO_MAIN = Application.dataPath + "/SaveData/save-one.txt",
         PATH_TO_TEMP = Application.dataPath + "/SaveData/save-temp.txt";
@@ -265,33 +265,88 @@ public static class SaveSystem {
         }
     }
 
+    //Function that loads the correct temp data based on the name of the stop given
+    public static void LoadTempData(string NAME)
+    {
+        switch (NAME)
+        {
+            case "PlayerHome":
+                LoadTempData(TempType.Farm);
+                LoadTempData(TempType.Decoration);
+                break;
+            case "HappyMart":
+                LoadTempData(TempType.HappyMart);
+                break;
+            default:
+                Debug.Log("Invalid stop. Not loading anything.");
+                break;
+        }
+    }
+
     //Retrieves the given info and separates it into the necessary indexes.
-    public static void LoadTempData()
+    public static void LoadTempData(TempType TYPE)
     {
         //Read in the file
         using (StreamReader SR = new StreamReader(PATH_TO_TEMP))
         {
             string LINE, DATA = "";
-            TempType TYPE = TempType.Farm;
+            //Whether or not we should be copying. Is false until we reach the right line.
+            bool COPY = false;
             while ((LINE = SR.ReadLine()) != null)
             {
                 switch (TYPE)
                 {
                     case TempType.Farm:
-                        if (!LINE.Contains("/Farm"))
+                        //Until we reach the right line, don't copy
+                        if (LINE.Contains("/Farm"))
                         {
-                            if (!LINE.Equals("/"))
+                            COPY = true;
+                        }
+
+                        //We need to copy, then load.
+                        if (COPY)
+                        {
+                            if (!LINE.Contains("/Farm"))
                             {
-                                DATA += LINE + "\n";
+                                if (!LINE.Equals("/"))
+                                {
+                                    DATA += LINE + "\n";
+                                }
+                                else
+                                {
+                                    GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
+                                    DATA = "";
+                                }
                             }
-                            else
-                            {
-                                GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
-                                DATA = "";
-                                TYPE = TempType.HappyMart;
-                            }
+                            
                         }
                         break;
+
+                    case TempType.Decoration:
+
+                        //Until we reach the right line, don't copy
+                        if (LINE.Contains("/Decoration"))
+                        {
+                            COPY = true;
+                        }
+
+                        if (COPY)
+                        {
+                            if (!LINE.Contains("/Decoration"))
+                            {
+                                if (!LINE.Equals("/"))
+                                {
+                                    DATA += LINE + "\n";
+                                }
+                                else
+                                {
+                                    GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.LoadData(DATA);
+                                    DATA = "";
+                                }
+                            }  
+                        }
+                        break;
+
                     default:
                         Debug.Log("Not written yet: " + TYPE);
                         break;
