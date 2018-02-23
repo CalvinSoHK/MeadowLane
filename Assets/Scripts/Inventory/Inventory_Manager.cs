@@ -154,8 +154,17 @@ public static class  Inventory_Manager {
                 InventorySeedCount.Add(itemInfo.KEY, itemInfo.gameObject.GetComponent<PourObject>().COUNT); //add the seeds to the key value (dictionary)
             }
             //Get the path for the icon of this item
-            Sprite ICON = Resources.Load(itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
-            Sprite CAT_ICON = Resources.Load("CategoryIcons/" + itemInfo.CATEGORY, typeof(Sprite)) as Sprite;
+            Sprite ICON = null;
+            Sprite CAT_ICON = null;
+            if (itemInfo.hasTag(BaseItem.ItemTags.Decoration))
+            {
+                ICON = Resources.Load("Deco" + "/" + itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
+                
+            }else
+            {
+                ICON = Resources.Load(itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;                
+            }
+            CAT_ICON = Resources.Load("CategoryIcons/" + itemInfo.CATEGORY, typeof(Sprite)) as Sprite;
 
             //add the item in the category at the end of the list
             currentInventory[categoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));

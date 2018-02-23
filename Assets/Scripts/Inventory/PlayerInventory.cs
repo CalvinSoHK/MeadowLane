@@ -242,7 +242,7 @@ public class PlayerInventory : MonoBehaviour {
                         else //If we are in the produce section
                         {
                             COUNT = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum - 1;
-                            SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
+                            SpawnFurnitureFromInventory(tempSlot); //spawn the produce into the scene
                         }
                         break;
                     case InventoryState.Furniture:
@@ -450,6 +450,17 @@ public class PlayerInventory : MonoBehaviour {
         {
             Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>()); //remove it from inv
         }
+        return ObjectRef;
+    }
+
+    public GameObject SpawnFurnitureFromInventory(InventorySlot tempSlot)
+    {
+        HomeCustomizationManager HCM = GetComponent<HomeCustomizationManager>();
+        GameObject prefabRef = Resources.Load(tempSlot.Category + "/" + tempSlot.Name, typeof(GameObject)) as GameObject; //get a ref to the object from the resources folder
+        GameObject ObjectRef = Instantiate(prefabRef, new Vector3(2.85f, 1.31f, 0.42f), Quaternion.identity); //Keep reference of instantiated object
+        HCM.selectObject(ObjectRef, false);
+        
+        Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>()); //remove it from inv
         return ObjectRef;
     }
 
