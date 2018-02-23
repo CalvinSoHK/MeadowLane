@@ -13,6 +13,18 @@ public class FurnitureManager : MonoBehaviour {
     string[] INPUT, LINE, VECTOR;
     Vector3 POS, ROT;
 
+    //Debug function
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Inventory_Manager.AddItemToInventory((Resources.Load("Deco/Chair/WoodenChair", typeof(GameObject)) as GameObject).GetComponent<BaseItem>(), 
+                Inventory_Manager.FurnitureCategory, 
+                Inventory_Manager.FurnitureCategorySlots);
+        }
+
+    }
+
     public void SaveData()
     {
         string DATA = "";
@@ -46,17 +58,20 @@ public class FurnitureManager : MonoBehaviour {
                 FURNITURE[i].transform.eulerAngles.x + "," + FURNITURE[i].transform.eulerAngles.y + "," + FURNITURE[i].transform.eulerAngles.z + "\n";
         }
 
-        SaveSystem.SaveTo(SaveSystem.TempType.Decoration, "/Decoration\n" + DATA + "/\n");
+        SaveSystem.SaveTo(SaveSystem.TempType.Decoration, "/Decoration\n" + DATA + "/");
     }
 
     public void LoadData(string DATA)
     {
-        INPUT = DATA.Split('\n');
+        ClearFurniture();
 
-        for(int i = 0; i < INPUT.Length; i++)
+        INPUT = DATA.Split('\n');
+        //Debug.Log(DATA);
+        for(int i = 0; i < INPUT.Length - 1; i++)
         {
             //Split the line up by spaces
             LINE = INPUT[i].Split(' ');
+            //Debug.Log(LINE[0]);
 
             //Split the pos vector and make it
             VECTOR = LINE[1].Split(',');
@@ -68,6 +83,15 @@ public class FurnitureManager : MonoBehaviour {
 
             //Spawn the object in the right position and rot
             LOADER = Instantiate(Resources.Load("Deco/" + LINE[0], typeof(GameObject)) as GameObject, POS, Quaternion.Euler(ROT),  transform);            
+        }
+    }
+
+    public void ClearFurniture()
+    {
+        BaseItem[] FURNITURE = transform.GetComponentsInChildren<BaseItem>();
+        foreach(BaseItem ITEM in FURNITURE)
+        {
+            Destroy(ITEM.gameObject);
         }
     }
 }

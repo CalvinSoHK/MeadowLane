@@ -10,6 +10,10 @@ public class PlotManager : MonoBehaviour {
     public GameObject[] plotBlocks;
     //public GameObject[] testBlocks;
 
+    //Used many times
+    Vector3 TEMP;
+    string[] VECTOR;
+
     //Size of the given plot
     public int length = 0;
 
@@ -39,7 +43,9 @@ public class PlotManager : MonoBehaviour {
         if(FBI.PLANT != null && !FBI.DEAD)
         {
             PlantBase PB = FBI.PLANT.GetComponent<PlantBase>();
-            DATA += PB.NAME + " " + FBI.TILLED + " " + PB.TIME_TO_NEXT + " " + PB.GetProduceNumber() + " " + PB.DAYS_TO_DIE + "\n";
+            DATA += PB.NAME + " " + FBI.TILLED + " " + PB.TIME_TO_NEXT + " " + PB.GetProduceNumber() + " " + PB.DAYS_TO_DIE + " " + 
+                PB.transform.localScale.x + "," + PB.transform.localScale.y + "," + PB.transform.localScale.z + " " +
+                PB.transform.eulerAngles.x + "," + PB.transform.eulerAngles.y + "," + PB.transform.eulerAngles.z + "\n";
         }
         else if (FBI.DEAD)
         {
@@ -62,10 +68,20 @@ public class PlotManager : MonoBehaviour {
         FarmBlockInfo FBI = plotBlocks[INDEX].GetComponent<FarmBlockInfo>();
         FBI.TILLED = bool.Parse(INPUT[1]);
 
+        //Extract rotation and instantiate it with that rotation
+        VECTOR = INPUT[6].Split(',');
+        TEMP = new Vector3(float.Parse(VECTOR[0]), float.Parse(VECTOR[1]), float.Parse(VECTOR[2]));
+
         //Instantiate the plant and save its referene to the script.
         //Debug.Log(INPUT[0]);
-        PlantBase PB = (Instantiate(Resources.Load("Plants/" + INPUT[0], typeof(GameObject)) as GameObject).GetComponent<PlantBase>());
+        PlantBase PB = (Instantiate(Resources.Load("Plants/" + INPUT[0],  typeof(GameObject)) as GameObject, Vector3.zero, Quaternion.Euler(TEMP), FBI.transform).GetComponent<PlantBase>());
         PB.PlantObj(PB.gameObject, FBI.transform);
+
+        //Change the scale of the object
+        VECTOR = INPUT[5].Split(',');
+        TEMP = new Vector3(float.Parse(VECTOR[0]), float.Parse(VECTOR[1]), float.Parse(VECTOR[2]));
+        PB.transform.localScale = TEMP;
+        TEMP = Vector3.zero;
 
         //Assign all important variables, then actually init the plant so it has our values applied.
         PB.TIME_TO_NEXT = int.Parse(INPUT[2]);

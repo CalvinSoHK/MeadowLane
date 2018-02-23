@@ -376,7 +376,7 @@ public class PlayerInventory : MonoBehaviour {
     /// <param name="hand"></param>
     public void MoveInventory(Hand hand)
     {
-        UICanvas.transform.parent = hand.transform;
+        UICanvas.transform.SetParent(hand.transform);
         UICanvas.transform.localPosition = POS_OFFSET;
         UICanvas.transform.localRotation = Quaternion.Euler(ROT_OFFSET);
     }

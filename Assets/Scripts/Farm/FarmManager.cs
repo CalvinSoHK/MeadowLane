@@ -64,7 +64,7 @@ public class FarmManager : MonoBehaviour {
     public void LoadData(string DATA)
     {
         //Split the input by lines. Temp is for splitting each line within
-        string[] INPUT = DATA.Split('\n'), TEMP;
+        string[] INPUT = DATA.Split('\n');
 
         //First line is just Plot0.
         int PLOT_INDEX = 0, list_index = 0;

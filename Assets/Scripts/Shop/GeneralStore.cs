@@ -30,7 +30,6 @@ public class GeneralStore : MonoBehaviour {
     {
         if (collision.gameObject.CompareTag("Collider"))
         {
-            Container tempContainer = collision.gameObject.GetComponent<Container>();
             //the container shouldn't be able to be picked up anymore.
             collision.gameObject.GetComponent<InteractionPickup>().enabled = false;
         }

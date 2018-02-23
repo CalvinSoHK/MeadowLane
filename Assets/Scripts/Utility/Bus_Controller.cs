@@ -157,7 +157,7 @@ public class Bus_Controller : MonoBehaviour {
 
         //Before replacing new stop info, use it to determine 
         //Save temp data if we need to
-        Debug.Log(NEW_STOP_INFO.GetName());
+        //Debug.Log(NEW_STOP_INFO.GetName());
         SaveSystem.SaveTempData(NEW_STOP_INFO.GetName());
         SaveSystem.WriteTempData();
 

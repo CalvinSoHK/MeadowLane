@@ -6,9 +6,6 @@ using Valve.VR.InteractionSystem;
 //Call all systems that need to save as well as clear the array
 public class InteractionSaveGame : InteractableCustom {
 
-    //FarmManager reference
-    public FarmManager FM;
-    public FurnitureManager FuM;
 
     //Whether or not we're attempting to save
     private bool ATTEMPT_SAVE = false, ATTEMPT_LOAD_DATA;
@@ -32,8 +29,8 @@ public class InteractionSaveGame : InteractableCustom {
             TextMessageManager.SaveData(); //Messages
             Inventory_Manager.SavePlayerInventory(); //Inventory
             RecipeManager.SaveData(); //Recipes
-            FM.SaveData(); //Farm
-            FuM.SaveData();//Decoration
+            GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.SaveData(); //Farm
+            GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.SaveData();//Decoration
                            //Relationships
                            //Town States
 

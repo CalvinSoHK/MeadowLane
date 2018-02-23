@@ -262,11 +262,11 @@ public static class SaveSystem {
                         }
                         break;
                     case SaveType.Relationships:
-                        Debug.Log("Haven't written Relationships loading yet.");
+                        //Debug.Log("Haven't written Relationships loading yet.");
                         TYPE = SaveType.TownState;
                         break;
                     case SaveType.TownState:
-                        Debug.Log("Haven't written Townstate loading yet.");
+                        //Debug.Log("Haven't written Townstate loading yet.");
                         break;
                     default: Debug.Log("Whoops");
                         break;

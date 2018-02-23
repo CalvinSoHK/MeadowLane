@@ -100,7 +100,8 @@ public class PlantBase : MonoBehaviour {
         float randomX = 1 + Random.Range(-widthFactor, widthFactor);
 
         //Apply to local scale
-        transform.localScale = new Vector3(randomX, randomY, randomX);   
+        transform.localScale = new Vector3(randomX, randomY, randomX);
+        //transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0f, 1f) * 360f, 0));
 
         //Spawn produce
         if (BIRTHS_PRODUCE)
@@ -131,6 +132,7 @@ public class PlantBase : MonoBehaviour {
 
         //Apply to local scale
         transform.localScale = new Vector3(randomX, randomY, randomX);
+        //transform.localRotation = Quaternion.Euler(new Vector3(0, Random.Range(0f, 1f) * 360f, 0));
 
         //Spawn produce
         if (BIRTHS_PRODUCE)
@@ -155,7 +157,6 @@ public class PlantBase : MonoBehaviour {
     public void BirthProduce()
     {
         //Debug.Log("Birth");
-        int counter = PRODUCE_NUMBER;
         List<GameObject> SpawnList = new List<GameObject>();
 
         //Retrieve all spawn points.
@@ -310,7 +311,6 @@ public class PlantBase : MonoBehaviour {
     public void PlantObj(GameObject OBJ, Transform BLOCK)
     {
         OBJ.transform.position = BLOCK.position;
-        OBJ.transform.rotation = Quaternion.identity;
         OBJ.transform.parent = BLOCK;
 
         //Transfer relevant details to new plant.

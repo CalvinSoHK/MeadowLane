@@ -86,7 +86,7 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-DEAD
+EMPTY
 EMPTY
 EMPTY
 EMPTY
@@ -97,6 +97,7 @@ EMPTY
 EMPTY
 /
 /Decoration
+Chair/WoodenChair -0.2719841,8.71,27.32121 0,140.9998,0
 /
 /Relationships
 /

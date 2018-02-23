@@ -31,6 +31,7 @@ public class CheckIfColliding : MonoBehaviour {
     public void IgnoreCollision(GameObject OBJ)
     {
         Physics.IgnoreCollision(GetComponent<Collider>(), OBJ.GetComponent<Collider>());
+        
     }
 
     private void OnTriggerStay(Collider other)

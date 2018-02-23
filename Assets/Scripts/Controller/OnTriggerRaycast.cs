@@ -195,7 +195,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                             }
 
                             //Then tell the customization manager to select the given object.
-                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj);
+                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj, true);
 
                             //Since we are "holding" that object, disable raycasting
                             ENABLED = false;

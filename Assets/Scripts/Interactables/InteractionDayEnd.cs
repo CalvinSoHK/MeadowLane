@@ -7,7 +7,7 @@ using Valve.VR.InteractionSystem;
 public class InteractionDayEnd : InteractableCustom {
 
     //Link to the farm manager
-    public FarmManager FM;
+    FarmManager FM;
 
     Scheduler SCHEDULER;
     DeliveryManager DM;
@@ -41,6 +41,7 @@ public class InteractionDayEnd : InteractableCustom {
             SCHEDULER = GameManagerPointer.Instance.SCHEDULER;
             DM = GameManagerPointer.Instance.DELIVERY_MANAGER;
             LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
+            FM = GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM;
         }
         FM.DayEndAll();
         SCHEDULER.NextDay();

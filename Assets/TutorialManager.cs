@@ -84,7 +84,7 @@ public class TutorialInfoDrawer : PropertyDrawer
         var COMPLETE_RECT = new Rect(position.x + 200, position.y, 30, position.height);
 
         //Make labels
-        GUIContent NAME_LABEL = new GUIContent("Name", "Name of the tutorial.");
+        //GUIContent NAME_LABEL = new GUIContent("Name", "Name of the tutorial.");
         //GUIContent COMPLETE_LABEL = new GUIContent("Complete", "Whether or not this tutorial has been done.");
 
         //Draw fields
