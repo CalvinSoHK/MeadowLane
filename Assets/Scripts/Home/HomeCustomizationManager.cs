@@ -51,6 +51,12 @@ public class HomeCustomizationManager : MonoBehaviour {
     //Layermask for our raycast
     public LayerMask PLACEMENT_LAYERMASK, RAYCAST_LAYERMASK;
 
+    public enum ROTATION_SNAPS { Zero, Five, Thirty, FortyFive, Ninety };
+    public ROTATION_SNAPS ROT_SNAP = ROTATION_SNAPS.Zero;
+
+    public enum GRID_SNAPS { None, One };
+    public GRID_SNAPS GRID_SNAP = GRID_SNAPS.None;
+
     // Use this for initialization
     void Start () {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
