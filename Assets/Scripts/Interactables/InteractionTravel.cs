@@ -20,6 +20,7 @@ public class InteractionTravel : InteractableCustom {
 
     TravelPointManager TPM;
 
+
     //Override use function to move the player rig
     public override void Use(Hand hand)
     {

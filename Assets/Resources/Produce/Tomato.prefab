@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Tomato
   CATEGORY: Produce
-  KEY: 1001
+  KEY: 5001
   _OWNER: 2
   _VALUE: 20
   _TAGS: 8

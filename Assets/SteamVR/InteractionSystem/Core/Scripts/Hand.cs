@@ -297,7 +297,7 @@ namespace Valve.VR.InteractionSystem
 					{
 						parentTransform = attachedObjects[index].originalParent.transform;
 					}
-					attachedObjects[index].attachedObject.transform.parent = parentTransform;
+					attachedObjects[index].attachedObject.transform.SetParent(parentTransform);
 				}
 
 				attachedObjects[index].attachedObject.SetActive( true );

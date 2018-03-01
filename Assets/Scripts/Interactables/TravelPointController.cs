@@ -13,10 +13,14 @@ public class TravelPointController : MonoBehaviour {
 
     //Travel point manager
 
+    private void Awake()
+    {
+        GameManagerPointer.Instance.TRAVEL_POINT_MANAGER.TRAVEL_POINT_LIST.Add(this);
+    }
 
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
         if(TARGET != null)
         {
             if (isValid && TARGET.layer != 8)

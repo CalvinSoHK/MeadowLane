@@ -141,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: Wheat
   CATEGORY: Produce
-  KEY: 1002
+  KEY: 5002
   _OWNER: 2
   _VALUE: 30
   _TAGS: 8

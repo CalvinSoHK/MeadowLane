@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 64158478451085750}
   - component: {fileID: 114885125601759102}
   - component: {fileID: 136132774737277438}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Wheat_Stage_Two_Standin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1704703708227776}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.328, y: 8.627, z: 14.322}
+  m_LocalPosition: {x: -3.5495353, y: 100.16831, z: 19.214628}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

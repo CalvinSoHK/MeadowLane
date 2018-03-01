@@ -31,9 +31,9 @@ public class PlayerPhone : MonoBehaviour {
     //Reference to the actual phone object
     public GameObject PHONE;
 
-    //Bools for the four directions on the phone
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, TRIGGER_UP = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false, TRIGGER_HOLD_DOWN = false;
-
+    public HandInputs INPUT = new HandInputs();
+    PlayerInputManager PIM;
+  
     //Bool to notify the player the next time the player's eyes are open
     public bool VIBRATE_NEXT = false;
     public ScreenTransitionImageEffect STIE;
@@ -50,59 +50,37 @@ public class PlayerPhone : MonoBehaviour {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
-
+        PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
         LoadConversationNow("Triangle/Start");
     }
 
     private void Update()
     {
+        if(PIM == null)
+        {
+            PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
+        }
+
         //Update the directional bools based off of the current hand's trackpad
-        if (SHOW == ShowState.Hand1)
+        if (PIM.isMode(PlayerInputManager.InputMode.Phone))
         {
-            PRESS_DOWN = hand1.GetTrackpadDown();
-            PRESS_UP = hand1.GetTrackpadUp();
-            LEFT = hand1.GetTrackpadPressLeft();
-            RIGHT = hand1.GetTrackpadPressRight();
-            UP = hand1.GetTrackpadPressUp();
-            DOWN = hand1.GetTrackpadPressDown();
-            TRIGGER_UP = hand1.GetStandardInteractionButtonUp();
-            TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
-            TRIGGER_HOLD_DOWN = hand1.GetStandardInteractionButton();
-            HOLD_DOWN = hand1.GetTrackpad();
-
-            //Any directional lets us know if any directions were pressed at all.
-            if (LEFT || RIGHT || UP || DOWN)
+            if (SHOW == ShowState.Hand1)
             {
-                ANY_DIRECTIONAL = true;
+                INPUT.CopyValues(PIM.HAND1);
+            }
+            else if (SHOW == ShowState.Hand2)
+            {
+                INPUT.CopyValues(PIM.HAND2);
             }
             else
             {
-                ANY_DIRECTIONAL = false;
+                INPUT.ClearValues();
             }
         }
-        else if (SHOW == ShowState.Hand2)
+        else
         {
-            PRESS_DOWN = hand2.GetTrackpadDown();
-            PRESS_UP = hand2.GetTrackpadUp();
-            LEFT = hand2.GetTrackpadPressLeft();
-            RIGHT = hand2.GetTrackpadPressRight();
-            UP = hand2.GetTrackpadPressUp();
-            DOWN = hand2.GetTrackpadPressDown();
-            TRIGGER_UP = hand2.GetStandardInteractionButtonUp();
-            TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
-            TRIGGER_HOLD_DOWN = hand2.GetStandardInteractionButton();
-            HOLD_DOWN = hand2.GetTrackpad();
-
-            //Any directional lets us know if any directions were pressed at all.
-            if (LEFT || RIGHT || UP || DOWN)
-            {
-                ANY_DIRECTIONAL = true;
-            }
-            else
-            {
-                ANY_DIRECTIONAL = false;
-            }
-        }
+            INPUT.ClearValues();
+        }    
 
         if (VIBRATE_NEXT)
         {
@@ -277,11 +255,11 @@ public class PlayerPhone : MonoBehaviour {
 
     public void HidePhone(Hand hand)
     {
-        //Detach the object in script, then destroy it
+        //Detach the object in script, then set it inactive
         if((hand == hand1 && SHOW == ShowState.Hand1) || (hand == hand2 && SHOW == ShowState.Hand2))
-        {
-            
+        {        
             hand.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
             SHOW = ShowState.None;
             PHONE.SetActive(false);
         }
@@ -290,6 +268,7 @@ public class PlayerPhone : MonoBehaviour {
 
     public void HidePhone()
     {
+        GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
         //Checks show state and hides the correct phone
         if (SHOW == ShowState.Hand1)
         {
@@ -305,7 +284,6 @@ public class PlayerPhone : MonoBehaviour {
         }
     }
 
-    
     //Helper coroutine that fades the phone in and moves it in
     IEnumerator FadeIn(GameObject phone, float FADE_TIME)
     {

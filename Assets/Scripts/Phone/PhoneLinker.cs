@@ -58,30 +58,30 @@ public class PhoneLinker : MonoBehaviour {
         if(RunState == PhoneState.OS)
         {
             //if we press down, on the right or left, adjust index. Watch for bounds.
-            if (PHONE.PRESS_DOWN)
+            if (PHONE.INPUT.TRACKPAD_DOWN)
             {
-                if (PHONE.RIGHT)
+                if (PHONE.INPUT.RIGHT)
                 {
                     if (index < APPLICATIONS.Length - 1)
                     {
                         index++;
                     }
                 }
-                else if (PHONE.LEFT)
+                else if (PHONE.INPUT.LEFT)
                 {
                     if (index > 1)
                     {
                         index--;
                     }
                 }//Going up or down is +/- 3
-                else if (PHONE.DOWN)
+                else if (PHONE.INPUT.DOWN)
                 {
                     if (index + 3 < APPLICATIONS.Length)
                     {
                         index += 3;
                     }
                 }
-                else if (PHONE.UP)
+                else if (PHONE.INPUT.UP)
                 {
                     if (index - 3 > 0)
                     {
@@ -98,7 +98,7 @@ public class PhoneLinker : MonoBehaviour {
                 }
             }
 
-            if (PHONE.TRIGGER_DOWN)
+            if (PHONE.INPUT.TRIGGER_DOWN)
             {
                 PHONE.HidePhone();
             }

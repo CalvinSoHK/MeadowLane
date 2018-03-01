@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4389007999030992}
   - component: {fileID: 65540658724911738}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Blade_Collider
   m_TagString: LinkingObject
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1302825727361082}
   m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: -0.911, y: 1.462, z: 12.266}
+  m_LocalPosition: {x: 0.035509765, y: 100.19916, z: 18.885792}
   m_LocalScale: {x: 0.45314437, y: 1, z: 0.45314437}
   m_Children:
   - {fileID: 4389007999030992}

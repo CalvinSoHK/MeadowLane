@@ -64,7 +64,7 @@ public class FarmManager : MonoBehaviour {
     public void LoadData(string DATA)
     {
         //Split the input by lines. Temp is for splitting each line within
-        string[] INPUT = DATA.Split('\n'), TEMP;
+        string[] INPUT = DATA.Split('\n');
 
         //First line is just Plot0.
         int PLOT_INDEX = 0, list_index = 0;
@@ -76,6 +76,10 @@ public class FarmManager : MonoBehaviour {
             {
                 PLOT_INDEX = int.Parse(INPUT[i].Substring(4));
                 list_index = 0;
+            }
+            else if (INPUT[i].Equals("DEAD"))
+            {
+                //Do nothing for now
             }
             else if (!INPUT[i].Equals("EMPTY")) //Doens't account for tilled but empty land. Needs to be fixed.
             {

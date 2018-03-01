@@ -1,14 +1,16 @@
 /Date
-4 1 2 3 1
+4 1 5 6 1
 /
 /Money
-150
+100
 /
 /Messages
 [NEW]
 Triangle/Start
+Triangle/Farm
 /
 /Inventory
+Produce/Wheat 1
 /
 /Recipe
 /
@@ -81,19 +83,26 @@ EMPTY
 EMPTY
 EMPTY
 EMPTY
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 4 7
-Tomato_StageTwo True 7 0 7
 EMPTY
 EMPTY
 EMPTY
+DEAD
+Tomato_StageTwo True 7 3 7 1.011886,1.055742,1.011886 0,314.7375,0
 EMPTY
 EMPTY
 EMPTY
+Tomato_StageTwo True 7 3 7 0.9470115,0.9079669,0.9470115 0,194.0244,0
+Tomato_StageTwo True 7 3 7 0.9371232,1.009374,0.9371232 0,50.43866,0
 /
 /Decoration
+Chair/WoodenChair 0.334,100.495,25.898 0,89.99983,0
+Table/WorkTable 1.271,100.495,25.524 0,269.9999,0
+Storage/Shoe_Rack -1.736,100.495,26.127 0,270,0
+Utility/Basic_Bed 0.288,100.495,23.998 0,0,0
+Electronic/TV 0.181,101.32,26.942 0,180.0003,0
+Table/Wooden_TV_Console 0.573,100.495,27.015 0,180,0
 /
+
 /Relationships
 /
 /Town

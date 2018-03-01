@@ -7,9 +7,6 @@ using Valve.VR.InteractionSystem;
 //Script that enables the controller to raycast trigger items
 public class OnTriggerRaycast : MonoBehaviour {
 
-    public enum RaycastMode { Default, Decorating };
-    public RaycastMode MODE = RaycastMode.Default;
-
     enum State { Idle, Raycast, Select };
     State STATE = State.Idle;
 
@@ -37,10 +34,13 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Raycast hit info
     RaycastHit HIT = new RaycastHit();
 
+    PlayerInputManager PIM;
+
     void Start()
     {
         hand = GetComponent<Hand>();
         PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.transform;
+        PIM = PLAYER.GetComponent<PlayerInputManager>();
         VR_CAMERA = transform.parent.Find("VRCamera");
     }
 
@@ -51,7 +51,9 @@ public class OnTriggerRaycast : MonoBehaviour {
         if (PLAYER == null)
         {
             PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.transform;
+            PIM = PLAYER.GetComponent<PlayerInputManager>();
         }
+
 
         //State machine
         switch (STATE)
@@ -59,16 +61,12 @@ public class OnTriggerRaycast : MonoBehaviour {
             //While idle
             case State.Idle:
                 //If we get trigger down, move us to the raycast state
-                if(hand.GetStandardInteractionButtonDown())
+                if (PIM.isMode(PlayerInputManager.InputMode.Default) || PIM.isMode(PlayerInputManager.InputMode.Edit))
                 {
-                    if (ENABLED)
+                    if (hand.GetStandardInteractionButtonDown() && ENABLED)
                     {
                         STATE = State.Raycast;
                     }
-                    else
-                    {
-                        ENABLED = true;
-                    }                
                 }
                 break;
             //While we need to raycast
@@ -92,11 +90,11 @@ public class OnTriggerRaycast : MonoBehaviour {
                         DisableUI(obj);
                         obj = null;
                     }
-                    
+
                     //Handle object validity based on mode.
-                    switch (MODE)
+                    switch (PIM.MODE)
                     {
-                        case RaycastMode.Default:
+                        case PlayerInputManager.InputMode.Default:
                             //If it is within the interactable layers
                             if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
                             {
@@ -109,16 +107,16 @@ public class OnTriggerRaycast : MonoBehaviour {
                                 }
                             }
                             break;
-                        case RaycastMode.Decorating:
+                        case PlayerInputManager.InputMode.Edit:
                             //If it is within our editable layer mask
                             if (EDITABLE_LAYERS == (EDITABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
                             {
                                 //If we are a base item with the decoration tag.
-                                if (HIT.collider.gameObject.GetComponent<BaseItem>() 
+                                if (HIT.collider.gameObject.GetComponent<BaseItem>()
                                     && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration)))
                                 {
                                     obj = HIT.collider.gameObject;
-                                    ApplyHighlight(obj);                                   
+                                    ApplyHighlight(obj);
                                 }
                             }
                             break;
@@ -157,10 +155,10 @@ public class OnTriggerRaycast : MonoBehaviour {
                 if (obj != null)
                 {
                     //Depending on what mode we are trying to use
-                    switch (MODE)
+                    switch (PIM.MODE)
                     {
                         //Default use. Fire all interaction scripts on use.
-                        case RaycastMode.Default:
+                        case PlayerInputManager.InputMode.Default:
                             //If the object has at least one interactable script
                             if (obj.GetComponent<InteractableCustom>())
                             {
@@ -182,7 +180,7 @@ public class OnTriggerRaycast : MonoBehaviour {
                             }
                             break;
                         //Decoration. Communicate with home customizatioin manager.
-                        case RaycastMode.Decorating:
+                        case PlayerInputManager.InputMode.Edit:
 
                             //Set the use state to the right hand depending on who called it.
                             if (hand.name.Contains("1"))
@@ -195,7 +193,8 @@ public class OnTriggerRaycast : MonoBehaviour {
                             }
 
                             //Then tell the customization manager to select the given object.
-                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj);
+
+                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj, true);
 
                             //Since we are "holding" that object, disable raycasting
                             ENABLED = false;
@@ -218,30 +217,23 @@ public class OnTriggerRaycast : MonoBehaviour {
         }
     }
 
+    /*
     public void ToggleMode()
     {
         if(MODE == RaycastMode.Default)
         {
             MODE = RaycastMode.Decorating;
+            PLAYER.GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = true;
         }
         else if(MODE == RaycastMode.Decorating)
         {
             MODE = RaycastMode.Default;
+            PLAYER.GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = false;
         }
 
         //Clear object if we toggle mode just so if we are raycasting at something it doesnt trick it into thinking its valid.
         obj = null;
-    }
-
-    public void SetMode(int MODE_INT)
-    {
-        MODE = (RaycastMode)MODE_INT;
-    }
-
-    public void SetMode(RaycastMode MODE_STATE)
-    {
-        MODE = MODE_STATE;
-    }
+    }*/
 
     //Helper function to manually pick something up with script
     public void PickUpObj(GameObject OBJECT)

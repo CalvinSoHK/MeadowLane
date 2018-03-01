@@ -12,7 +12,7 @@ public static class  Inventory_Manager {
     public static Dictionary<int, int> InventorySeedCount = new Dictionary<int, int>(); //reference the seeds for individual seed-boxes currently in inventory
 
     //Variables used for the furniture inventory
-    public static List<string> FurnitureCategory = new List<string>(new string[] { "Chair", "Table", "Storage", "Beds", "Floor", "Electronic", "Plants", "Trophies", "Mounted", "Misc" }); //all furniture categories
+    public static List<string> FurnitureCategory = new List<string>(new string[] { "Chair", "Table", "Storage", "Utility", "Floor", "Electronic", "Plants", "Trophies", "Mounted", "Misc" }); //all furniture categories
     public static List<InventorySlot>[] FurnitureCategorySlots = new List<InventorySlot>[10]; //all furniture items within each category
     public static int currentFurnitureCategoryIndex = 0, currentFurnitureCategorySlotsIndex = 0; //current index for the diplay of furniture category and item.
 
@@ -143,8 +143,8 @@ public static class  Inventory_Manager {
     {
         //CategorySlots[0] = new List<InventorySlot>();
        // Debug.Log(CategorySlots[0]);
-        int catergoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim(), currentCategories); //get the index of the category for which the item will be placed in
-        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, catergoryIndex, currentInventory); //get the index of the item within the category list (if it is already there)
+        int categoryIndex = checkItemCategoryIndex(itemInfo.CATEGORY.Trim(), currentCategories); //get the index of the category for which the item will be placed in
+        int inventorySlotIndex = checkItemInvetorySlot(itemInfo.KEY, categoryIndex, currentInventory); //get the index of the item within the category list (if it is already there)
         if(inventorySlotIndex == -1) //this item is not in the inventory yet
         {
             
@@ -158,7 +158,7 @@ public static class  Inventory_Manager {
             Sprite CAT_ICON = null;
             if (itemInfo.hasTag(BaseItem.ItemTags.Decoration))
             {
-                ICON = Resources.Load("Deco" + "/" + itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
+                ICON = Resources.Load("Deco/" + itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
                 
             }else
             {
@@ -167,7 +167,7 @@ public static class  Inventory_Manager {
             CAT_ICON = Resources.Load("CategoryIcons/" + itemInfo.CATEGORY, typeof(Sprite)) as Sprite;
 
             //add the item in the category at the end of the list
-            currentInventory[catergoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));
+            currentInventory[categoryIndex].Add(new InventorySlot(itemInfo._NAME, itemInfo.CATEGORY, itemInfo.KEY, ICON, CAT_ICON));
         }else //item type is already in inventory
         {
             //check if the object added already existed in iventory, but was taken out by the player (does not apply for produce)
@@ -178,7 +178,7 @@ public static class  Inventory_Manager {
                     InventorySeedCount[itemInfo.KEY] += itemInfo.gameObject.GetComponent<PourObject>().COUNT; //add the seeds to the key value (dictionary)
                 }
                 InventoryItemInScene.Remove(itemInfo.KEY); //remove that item from the dictionary
-                currentInventory[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+                currentInventory[categoryIndex][inventorySlotIndex].TotalNum += 1;
             }
             else
             {
@@ -188,7 +188,7 @@ public static class  Inventory_Manager {
                     return;
                 }
                 //increase the total number of specific item in inventory by 1
-                CategorySlots[catergoryIndex][inventorySlotIndex].TotalNum += 1;
+                currentInventory[categoryIndex][inventorySlotIndex].TotalNum += 1;
             }
             
         }
