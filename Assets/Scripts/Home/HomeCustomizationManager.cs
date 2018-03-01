@@ -27,6 +27,7 @@ public class HomeCustomizationManager : MonoBehaviour {
     Material PREV_MATERIAL;
 
     HandInputs INPUT = new HandInputs();
+    HandInputs OFF_INPUT = new HandInputs();
 
     //Both hands
     public Hand hand1, hand2;
@@ -53,6 +54,8 @@ public class HomeCustomizationManager : MonoBehaviour {
 
     public enum ROTATION_SNAPS { Zero, Five, Thirty, FortyFive, Ninety };
     public ROTATION_SNAPS ROT_SNAP = ROTATION_SNAPS.Zero;
+    float SNAP = 1;
+    Vector3 NEW_ROT = Vector3.zero;
 
     public enum GRID_SNAPS { None, One };
     public GRID_SNAPS GRID_SNAP = GRID_SNAPS.None;
@@ -106,21 +109,76 @@ public class HomeCustomizationManager : MonoBehaviour {
                             if (Physics.Raycast(HAND_POINT, out HIT, 1000f, PLACEMENT_LAYERMASK))
                             {
                                 hologramRefToSelectedObject.GetComponent<CheckIfColliding>().TOO_FAR = false;
-                                hologramRefToSelectedObject.transform.position = HIT.point;
+                                if(GRID_SNAP == GRID_SNAPS.None)
+                                {
+                                    hologramRefToSelectedObject.transform.position = HIT.point;
+                                }
+                                else if(GRID_SNAP == GRID_SNAPS.One)
+                                {
+                                    //Snaps to the Second decimal place, as in every tenth centimeter
+                                    hologramRefToSelectedObject.transform.position =
+                                        new Vector3(Mathf.Round(HIT.point.x * 10f) / 10f,
+                                        HIT.point.y,
+                                          Mathf.Round(HIT.point.z * 10f) / 10f);
+                                }
+                               
                             }
                             else
                             {
                                 hologramRefToSelectedObject.GetComponent<CheckIfColliding>().TOO_FAR = true;
                             }
 
-                            if (INPUT.RIGHT)
+                            //Calculate our rotational snap
+                            if (ROT_SNAP == ROTATION_SNAPS.Zero)
                             {
-                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, 1, 0));
+                                SNAP = 1f;
                             }
-                            else if(INPUT.LEFT)
+                            else if(ROT_SNAP == ROTATION_SNAPS.Five)
                             {
-                                hologramRefToSelectedObject.transform.Rotate(new Vector3(0, -1, 0));
+                                SNAP = 5f;
                             }
+                            else if(ROT_SNAP == ROTATION_SNAPS.Thirty)
+                            {
+                                SNAP = 30f;
+                            }
+                            else if(ROT_SNAP == ROTATION_SNAPS.FortyFive)
+                            {
+                                SNAP = 45f;
+                            }
+                            else if(ROT_SNAP == ROTATION_SNAPS.Ninety)
+                            {
+                                SNAP = 90f;
+                            }
+
+                            if (INPUT.RIGHT && INPUT.TRACKPAD_DOWN)
+                            {
+                                NEW_ROT = hologramRefToSelectedObject.transform.eulerAngles;
+                                NEW_ROT.y = Mathf.Round((NEW_ROT.y + SNAP) / SNAP) * SNAP;
+                                hologramRefToSelectedObject.transform.rotation = Quaternion.Euler(NEW_ROT);
+                            }
+                            else if(INPUT.LEFT && INPUT.TRACKPAD_DOWN)
+                            {
+                                NEW_ROT = hologramRefToSelectedObject.transform.eulerAngles;
+                                NEW_ROT.y = Mathf.Round((NEW_ROT.y - SNAP) / SNAP) * SNAP;
+                                hologramRefToSelectedObject.transform.rotation = Quaternion.Euler(NEW_ROT);
+                            }
+                            else if (INPUT.TRACKPAD_DOWN && !INVENTORY_CALL)
+                            {
+                                //Assign the right layer back to the og object regardless of if it was moved or not
+                                currentlySelectedObject.layer = PREV_LAYER;
+                                if (!inScene)
+                                {
+                                    Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(),
+                                        Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+                                }
+                                Destroy(hologramRefToSelectedObject.gameObject);
+                                SetCurrentHomeState(CustomizeState.Stop);
+                            }
+                            else if (INPUT.TRACKPAD_DOWN)
+                            {
+                                INVENTORY_CALL = false;
+                            }
+                            Debug.Log(NEW_ROT);
 
                             //Press down on trackpad to attempt to place it down.
                             //Debug.Log(INPUT.TRIGGER_DOWN);
@@ -135,23 +193,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                                 }
                             }
 
-                            //Press trigger to exit this object place mode.
-                            if (INPUT.TRACKPAD_DOWN && !INVENTORY_CALL)
-                            {
-                                //Assign the right layer back to the og object regardless of if it was moved or not
-                                currentlySelectedObject.layer = PREV_LAYER;
-                                if (!inScene)
-                                {
-                                    Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(), 
-                                        Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
-                                }                             
-                                Destroy(hologramRefToSelectedObject.gameObject);
-                                SetCurrentHomeState(CustomizeState.Stop);
-                            }
-                            else if (INPUT.TRACKPAD_DOWN)
-                            {
-                                INVENTORY_CALL = false;
-                            }
+                          
                         }
                     }
                     break;
