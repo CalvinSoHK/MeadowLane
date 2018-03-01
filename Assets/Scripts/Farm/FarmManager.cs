@@ -77,6 +77,10 @@ public class FarmManager : MonoBehaviour {
                 PLOT_INDEX = int.Parse(INPUT[i].Substring(4));
                 list_index = 0;
             }
+            else if (INPUT[i].Equals("DEAD"))
+            {
+                //Do nothing for now
+            }
             else if (!INPUT[i].Equals("EMPTY")) //Doens't account for tilled but empty land. Needs to be fixed.
             {
                 //Set the block info of the given index

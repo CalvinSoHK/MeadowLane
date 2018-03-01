@@ -23,7 +23,7 @@ public class BasicApp : MonoBehaviour {
     //Function that will be called by the PhoneLinker if the app is running
 	public virtual void RunApp()
     {
-        if (PHONE.TRIGGER_HOLD_DOWN && downInitiated)
+        if (PHONE.INPUT.TRIGGER && downInitiated)
         {
             if (Time.time - TIMER >= EXIT_TIME)
             {
@@ -32,12 +32,12 @@ public class BasicApp : MonoBehaviour {
                 PHONE.HidePhone();
             }
         }
-        else if (PHONE.TRIGGER_HOLD_DOWN && !downInitiated)
+        else if (PHONE.INPUT.TRIGGER && !downInitiated)
         {
             TIMER = Time.time;
             downInitiated = true;
         }
-        else if (PHONE.TRIGGER_UP)
+        else if (PHONE.INPUT.TRIGGER_UP)
         {
             //Exit app
             downInitiated = false;
@@ -48,7 +48,7 @@ public class BasicApp : MonoBehaviour {
     //Function that will allow us to drop the phone where we are but still use trigger
     public bool GetTriggerUp()
     {
-        if (PHONE.TRIGGER_HOLD_DOWN && downInitiated)
+        if (PHONE.INPUT.TRIGGER && downInitiated)
         {
             if (Time.time - TIMER >= EXIT_TIME)
             {
@@ -57,12 +57,12 @@ public class BasicApp : MonoBehaviour {
                 PHONE.HidePhone();
             }
         }
-        else if (PHONE.TRIGGER_HOLD_DOWN && !downInitiated)
+        else if (PHONE.INPUT.TRIGGER && !downInitiated)
         {
             TIMER = Time.time;
             downInitiated = true;
         }
-        else if (PHONE.TRIGGER_UP)
+        else if (PHONE.INPUT.TRIGGER)
         {
             //Exit app
             downInitiated = false;

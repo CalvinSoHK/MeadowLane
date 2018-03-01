@@ -7,9 +7,6 @@ using Valve.VR.InteractionSystem;
 //Script that enables the controller to raycast trigger items
 public class OnTriggerRaycast : MonoBehaviour {
 
-    public enum RaycastMode { Default, Decorating };
-    public RaycastMode MODE = RaycastMode.Default;
-
     enum State { Idle, Raycast, Select };
     State STATE = State.Idle;
 
@@ -37,10 +34,13 @@ public class OnTriggerRaycast : MonoBehaviour {
     //Raycast hit info
     RaycastHit HIT = new RaycastHit();
 
+    PlayerInputManager PIM;
+
     void Start()
     {
         hand = GetComponent<Hand>();
         PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.transform;
+        PIM = PLAYER.GetComponent<PlayerInputManager>();
         VR_CAMERA = transform.parent.Find("VRCamera");
     }
 
@@ -51,197 +51,188 @@ public class OnTriggerRaycast : MonoBehaviour {
         if (PLAYER == null)
         {
             PLAYER = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.transform;
+            PIM = PLAYER.GetComponent<PlayerInputManager>();
         }
 
-        //State machine
-        switch (STATE)
+        if (PIM.isMode(PlayerInputManager.InputMode.Default))
         {
-            //While idle
-            case State.Idle:
-                //If we get trigger down, move us to the raycast state
-                if(hand.GetStandardInteractionButtonDown())
-                {
-                    if (ENABLED)
+            //State machine
+            switch (STATE)
+            {
+                //While idle
+                case State.Idle:
+                    //If we get trigger down, move us to the raycast state
+                    if (hand.GetStandardInteractionButtonDown() && ENABLED)
                     {
                         STATE = State.Raycast;
                     }
-                    else
+                    break;
+                //While we need to raycast
+                case State.Raycast:
+                    //Turn on the raycast renderer
+                    GetComponent<LineRenderer>().enabled = true;
+
+                    //Set line renderer to our position
+                    GetComponent<LineRenderer>().SetPosition(0, transform.position);
+
+                    //Raycast real far forward from this hand and only hit hittable layers
+                    if (Physics.Raycast(transform.position, transform.forward, out HIT, 1000f, HITTABLE_LAYERS))
                     {
-                        ENABLED = true;
-                    }                
-                }
-                break;
-            //While we need to raycast
-            case State.Raycast:
-                //Turn on the raycast renderer
-                GetComponent<LineRenderer>().enabled = true;
+                        //Set the position of the line rendered wherever we hit, regardless of the mode
+                        GetComponent<LineRenderer>().SetPosition(1, HIT.point);
 
-                //Set line renderer to our position
-                GetComponent<LineRenderer>().SetPosition(0, transform.position);
+                        //If the raycasted object is not the same as last frame, get rid of highlights off the old obj and the UI popup
+                        if (!HIT.collider.gameObject.Equals(obj) && obj != null)
+                        {
+                            RemoveHighlight(obj);
+                            DisableUI(obj);
+                            obj = null;
+                        }
 
-                //Raycast real far forward from this hand and only hit hittable layers
-                if (Physics.Raycast(transform.position, transform.forward, out HIT, 1000f, HITTABLE_LAYERS))
-                {
-                    //Set the position of the line rendered wherever we hit, regardless of the mode
-                    GetComponent<LineRenderer>().SetPosition(1, HIT.point);
-
-                    //If the raycasted object is not the same as last frame, get rid of highlights off the old obj and the UI popup
-                    if (!HIT.collider.gameObject.Equals(obj) && obj != null)
+                        //Handle object validity based on mode.
+                        switch (PIM.MODE)
+                        {
+                            case PlayerInputManager.InputMode.Default:
+                                //If it is within the interactable layers
+                                if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
+                                {
+                                    //And has the interactable script.
+                                    if (HIT.collider.gameObject.GetComponent<InteractableCustom>())
+                                    {
+                                        obj = HIT.collider.gameObject;
+                                        ApplyHighlight(obj);
+                                        EnableUI(obj);
+                                    }
+                                }
+                                break;
+                            case PlayerInputManager.InputMode.Edit:
+                                //If it is within our editable layer mask
+                                if (EDITABLE_LAYERS == (EDITABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
+                                {
+                                    //If we are a base item with the decoration tag.
+                                    if (HIT.collider.gameObject.GetComponent<BaseItem>()
+                                        && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration)))
+                                    {
+                                        obj = HIT.collider.gameObject;
+                                        ApplyHighlight(obj);
+                                    }
+                                }
+                                break;
+                            default:
+                                Debug.Log("Invalid mode.");
+                                break;
+                        }
+                    }
+                    else //We aren't hitting anything but we still draw the line for players.
                     {
-                        RemoveHighlight(obj);
-                        DisableUI(obj);
+                        //Render the line to its max distance.
+                        GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
+
+                        //If we had something highlighted before, turn it off.
+                        if (obj != null)
+                        {
+                            RemoveHighlight(obj);
+                            DisableUI(obj);
+                        }
                         obj = null;
                     }
-                    
-                    //Handle object validity based on mode.
-                    switch (MODE)
-                    {
-                        case RaycastMode.Default:
-                            //If it is within the interactable layers
-                            if (INTERACTABLE_LAYERS == (INTERACTABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
-                            {
-                                //And has the interactable script.
-                                if (HIT.collider.gameObject.GetComponent<InteractableCustom>())
-                                {
-                                    obj = HIT.collider.gameObject;
-                                    ApplyHighlight(obj);
-                                    EnableUI(obj);
-                                }
-                            }
-                            break;
-                        case RaycastMode.Decorating:
-                            //If it is within our editable layer mask
-                            if (EDITABLE_LAYERS == (EDITABLE_LAYERS | (1 << HIT.collider.gameObject.layer)))
-                            {
-                                //If we are a base item with the decoration tag.
-                                if (HIT.collider.gameObject.GetComponent<BaseItem>() 
-                                    && (HIT.collider.GetComponent<BaseItem>().hasTag(BaseItem.ItemTags.Decoration)))
-                                {
-                                    obj = HIT.collider.gameObject;
-                                    ApplyHighlight(obj);                                   
-                                }
-                            }
-                            break;
-                        default:
-                            Debug.Log("Invalid mode.");
-                            break;
-                    }
-                }
-                else //We aren't hitting anything but we still draw the line for players.
-                {
-                    //Render the line to its max distance.
-                    GetComponent<LineRenderer>().SetPosition(1, transform.forward * 1000 + transform.position);
 
-                    //If we had something highlighted before, turn it off.
+                    //Once we get button up we can move on to select.
+                    if (hand.GetStandardInteractionButtonUp())
+                    {
+                        STATE = State.Select;
+                    }
+
+                    break;
+                //When we are told to select.
+                case State.Select:
+                    //Disable the raycast render
+                    GetComponent<LineRenderer>().enabled = false;
+
+                    //If we have an obj we can try to select
                     if (obj != null)
                     {
-                        RemoveHighlight(obj);
-                        DisableUI(obj);
-                    }
-                    obj = null;
-                }
-
-                //Once we get button up we can move on to select.
-                if (hand.GetStandardInteractionButtonUp())
-                {
-                    STATE = State.Select;
-                }
-
-                break;
-            //When we are told to select.
-            case State.Select:
-                //Disable the raycast render
-                GetComponent<LineRenderer>().enabled = false;
-
-                //If we have an obj we can try to select
-                if (obj != null)
-                {
-                    //Depending on what mode we are trying to use
-                    switch (MODE)
-                    {
-                        //Default use. Fire all interaction scripts on use.
-                        case RaycastMode.Default:
-                            //If the object has at least one interactable script
-                            if (obj.GetComponent<InteractableCustom>())
-                            {
-                                //Use every interact on an object.
-                                foreach (InteractableCustom interact in obj.GetComponents<InteractableCustom>())
+                        //Depending on what mode we are trying to use
+                        switch (PIM.MODE)
+                        {
+                            //Default use. Fire all interaction scripts on use.
+                            case PlayerInputManager.InputMode.Default:
+                                //If the object has at least one interactable script
+                                if (obj.GetComponent<InteractableCustom>())
                                 {
-                                    interact.Use(hand);
+                                    //Use every interact on an object.
+                                    foreach (InteractableCustom interact in obj.GetComponents<InteractableCustom>())
+                                    {
+                                        interact.Use(hand);
+                                    }
+
+                                    //If the object has interaction pickup, disable raycasting.
+                                    if (obj.GetComponent<InteractionPickup>())
+                                    {
+                                        ENABLED = false;
+                                    }
+                                    else
+                                    {
+                                        ENABLED = true;
+                                    }
                                 }
+                                break;
+                            //Decoration. Communicate with home customizatioin manager.
+                            case PlayerInputManager.InputMode.Edit:
 
-                                //If the object has interaction pickup, disable raycasting.
-                                if (obj.GetComponent<InteractionPickup>())
+                                //Set the use state to the right hand depending on who called it.
+                                if (hand.name.Contains("1"))
                                 {
-                                    ENABLED = false;
+                                    PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand1);
                                 }
                                 else
                                 {
-                                    ENABLED = true;
+                                    PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand2);
                                 }
-                            }
-                            break;
-                        //Decoration. Communicate with home customizatioin manager.
-                        case RaycastMode.Decorating:
 
-                            //Set the use state to the right hand depending on who called it.
-                            if (hand.name.Contains("1"))
-                            {
-                                PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand1);
-                            }
-                            else
-                            {
-                                PLAYER.GetComponent<HomeCustomizationManager>().SetUseState(HomeCustomizationManager.UseState.Hand2);
-                            }
+                                //Then tell the customization manager to select the given object.
 
-                            //Then tell the customization manager to select the given object.
-                            PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj, true);
+                                PLAYER.GetComponent<HomeCustomizationManager>().selectObject(obj, true);
 
-                            //Since we are "holding" that object, disable raycasting
-                            ENABLED = false;
-                            break;
+                                //Since we are "holding" that object, disable raycasting
+                                ENABLED = false;
+                                break;
+                        }
+
+                        //Remove the highlight effect
+                        RemoveHighlight(obj);
+
+                        //No matter what happens remove the selected object.
+                        obj = null;
                     }
 
-                    //Remove the highlight effect
-                    RemoveHighlight(obj);
-
-                    //No matter what happens remove the selected object.
-                    obj = null;
-                }
-
-                //After passing through once cut to idle again, regardless if there was valid select
-                STATE = State.Idle;
-                break;
-            default:
-                Debug.Log("Error: Non valid state.");
-                break;
-        }
+                    //After passing through once cut to idle again, regardless if there was valid select
+                    STATE = State.Idle;
+                    break;
+                default:
+                    Debug.Log("Error: Non valid state.");
+                    break;
+            }
+        }     
     }
 
+    /*
     public void ToggleMode()
     {
         if(MODE == RaycastMode.Default)
         {
             MODE = RaycastMode.Decorating;
+            PLAYER.GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = true;
         }
         else if(MODE == RaycastMode.Decorating)
         {
             MODE = RaycastMode.Default;
+            PLAYER.GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = false;
         }
 
         //Clear object if we toggle mode just so if we are raycasting at something it doesnt trick it into thinking its valid.
         obj = null;
-    }
-
-    public void SetMode(int MODE_INT)
-    {
-        MODE = (RaycastMode)MODE_INT;
-    }
-
-    public void SetMode(RaycastMode MODE_STATE)
-    {
-        MODE = MODE_STATE;
-    }
+    }*/
 
     //Helper function to manually pick something up with script
     public void PickUpObj(GameObject OBJECT)

@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85cc8d2b2cade8a4e8e9aaf6a36e98ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _NAME: Shoe Rack
+  _NAME: Shoe_Rack
   CATEGORY: Storage
   KEY: 1006
   _OWNER: 2

@@ -80,7 +80,7 @@ public class MessageApp : BasicApp {
             if (CONVO_ENTRIES != null && CONVO_ENTRIES[0] != null)
             {
                 //Allow us to select a contact
-                if (PHONE.DOWN && PHONE.PRESS_DOWN)
+                if (PHONE.INPUT.DOWN && PHONE.INPUT.TRACKPAD_DOWN)
                 {
                     if (INDEX < CONVO_ENTRIES.Count - 1)
                     {
@@ -109,7 +109,7 @@ public class MessageApp : BasicApp {
                         }
                     }
                 }
-                else if (PHONE.UP && PHONE.PRESS_DOWN)
+                else if (PHONE.INPUT.UP && PHONE.INPUT.TRACKPAD_DOWN)
                 {
                     if (INDEX > 0)
                     {
@@ -159,7 +159,7 @@ public class MessageApp : BasicApp {
                 }
 
                 //If we press down on the button AND no directional presses were done.
-                if (PHONE.PRESS_DOWN && !PHONE.ANY_DIRECTIONAL)
+                if (PHONE.INPUT.TRACKPAD_DOWN && !(PHONE.INPUT.UP || PHONE.INPUT.DOWN || PHONE.INPUT.LEFT || PHONE.INPUT.RIGHT))
                 {
                     //Clear the messages if there are any sitting around
                     if (CONVERSATION_CONTENT.transform.childCount > 0)
@@ -213,9 +213,9 @@ public class MessageApp : BasicApp {
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
                 STATE = MESSAGE_APP_STATE.ConvoList;
             }
-            else if (PHONE.HOLD_DOWN)
+            else if (PHONE.INPUT.TRACKPAD)
             {
-                if (PHONE.UP)
+                if (PHONE.INPUT.UP)
                 {
                     if (TARGET_NORMALIZEDPOSITION < 1)
                     {
@@ -226,7 +226,7 @@ public class MessageApp : BasicApp {
                         }
                     }
                 }
-                else if (PHONE.DOWN)
+                else if (PHONE.INPUT.DOWN)
                 {
                     //Debug.Log(TARGET_NORMALIZEDPOSITION);
                     if (TARGET_NORMALIZEDPOSITION > 0)

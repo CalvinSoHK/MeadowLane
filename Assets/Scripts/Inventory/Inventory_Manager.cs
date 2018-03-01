@@ -158,7 +158,7 @@ public static class  Inventory_Manager {
             Sprite CAT_ICON = null;
             if (itemInfo.hasTag(BaseItem.ItemTags.Decoration))
             {
-                ICON = Resources.Load("Deco" + "/" + itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
+                ICON = Resources.Load("Deco/" + itemInfo.CATEGORY + "/" + itemInfo._NAME, typeof(Sprite)) as Sprite;
                 
             }else
             {
@@ -188,7 +188,7 @@ public static class  Inventory_Manager {
                     return;
                 }
                 //increase the total number of specific item in inventory by 1
-                CategorySlots[categoryIndex][inventorySlotIndex].TotalNum += 1;
+                currentInventory[categoryIndex][inventorySlotIndex].TotalNum += 1;
             }
             
         }

@@ -26,11 +26,11 @@ public class HomeCustomizationManager : MonoBehaviour {
     Material[] hologramMaterial = new Material[2];
     Material PREV_MATERIAL;
 
-    //Bools for the four directions on the hand
-    public bool LEFT = false, RIGHT = false, UP = false, DOWN = false, PRESS_DOWN = false, PRESS_UP = false, TRIGGER_DOWN = false, TRIGGER_UP = false, ANY_DIRECTIONAL = false, HOLD_DOWN = false, TRIGGER_HOLD_DOWN = false;
+    HandInputs INPUT = new HandInputs();
 
     //Both hands
     public Hand hand1, hand2;
+    PlayerInputManager PIM;
 
     //Where the phone is showing
     public enum UseState { None, Hand1, Hand2 };
@@ -46,6 +46,8 @@ public class HomeCustomizationManager : MonoBehaviour {
     //Save the old layer just in case
     int PREV_LAYER = -1;
 
+    public bool INVENTORY_CALL = false;
+
     //Layermask for our raycast
     public LayerMask PLACEMENT_LAYERMASK, RAYCAST_LAYERMASK;
 
@@ -53,6 +55,7 @@ public class HomeCustomizationManager : MonoBehaviour {
     void Start () {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
+        PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
     }
 	
 	// Update is called once per frame
@@ -66,16 +69,23 @@ public class HomeCustomizationManager : MonoBehaviour {
             switch (currentCustomizeState)
             {
                 case CustomizeState.Idle:
-                    //Make sure raycast is coming from the right hand/
-                    AssignRaycast();
+                    //Do nothing. Just wait.
+                    
                     break;
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
                     //NOTE: Selected object is assigned in OnTriggerRaycast.
+                    AssignRaycast();
+
                     //If we don't have a selectable object, its an error and move to the stop state.
-                    if(currentlySelectedObject == null)
+                    if (inScene && currentlySelectedObject == null)
                     {
                         Debug.Log("Error: Don't actually have a selected object.");
+                        SetCurrentHomeState(CustomizeState.Stop);
+                    }
+                    else if(!inScene && hologramRefToSelectedObject == null)
+                    {
+                        Debug.Log("Error: Don't actually have a hologram object.");
                         SetCurrentHomeState(CustomizeState.Stop);
                     }
                     else
@@ -97,35 +107,44 @@ public class HomeCustomizationManager : MonoBehaviour {
                                 hologramRefToSelectedObject.GetComponent<CheckIfColliding>().TOO_FAR = true;
                             }
 
-                            if (RIGHT)
+                            if (INPUT.RIGHT)
                             {
                                 hologramRefToSelectedObject.transform.Rotate(new Vector3(0, 1, 0));
                             }
-                            else if(LEFT)
+                            else if(INPUT.LEFT)
                             {
                                 hologramRefToSelectedObject.transform.Rotate(new Vector3(0, -1, 0));
                             }
 
                             //Press down on trackpad to attempt to place it down.
-                            if (PRESS_DOWN)
+                            if (INPUT.TRIGGER_DOWN)
                             {
                                 if (hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IS_VALID)
                                 {
-                                    //Debug.Log("Valid. Placing.");
+                                    Debug.Log("Valid. Placing.");
                                     placeObject();
+                                    SetCurrentHomeState(CustomizeState.Stop);
                                 }
                                 else
                                 {
-                                    //Debug.Log("Invalid. Destroyed.");
-                                    Destroy(hologramRefToSelectedObject.gameObject);
+                                    /*
+                                    Debug.Log("Invalid. Destroyed.");
+                                    if (inScene)
+                                    {
+                                        currentlySelectedObject.layer = PREV_LAYER;
+                                    }
+                                    else
+                                    {
+                                        Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(),
+                                            Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+                                    }
+                                    Destroy(hologramRefToSelectedObject.gameObject);*/
                                 }
-
-                                EnableRaycasting();
-                                SetCurrentHomeState(CustomizeState.Stop);
+                              
                             }
 
                             //Press trigger to exit this object place mode.
-                            if (TRIGGER_DOWN)
+                            if (INPUT.TRACKPAD_DOWN && !INVENTORY_CALL)
                             {
                                 //Assign the right layer back to the og object regardless of if it was moved or not
                                 currentlySelectedObject.layer = PREV_LAYER;
@@ -137,20 +156,18 @@ public class HomeCustomizationManager : MonoBehaviour {
                                 Destroy(hologramRefToSelectedObject.gameObject);
                                 SetCurrentHomeState(CustomizeState.Stop);
                             }
+                            else if (INPUT.TRACKPAD_DOWN)
+                            {
+                                INVENTORY_CALL = false;
+                            }
                         }
                     }
                     break;
 
                 case CustomizeState.Stop:
-                    if (SHOW_STATE == UseState.Hand1)
-                    {
-                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
-                    }
-                    else if (SHOW_STATE == UseState.Hand2)
-                    {
-                        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
-                    }
-                    currentlyCustomizingHome = false;
+
+                    EnableRaycasting();
+
                     SetCurrentHomeState(CustomizeState.Idle);
                     break;
             }
@@ -178,7 +195,7 @@ public class HomeCustomizationManager : MonoBehaviour {
     /// getter to see if we are currently customizing the home
     /// </summary>
     /// <returns></returns>
-    public bool CustomizingHome()
+    public bool GetCustomizeState()
     {
         return currentlyCustomizingHome;
     }
@@ -214,52 +231,24 @@ public class HomeCustomizationManager : MonoBehaviour {
     //Receives all inputs
     public void RetrieveHandInputs()
     {
-        //Update the directional bools based off of the current hand's trackpad
-        if (SHOW_STATE == UseState.Hand1)
+        if (PIM.isMode(PlayerInputManager.InputMode.Edit))
         {
-            PRESS_DOWN = hand1.GetTrackpadDown();
-            PRESS_UP = hand1.GetTrackpadUp();
-            LEFT = hand1.GetTrackpadPressLeft();
-            RIGHT = hand1.GetTrackpadPressRight();
-            UP = hand1.GetTrackpadPressUp();
-            DOWN = hand1.GetTrackpadPressDown();
-            TRIGGER_UP = hand1.GetStandardInteractionButtonUp();
-            TRIGGER_DOWN = hand1.GetStandardInteractionButtonDown();
-            TRIGGER_HOLD_DOWN = hand1.GetStandardInteractionButton();
-            HOLD_DOWN = hand1.GetTrackpad();
-
-            //Any directional lets us know if any directions were pressed at all.
-            if (LEFT || RIGHT || UP || DOWN)
+            if (SHOW_STATE == UseState.Hand1)
             {
-                ANY_DIRECTIONAL = true;
+                INPUT = PIM.HAND1;
+            }
+            else if (SHOW_STATE == UseState.Hand2)
+            {
+                INPUT = PIM.HAND2;
             }
             else
             {
-                ANY_DIRECTIONAL = false;
+                INPUT.ClearValues();
             }
         }
-        else if (SHOW_STATE == UseState.Hand2)
+        else
         {
-            PRESS_DOWN = hand2.GetTrackpadDown();
-            PRESS_UP = hand2.GetTrackpadUp();
-            LEFT = hand2.GetTrackpadPressLeft();
-            RIGHT = hand2.GetTrackpadPressRight();
-            UP = hand2.GetTrackpadPressUp();
-            DOWN = hand2.GetTrackpadPressDown();
-            TRIGGER_UP = hand2.GetStandardInteractionButtonUp();
-            TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
-            TRIGGER_HOLD_DOWN = hand2.GetStandardInteractionButton();
-            HOLD_DOWN = hand2.GetTrackpad();
-
-            //Any directional lets us know if any directions were pressed at all.
-            if (LEFT || RIGHT || UP || DOWN)
-            {
-                ANY_DIRECTIONAL = true;
-            }
-            else
-            {
-                ANY_DIRECTIONAL = false;
-            }
+            INPUT.ClearValues();
         }
     }
 
@@ -281,8 +270,6 @@ public class HomeCustomizationManager : MonoBehaviour {
 
     public void selectObject(GameObject og, bool in_scene)
     {
-        //Enable moving things around
-        currentlyCustomizingHome = true;
         inScene = in_scene;
 
         if (hologramRefToSelectedObject != null) //if the hologram ref is not equal to null
@@ -324,7 +311,11 @@ public class HomeCustomizationManager : MonoBehaviour {
         hologramMaterial[1] = Resources.Load("Materials/HandHighlight", typeof(Material)) as Material;
         hologramRefToSelectedObject.GetComponent<Renderer>().materials = hologramMaterial; //assign the new materials to the hologram object
         hologramRefToSelectedObject.AddComponent<CheckIfColliding>(); //Adds the script checkifcolliding.
-        hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IgnoreCollision(currentlySelectedObject);
+
+        if (inScene)
+        {
+            hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IgnoreCollision(currentlySelectedObject);
+        } 
 
         //Makes the collider compatible with the rigidbody.
         if (hologramRefToSelectedObject.GetComponent<MeshCollider>() != null)
@@ -357,7 +348,7 @@ public class HomeCustomizationManager : MonoBehaviour {
         else //If we aren't in the scene, we need to revert changes.
         {
             //Reset the material
-            hologramMaterial = new Material[0];
+            hologramMaterial = new Material[1];
             hologramMaterial[0] = PREV_MATERIAL;
             hologramRefToSelectedObject.GetComponent<MeshRenderer>().materials = hologramMaterial;
 

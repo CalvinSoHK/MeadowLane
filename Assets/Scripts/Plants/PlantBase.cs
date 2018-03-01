@@ -180,6 +180,7 @@ public class PlantBase : MonoBehaviour {
         {
             //Debug.Log("Spawn!");
             GameObject obj = Instantiate(PRODUCE, ChosenList[i].transform.position, ChosenList[i].transform.rotation, ChosenList[i].transform);
+            Physics.IgnoreCollision(GetComponent<Collider>(), obj.GetComponent<Collider>());
             PRODUCE_LIST.Add(obj);
 
             //Set owner of objects to player
