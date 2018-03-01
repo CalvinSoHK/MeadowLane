@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using UnityEngine.UI;
 
 //Customizing stuff
 public class HomeCustomizationManager : MonoBehaviour {
@@ -57,6 +58,13 @@ public class HomeCustomizationManager : MonoBehaviour {
     public enum GRID_SNAPS { None, One };
     public GRID_SNAPS GRID_SNAP = GRID_SNAPS.None;
 
+    public GameObject FurnitureUI;
+    public Text FurnitureRotation;
+    public Image FurnitureGrid;
+    float furnitureGridUIAlpha = 147;
+    Color tmp;
+    public Vector3 furnitureUIOffset;
+
     // Use this for initialization
     void Start () {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
@@ -81,6 +89,7 @@ public class HomeCustomizationManager : MonoBehaviour {
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
                     //NOTE: Selected object is assigned in OnTriggerRaycast.
+                    FurnitureUIHandler();
                     AssignRaycast();
 
                     //If we don't have a selectable object, its an error and move to the stop state.
@@ -157,7 +166,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                     break;
 
                 case CustomizeState.Stop:
-
+                    FurnitureUI.SetActive(false);
                     EnableRaycasting();
 
                     SetCurrentHomeState(CustomizeState.Idle);
@@ -326,8 +335,15 @@ public class HomeCustomizationManager : MonoBehaviour {
         //Make the hologram have a rigidbody so its on trigger calls work. Kinematic so it isnt pushed around by things.
         hologramRefToSelectedObject.AddComponent<Rigidbody>();
         hologramRefToSelectedObject.GetComponent<Rigidbody>().isKinematic = true;
-
-
+        FurnitureUI.SetActive(true);
+        if (SHOW_STATE == UseState.Hand1)
+        {
+            FurnitureUIHandler(hand2);
+        }
+        else if(SHOW_STATE == UseState.Hand2)
+        {
+            FurnitureUIHandler(hand1);
+        }        
         SetCurrentHomeState(CustomizeState.Selected); //Set the current state to the selected one
     }
 
@@ -384,5 +400,47 @@ public class HomeCustomizationManager : MonoBehaviour {
             currentlySelectedObject = null;
         }
         SetCurrentHomeState(CustomizeState.Idle);
+    }
+
+    /// <summary>
+    /// Handles the Furniture UI that snaps the location and rotation
+    /// </summary>
+    public void FurnitureUIHandler(Hand currentHand)
+    {
+        FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
+        switch (ROT_SNAP)
+        {
+            case ROTATION_SNAPS.Ninety:
+                FurnitureRotation.text = "90°";
+                break;
+            case ROTATION_SNAPS.FortyFive:
+                FurnitureRotation.text = "45°";
+                break;
+            case ROTATION_SNAPS.Thirty:
+                FurnitureRotation.text = "30°";
+                break;
+            case ROTATION_SNAPS.Five:
+                FurnitureRotation.text = "5°";
+                break;
+            case ROTATION_SNAPS.Zero:
+                FurnitureRotation.text = "0°";
+                break;
+        }
+        switch (GRID_SNAP)
+        {
+            case GRID_SNAPS.None:
+                tmp = FurnitureGrid.color;
+                furnitureGridUIAlpha = 144f;
+                tmp.a = furnitureGridUIAlpha;
+                FurnitureGrid.color = tmp;
+                break;
+
+            case GRID_SNAPS.One:
+                tmp = FurnitureGrid.color;
+                furnitureGridUIAlpha = 255f;
+                tmp.a = furnitureGridUIAlpha;
+                FurnitureGrid.color = tmp;
+                break;
+        }
     }
 }
