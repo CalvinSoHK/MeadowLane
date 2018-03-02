@@ -61,8 +61,9 @@ public class HomeCustomizationManager : MonoBehaviour {
     public enum GRID_SNAPS { None, One };
     public GRID_SNAPS GRID_SNAP = GRID_SNAPS.None;
 
+    FurnitureManager FM;
     public GameObject FurnitureUI;
-    public Text FurnitureRotation;
+    public Text FurnitureRotationSnap;
     public Image FurnitureGrid;
     float furnitureGridUIAlpha = 147;
     Color tmp;
@@ -73,10 +74,15 @@ public class HomeCustomizationManager : MonoBehaviour {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
+        FM = GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if(FM == null)
+        {
+            FM = GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM;
+        }
 
         //Retrieve hand inputs
         RetrieveHandInputs();
@@ -87,12 +93,11 @@ public class HomeCustomizationManager : MonoBehaviour {
             {
                 case CustomizeState.Idle:
                     //Do nothing. Just wait.
-                    
                     break;
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
                     //NOTE: Selected object is assigned in OnTriggerRaycast.
-                    setFurnitureUIHand();
+                    FurnitureUIHandler();
                     AssignRaycast();
 
                     //If we don't have a selectable object, its an error and move to the stop state.
@@ -171,6 +176,20 @@ public class HomeCustomizationManager : MonoBehaviour {
                                 NEW_ROT.y = Mathf.Round((NEW_ROT.y - SNAP) / SNAP) * SNAP;
                                 hologramRefToSelectedObject.transform.rotation = Quaternion.Euler(NEW_ROT);
                             }
+                            else if(INPUT.UP && INPUT.TRACKPAD_DOWN) //Store the object selected
+                            {
+                                Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(),
+                                    Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+
+                                Destroy(hologramRefToSelectedObject);
+                                if (inScene)
+                                {
+                                    Destroy(currentlySelectedObject);
+                                }
+                                hologramRefToSelectedObject = null;
+                                currentlySelectedObject = null;
+                                SetCurrentHomeState(CustomizeState.Stop);
+                            }
                             else if (INPUT.TRACKPAD_DOWN && !INVENTORY_CALL)
                             {
                                 //Assign the right layer back to the og object regardless of if it was moved or not
@@ -187,7 +206,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                             {
                                 INVENTORY_CALL = false;
                             }
-                            Debug.Log(NEW_ROT);
+                            //Debug.Log(NEW_ROT);
 
                             //Press down on trackpad to attempt to place it down.
                             //Debug.Log(INPUT.TRIGGER_DOWN);
@@ -280,11 +299,13 @@ public class HomeCustomizationManager : MonoBehaviour {
             {
                 //Debug.Log("Hand 1");
                 INPUT.CopyValues(PIM.HAND1);
+                OFF_INPUT.CopyValues(PIM.HAND2);
             }
             else if (SHOW_STATE == UseState.Hand2)
             {
                 //Debug.Log("Hand 2");
                 INPUT.CopyValues(PIM.HAND2);
+                OFF_INPUT.CopyValues(PIM.HAND1);
             }
             else
             {
@@ -387,6 +408,7 @@ public class HomeCustomizationManager : MonoBehaviour {
         if (inScene) //If we are already in the scene, move the real object to the right place.
         {
             currentlySelectedObject.layer = PREV_LAYER;
+            currentlySelectedObject.transform.SetParent(FM.transform);
             currentlySelectedObject.transform.position = hologramRefToSelectedObject.transform.position;
             currentlySelectedObject.transform.rotation = hologramRefToSelectedObject.transform.rotation;
             Destroy(hologramRefToSelectedObject.gameObject);
@@ -394,6 +416,9 @@ public class HomeCustomizationManager : MonoBehaviour {
         }
         else //If we aren't in the scene, we need to revert changes.
         {
+            //Set the transform
+            hologramRefToSelectedObject.transform.SetParent(FM.transform);
+
             //Reset the material
             hologramMaterial = new Material[1];
             hologramMaterial[0] = PREV_MATERIAL;
@@ -440,11 +465,11 @@ public class HomeCustomizationManager : MonoBehaviour {
     /// <summary>
     /// Handles the Furniture UI that snaps the location and rotation
     /// </summary>
-    public void FurnitureUIHandler(Hand currentHand)
+    public void FurnitureUIHandler()
     {
-        FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
-        FurnitureUI.GetComponent<RectTransform>().eulerAngles = currentHand.transform.rotation.eulerAngles + furnitureUIRotationOffset;
-        if (OFF_INPUT.Left && OFF_INPUT.TrackPadDown)
+        //FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
+        //FurnitureUI.GetComponent<RectTransform>().eulerAngles = currentHand.transform.rotation.eulerAngles + furnitureUIRotationOffset;
+        if (OFF_INPUT.LEFT && OFF_INPUT.TRACKPAD_DOWN)
         {
             if(ROT_SNAP == ROTATION_SNAPS.Zero)
             {
@@ -454,7 +479,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                 ROT_SNAP -= 1;
             }
             
-        }else if (OFF_INPUT.Right && OFF_INPUT.TrackPadDown)
+        }else if (OFF_INPUT.RIGHT && OFF_INPUT.TRACKPAD_DOWN)
         {
             if (ROT_SNAP == ROTATION_SNAPS.Ninety)
             {
@@ -465,7 +490,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                 ROT_SNAP += 1;
             }
         }
-        if (OFF_INPUT.Up && OFF_INPUT.TrackPadDown)
+        if (OFF_INPUT.UP && OFF_INPUT.TRACKPAD_DOWN)
         {
             if (GRID_SNAP == GRID_SNAPS.One)
             {
@@ -473,11 +498,11 @@ public class HomeCustomizationManager : MonoBehaviour {
             }
             else
             {
-                GRID_SNAP -= 1;
+                GRID_SNAP += 1;
             }
 
         }
-        else if (OFF_INPUT.Down && OFF_INPUT.TrackPadDown)
+        else if (OFF_INPUT.DOWN && OFF_INPUT.TRACKPAD_DOWN)
         {
             if (GRID_SNAP == GRID_SNAPS.None)
             {
@@ -485,39 +510,39 @@ public class HomeCustomizationManager : MonoBehaviour {
             }
             else
             {
-                GRID_SNAP += 1;
+                GRID_SNAP -= 1;
             }
         }
         switch (ROT_SNAP)
         {
             case ROTATION_SNAPS.Ninety:
-                FurnitureRotation.text = "90°";
+                FurnitureRotationSnap.text = "90°";
                 break;
             case ROTATION_SNAPS.FortyFive:
-                FurnitureRotation.text = "45°";
+                FurnitureRotationSnap.text = "45°";
                 break;
             case ROTATION_SNAPS.Thirty:
-                FurnitureRotation.text = "30°";
+                FurnitureRotationSnap.text = "30°";
                 break;
             case ROTATION_SNAPS.Five:
-                FurnitureRotation.text = "5°";
+                FurnitureRotationSnap.text = "5°";
                 break;
             case ROTATION_SNAPS.Zero:
-                FurnitureRotation.text = "0°";
+                FurnitureRotationSnap.text = "0°";
                 break;
         }
         switch (GRID_SNAP)
         {
             case GRID_SNAPS.None:
                 tmp = FurnitureGrid.color;
-                furnitureGridUIAlpha = 144f;
+                furnitureGridUIAlpha = 0.4f;
                 tmp.a = furnitureGridUIAlpha;
                 FurnitureGrid.color = tmp;
                 break;
 
             case GRID_SNAPS.One:
                 tmp = FurnitureGrid.color;
-                furnitureGridUIAlpha = 255f;
+                furnitureGridUIAlpha = 1.0f;
                 tmp.a = furnitureGridUIAlpha;
                 FurnitureGrid.color = tmp;
                 break;
@@ -527,11 +552,14 @@ public class HomeCustomizationManager : MonoBehaviour {
     {
         if (SHOW_STATE == UseState.Hand1)
         {
-            FurnitureUIHandler(hand2);
+            FurnitureUI.transform.SetParent(hand2.transform);
         }
         else if (SHOW_STATE == UseState.Hand2)
         {
-            FurnitureUIHandler(hand1);
+            FurnitureUI.transform.SetParent(hand1.transform);
         }
+
+        FurnitureUI.transform.localPosition = furnitureUIOffset;
+        FurnitureUI.transform.localEulerAngles = furnitureUIRotationOffset;
     }
 }

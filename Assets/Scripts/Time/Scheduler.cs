@@ -21,56 +21,7 @@ public class Scheduler : MonoBehaviour {
     [HideInInspector]
     int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-    //Class for a date
-    public class Date
-    {
-        //The current season
-        public Season season = Season.None;
-
-        //The current month
-        public Month month = Month.None;
-
-        //The current day
-        public Day day = Day.None;
-
-        //The current day number
-        public int dayNumber = 0;
-
-        //The current year
-        public int year = 0;
-
-        //Constructor function
-        public Date(Season inSeason, Month inMonth, Day inDay, int inNumber, int inYear)
-        {
-            season = inSeason;
-            month = inMonth;
-            day = inDay;
-            dayNumber = inNumber;
-            year = inYear;
-        }
-
-        //Setter function
-        public void SetDate(Season inSeason, Month inMonth, Day inDay, int inNumber, int inYear)
-        {
-            season = inSeason;
-            month = inMonth;
-            day = inDay;
-            dayNumber = inNumber;
-            year = inYear;
-        }
-
-        //Print function
-        public void Print()
-        {
-            Debug.Log((int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " Year " +  year);
-        }
-
-        public override string ToString()
-        {
-            return (int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " " + year;
-        }
-
-    }
+    
 
     //The current date of the game
     public Date date;
@@ -250,4 +201,53 @@ public class Scheduler : MonoBehaviour {
     }
 }
 
+//Class for a date
+public class Date
+{
+    //The current season
+    public Scheduler.Season season = Scheduler.Season.None;
 
+    //The current month
+    public Scheduler.Month month = Scheduler.Month.None;
+
+    //The current day
+    public Scheduler.Day day = Scheduler.Day.None;
+
+    //The current day number
+    public int dayNumber = 0;
+
+    //The current year
+    public int year = 0;
+
+    //Constructor function
+    public Date(Scheduler.Season inSeason, Scheduler.Month inMonth, Scheduler.Day inDay, int inNumber, int inYear)
+    {
+        season = inSeason;
+        month = inMonth;
+        day = inDay;
+        dayNumber = inNumber;
+        year = inYear;
+    }
+
+    //Setter function
+    public void SetDate(Scheduler.Season inSeason, Scheduler.Month inMonth, Scheduler.Day inDay, int inNumber, int inYear)
+    {
+        season = inSeason;
+        month = inMonth;
+        day = inDay;
+        dayNumber = inNumber;
+        year = inYear;
+    }
+
+    //Print function
+    public void Print()
+    {
+        Debug.Log((int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " Year " + year);
+    }
+
+    public override string ToString()
+    {
+        return (int)season + " " + (int)month + " " + dayNumber + " " + (int)day + " " + year;
+    }
+
+}
