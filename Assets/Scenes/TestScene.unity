@@ -325,8 +325,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b204f1c4b369b3f4ea607a1fe66f0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   velocityMutiplier: 1
+  isAnchored: 0
   isHeld: 0
+  isKin: 0
   debug: 0
 --- !u!114 &146648302
 MonoBehaviour:
@@ -593,8 +599,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21ff8e17fc612cd468c24c775801857f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {fileID: 462829039}
-  AnchorPlayer: 1
 --- !u!1 &255673599
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,7 +677,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   destination: {fileID: 1698681198}
+  FLIP: 0
+  ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!23 &260604630
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -941,6 +952,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -1078,6 +1091,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -1125,6 +1140,8 @@ MonoBehaviour:
   closeTimeBetween: 4
   destination: {fileID: 0}
   player: {fileID: 0}
+  isOpen: 0
+  isClosed: 0
 --- !u!92 &462373066
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1214,6 +1231,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 462829038}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &479212036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1015617337}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 479212037}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &479212037
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1015617337}
+  m_GameObject: {fileID: 479212036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &483647354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1978,9 +2023,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679c80fe80830a2439b41a3a26ab990e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  INTERACTABLE_LAYERS:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
+  HITTABLE_LAYERS:
+    serializedVersion: 2
+    m_Bits: 0
+  EDITABLE_LAYERS:
+    serializedVersion: 2
+    m_Bits: 0
+  ENABLED: 1
+  obj: {fileID: 0}
 --- !u!120 &610009732
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -2199,6 +2252,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -2405,7 +2460,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4482144459881986, guid: 2a6a54912a25b5f4c86ae89d310f6d97, type: 2}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1826601871262096, guid: 2a6a54912a25b5f4c86ae89d310f6d97, type: 2}
       propertyPath: m_IsActive
@@ -2546,6 +2601,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -3253,9 +3310,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 679c80fe80830a2439b41a3a26ab990e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  INTERACTABLE_LAYERS:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
+  HITTABLE_LAYERS:
+    serializedVersion: 2
+    m_Bits: 0
+  EDITABLE_LAYERS:
+    serializedVersion: 2
+    m_Bits: 0
+  ENABLED: 1
+  obj: {fileID: 0}
 --- !u!1 &1050770181
 GameObject:
   m_ObjectHideFlags: 0
@@ -3686,7 +3751,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   destination: {fileID: 500273006}
+  FLIP: 0
+  ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!23 &1116467513
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4032,6 +4104,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -4171,7 +4245,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4222219252872718, guid: 76d0e610cca7ac944acfd3adab385a40, type: 2}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1150913983552326, guid: 76d0e610cca7ac944acfd3adab385a40, type: 2}
       propertyPath: m_IsActive
@@ -4302,8 +4376,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f87f1cb6c0e2d4b9f348b53201627d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FM: {fileID: 1608045145}
-  TM: {fileID: 1161011205}
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
 --- !u!23 &1273488015
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4411,7 +4487,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   destination: {fileID: 0}
+  FLIP: 0
+  ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!23 &1421900269
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5171,6 +5254,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -5370,7 +5455,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c6c8c66857c1344aa2c6400b757fec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UI_PREFAB: {fileID: 0}
+  UI_OFFSET: {x: 0, y: 0, z: 0}
+  DIST_TO_PLAYER: 0.5
+  SHOW_UI: 0
   destination: {fileID: 0}
+  FLIP: 0
+  ANCHOR: 0
+  TPC: {fileID: 0}
 --- !u!23 &1769770108
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5831,8 +5923,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2ad14f14731384ab0f302da02bc683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicle: {fileID: 985934518}
-  speed: 0.01
 --- !u!114 &1958780367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5893,7 +5983,6 @@ MonoBehaviour:
   frozenAngle: 0
   frozenHandWorldPos: {x: 0, y: 0, z: 0}
   handHoverLocked: {fileID: 0}
-  isUse: 0
   drivingHand: {fileID: 0}
 --- !u!65 &1958780368
 BoxCollider:
@@ -5996,6 +6085,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -6202,6 +6293,8 @@ MonoBehaviour:
   WATERED: 0
   TILLED: 0
   FERTILE: 0
+  HAS_SEED: 0
+  DEAD: 0
   waterCount: 0
   waterMax: 100
   coordinate: {x: 0, y: 0}
@@ -6257,7 +6350,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plotBlocks: []
-  testBlocks: []
   length: 0
 --- !u!1 &2137536218
 GameObject:
@@ -6378,7 +6470,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4147334479572274, guid: e74c4ba94aab7e240b5f4b155642aea1, type: 2}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1398799647257428, guid: e74c4ba94aab7e240b5f4b155642aea1, type: 2}
       propertyPath: m_IsActive
