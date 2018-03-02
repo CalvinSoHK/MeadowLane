@@ -1359,8 +1359,8 @@ MonoBehaviour:
   FurnitureUI: {fileID: 171298555}
   FurnitureRotationSnap: {fileID: 695458452}
   FurnitureGrid: {fileID: 905979569}
-  furnitureUIOffset: {x: 0, y: 0, z: 0}
-  furnitureUIRotationOffset: {x: 0, y: 0, z: 0}
+  furnitureUIOffset: {x: 0, y: 0.02, z: 0}
+  furnitureUIRotationOffset: {x: 90, y: 0, z: 0}
 --- !u!114 &637642983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2520,22 +2520,22 @@ Prefab:
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0.70710707
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.70710653
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
@@ -2595,7 +2595,7 @@ Prefab:
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90.00001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114165439795034646, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
@@ -2659,7 +2659,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1849274613745892, guid: a829a085003294d40ba17b01ac612b01, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
         type: 2}
@@ -2675,6 +2675,21 @@ Prefab:
         type: 2}
       propertyPath: m_LocalScale.z
       value: 0.2727211
+      objectReference: {fileID: 0}
+    - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224591074470590778, guid: a829a085003294d40ba17b01ac612b01,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114988788946633000, guid: a829a085003294d40ba17b01ac612b01,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a829a085003294d40ba17b01ac612b01, type: 2}

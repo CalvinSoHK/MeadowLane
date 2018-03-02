@@ -178,12 +178,20 @@ public class PlayerInputManager : MonoBehaviour {
             
             if(HAND1.DOWN && HAND1.TRACKPAD_DOWN)
             {
-                GetComponent<PlayerInventory>().CallInventory(hand1);
+                if (hand1.GetComponent<OnTriggerRaycast>().ENABLED)
+                {
+                    GetComponent<PlayerInventory>().CallInventory(hand1);
+                }
+               
             }
 
             if(HAND2.DOWN && HAND2.TRACKPAD_DOWN)
             {
-                GetComponent<PlayerInventory>().CallInventory(hand2);
+                if (hand2.GetComponent<OnTriggerRaycast>().ENABLED)
+                {
+                    GetComponent<PlayerInventory>().CallInventory(hand2);
+                }
+               
             }
         }
     }

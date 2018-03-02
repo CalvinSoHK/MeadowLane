@@ -97,7 +97,7 @@ public class HomeCustomizationManager : MonoBehaviour {
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
                     //NOTE: Selected object is assigned in OnTriggerRaycast.
-                    setFurnitureUIHand();
+                    FurnitureUIHandler();
                     AssignRaycast();
 
                     //If we don't have a selectable object, its an error and move to the stop state.
@@ -206,7 +206,7 @@ public class HomeCustomizationManager : MonoBehaviour {
                             {
                                 INVENTORY_CALL = false;
                             }
-                            Debug.Log(NEW_ROT);
+                            //Debug.Log(NEW_ROT);
 
                             //Press down on trackpad to attempt to place it down.
                             //Debug.Log(INPUT.TRIGGER_DOWN);
@@ -465,10 +465,10 @@ public class HomeCustomizationManager : MonoBehaviour {
     /// <summary>
     /// Handles the Furniture UI that snaps the location and rotation
     /// </summary>
-    public void FurnitureUIHandler(Hand currentHand)
+    public void FurnitureUIHandler()
     {
-        FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
-        FurnitureUI.GetComponent<RectTransform>().eulerAngles = currentHand.transform.rotation.eulerAngles + furnitureUIRotationOffset;
+        //FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
+        //FurnitureUI.GetComponent<RectTransform>().eulerAngles = currentHand.transform.rotation.eulerAngles + furnitureUIRotationOffset;
         if (OFF_INPUT.LEFT && OFF_INPUT.TRACKPAD_DOWN)
         {
             if(ROT_SNAP == ROTATION_SNAPS.Zero)
@@ -498,7 +498,7 @@ public class HomeCustomizationManager : MonoBehaviour {
             }
             else
             {
-                GRID_SNAP -= 1;
+                GRID_SNAP += 1;
             }
 
         }
@@ -510,7 +510,7 @@ public class HomeCustomizationManager : MonoBehaviour {
             }
             else
             {
-                GRID_SNAP += 1;
+                GRID_SNAP -= 1;
             }
         }
         switch (ROT_SNAP)
@@ -535,14 +535,14 @@ public class HomeCustomizationManager : MonoBehaviour {
         {
             case GRID_SNAPS.None:
                 tmp = FurnitureGrid.color;
-                furnitureGridUIAlpha = 144f;
+                furnitureGridUIAlpha = 0.4f;
                 tmp.a = furnitureGridUIAlpha;
                 FurnitureGrid.color = tmp;
                 break;
 
             case GRID_SNAPS.One:
                 tmp = FurnitureGrid.color;
-                furnitureGridUIAlpha = 255f;
+                furnitureGridUIAlpha = 1.0f;
                 tmp.a = furnitureGridUIAlpha;
                 FurnitureGrid.color = tmp;
                 break;
@@ -552,11 +552,14 @@ public class HomeCustomizationManager : MonoBehaviour {
     {
         if (SHOW_STATE == UseState.Hand1)
         {
-            FurnitureUIHandler(hand2);
+            FurnitureUI.transform.SetParent(hand2.transform);
         }
         else if (SHOW_STATE == UseState.Hand2)
         {
-            FurnitureUIHandler(hand1);
+            FurnitureUI.transform.SetParent(hand1.transform);
         }
+
+        FurnitureUI.transform.localPosition = furnitureUIOffset;
+        FurnitureUI.transform.localEulerAngles = furnitureUIRotationOffset;
     }
 }
