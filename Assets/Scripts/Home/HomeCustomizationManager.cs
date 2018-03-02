@@ -117,30 +117,16 @@ public class HomeCustomizationManager : MonoBehaviour {
                             }
 
                             //Press down on trackpad to attempt to place it down.
-                            if (INPUT.TRIGGER_DOWN)
+                            //Debug.Log(INPUT.TRIGGER_DOWN);
+                            if (INPUT.TRIGGER)
                             {
+                                //Debug.Log("Trigger down.");
                                 if (hologramRefToSelectedObject.GetComponent<CheckIfColliding>().IS_VALID)
                                 {
-                                    Debug.Log("Valid. Placing.");
+                                    //Debug.Log("Valid. Placing.");
                                     placeObject();
                                     SetCurrentHomeState(CustomizeState.Stop);
                                 }
-                                else
-                                {
-                                    /*
-                                    Debug.Log("Invalid. Destroyed.");
-                                    if (inScene)
-                                    {
-                                        currentlySelectedObject.layer = PREV_LAYER;
-                                    }
-                                    else
-                                    {
-                                        Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(),
-                                            Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
-                                    }
-                                    Destroy(hologramRefToSelectedObject.gameObject);*/
-                                }
-                              
                             }
 
                             //Press trigger to exit this object place mode.
@@ -173,7 +159,7 @@ public class HomeCustomizationManager : MonoBehaviour {
             }
         }
 	}
-
+    /*
     /// <summary>
     /// set whether or not we are currently customizing the home
     /// should be activated on press of the top vive controller button
@@ -188,9 +174,9 @@ public class HomeCustomizationManager : MonoBehaviour {
         }else // other set it to true
         {
             currentlyCustomizingHome = true;
-        }
-        
-    }
+        } 
+    }*/
+
     /// <summary>
     /// getter to see if we are currently customizing the home
     /// </summary>
@@ -235,19 +221,23 @@ public class HomeCustomizationManager : MonoBehaviour {
         {
             if (SHOW_STATE == UseState.Hand1)
             {
-                INPUT = PIM.HAND1;
+                //Debug.Log("Hand 1");
+                INPUT.CopyValues(PIM.HAND1);
             }
             else if (SHOW_STATE == UseState.Hand2)
             {
-                INPUT = PIM.HAND2;
+                //Debug.Log("Hand 2");
+                INPUT.CopyValues(PIM.HAND2);
             }
             else
             {
+                //Debug.Log("Clear values");
                 INPUT.ClearValues();
             }
         }
         else
         {
+            //Debug.Log("Clear values default");
             INPUT.ClearValues();
         }
     }
@@ -366,8 +356,27 @@ public class HomeCustomizationManager : MonoBehaviour {
             hologramRefToSelectedObject.layer = PREV_LAYER;
 
             hologramRefToSelectedObject = null;
+        }  
+    }
+
+    public void cancelObject()
+    {
+        if (inScene)
+        {
+            currentlySelectedObject.layer = PREV_LAYER;
+            Destroy(hologramRefToSelectedObject.gameObject);
+            currentlySelectedObject = null;
         }
-   
-        
+        else
+        {
+            //Add it back to inventory
+            Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(), 
+                Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+
+            //Remove it from scene
+            Destroy(hologramRefToSelectedObject);
+            currentlySelectedObject = null;
+        }
+        SetCurrentHomeState(CustomizeState.Idle);
     }
 }

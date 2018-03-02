@@ -66,11 +66,11 @@ public class PlayerPhone : MonoBehaviour {
         {
             if (SHOW == ShowState.Hand1)
             {
-                INPUT = PIM.HAND1;
+                INPUT.CopyValues(PIM.HAND1);
             }
             else if (SHOW == ShowState.Hand2)
             {
-                INPUT = PIM.HAND2;
+                INPUT.CopyValues(PIM.HAND2);
             }
             else
             {
@@ -255,11 +255,11 @@ public class PlayerPhone : MonoBehaviour {
 
     public void HidePhone(Hand hand)
     {
-        //Detach the object in script, then destroy it
+        //Detach the object in script, then set it inactive
         if((hand == hand1 && SHOW == ShowState.Hand1) || (hand == hand2 && SHOW == ShowState.Hand2))
-        {
-            
+        {        
             hand.GetComponent<OnTriggerRaycast>().DropObj(PHONE);
+            GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
             SHOW = ShowState.None;
             PHONE.SetActive(false);
         }
@@ -268,6 +268,7 @@ public class PlayerPhone : MonoBehaviour {
 
     public void HidePhone()
     {
+        GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
         //Checks show state and hides the correct phone
         if (SHOW == ShowState.Hand1)
         {

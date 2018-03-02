@@ -27,7 +27,7 @@ public class PlayerInventory : MonoBehaviour {
     public Canvas UICanvas;
     public Image currentCategory_Image, currentItem_Image, upArrow, downArrow, leftArrow, rightArrow; //Category and Item UI image ref
     public Text currentCount; //UI text placement for count
-    bool isInventoryOn = false; //ref to whether the inventory UI is on
+    public bool isInventoryOn = false; //ref to whether the inventory UI is on
     int totalCategory; //total number of categories
     int TotalItemForCategory; //total number of items within the category
 
@@ -148,11 +148,11 @@ public class PlayerInventory : MonoBehaviour {
             //Update the directional bools based off of the current hand's trackpad
             if (SHOW == ShowState.Hand1)
             {
-                INPUT = PIM.HAND1;
+                INPUT.CopyValues(PIM.HAND1);
             }
             else if (SHOW == ShowState.Hand2)
             {
-                INPUT = PIM.HAND2;
+                INPUT.CopyValues(PIM.HAND2);
             }
             else
             {
@@ -244,14 +244,16 @@ public class PlayerInventory : MonoBehaviour {
                             COUNT = Inventory_Manager.CategorySlots[Inventory_Manager.currentCategoryIndex][Inventory_Manager.currentCategorySlotsIndex].TotalNum - 1;
                             SpawnItemFromInventory(tempSlot, true); //spawn the produce into the scene
                         }
+                        GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
                         break;
                     case InventoryState.Furniture:
                         COUNT = Inventory_Manager.FurnitureCategorySlots[Inventory_Manager.currentFurnitureCategoryIndex][Inventory_Manager.currentFurnitureCategorySlotsIndex].TotalNum - 1;
                         SpawnFurnitureFromInventory(tempSlot); //spawn the produce into the scene
+                        GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Edit);
                         break;
                 }
-                
-                
+
+               
                 CheckInventoryUI(false); //turn off the Inventory UI                
             }
 
@@ -313,13 +315,14 @@ public class PlayerInventory : MonoBehaviour {
             //If we are in the NONE show state, just show the phone on this hand
             if (SHOW == ShowState.None && ShowInventory())
             {
+                GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Inventory);
                 hand.GetComponent<OnTriggerRaycast>().PickUpObj(UICanvas.gameObject);
                 if (hand == hand1)
                 {
                     UICanvas.gameObject.SetActive(true);
                     TEMP_STATE = ShowState.Hand1;
                 }
-                else
+                else if(hand == hand2)
                 {
                     UICanvas.gameObject.SetActive(true);
                     TEMP_STATE = ShowState.Hand2;
@@ -526,6 +529,17 @@ public class PlayerInventory : MonoBehaviour {
             currentCount.color = tmp;
             turnOnArrows(false);
             currentFadeState = FadeState.Wait;
+
+            if(currentInventoryState == InventoryState.Furniture)
+            {
+                //Debug.Log("Change to edit");
+                GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Edit);
+            }
+            else if(currentInventoryState == InventoryState.Item)
+            {
+                GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
+            }
+
         }
         else //if true
         {
@@ -534,6 +548,8 @@ public class PlayerInventory : MonoBehaviour {
             currentCount.gameObject.SetActive(true);
             turnOnArrows(true);
         }
+
+
     }
 
     /// <summary>

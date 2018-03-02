@@ -10,9 +10,9 @@ public class PlayerInputManager : MonoBehaviour {
 
     public enum InputIdentity { Hand1, Hand2, None };
 
-    public HandInputs HAND1, HAND2;
+    public HandInputs HAND1 = new HandInputs(), HAND2 = new HandInputs();
 
-    Hand hand1, hand2;
+    public Hand hand1, hand2;
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +22,11 @@ public class PlayerInputManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(hand1 != null)
+        if(hand1 == null)
+        {
+            hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
+        }
+		else if(hand1 != null)
         {
             HAND1.LEFT = hand1.GetTrackpadPressLeft();
             HAND1.RIGHT = hand1.GetTrackpadPressRight();
@@ -39,15 +43,21 @@ public class PlayerInputManager : MonoBehaviour {
             HAND1.MENU_UP = hand1.GetMenuButtonUp();
         }
         
-        if(hand2 != null)
+        if(hand2 == null)
         {
+            //Debug.Log("Hand 2 missing.");
+            hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
+        }
+        else if(hand2 != null)
+        {
+            //Debug.Log("Hand 2 inputs retrieving.");
             HAND2.LEFT = hand2.GetTrackpadPressLeft();
             HAND2.RIGHT = hand2.GetTrackpadPressRight();
             HAND2.UP = hand2.GetTrackpadPressUp();
             HAND2.DOWN = hand2.GetTrackpadPressDown();
-            HAND1.TRACKPAD = hand2.GetTrackpad();
-            HAND1.TRACKPAD_DOWN = hand2.GetTrackpadDown();
-            HAND1.TRACKPAD_UP = hand2.GetTrackpadUp();
+            HAND2.TRACKPAD = hand2.GetTrackpad();
+            HAND2.TRACKPAD_DOWN = hand2.GetTrackpadDown();
+            HAND2.TRACKPAD_UP = hand2.GetTrackpadUp();
             HAND2.TRIGGER_DOWN = hand2.GetStandardInteractionButtonDown();
             HAND2.TRIGGER = hand2.GetStandardInteractionButton();
             HAND2.TRIGGER_UP = hand2.GetStandardInteractionButtonUp();
@@ -62,9 +72,11 @@ public class PlayerInputManager : MonoBehaviour {
             //If the trackpad is pressed down
             if (HAND1.TRACKPAD_DOWN)
             {
+                //Debug.Log("Trackpad");
                 //Trigger the phone if it is the up on the trackpad
                 if (HAND1.UP)
                 {
+                    //Debug.Log("Phone");
                     GetComponent<PlayerPhone>().UsePhone(hand1);
                     changeMode(InputMode.Phone);
                 }          
@@ -72,15 +84,21 @@ public class PlayerInputManager : MonoBehaviour {
                 //Trigger the player inventory if it is down on the trackpad
                 if (HAND1.DOWN)
                 {
+                    //Debug.Log("Inventory");
                     GetComponent<PlayerInventory>().CallInventory(hand1);
-                    changeMode(InputMode.Inventory);
+                    //changeMode(InputMode.Inventory);
                 }
             }
 
             //If the menu button is pressed
             if (HAND1.MENU_DOWN)
-            {               
-                GetComponent<PlayerInventory>().CheckInventoryUI(false);
+            {
+                /*
+                if (GetComponent<PlayerInventory>().isInventoryOn)
+                {
+                    GetComponent<PlayerInventory>().CheckInventoryUI(false);
+                }*/
+             
                 hand1.GetComponent<OnTriggerRaycast>().obj = null;
 
                 //Just in case the other hand is out, empty that object as well.
@@ -92,20 +110,21 @@ public class PlayerInputManager : MonoBehaviour {
                 //Toggle between default or edit mode.
                 if (isMode(InputMode.Default))
                 {
+                    Debug.Log("Set to true");
                     GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = true;
                     changeMode(InputMode.Edit);
-                }
-                else if (isMode(InputMode.Edit))
-                {
-                    GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = false;
-                    changeMode(InputMode.Default);
-                }               
+                }            
             }
 
             //If the menu button is pressed
             if (HAND2.MENU_DOWN)
             {
-                GetComponent<PlayerInventory>().CheckInventoryUI(false);
+                /*
+                if (GetComponent<PlayerInventory>().isInventoryOn)
+                {
+                    GetComponent<PlayerInventory>().CheckInventoryUI(false);
+                }*/
+
                 hand2.GetComponent<OnTriggerRaycast>().obj = null;
 
                 //Just in case the other hand is out, empty that object as well.
@@ -117,37 +136,57 @@ public class PlayerInputManager : MonoBehaviour {
                 //Toggle between default or edit mode.
                 if (isMode(InputMode.Default))
                 {
+                    //Debug.Log("Set to true");
                     GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = true;
                     changeMode(InputMode.Edit);
                 }
-                else if (isMode(InputMode.Edit))
-                {
-                    GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = false;
-                    changeMode(InputMode.Default);
-                }
             }
-
-
 
             //If the trackpad is pressed down
             if (HAND2.TRACKPAD_DOWN)
             {
+                //Debug.Log("Trackpad press down.");
                 //Trigger the phone if it is the up on the trackpad
                 if (HAND2.UP)
                 {
+                    //Debug.Log("Phone");
                     GetComponent<PlayerPhone>().UsePhone(hand2);
                     changeMode(InputMode.Phone);
                 }
                 //Trigger the player inventory if it is down on the trackpad
                 if (HAND2.DOWN)
                 {
+                    //Debug.Log("Inventory");
                     GetComponent<PlayerInventory>().CallInventory(hand2);
-                    changeMode(InputMode.Inventory);
+                    //changeMode(InputMode.Inventory);
                 }
             }
 
         }
-	}
+        else if (isMode(InputMode.Edit))
+        {
+            if(HAND2.MENU_DOWN || HAND1.MENU_DOWN)
+            {
+                //Debug.Log("Firing again");
+                GetComponent<HomeCustomizationManager>().currentlyCustomizingHome = false;
+                if(GetComponent<HomeCustomizationManager>().currentCustomizeState == HomeCustomizationManager.CustomizeState.Selected)
+                {
+                    GetComponent<HomeCustomizationManager>().cancelObject();
+                }
+                changeMode(InputMode.Default);
+            }
+            
+            if(HAND1.DOWN && HAND1.TRACKPAD_DOWN)
+            {
+                GetComponent<PlayerInventory>().CallInventory(hand1);
+            }
+
+            if(HAND2.DOWN && HAND2.TRACKPAD_DOWN)
+            {
+                GetComponent<PlayerInventory>().CallInventory(hand2);
+            }
+        }
+    }
 
     /// <summary>
     /// Checks to see if we are in the given mode.
@@ -166,6 +205,10 @@ public class PlayerInputManager : MonoBehaviour {
     public void changeMode(InputMode NEW)
     {
         MODE = NEW;
+
+        //Reset on trigger raycast for both hands on mode change
+        hand1.GetComponent<OnTriggerRaycast>().ENABLED = true;
+        hand2.GetComponent<OnTriggerRaycast>().ENABLED = true;
     }
 
     /// <summary>
@@ -191,6 +234,7 @@ public class PlayerInputManager : MonoBehaviour {
     }
 }
 
+[System.Serializable]
 public class HandInputs
 {
     public bool LEFT = false, RIGHT = false, UP = false, DOWN = false,
@@ -212,5 +256,22 @@ public class HandInputs
         MENU_DOWN = false;
         MENU = false;
         MENU_UP = false;
+    }
+
+    public void CopyValues(HandInputs INPUT)
+    {
+        LEFT = INPUT.LEFT;
+        RIGHT = INPUT.RIGHT;
+        UP = INPUT.UP;
+        DOWN = INPUT.DOWN;
+        TRACKPAD = INPUT.TRACKPAD;
+        TRACKPAD_DOWN = INPUT.TRACKPAD_DOWN;
+        TRACKPAD_UP = INPUT.TRACKPAD_UP;
+        TRIGGER = INPUT.TRIGGER;
+        TRIGGER_DOWN = INPUT.TRIGGER_DOWN;
+        TRIGGER_UP = INPUT.TRIGGER_UP;
+        MENU_DOWN = INPUT.MENU_DOWN;
+        MENU = INPUT.MENU;
+        MENU_UP = INPUT.MENU_UP;
     }
 }

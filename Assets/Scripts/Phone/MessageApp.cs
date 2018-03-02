@@ -209,6 +209,7 @@ public class MessageApp : BasicApp {
             //Allow for exitinbg back to contact list on trigger down.
             if (GetTriggerUp())
             {
+                Debug.Log("Go back");
                 //Go back to message screen
                 LINKER.TransitionTo(LINKER.SECOND_SCREEN);
                 STATE = MESSAGE_APP_STATE.ConvoList;

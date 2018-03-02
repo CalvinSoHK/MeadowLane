@@ -101,6 +101,7 @@ public class InteractionPickup : InteractableCustom {
         if (hand.GetStandardInteractionButtonDown())
         {
             hand.DetachObject(gameObject);
+            hand.GetComponent<OnTriggerRaycast>().ENABLED = true;
         } 
     }
 

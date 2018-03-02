@@ -62,7 +62,7 @@ public class BasicApp : MonoBehaviour {
             TIMER = Time.time;
             downInitiated = true;
         }
-        else if (PHONE.INPUT.TRIGGER)
+        else if (PHONE.INPUT.TRIGGER_UP)
         {
             //Exit app
             downInitiated = false;
