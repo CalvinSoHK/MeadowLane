@@ -169,7 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _NAME: WorkTable
   CATEGORY: Table
-  KEY: 200
+  KEY: 1002
   _OWNER: 2
   _VALUE: 0
   _TAGS: 32

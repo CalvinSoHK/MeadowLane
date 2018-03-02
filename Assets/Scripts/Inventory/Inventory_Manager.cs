@@ -34,13 +34,13 @@ public static class  Inventory_Manager {
     /// <summary>
     /// Init the furniture category slots in the player inventory
     /// </summary>
-    public static void InitPlayerFurnitureInventory()
+    /*public static void InitPlayerFurnitureInventory()
     {
         for(int i = 0; i < FurnitureCategory.Count; i++)
         {
             FurnitureCategorySlots[i] = new List<InventorySlot>();
         }
-    }
+    }*/
 
     //Load inventory from save data
     public static void LoadPlayerInventory(string DATA)
@@ -198,12 +198,12 @@ public static class  Inventory_Manager {
     /// After item is spawned from inventory, removes that item instance from inventory if it is produce
     /// </summary>
     /// <param name="itemInfo"></param>
-    public static void RemoveItemFromInventory(InventorySlot itemInfo, List<InventorySlot>[] currentInventory, BaseItem currentItem)
+    public static void RemoveItemFromInventory(InventorySlot itemInfo, List<InventorySlot>[] currentInventory, BaseItem currentItem, int CurrentCategoryIndex)
     {
         itemInfo.TotalNum -= 1; //reduce the total number of that slot object
         if((currentItem.hasTag(BaseItem.ItemTags.Decoration) || currentCategoryIndex == 0)&& itemInfo.TotalNum == 0) //check if that specific object belongs to the produce category or if its furniture and whether there are none left.
         {
-            currentInventory[currentCategoryIndex].Remove(itemInfo); //remove that item from the list
+            currentInventory[CurrentCategoryIndex].Remove(itemInfo); //remove that item from the list
         }
     }
 

@@ -60,15 +60,22 @@ public class HomeCustomizationManager : MonoBehaviour {
     public enum GRID_SNAPS { None, One };
     public GRID_SNAPS GRID_SNAP = GRID_SNAPS.None;
 
+    FurnitureManager FM;
+
     // Use this for initialization
     void Start () {
         hand1 = transform.GetChild(0).Find("Hand1").GetComponent<Hand>();
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
+        FM = GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        if(FM == null)
+        {
+            FM = GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM;
+        }
 
         //Retrieve hand inputs
         RetrieveHandInputs();
@@ -79,7 +86,6 @@ public class HomeCustomizationManager : MonoBehaviour {
             {
                 case CustomizeState.Idle:
                     //Do nothing. Just wait.
-                    
                     break;
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
@@ -161,6 +167,20 @@ public class HomeCustomizationManager : MonoBehaviour {
                                 NEW_ROT = hologramRefToSelectedObject.transform.eulerAngles;
                                 NEW_ROT.y = Mathf.Round((NEW_ROT.y - SNAP) / SNAP) * SNAP;
                                 hologramRefToSelectedObject.transform.rotation = Quaternion.Euler(NEW_ROT);
+                            }
+                            else if(INPUT.UP && INPUT.TRACKPAD_DOWN) //Store the object selected
+                            {
+                                Inventory_Manager.AddItemToInventory(hologramRefToSelectedObject.GetComponent<BaseItem>(),
+                                    Inventory_Manager.FurnitureCategory, Inventory_Manager.FurnitureCategorySlots);
+
+                                Destroy(hologramRefToSelectedObject);
+                                if (inScene)
+                                {
+                                    Destroy(currentlySelectedObject);
+                                }
+                                hologramRefToSelectedObject = null;
+                                currentlySelectedObject = null;
+                                SetCurrentHomeState(CustomizeState.Stop);
                             }
                             else if (INPUT.TRACKPAD_DOWN && !INVENTORY_CALL)
                             {
@@ -271,11 +291,13 @@ public class HomeCustomizationManager : MonoBehaviour {
             {
                 //Debug.Log("Hand 1");
                 INPUT.CopyValues(PIM.HAND1);
+                OFF_INPUT.CopyValues(PIM.HAND2);
             }
             else if (SHOW_STATE == UseState.Hand2)
             {
                 //Debug.Log("Hand 2");
                 INPUT.CopyValues(PIM.HAND2);
+                OFF_INPUT.CopyValues(PIM.HAND1);
             }
             else
             {
@@ -378,6 +400,7 @@ public class HomeCustomizationManager : MonoBehaviour {
         if (inScene) //If we are already in the scene, move the real object to the right place.
         {
             currentlySelectedObject.layer = PREV_LAYER;
+            currentlySelectedObject.transform.SetParent(FM.transform);
             currentlySelectedObject.transform.position = hologramRefToSelectedObject.transform.position;
             currentlySelectedObject.transform.rotation = hologramRefToSelectedObject.transform.rotation;
             Destroy(hologramRefToSelectedObject.gameObject);
@@ -385,6 +408,9 @@ public class HomeCustomizationManager : MonoBehaviour {
         }
         else //If we aren't in the scene, we need to revert changes.
         {
+            //Set the transform
+            hologramRefToSelectedObject.transform.SetParent(FM.transform);
+
             //Reset the material
             hologramMaterial = new Material[1];
             hologramMaterial[0] = PREV_MATERIAL;

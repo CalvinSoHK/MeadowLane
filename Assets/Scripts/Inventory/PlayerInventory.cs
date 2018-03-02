@@ -247,6 +247,7 @@ public class PlayerInventory : MonoBehaviour {
                         GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Default);
                         break;
                     case InventoryState.Furniture:
+                        Debug.Log("eyyy we in teh furnoture dog");
                         COUNT = Inventory_Manager.FurnitureCategorySlots[Inventory_Manager.currentFurnitureCategoryIndex][Inventory_Manager.currentFurnitureCategorySlotsIndex].TotalNum - 1;
                         SpawnFurnitureFromInventory(tempSlot); //spawn the produce into the scene
                         GetComponent<PlayerInputManager>().changeMode(PlayerInputManager.InputMode.Edit);
@@ -408,8 +409,10 @@ public class PlayerInventory : MonoBehaviour {
             if (CategoryIndex != -1) //if the category index is not equal to -1 (meaning all categories are empty)
             {
                 //Debug.Log("-1 you is not: " + CategoryIndex);
-                Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
-                Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
+                Inventory_Manager.setIndex(currentInventoryState, CategoryIndex);
+                Inventory_Manager.setIndexSlots(currentInventoryState, 0);
+                //Inventory_Manager.currentCategoryIndex = CategoryIndex; //update the category index that we are in
+                //Inventory_Manager.currentCategorySlotsIndex = 0; //reset the item index
                 //DO i need to get the number of categories here?
                 TotalItemForCategory = Inventory_Manager.getCurrentInventory(currentInventoryState)[Inventory_Manager.currentCategoryIndex].Count; //get the total number of items in category
                 //Debug.Log("Count: " + TotalItemForCategory);
@@ -450,7 +453,7 @@ public class PlayerInventory : MonoBehaviour {
         AttachObjectToHand(ObjectRef);//Attach the instantiated object to the player's hand
         if (removeFromInventory) //does it need to be removed from inventory
         {
-            Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>()); //remove it from inv
+            Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>(), Inventory_Manager.currentCategoryIndex); //remove it from inv
         }
         return ObjectRef;
     }
@@ -463,15 +466,17 @@ public class PlayerInventory : MonoBehaviour {
         if(SHOW == ShowState.Hand1)
         {
             HCM.SetUseState(HomeCustomizationManager.UseState.Hand1);
+            hand1.GetComponent<OnTriggerRaycast>().ENABLED = false;
         }
         else if(SHOW == ShowState.Hand2)
         {
             HCM.SetUseState(HomeCustomizationManager.UseState.Hand2);
+            hand2.GetComponent<OnTriggerRaycast>().ENABLED = false;
         }
         HCM.INVENTORY_CALL = true;
         HCM.selectObject(ObjectRef, false);
         
-        Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>()); //remove it from inv
+        Inventory_Manager.RemoveItemFromInventory(tempSlot, Inventory_Manager.getCurrentInventory(currentInventoryState), ObjectRef.GetComponent<BaseItem>(), Inventory_Manager.currentFurnitureCategoryIndex); //remove it from inv
         return ObjectRef;
     }
 
