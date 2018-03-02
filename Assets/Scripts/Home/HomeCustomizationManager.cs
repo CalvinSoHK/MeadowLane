@@ -66,7 +66,7 @@ public class HomeCustomizationManager : MonoBehaviour {
     public Image FurnitureGrid;
     float furnitureGridUIAlpha = 147;
     Color tmp;
-    public Vector3 furnitureUIOffset;
+    public Vector3 furnitureUIOffset, furnitureUIRotationOffset;
 
     // Use this for initialization
     void Start () {
@@ -92,7 +92,7 @@ public class HomeCustomizationManager : MonoBehaviour {
 
                 case CustomizeState.Selected: //Make the object follow our raycast location
                     //NOTE: Selected object is assigned in OnTriggerRaycast.
-                    FurnitureUIHandler();
+                    setFurnitureUIHand();
                     AssignRaycast();
 
                     //If we don't have a selectable object, its an error and move to the stop state.
@@ -378,14 +378,7 @@ public class HomeCustomizationManager : MonoBehaviour {
         hologramRefToSelectedObject.AddComponent<Rigidbody>();
         hologramRefToSelectedObject.GetComponent<Rigidbody>().isKinematic = true;
         FurnitureUI.SetActive(true);
-        if (SHOW_STATE == UseState.Hand1)
-        {
-            FurnitureUIHandler(hand2);
-        }
-        else if(SHOW_STATE == UseState.Hand2)
-        {
-            FurnitureUIHandler(hand1);
-        }        
+        setFurnitureUIHand();       
         SetCurrentHomeState(CustomizeState.Selected); //Set the current state to the selected one
     }
 
@@ -450,6 +443,51 @@ public class HomeCustomizationManager : MonoBehaviour {
     public void FurnitureUIHandler(Hand currentHand)
     {
         FurnitureUI.GetComponent<RectTransform>().anchoredPosition3D = currentHand.transform.position + furnitureUIOffset;
+        FurnitureUI.GetComponent<RectTransform>().eulerAngles = currentHand.transform.rotation.eulerAngles + furnitureUIRotationOffset;
+        if (OFF_INPUT.Left && OFF_INPUT.TrackPadDown)
+        {
+            if(ROT_SNAP == ROTATION_SNAPS.Zero)
+            {
+                ROT_SNAP = ROTATION_SNAPS.Ninety;
+            }else
+            {
+                ROT_SNAP -= 1;
+            }
+            
+        }else if (OFF_INPUT.Right && OFF_INPUT.TrackPadDown)
+        {
+            if (ROT_SNAP == ROTATION_SNAPS.Ninety)
+            {
+                ROT_SNAP = ROTATION_SNAPS.Zero;
+            }
+            else
+            {
+                ROT_SNAP += 1;
+            }
+        }
+        if (OFF_INPUT.Up && OFF_INPUT.TrackPadDown)
+        {
+            if (GRID_SNAP == GRID_SNAPS.One)
+            {
+                GRID_SNAP = GRID_SNAPS.None;
+            }
+            else
+            {
+                GRID_SNAP -= 1;
+            }
+
+        }
+        else if (OFF_INPUT.Down && OFF_INPUT.TrackPadDown)
+        {
+            if (GRID_SNAP == GRID_SNAPS.None)
+            {
+                GRID_SNAP = GRID_SNAPS.One;
+            }
+            else
+            {
+                GRID_SNAP += 1;
+            }
+        }
         switch (ROT_SNAP)
         {
             case ROTATION_SNAPS.Ninety:
@@ -483,6 +521,17 @@ public class HomeCustomizationManager : MonoBehaviour {
                 tmp.a = furnitureGridUIAlpha;
                 FurnitureGrid.color = tmp;
                 break;
+        }
+    }
+    public void setFurnitureUIHand()
+    {
+        if (SHOW_STATE == UseState.Hand1)
+        {
+            FurnitureUIHandler(hand2);
+        }
+        else if (SHOW_STATE == UseState.Hand2)
+        {
+            FurnitureUIHandler(hand1);
         }
     }
 }
