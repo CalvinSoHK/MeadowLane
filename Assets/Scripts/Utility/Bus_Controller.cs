@@ -51,25 +51,28 @@ public class Bus_Controller : MonoBehaviour {
         //If we have finished loading
         if (isTransitionLoaded && VR_CAMERA.GetComponent<ScreenTransitionImageEffect>().GetCurrentState() == ScreenTransitionImageEffect.Gamestate.open)
         {
-            //Set is loaded to false
-            isTransitionLoaded = false;
-            //Debug.Log("Scene loaded");
-
-            //Place us on the bus in the right position
+            //Find the bus point. Don't proceed till we can find it.
             BUS_POINT = GameObject.Find("BusPoint");
-            transform.rotation = BUS_POINT.transform.rotation;
-            transform.position = BUS_POINT.transform.position;
-            timer = MIN_LOAD_TIME;
+            if(BUS_POINT != null)
+            {
+                //Set is loaded to false
+                isTransitionLoaded = false;
 
-            //Start unloading the old scene
-            SceneManager.UnloadSceneAsync(BSM.CURRENT_STOP.GetName());
+                transform.rotation = BUS_POINT.transform.rotation;
+                transform.position = BUS_POINT.transform.position;
+                timer = MIN_LOAD_TIME;
 
-            BSM.CURRENT_STOP = NEW_STOP_INFO;
+                //Start unloading the old scene
+                SceneManager.UnloadSceneAsync(BSM.CURRENT_STOP.GetName());
 
-            //When the old scene is unloaded fire the event old scene unloaded.
-            SceneManager.sceneUnloaded += OldSceneUnloaded;
+                BSM.CURRENT_STOP = NEW_STOP_INFO;
 
-            isMoving = true;
+                //When the old scene is unloaded fire the event old scene unloaded.
+                SceneManager.sceneUnloaded += OldSceneUnloaded;
+
+                isMoving = true;
+            }
+         
         }
 
         //If we should be moving
