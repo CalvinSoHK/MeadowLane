@@ -379,6 +379,32 @@ public class EventManager : MonoBehaviour {
             OverrideList();
         }
     }
+
+    //Do all the organizing
+    public void OrganizeList()
+    {
+        FilterList();
+        SortList();
+        OverrideList();
+    }
+
+    //Get the event info for the given scene and time
+    public EventInfo GetEvent(EventClass.SCENES SCENE, float CURRENT_TIME)
+    {
+        //For loop
+        for(int i = 0; i < EVENT_LIST.Count; i++)
+        {
+            //If the event is in the right scene and the event starts before this time and ends after this time.
+            if(EVENT_LIST[i].SCENE == SCENE && EVENT_LIST[i].TIME_START < CURRENT_TIME &&
+                EVENT_LIST[i].TIME_END > CURRENT_TIME)
+            {
+                return EVENT_LIST[i];
+            }
+        }
+        Debug.Log("No event for the given scene and time: " + SCENE + " " + CURRENT_TIME);
+        return null;
+    }
+
 }
 
 [System.Serializable]

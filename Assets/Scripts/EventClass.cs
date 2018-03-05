@@ -56,7 +56,7 @@ public class EventClass : MonoBehaviour {
     public SCENES SCENE;
 
     //Whether or not this event is constricted to a given time.
-    public enum TIME_TYPE { AllDay, Morning, Noon, Evening, Night, Wake, Sleep, Specific};
+    public enum TIME_TYPE { AllDay, Morning, Noon, Evening, Night, Midnight, Wake, Sleep, Specific};
     public TIME_TYPE DAY;
 
     //If we want a specific time in day doesn't fall into the normal time settings.
