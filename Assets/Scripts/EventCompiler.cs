@@ -146,15 +146,16 @@ public class EventCompiler : MonoBehaviour {
 
                     for (int l = k + 1; l < DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count; l++)
                     {
-                        if (currentEventType != (int)EventClass.EVENT_TYPE.None) //if its of type none, move on to the next event
+                        if (currentEventType == (int)EventClass.EVENT_TYPE.None) //if its of type none, move on to the next event
                         {
                             break;
                         }
                         else if (currentChance != 1) //if there is a percent chance of this event to happen, move on to the next event
                         {
+                            
                             break;
                         }
-
+                        
                         if (  currentLocation == (int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l].SCENE) //if the current location of both events are the same
                         {
                             if (currentEventType == (int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l].TYPE) //if the type are the same
