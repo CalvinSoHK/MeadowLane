@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -66,7 +67,7 @@ public class EventClass : MonoBehaviour {
     public CONSISTENCY_TYPE CONSISTENCY;
 
     //The chance the event will occur on a day that it can occur on
-    public float CHANCE;
+    public float CHANCE = 1;
 
     //Whether or not we can override this event with an event of the same EVENT_TYPE
     public enum OVERRIDEABLE_TYPE { Overrideable, NonOverrideable };
@@ -77,7 +78,7 @@ public class EventClass : MonoBehaviour {
     public WEATHER_OVERRIDEABLE_TYPE WEATHER_OVERRIDEABLE;
 
     //What weather we are going to enforce
-    public enum WEATHER_TYPE { Sunny, Rainy, Snowing, Misty, Thunderstorm, Cloudy, Hail };
+    public enum WEATHER_TYPE { None, Sunny, Rainy, Snowing, Misty, Thunderstorm, Cloudy, Hail };
     public WEATHER_TYPE WEATHER;
 
     //Whether or not this event is only past the first year (i.e. NG+)
@@ -105,6 +106,14 @@ public class EventClassInspector : Editor
         //Display the type of event this is
         GUIContent eventtype_label = new GUIContent("Event Type", "The category we use to filter events");
         script.TYPE = (EventClass.EVENT_TYPE)EditorGUILayout.EnumPopup(eventtype_label, script.TYPE);
+
+        EditorGUI.indentLevel++;
+        if (script.TYPE != EventClass.EVENT_TYPE.None)
+        {
+            GUIContent overrideable_label = new GUIContent("Overrideable", "Whether or not this event can be overridden");
+            script.OVERRIDEABLE = (EventClass.OVERRIDEABLE_TYPE)EditorGUILayout.EnumPopup(overrideable_label, script.OVERRIDEABLE);
+        }
+        EditorGUI.indentLevel--;
 
         //Display the scene type the event is on
         GUIContent scenetype_label = new GUIContent("Scene Type", "The scene type this event is");
@@ -215,9 +224,31 @@ public class EventClassInspector : Editor
         }
         EditorGUI.indentLevel -= 1;
 
+        GUIContent year_label = new GUIContent("Year", "Whether or not it should appear in year one or only after");
+        script.YEAR = (EventClass.YEAR_TYPE)EditorGUILayout.EnumPopup(year_label, script.YEAR);
 
+        GUIContent consistency_label = new GUIContent("Consistency", "Whether or not the event should have a chance of occuring or not");
+        script.CONSISTENCY = (EventClass.CONSISTENCY_TYPE)EditorGUILayout.EnumPopup(consistency_label, script.CONSISTENCY);
+        if(script.CONSISTENCY == EventClass.CONSISTENCY_TYPE.Chance)
+        {
+            GUIContent chance_label = new GUIContent("Chance", "What the chance of this event occuring is");
+            script.CHANCE = EditorGUILayout.Slider(chance_label, script.CHANCE, 0.01f, 0.99f);
+        }
+        else
+        {
+            script.CHANCE = 1;
+        }
 
+        GUIContent weather_label = new GUIContent("Weather", "What weather should this event enforce");
+        script.WEATHER = (EventClass.WEATHER_TYPE)EditorGUILayout.EnumPopup(weather_label.text, script.WEATHER);
 
+        EditorGUI.indentLevel++;
+        if(script.WEATHER != EventClass.WEATHER_TYPE.None)
+        {
+            GUIContent weatheroverride_label = new GUIContent("Weather Override", "Whether the weather it enforces can be overriden by other events");
+            script.WEATHER_OVERRIDEABLE = (EventClass.WEATHER_OVERRIDEABLE_TYPE)EditorGUILayout.EnumPopup(weatheroverride_label, script.WEATHER_OVERRIDEABLE);
+        }
+        EditorGUI.indentLevel--;
     }
 
     public int DisplayDays(EventClass script, int field, Scheduler.Month month, GUIContent label)
