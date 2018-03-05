@@ -66,7 +66,7 @@ public class EventClass : MonoBehaviour {
     public CONSISTENCY_TYPE CONSISTENCY;
 
     //The chance the event will occur on a day that it can occur on
-    public float CHANCE;
+    public float CHANCE = 1f;
 
     //Whether or not we can override this event with an event of the same EVENT_TYPE
     public enum OVERRIDEABLE_TYPE { Overrideable, NonOverrideable };

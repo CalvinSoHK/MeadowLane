@@ -19,7 +19,7 @@ public class Scheduler : MonoBehaviour {
 
     //Array that saves the length of each month. Index is the month of the year. plugging in month enums should work one to one.
     [HideInInspector]
-    int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    public int[] MonthLength = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
     
 
