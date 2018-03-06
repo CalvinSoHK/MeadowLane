@@ -36,12 +36,10 @@ public class EventManager : MonoBehaviour {
     //Loads in events for today
     public void LoadEvents()
     {
-        LoadWeather();
-        LoadNamed();
+        //LoadWeather();
+        //LoadNamed();
         LoadNumbered();
-        FilterList();
-        SortList();
-        OverrideList();
+        OrganizeList();
     }
 
     //Read in weather events
@@ -105,7 +103,7 @@ public class EventManager : MonoBehaviour {
         }
 
         //Each index in input should be a line in the text file
-        INPUT = WEATHER.text.Split('\n');
+        INPUT = NAMED.text.Split('\n');
         int index = 0;
 
         //Keep going through the lines till we get to the one with the named day we're looking for
@@ -153,24 +151,28 @@ public class EventManager : MonoBehaviour {
         }
 
         //Each index in input should be a line in the text file
-        INPUT = WEATHER.text.Split('\n');
+        INPUT = NUMBERED.text.Split('\n');
         int index = 0;
 
         //Keep going through the lines till we get to the one with the named day we're looking for
-        while (!INPUT[index].Contains(GetComponent<Scheduler>().date.month + " " + GetComponent<Scheduler>().date.dayNumber.ToString()))
+        while (!INPUT[index].Contains(GetComponent<Scheduler>().date.month + "_" + GetComponent<Scheduler>().date.dayNumber.ToString()))
         {
             index++;
             if (index >= INPUT.Length)
             {
-                //Debug.Log("Error: Couldn't find that numbered day type. " + GetComponent<Scheduler>().date.month + " " + GetComponent<Scheduler>().date.dayNumber.ToString());
+                Debug.Log("Error: Couldn't find that numbered day type. " + GetComponent<Scheduler>().date.month + " " + GetComponent<Scheduler>().date.dayNumber.ToString());
                 break;
             }
         }
+
+        index++;
+
         //Line should read something like:
         //  ValentinesDay 0.5 February 14 Sunny trueDefault true
         //  Name Month DayNumber Weather WeatherOverrideable ImportanceWeight YearSetting Overrideable
-        while (INPUT[index].Contains(GetComponent<Scheduler>().date.month + " " + GetComponent<Scheduler>().date.dayNumber.ToString()))
+        while (!INPUT[index].Contains(GetComponent<Scheduler>().date.month.ToString()))
         {
+            Debug.Log(INPUT[index]);
             //Split the line into each word
             LINE = INPUT[index].Split(' ');
 
@@ -239,82 +241,87 @@ public class EventManager : MonoBehaviour {
     {
         for(int i = 0; i < EVENT_LIST.Count - 1; i++)
         {
-            //Compare all events that are after E1.
-            for(int j = i + 1; j < EVENT_LIST.Count; j++)
+            //If it is a wake or sleep event, just don't check this event.
+            if (EVENT_LIST[i].TIME_START != 0 || EVENT_LIST[i].TIME_START != 1)
             {
-                //Ignore itself
-                if(i != j)
+                //Compare all events that are after E1.
+                for (int j = i + 1; j < EVENT_LIST.Count; j++)
                 {
-                    //If the same scene and type
-                    if (EVENT_LIST[i].SCENE == EVENT_LIST[j].SCENE && EVENT_LIST[i].TYPE == EVENT_LIST[j].TYPE)
+                    //Ignore itself
+                    if (i != j && EVENT_LIST[j].TIME_START != 0 && EVENT_LIST[j].TIME_START != 1)
                     {
-                        //If the time of E2 is completely eclipsed by E1, remove E2.
-                        if(EVENT_LIST[j].TIME_START >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END <= EVENT_LIST[i].TIME_END)
+                        //If the same scene and type
+                        if (EVENT_LIST[i].SCENE == EVENT_LIST[j].SCENE && EVENT_LIST[i].TYPE == EVENT_LIST[j].TYPE)
                         {
-                            //If this event is overrideable, remove it
-                            if (EVENT_LIST[j].OVERRIDEABLE)
-                            {
-                                //Remove the event
-                                EVENT_LIST.RemoveAt(j);
 
-                                //If i is an index
-                                if (i > j)
+                            //If the time of E2 is completely eclipsed by E1, remove E2.
+                            if (EVENT_LIST[j].TIME_START >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END <= EVENT_LIST[i].TIME_END)
+                            {
+                                //If this event is overrideable, remove it
+                                if (EVENT_LIST[j].OVERRIDEABLE)
                                 {
+                                    //Remove the event
+                                    EVENT_LIST.RemoveAt(j);
+
+                                    //If i is an index
+                                    if (i > j)
+                                    {
+                                        i--;
+                                    }
+                                    j--;
+                                }//If this event isnt overrideable but the original is, remove the original, and exit this for loop check
+                                else if (EVENT_LIST[i].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST.RemoveAt(i);
                                     i--;
+                                    break;
                                 }
-                                j--;
-                            }//If this event isnt overrideable but the original is, remove the original, and exit this for loop check
-                            else if (EVENT_LIST[i].OVERRIDEABLE)
-                            {
-                                EVENT_LIST.RemoveAt(i);
-                                i--;
-                                break;
+                                else
+                                {
+                                    Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
+                                }
                             }
-                            else
+                            //If E2 ends during E1, make it end before E1
+                            else if (EVENT_LIST[j].TIME_END >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END <= EVENT_LIST[i].TIME_END)
                             {
-                                Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
-                            }          
+
+                                //If this event is overrideable, we can shift its time around
+                                if (EVENT_LIST[j].OVERRIDEABLE)
+                                {
+                                    //Allow j to keep its normal time and shift i.
+                                    //NOTE: Since the list is sorted by priority, j is more important than i.
+                                    EVENT_LIST[j].TIME_END = EVENT_LIST[i].TIME_START - 1;
+                                }//If this event is not overrideable, but the original one is, shift its start so the end for the second event is okay.
+                                else if (EVENT_LIST[i].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST[i].TIME_START = EVENT_LIST[j].TIME_END;
+                                }
+                                else
+                                {
+                                    Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
+                                }
+
+                            }//IF E2 starts during E1
+                            else if (EVENT_LIST[j].TIME_START >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_START <= EVENT_LIST[i].TIME_END)
+                            {
+                                //If the event is overrideable, make it start right after
+                                if (EVENT_LIST[j].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST[j].TIME_START = EVENT_LIST[i].TIME_END + 1;
+                                }//If the event is non-overrideable, but the original is, make the second event end as this one starts
+                                else if (EVENT_LIST[i].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST[i].TIME_END = EVENT_LIST[j].TIME_START - 1;
+                                }
+                                else
+                                {
+                                    Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
+                                }
+
+                            }
                         }
-                        //If E2 ends during E1, make it end before E1
-                        else if (EVENT_LIST[j].TIME_END >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END <= EVENT_LIST[i].TIME_END)
-                        {
-                         
-                            //If this event is overrideable, we can shift its time around
-                            if (EVENT_LIST[j].OVERRIDEABLE)
-                            {
-                                //Allow j to keep its normal time and shift i.
-                                //NOTE: Since the list is sorted by priority, j is more important than i.
-                                EVENT_LIST[j].TIME_END = EVENT_LIST[i].TIME_START - 1;
-                            }//If this event is not overrideable, but the original one is, shift its start so the end for the second event is okay.
-                            else if (EVENT_LIST[i].OVERRIDEABLE)
-                            {
-                                EVENT_LIST[i].TIME_START = EVENT_LIST[j].TIME_END;
-                            }
-                            else
-                            {
-                                Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
-                            }
-                           
-                        }//IF E2 starts during E1
-                        else if(EVENT_LIST[j].TIME_START >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_START <= EVENT_LIST[i].TIME_END)
-                        {
-                            //If the event is overrideable, make it start right after
-                            if (EVENT_LIST[j].OVERRIDEABLE)
-                            {
-                                EVENT_LIST[j].TIME_START = EVENT_LIST[i].TIME_END + 1;
-                            }//If the event is non-overrideable, but the original is, make the second event end as this one starts
-                            else if (EVENT_LIST[i].OVERRIDEABLE)
-                            {
-                                EVENT_LIST[i].TIME_END = EVENT_LIST[j].TIME_START - 1;
-                            }
-                            else
-                            {
-                                Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
-                            }
-                         
-                        }
-                    }                  
-                }                
+                    }
+                }
             }
         }
     }
@@ -374,11 +381,35 @@ public class EventManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            FilterList();
-            SortList();
-            OverrideList();
+            LoadEvents();
         }
     }
+
+    //Do all the organizing
+    public void OrganizeList()
+    {
+        FilterList();
+        SortList();
+        OverrideList();
+    }
+
+    //Get the event info for the given scene and time
+    public EventInfo GetEvent(EventClass.SCENES SCENE, float CURRENT_TIME)
+    {
+        //For loop
+        for(int i = 0; i < EVENT_LIST.Count; i++)
+        {
+            //If the event is in the right scene and the event starts before this time and ends after this time.
+            if(EVENT_LIST[i].SCENE == SCENE && EVENT_LIST[i].TIME_START < CURRENT_TIME &&
+                EVENT_LIST[i].TIME_END > CURRENT_TIME)
+            {
+                return EVENT_LIST[i];
+            }
+        }
+        Debug.Log("No event for the given scene and time: " + SCENE + " " + CURRENT_TIME);
+        return null;
+    }
+
 }
 
 [System.Serializable]

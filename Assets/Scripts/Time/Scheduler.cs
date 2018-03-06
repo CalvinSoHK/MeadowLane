@@ -39,7 +39,7 @@ public class Scheduler : MonoBehaviour {
     void Start () {
         
         //Init a date.
-        date = new Date(Season.Winter, Month.January, Day.Monday, 1, 1);
+        //date = new Date(Season.Winter, Month.January, Day.Monday, 1, 1);
 	}
 	
 	//Helper function to go next day
@@ -202,6 +202,7 @@ public class Scheduler : MonoBehaviour {
 }
 
 //Class for a date
+[System.Serializable]
 public class Date
 {
     //The current season

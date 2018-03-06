@@ -56,11 +56,14 @@ public class EventClass : MonoBehaviour {
     public SCENES SCENE;
 
     //Whether or not this event is constricted to a given time.
-    public enum TIME_TYPE { AllDay, Morning, Noon, Evening, Night, Wake, Sleep, Specific};
+    public enum TIME_TYPE { AllDay, Morning, Noon, Evening, Night, Midnight, Wake, Sleep, Specific};
     public TIME_TYPE DAY;
 
     //If we want a specific time in day doesn't fall into the normal time settings.
+    
     public int TIME_START, TIME_END;
+    [HideInInspector]
+    public int TIME_START_HOUR, TIME_END_HOUR;
 
     //If we want an event to not be guaranteed 
     public enum CONSISTENCY_TYPE { Consistent, Chance };
@@ -90,17 +93,28 @@ public class EventClass : MonoBehaviour {
 [CustomEditor(typeof(EventClass))]
 public class EventClassInspector : Editor
 {
+    SerializedObject obj;
+
+    private void OnEnable()
+    {
+        obj = new SerializedObject(target);
+    }
 
     public override void OnInspectorGUI()
     {
         EventClass script = (EventClass)target;
+        
 
         //Display name
         GUIContent name_label = new GUIContent("Name", "The given name for the event");
-        script.NAME = EditorGUILayout.TextField(name_label, script.NAME);
+
+        //Get the values we need
+        SerializedProperty NAME = obj.FindProperty("NAME");
+        NAME.stringValue = EditorGUILayout.TextField(name_label, NAME.stringValue);
 
         //Display importance weight
         GUIContent weight_label = new GUIContent("Weight", "The priority of this event against others");
+        
         script.IMPORTANCE_WEIGHT = EditorGUILayout.Slider(weight_label, script.IMPORTANCE_WEIGHT, 0.01f, 1.0f);
 
         //Display the type of event this is
@@ -135,8 +149,10 @@ public class EventClassInspector : Editor
         {
             GUIContent timestart_label = new GUIContent("Time Start", "The time when this event will start");
             GUIContent timeend_label = new GUIContent("Time End", "The time when this event will end");
-            script.TIME_START = EditorGUILayout.IntSlider(timestart_label, script.TIME_START, 28800, 86400);
-            script.TIME_END = EditorGUILayout.IntSlider(timeend_label, script.TIME_END, script.TIME_START, 86400);
+            script.TIME_START_HOUR = EditorGUILayout.IntSlider(timestart_label, script.TIME_START_HOUR, 8, 24);
+            script.TIME_END_HOUR = EditorGUILayout.IntSlider(timeend_label, script.TIME_END_HOUR, script.TIME_START_HOUR, 24);
+            script.TIME_START = script.TIME_START_HOUR * 3600;
+            script.TIME_END = script.TIME_END_HOUR * 3600;
         }
 
         //Display day choice

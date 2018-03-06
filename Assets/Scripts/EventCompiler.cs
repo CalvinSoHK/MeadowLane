@@ -25,7 +25,7 @@ public class EventCompiler : MonoBehaviour {
 
     public void setTheEventTextFile()
     {
-        EVENT_TXT_PATH = Application.dataPath + "/SaveData/AllEvents.txt";
+        EVENT_TXT_PATH = Application.dataPath + "/Resources/Events/Numbered.txt";
         allPrefabEvents = Resources.LoadAll("Events".Trim(), typeof(GameObject)).Cast<GameObject>().ToArray();//get all the prefab event game objects
         Debug.Log(allPrefabEvents.Count());
         Debug.Log("Started Compiling Events");
@@ -178,7 +178,7 @@ public class EventCompiler : MonoBehaviour {
                                     {
                                         //remove the current
                                         Debug.Log("objectWasRemoved_2");
-                                        DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Remove(DATE_EventOrguanizer[MonthKeys[i]][j][l]); //remove the current event
+                                        DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Remove(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l]); //remove the current event
                                         l -= 1; //go back one                                                                             
                                     }
                                 }
@@ -198,7 +198,7 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public bool checkIfEventTimeOverLap(EventClass firstEvent, EventClass secondEvent)
     {
-        Debug.Log("check overlap is happening");
+         //Debug.Log("check overlap is happening");
         bool ev2_Ov = false; //event 2 non overidable?
         
         if((int)firstEvent.OVERRIDEABLE == 1)
@@ -326,20 +326,55 @@ public class EventCompiler : MonoBehaviour {
 
     public string getEventInfo(EventClass currentEvent)
     {
-        return currentEvent.NAME + " " +
+
+        string EVENT_INFO = "";
+        EVENT_INFO += currentEvent.NAME + " " +
                             currentEvent.TYPE + " " +
                             currentEvent.IMPORTANCE_WEIGHT + " " +
-                            currentEvent.CHANCE + " " +
-                            currentEvent.YEAR + " " +
-                            currentEvent.OVERRIDEABLE + " " +
-                            currentEvent.WEATHER + " " +
-                            currentEvent.WEATHER_OVERRIDEABLE + " " +
-                            getTimeStart(currentEvent.DAY, currentEvent) + " " +
-                            getTimeEnd(currentEvent.DAY, currentEvent);
+                            currentEvent.CHANCE + " ";
+
+        if (currentEvent.YEAR == EventClass.YEAR_TYPE.Default)
+        {
+            EVENT_INFO += false + " ";
+        }
+        else
+        {
+            EVENT_INFO += true + " ";
+        }
+
+        if (currentEvent.OVERRIDEABLE == EventClass.OVERRIDEABLE_TYPE.Overrideable)
+        {
+            EVENT_INFO += true + " ";
+        }
+        else
+        {
+            EVENT_INFO += false + " ";
+        }
+        
+        EVENT_INFO += currentEvent.WEATHER + " ";
+
+
+        if (currentEvent.WEATHER_OVERRIDEABLE == EventClass.WEATHER_OVERRIDEABLE_TYPE.Overrideable)
+        {
+            EVENT_INFO += true + " ";
+        }
+        else
+        {
+            EVENT_INFO += false + " ";
+        }
+
+        EVENT_INFO += getTimeStart(currentEvent.DAY, currentEvent) + " " +
+                            getTimeEnd(currentEvent.DAY, currentEvent) + " " +
+                            currentEvent.SCENE.ToString();
+
+        return EVENT_INFO;
     }
 
     /// <summary>
     /// returns the int/string value of the time start (based on the type given by the event)
+    /// Sleeping is 0
+    /// Waking is 1
+    /// Both need numbers because we need to parse int later.
     /// </summary>
     /// <param name="currentType"></param>
     /// <param name="currentEvent"></param>
@@ -349,19 +384,19 @@ public class EventCompiler : MonoBehaviour {
         switch (currentType)
         {
             case EventClass.TIME_TYPE.AllDay:
-                return "8";
+                return "28800";
             case EventClass.TIME_TYPE.Evening:
-                return "16";
+                return "57600";
             case EventClass.TIME_TYPE.Morning:
-                return "8";
+                return "28800";
             case EventClass.TIME_TYPE.Night:
-                return "20";
+                return "72000";
             case EventClass.TIME_TYPE.Noon:
-                return "12";
+                return "43200";
             case EventClass.TIME_TYPE.Sleep:
-                return "sleep";
+                return "0";
             case EventClass.TIME_TYPE.Wake:
-                return "wake";
+                return "1";
         }
         return currentEvent.TIME_START.ToString();
     }
@@ -377,19 +412,19 @@ public class EventCompiler : MonoBehaviour {
         switch (currentType)
         {
             case EventClass.TIME_TYPE.AllDay:
-                return "22";
+                return "79200";
             case EventClass.TIME_TYPE.Evening:
-                return "20";
+                return "72000";
             case EventClass.TIME_TYPE.Morning:
-                return "12";
+                return "43200";
             case EventClass.TIME_TYPE.Night:
-                return "22";
+                return "79200";
             case EventClass.TIME_TYPE.Noon:
-                return "16";
+                return "57600";
             case EventClass.TIME_TYPE.Sleep:
-                return "sleep";
+                return "0";
             case EventClass.TIME_TYPE.Wake:
-                return "wake";
+                return "1";
         }
         return currentEvent.TIME_END.ToString();
     }
