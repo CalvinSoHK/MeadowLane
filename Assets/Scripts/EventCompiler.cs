@@ -20,18 +20,26 @@ public class EventCompiler : MonoBehaviour {
 
     Dictionary<int, Dictionary<int, List<EventClass>>> DATE_EventOrguanizer = new Dictionary<int, Dictionary<int, List<EventClass>>>();
     Dictionary<int, List<EventClass>> REPEAT_EventOrguanizer = new Dictionary<int, List<EventClass>>();
+    Dictionary<string, List<EventClass>> Weather_Orguanizer = new Dictionary<string, List<EventClass>>();
 
-    string EVENT_TXT_PATH;
+    string EVENT_TXT_PATH, REPEAT_TXT_PATH, WEATHER_TXT_PATH;
 
     public void setTheEventTextFile()
     {
+        DATE_EventOrguanizer.Clear();
+        REPEAT_EventOrguanizer.Clear();
+        Weather_Orguanizer.Clear();
         EVENT_TXT_PATH = Application.dataPath + "/Resources/Events/Numbered.txt";
+        REPEAT_TXT_PATH = Application.dataPath + "/Resources/Events/Repeat.txt";
+        WEATHER_TXT_PATH = Application.dataPath + "/Resources/Events/Weather.txt";
+
         allPrefabEvents = Resources.LoadAll("Events".Trim(), typeof(GameObject)).Cast<GameObject>().ToArray();//get all the prefab event game objects
         Debug.Log(allPrefabEvents.Count());
         Debug.Log("Started Compiling Events");
         InitEventClass();
         OrguanizeByDay();
         SetRelevantEventsPerDay();
+        SetRelevantRepeatEvents();
         WriteAllEventsIntoTheTextFile();
         Debug.Log("Done Compiling Events");
     }
@@ -89,7 +97,38 @@ public class EventCompiler : MonoBehaviour {
             }
             else if(allEventClass[i].TIME == EventClass.OCCURENCE_TYPE.Repeat)
             {
+                int weekDayEnumStartingIndex = 3; //weekdays index in the Event class repeat enum
+                int totalWeekDay = 5; //how many weekdays to account for
+                int weekendEnumStartingIndex = 8; //weekends index in the Event class repeat enum
+                int totalWeekend = 2; //how many weekend days to account for
+                switch (allEventClass[i].REPEAT) //switch, correct repeat event
+                {
+                    case EventClass.REPEAT_TYPE.Week:
+                        for(int j = weekDayEnumStartingIndex; j < weekDayEnumStartingIndex + totalWeekDay; j++)
+                        {
+                            addEventRepeat(allEventClass[i], j); //add the event to all the weekday keys in dict
+                        }
+                        break;
+                    case EventClass.REPEAT_TYPE.Weekend:
+                        for(int j = weekendEnumStartingIndex; j < weekendEnumStartingIndex + totalWeekend; j++)
+                        {
+                            addEventRepeat(allEventClass[i], j); //add all events to weekend keys in dict
+                        }
+                        break;
 
+                    case EventClass.REPEAT_TYPE.Mondays:
+                    case EventClass.REPEAT_TYPE.Tuesdays:
+                    case EventClass.REPEAT_TYPE.Wednesdays:
+                    case EventClass.REPEAT_TYPE.Thursdays:
+                    case EventClass.REPEAT_TYPE.Fridays:
+                    case EventClass.REPEAT_TYPE.Saturdays:
+                    case EventClass.REPEAT_TYPE.Sundays:
+                    case EventClass.REPEAT_TYPE.Rain:
+                    case EventClass.REPEAT_TYPE.Sunny:
+                    case EventClass.REPEAT_TYPE.Snow:
+                        addEventRepeat(allEventClass[i]); //add event to its corresponding 
+                        break;
+                }               
             }
         }
     }
@@ -118,6 +157,34 @@ public class EventCompiler : MonoBehaviour {
             {
                 DATE_EventOrguanizer[theMonth][theDay].Add(currentEvent); //add the event to the orguanizer on that month/day
             }
+        }
+    }
+
+    /// <summary>
+    /// works the same as the add Event function but is specific to events that have an occurence type of repeat.
+    /// we need to add the currentEvent in the appropriate repeat type whithin the REPEAT_ORGANIZER
+    /// </summary>
+    /// <param name="currenEvent"></param>
+    public void addEventRepeat(EventClass currenEvent) {
+        if (!REPEAT_EventOrguanizer.ContainsKey((int)currenEvent.REPEAT)){
+            REPEAT_EventOrguanizer.Add((int)currenEvent.REPEAT, new List<EventClass>());
+            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent);
+        }else
+        {
+            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent);
+        }
+    }
+
+    public void addEventRepeat(EventClass currenEvent, int REPEAT)
+    {
+        if (!REPEAT_EventOrguanizer.ContainsKey(REPEAT))
+        {
+            REPEAT_EventOrguanizer.Add(REPEAT, new List<EventClass>());
+            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent);
+        }
+        else
+        {
+            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent);
         }
     }
 
@@ -181,6 +248,62 @@ public class EventCompiler : MonoBehaviour {
                                         DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Remove(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l]); //remove the current event
                                         l -= 1; //go back one                                                                             
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void SetRelevantRepeatEvents()
+    {
+        List<int> RepeatKeys = new List<int>(this.REPEAT_EventOrguanizer.Keys); //get the REPEAT keys from the dictionary 
+        for(int i = 0; i < RepeatKeys.Count; i++)
+        {
+            for(int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count - 1; j++)
+            {
+                int currentEventType = (int)REPEAT_EventOrguanizer[RepeatKeys[i]][j].TYPE; //get the event type
+                int currentTimeOfDay = (int)REPEAT_EventOrguanizer[RepeatKeys[i]][j].DAY; //get the time of day
+                int currentLocation = (int)REPEAT_EventOrguanizer[RepeatKeys[i]][j].SCENE; //get the location
+                float currentChance = REPEAT_EventOrguanizer[RepeatKeys[i]][j].CHANCE; //get the chance
+                for (int k = j+1; k< REPEAT_EventOrguanizer[RepeatKeys[i]].Count; k++)
+                {
+                    if (currentEventType == (int)EventClass.EVENT_TYPE.None) //if its of type none, move on to the next event
+                    {
+                        break;
+                    }
+                    else if (currentChance != 1) //if there is a percent chance of this event to happen, move on to the next event
+                    {
+
+                        break;
+                    }
+
+                    if (currentLocation == (int)REPEAT_EventOrguanizer[RepeatKeys[i]][k].SCENE) //if the current location of both events are the same
+                    {
+                        if (currentEventType == (int)REPEAT_EventOrguanizer[RepeatKeys[i]][k].TYPE) //if the type are the same
+                        {
+                            if (checkIfEventTimeOverLap(REPEAT_EventOrguanizer[RepeatKeys[i]][j], REPEAT_EventOrguanizer[RepeatKeys[i]][k])) //if one of the two events is completely encapsulated by the other
+                            {
+                                if ((int)REPEAT_EventOrguanizer[RepeatKeys[i]][j].OVERRIDEABLE == 1 && (int)REPEAT_EventOrguanizer[RepeatKeys[i]][k].OVERRIDEABLE == 1) //if both are none overidable, error
+                                {
+                                    Debug.Log("ERROR!! We are trying to add two events that are on the same day, same type, same TOD, and same Location  ");
+                                }
+                                else if ((int)REPEAT_EventOrguanizer[RepeatKeys[i]][k].OVERRIDEABLE == 1) //if second event is non overidable
+                                {
+                                    //remove the first one
+                                    Debug.Log("objectWasRemoved_1");
+                                    REPEAT_EventOrguanizer[RepeatKeys[i]].Remove(REPEAT_EventOrguanizer[RepeatKeys[i]][j]); //remove the main event 
+                                    j -= 1; //go back one
+                                    break; //break out to move to the next event
+                                }
+                                else //if second is overidable
+                                {
+                                    //remove the current
+                                    Debug.Log("objectWasRemoved_2");
+                                    REPEAT_EventOrguanizer[RepeatKeys[i]].Remove(REPEAT_EventOrguanizer[RepeatKeys[i]][k]); //remove the current event
+                                    k -= 1; //go back one                                                                             
                                 }
                             }
                         }
@@ -298,30 +421,111 @@ public class EventCompiler : MonoBehaviour {
                     string eventEntry = "";
                     for (int k = 0; k < DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count; k++) //goes through each event on this day 
                     {
-                        if(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1)
+                        if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER == 0)
                         {
-                            eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
-                           
-                        }else if(k == 0)
+                            if (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1)
+                            {
+                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+
+                            }
+                            else if (k == 0)
+                            {
+                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                            }
+                            else if (k == DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count - 1)
+                            {
+                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                            }
+                            else
+                            {
+                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                            }
+                        }else
                         {
-                            eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
-                        }
-                        else if (k == DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count - 1)
-                        {
-                            eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
-                        }
-                        else
-                        {
-                            eventEntry +=getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
-                        }                        
+                            if (!Weather_Orguanizer.ContainsKey(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString()))
+                            {
+                                Weather_Orguanizer.Add(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim(), new List<EventClass>());
+                                Weather_Orguanizer[DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim()].Add(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                            }
+                            else
+                            {
+                                Weather_Orguanizer[DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim()].Add
+                                    (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                            }
+                        }                                  
                         
                     }
                     SW.WriteLine(eventEntry);
                 }
             }
 
-        }       
-        
+        }
+
+
+        FileStream FS_REPEAT = File.Open(REPEAT_TXT_PATH, FileMode.Create);
+        using (StreamWriter SW = new StreamWriter(FS_REPEAT))
+        {
+            List<int> RepeatKeys = new List<int>(this.REPEAT_EventOrguanizer.Keys); //get the REPEAT keys from the dictionary 
+            for (int i = 0; i < RepeatKeys.Count; i++)
+            {
+                if (RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Rain || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Sunny || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Snow)
+                {
+                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++)
+                    {
+                        if (!Weather_Orguanizer.ContainsKey(REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()))
+                        {
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()] = new List<EventClass>();
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                        }
+                        else
+                        {
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                        }
+                    }
+                }
+                else
+                {
+                    string currentEvent = ((EventClass.REPEAT_TYPE)RepeatKeys[i]).ToString() + "\n";
+                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++)
+                    {
+                        if(j == REPEAT_EventOrguanizer[RepeatKeys[i]].Count - 1)
+                        {
+                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                        }else
+                        {
+                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]) + "\n";
+                        }
+                    }
+                    SW.WriteLine(currentEvent);
+                }
+
+            }
+        }
+
+        FileStream FS_WEATHER = File.Open(WEATHER_TXT_PATH, FileMode.Create);
+        using (StreamWriter SW = new StreamWriter(FS_WEATHER))
+        {
+            List<string> WeatherKeys = new List<string>(this.Weather_Orguanizer.Keys); //get the REPEAT keys from the dictionary 
+            for (int i = 0; i < WeatherKeys.Count; i++)
+            {
+                string currentEvent = WeatherKeys[i] + "\n";
+                for (int j = 0; j < Weather_Orguanizer[WeatherKeys[i]].Count; j++)
+                {
+                    if (j == Weather_Orguanizer[WeatherKeys[i]].Count - 1)
+                    {
+                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]);
+                    }
+                    else
+                    {
+                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]) + "\n";
+                    }
+                }
+                SW.WriteLine(currentEvent);
+            }
+        }
+
+
+
     }
 
     public string getEventInfo(EventClass currentEvent)
@@ -542,6 +746,7 @@ public class EventCompilerCustomInspectorButton: Editor
         EventCompiler eventCompilerScript = (EventCompiler)target;
         if (GUILayout.Button("Convert_Events"))
         {
+            
             eventCompilerScript.setTheEventTextFile();
         }
         //base.OnInspectorGUI();

@@ -81,7 +81,7 @@ public class EventClass : MonoBehaviour {
     public WEATHER_OVERRIDEABLE_TYPE WEATHER_OVERRIDEABLE;
 
     //What weather we are going to enforce
-    public enum WEATHER_TYPE { None, Sunny, Rainy, Snowing, Misty, Thunderstorm, Cloudy, Hail };
+    public enum WEATHER_TYPE { None, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail };
     public WEATHER_TYPE WEATHER;
 
     //Whether or not this event is only past the first year (i.e. NG+)
