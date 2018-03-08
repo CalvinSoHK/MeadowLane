@@ -41,7 +41,7 @@ public class EventClass : MonoBehaviour {
     //Date for when this event should occur
     public Scheduler.Month START_MONTH, END_MONTH;
 
-    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Rain, Snow, Sunny, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
+    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
     public REPEAT_TYPE REPEAT;
 
     //The type of event, used in comparisons to know if we can overide this event
