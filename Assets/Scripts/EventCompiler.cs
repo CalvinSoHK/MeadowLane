@@ -229,6 +229,7 @@ public class EventCompiler : MonoBehaviour {
                             {
                                 if(checkIfEventTimeOverLap(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k], DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l])) //if one of the two events is completely encapsulated by the other
                                 {
+                                    Debug.Log("we should remove one...");
                                     if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].OVERRIDEABLE == 1 && (int) DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l].OVERRIDEABLE == 1) //if both are none overidable, error
                                     {
                                         Debug.Log("ERROR!! We are trying to add two events that are on the same day, same type, same TOD, and same Location  "
@@ -321,6 +322,10 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public bool checkIfEventTimeOverLap(EventClass firstEvent, EventClass secondEvent)
     {
+        firstEvent.TIME_START = int.Parse(getTimeStart(firstEvent.DAY, firstEvent));
+        firstEvent.TIME_END = int.Parse(getTimeEnd(firstEvent.DAY, firstEvent));
+        secondEvent.TIME_START = int.Parse(getTimeStart(secondEvent.DAY, secondEvent));
+        secondEvent.TIME_END = int.Parse(getTimeEnd(secondEvent.DAY, secondEvent));
          //Debug.Log("check overlap is happening");
         bool ev2_Ov = false; //event 2 non overidable?
         
@@ -330,7 +335,7 @@ public class EventCompiler : MonoBehaviour {
         }
        
 
-        if((int)firstEvent.DAY == 7 && (int) secondEvent.DAY == 7) //if both are a specific time
+        if((int)firstEvent.DAY == 8 && (int) secondEvent.DAY == 8) //if both are a specific time
         {
             if(secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it is encapsulated
             {
@@ -355,8 +360,9 @@ public class EventCompiler : MonoBehaviour {
                 return false;
             }
 
-        }else if((int)firstEvent.DAY == 7 || (int)secondEvent.DAY == 7) //do the same as the above if statement
+        }else if((int)firstEvent.DAY == 8 || (int)secondEvent.DAY == 8) //do the same as the above if statement
         {
+            Debug.Log("one of these is not set");
             if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END)
             {
                 return true;
