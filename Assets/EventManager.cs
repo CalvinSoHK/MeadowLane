@@ -31,7 +31,7 @@ public class EventManager : MonoBehaviour {
     //Name Type ImportantWeight Chance YearSetting Overrideable Weather WeatherOverride TimeStart TimeEnd
 
     //The events for today
-    public List<EventInfo> EVENT_LIST;
+    public List<EventInfo> EVENT_LIST, WAKE_LIST, SLEEP_LIST, MIDNIGHT_LIST;
 
     //Loads in events for today
     public void LoadEvents()
@@ -177,7 +177,9 @@ public class EventManager : MonoBehaviour {
             LINE = INPUT[index].Split(' ');
 
             //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
+            //If LINE[8] is 0, 1, or 2, they are signifiers for special timed events. Sleep, Wake, Midnight, in that order.
             AddLine(LINE);
+            
 
             index++;
             if (index >= INPUT.Length)
@@ -195,10 +197,30 @@ public class EventManager : MonoBehaviour {
     public void AddLine(string[] LINE)
     {
         //Name Type ImportantWeight Chance YearSetting Overrideable Weather WeatherOverride TimeStart TimeEnd Scene
-        EVENT_LIST.Add(new EventInfo(LINE[0], (EventClass.EVENT_TYPE)Enum.Parse(typeof(EventClass.EVENT_TYPE), LINE[1]),
+        EventInfo TEMP = new EventInfo(LINE[0], (EventClass.EVENT_TYPE)Enum.Parse(typeof(EventClass.EVENT_TYPE), LINE[1]),
             float.Parse(LINE[2]), float.Parse(LINE[3]), bool.Parse(LINE[4]), bool.Parse(LINE[5]),
             (EventClass.WEATHER_TYPE)Enum.Parse(typeof(EventClass.WEATHER_TYPE), LINE[6]),
-            bool.Parse(LINE[7]), int.Parse(LINE[8]), int.Parse(LINE[9]), (EventClass.SCENES)Enum.Parse(typeof(EventClass.SCENES), LINE[10])));
+            bool.Parse(LINE[7]), int.Parse(LINE[8]), int.Parse(LINE[9]), (EventClass.SCENES)Enum.Parse(typeof(EventClass.SCENES), LINE[10]));
+
+        //0, 1, and 2, are special signifiers for Sleep, Wake, and Midnight events.
+        if (LINE[8].Equals("0"))
+        {
+            SLEEP_LIST.Add(TEMP);
+        }
+        else if (LINE[8].Equals("1"))
+        {
+            WAKE_LIST.Add(TEMP);
+        }
+        else if (LINE[8].Equals("2"))
+        {
+            MIDNIGHT_LIST.Add(TEMP);
+        }
+        else
+        {
+            EVENT_LIST.Add(TEMP);
+        }
+
+
     }
 
     //Filters list. Flips coins for the chance events and removes them if they fail. Removes yearsetting ones as well.
