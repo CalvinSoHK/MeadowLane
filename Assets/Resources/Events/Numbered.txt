@@ -1,30 +1,29 @@
 February_7
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_8
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_9
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_10
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_11
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_12
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_13
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
-February_14
-ChuninExams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_15
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_16
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_17
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_18
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_19
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_20
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart
 February_21
-Memes&Dreams Stock 0.5 1 False True None True 28800 43200 HappyMart
+Memes&Dreams Stock 0.5 1 False True None True 0 0 HappyMart

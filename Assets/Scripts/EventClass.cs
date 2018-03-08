@@ -41,7 +41,7 @@ public class EventClass : MonoBehaviour {
     //Date for when this event should occur
     public Scheduler.Month START_MONTH, END_MONTH;
 
-    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Rain, Snow, Sunny, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
+    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
     public REPEAT_TYPE REPEAT;
 
     //The type of event, used in comparisons to know if we can overide this event
@@ -81,7 +81,7 @@ public class EventClass : MonoBehaviour {
     public WEATHER_OVERRIDEABLE_TYPE WEATHER_OVERRIDEABLE;
 
     //What weather we are going to enforce
-    public enum WEATHER_TYPE { None, Sunny, Rainy, Snowing, Misty, Thunderstorm, Cloudy, Hail };
+    public enum WEATHER_TYPE { None, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail };
     public WEATHER_TYPE WEATHER;
 
     //Whether or not this event is only past the first year (i.e. NG+)
