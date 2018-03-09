@@ -229,6 +229,7 @@ public class EventCompiler : MonoBehaviour {
                             {
                                 if(checkIfEventTimeOverLap(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k], DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l])) //if one of the two events is completely encapsulated by the other
                                 {
+                                    Debug.Log("we should remove one...");
                                     if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].OVERRIDEABLE == 1 && (int) DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][l].OVERRIDEABLE == 1) //if both are none overidable, error
                                     {
                                         Debug.Log("ERROR!! We are trying to add two events that are on the same day, same type, same TOD, and same Location  "
@@ -321,6 +322,10 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public bool checkIfEventTimeOverLap(EventClass firstEvent, EventClass secondEvent)
     {
+        firstEvent.TIME_START = int.Parse(getTimeStart(firstEvent.DAY, firstEvent));
+        firstEvent.TIME_END = int.Parse(getTimeEnd(firstEvent.DAY, firstEvent));
+        secondEvent.TIME_START = int.Parse(getTimeStart(secondEvent.DAY, secondEvent));
+        secondEvent.TIME_END = int.Parse(getTimeEnd(secondEvent.DAY, secondEvent));
          //Debug.Log("check overlap is happening");
         bool ev2_Ov = false; //event 2 non overidable?
         
@@ -332,7 +337,6 @@ public class EventCompiler : MonoBehaviour {
 
         if((int)firstEvent.DAY == 8 && (int) secondEvent.DAY == 8) //if both are a specific time
         {
-            Debug.Log("Both specific");
             if(secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it is encapsulated
             {
                 return true;
@@ -358,13 +362,9 @@ public class EventCompiler : MonoBehaviour {
 
         }else if((int)firstEvent.DAY == 8 || (int)secondEvent.DAY == 8) //do the same as the above if statement
         {
-            Debug.Log("At least one specific");
-            Debug.Log("First time end: " + firstEvent.TIME_END + " Time start: " + firstEvent.TIME_START);
-            Debug.Log("Second event end: " + secondEvent.TIME_END + " Time start: " + secondEvent.TIME_START);
-
+            Debug.Log("one of these is not set");
             if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END)
             {
-                Debug.Log("Returned true, should be removed.");
                 return true;
             }
             else if (secondEvent.TIME_END >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END)
@@ -573,14 +573,13 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += false + " ";
         }
 
-        EVENT_INFO += currentEvent.getTimeStart(currentEvent.DAY, currentEvent) + " " +
-                            currentEvent.getTimeEnd(currentEvent.DAY, currentEvent) + " " +
+        EVENT_INFO += getTimeStart(currentEvent.DAY, currentEvent) + " " +
+                            getTimeEnd(currentEvent.DAY, currentEvent) + " " +
                             currentEvent.SCENE.ToString();
 
         return EVENT_INFO;
     }
 
-    /*
     /// <summary>
     /// returns the int/string value of the time start (based on the type given by the event)
     /// Sleeping is 0
@@ -592,24 +591,6 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public string getTimeStart(EventClass.TIME_TYPE currentType, EventClass currentEvent)
     {
-        string RET = getTimeStartNoEvent(currentType);
-        if(RET.Length <= 0)
-        {
-            return currentEvent.TIME_START.ToString();
-        }
-        else
-        {
-            return RET;
-        }
-    }
-
-    /// <summary>
-    /// Returns a start time as a string for given presets.
-    /// </summary>
-    /// <param name="currentType"></param>
-    /// <returns></returns>
-    public string getTimeStartNoEvent(EventClass.TIME_TYPE currentType)
-    {
         switch (currentType)
         {
             case EventClass.TIME_TYPE.AllDay:
@@ -627,7 +608,7 @@ public class EventCompiler : MonoBehaviour {
             case EventClass.TIME_TYPE.Wake:
                 return "1";
         }
-        return "";
+        return currentEvent.TIME_START.ToString();
     }
 
     /// <summary>
@@ -638,24 +619,6 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public string getTimeEnd(EventClass.TIME_TYPE currentType, EventClass currentEvent)
     {
-        string RET = getTimeEndNoEvent(currentType);
-        if (RET.Length <= 0)
-        {
-            return currentEvent.TIME_END.ToString();
-        }
-        else
-        {
-            return RET;
-        }
-    }
-
-    /// <summary>
-    /// Returns a string end time for a given preset
-    /// </summary>
-    /// <param name="currentType"></param>
-    /// <returns></returns>
-    public string getTimeEndNoEvent(EventClass.TIME_TYPE currentType)
-    {
         switch (currentType)
         {
             case EventClass.TIME_TYPE.AllDay:
@@ -673,8 +636,8 @@ public class EventCompiler : MonoBehaviour {
             case EventClass.TIME_TYPE.Wake:
                 return "1";
         }
-        return "";
-    }*/
+        return currentEvent.TIME_END.ToString();
+    }
 
     /// <summary>
     /// returns the date based on the current day and month of the events we are going through.
