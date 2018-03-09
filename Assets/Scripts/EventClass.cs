@@ -41,7 +41,7 @@ public class EventClass : MonoBehaviour {
     //Date for when this event should occur
     public Scheduler.Month START_MONTH, END_MONTH;
 
-    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Rain, Snow, Sunny, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
+    public enum REPEAT_TYPE { None, Weekend, Week, Mondays, Tuesdays, Wednesdays, Thursdays, Fridays, Saturdays, Sundays, Odd, Even, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail, FirstOfTheMonth, LastOfTheMonth, SpecificDays};
     public REPEAT_TYPE REPEAT;
 
     //The type of event, used in comparisons to know if we can overide this event
@@ -81,7 +81,7 @@ public class EventClass : MonoBehaviour {
     public WEATHER_OVERRIDEABLE_TYPE WEATHER_OVERRIDEABLE;
 
     //What weather we are going to enforce
-    public enum WEATHER_TYPE { None, Sunny, Rainy, Snowing, Misty, Thunderstorm, Cloudy, Hail };
+    public enum WEATHER_TYPE { None, Sunny, Rain, Snow, Misty, Thunderstorm, Cloudy, Hail };
     public WEATHER_TYPE WEATHER;
 
     //Whether or not this event is only past the first year (i.e. NG+)
@@ -204,6 +204,12 @@ public class EventClassInspector : Editor
 
         obj.Update();
 
+        //Weather property. Need it for different if statements.
+        SerializedProperty WEATHER = obj.FindProperty("WEATHER");
+
+        //REpeat property. Need it for different if statements.
+        SerializedProperty REPEAT = obj.FindProperty("REPEAT");
+
         //Display name
         GUIContent name_label = new GUIContent("Name", "The given name for the event");
 
@@ -260,16 +266,17 @@ public class EventClassInspector : Editor
             GUIContent timeend_label = new GUIContent("Time End", "The time when this event will end");
             TIME_START_HOUR.intValue = EditorGUILayout.IntSlider(timestart_label, TIME_START_HOUR.intValue, 8, 24);
             TIME_END_HOUR.intValue = EditorGUILayout.IntSlider(timeend_label, TIME_END_HOUR.intValue, TIME_START_HOUR.intValue, 24);
+            TIME_START.intValue = TIME_START_HOUR.intValue * 3600;
+            TIME_END.intValue = TIME_END_HOUR.intValue * 3600;
         }
         else
         {
-            TIME_START_HOUR.intValue = int.Parse(((EventClass)target).getTimeStartNoEvent((EventClass.TIME_TYPE)DAY.enumValueIndex));
-            TIME_END_HOUR.intValue = int.Parse(((EventClass)target).getTimeEndNoEvent((EventClass.TIME_TYPE)DAY.enumValueIndex));
+            TIME_START.intValue = int.Parse(((EventClass)target).getTimeStartNoEvent((EventClass.TIME_TYPE)DAY.enumValueIndex));
+            TIME_END.intValue = int.Parse(((EventClass)target).getTimeEndNoEvent((EventClass.TIME_TYPE)DAY.enumValueIndex));
         }
 
         //Convert inputs into the seconds for scheduler.
-        TIME_START.intValue = TIME_START_HOUR.intValue * 3600;
-        TIME_END.intValue = TIME_END_HOUR.intValue * 3600;
+   
 
         //Display day choice
         GUIContent day_label = new GUIContent("Day Occurence", "The type of days this event will occur on");
@@ -304,13 +311,14 @@ public class EventClassInspector : Editor
                 SerializedProperty DAY_NUMBER_START = obj.FindProperty("DAY_NUMBER_START");
                 DAY_NUMBER_START.intValue = DisplayDays(DAY_NUMBER_START.intValue, (Scheduler.Month)START_MONTH.enumValueIndex, startday_label);
             }
+            REPEAT.enumValueIndex = (int)EventClass.REPEAT_TYPE.None;
         }
         else if (TIME.enumValueIndex == (int)EventClass.OCCURENCE_TYPE.Repeat)
         {
             //Display the choices for repeat
             GUIContent repeat_label = new GUIContent("Repeat", "The days this event will repeat on");
             //GUIContent repeatdaytype_label = new GUIContent("Repeat Day Type", "Whether to use a named day or a numbered day to repeat");
-            SerializedProperty REPEAT = obj.FindProperty("REPEAT");  
+           
             REPEAT.enumValueIndex = (int)(EventClass.REPEAT_TYPE)EditorGUILayout.EnumPopup(repeat_label, (EventClass.REPEAT_TYPE)REPEAT.enumValueIndex);
             if (REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.SpecificDays)
             {
@@ -333,6 +341,34 @@ public class EventClassInspector : Editor
                     SerializedProperty DAY_NUMBER_START = obj.FindProperty("DAY_NUMBER_START");
                     DAY_NUMBER_START.intValue = DisplayDays(DAY_NUMBER_START.intValue, Scheduler.Month.December, startnumber_label);
                 }
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.Rain)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.WEATHER_TYPE.Rain;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.Cloudy)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.WEATHER_TYPE.Cloudy;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.Hail)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.WEATHER_TYPE.Hail;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.Misty)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.WEATHER_TYPE.Misty;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.REPEAT_TYPE.Snow)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.REPEAT_TYPE.Snow;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.WEATHER_TYPE.Sunny)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.REPEAT_TYPE.Sunny;
+            }
+            else if(REPEAT.enumValueIndex == (int)EventClass.WEATHER_TYPE.Thunderstorm)
+            {
+                WEATHER.enumValueIndex = (int)EventClass.WEATHER_TYPE.Thunderstorm;
             }
         }
         else if (TIME.enumValueIndex == (int)EventClass.OCCURENCE_TYPE.Multi)
@@ -383,6 +419,7 @@ public class EventClassInspector : Editor
                 SerializedProperty DAY_NUMBER_END = obj.FindProperty("DAY_NUMBER_END");
                 DAY_NUMBER_END.intValue = DisplayDays(DAY_NUMBER_END.intValue, (Scheduler.Month)END_MONTH.enumValueIndex, endday_label);
             }
+            REPEAT.enumValueIndex = (int)EventClass.REPEAT_TYPE.None;
         }
         EditorGUI.indentLevel -= 1;
 
@@ -406,8 +443,13 @@ public class EventClassInspector : Editor
         }
 
         GUIContent weather_label = new GUIContent("Weather", "What weather should this event enforce");
-        SerializedProperty WEATHER = obj.FindProperty("WEATHER");
-        WEATHER.enumValueIndex = (int)(EventClass.WEATHER_TYPE)EditorGUILayout.EnumPopup(weather_label, (EventClass.WEATHER_TYPE)WEATHER.enumValueIndex);
+        //SerializedProperty WEATHER = obj.FindProperty("WEATHER");
+
+        //Show weather choices if we aren't repeating based on weather.
+        if(REPEAT.enumValueIndex <= 11 || REPEAT.enumValueIndex >= 19)
+        {
+            WEATHER.enumValueIndex = (int)(EventClass.WEATHER_TYPE)EditorGUILayout.EnumPopup(weather_label, (EventClass.WEATHER_TYPE)WEATHER.enumValueIndex);
+        }    
 
         EditorGUI.indentLevel++;
         if(WEATHER.enumValueIndex != (int)EventClass.WEATHER_TYPE.None)
