@@ -52,7 +52,7 @@ public class EventClass : MonoBehaviour {
     public enum SCENE_SPECIFIC { NonSpecific, Specific };
     public SCENE_SPECIFIC SCENE_TYPE;
     //Scene that this event fires off in
-    public enum SCENES { PlayerHome, HappyMart, TownSquare };
+    public enum SCENES { None, PlayerHome, HappyMart, TownSquare };
     public SCENES SCENE;
 
     //Whether or not this event is constricted to a given time.
@@ -247,6 +247,11 @@ public class EventClassInspector : Editor
             GUIContent scenespecific_label = new GUIContent("Specific Scene", "The specific scene this event will occur on");
             SerializedProperty SCENE = obj.FindProperty("SCENE");
             SCENE.enumValueIndex = (int)(EventClass.SCENES)EditorGUILayout.EnumPopup(scenespecific_label, (EventClass.SCENES)(SCENE.enumValueIndex));
+        }
+        else if (SCENE_TYPE.enumValueIndex == (int)EventClass.SCENE_SPECIFIC.NonSpecific)
+        {
+            SerializedProperty SCENE = obj.FindProperty("SCENE");
+            SCENE_TYPE.enumValueIndex = (int)(EventClass.SCENES.None);
         }
         EditorGUI.indentLevel -= 1;
 

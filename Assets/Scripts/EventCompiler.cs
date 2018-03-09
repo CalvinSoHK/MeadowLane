@@ -34,7 +34,7 @@ public class EventCompiler : MonoBehaviour {
         WEATHER_TXT_PATH = Application.dataPath + "/Resources/Events/Weather.txt";
 
         allPrefabEvents = Resources.LoadAll("Events".Trim(), typeof(GameObject)).Cast<GameObject>().ToArray();//get all the prefab event game objects
-        Debug.Log(allPrefabEvents.Count());
+        //Debug.Log(allPrefabEvents.Count());
         Debug.Log("Started Compiling Events");
         InitEventClass();
         OrguanizeByDay();
@@ -323,6 +323,7 @@ public class EventCompiler : MonoBehaviour {
     public bool checkIfEventTimeOverLap(EventClass firstEvent, EventClass secondEvent)
     {
         firstEvent.TIME_START = int.Parse(getTimeStart(firstEvent.DAY, firstEvent));
+        Debug.Log(firstEvent.TIME_START);
         firstEvent.TIME_END = int.Parse(getTimeEnd(firstEvent.DAY, firstEvent));
         secondEvent.TIME_START = int.Parse(getTimeStart(secondEvent.DAY, secondEvent));
         secondEvent.TIME_END = int.Parse(getTimeEnd(secondEvent.DAY, secondEvent));
@@ -333,65 +334,41 @@ public class EventCompiler : MonoBehaviour {
         {
             ev2_Ov = true;
         }
-       
 
-        if((int)firstEvent.DAY == 8 && (int) secondEvent.DAY == 8) //if both are a specific time
-        {
-            if(secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it is encapsulated
-            {
-                return true;
-            }else if(secondEvent.TIME_END >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it overlapse on one side
-            {
-                if (ev2_Ov) //and event2 is non overidable
-                {
-                    firstEvent.TIME_START = secondEvent.TIME_END + 1; //update event's 1 time
-                    return false;
-                }
-                secondEvent.TIME_END = firstEvent.TIME_START - 1;// otherwise update event 2's time
-                return false;
-            }else if(secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_START <= firstEvent.TIME_END) //do the same as above
-            {
-                if (ev2_Ov)
-                {
-                    firstEvent.TIME_END = secondEvent.TIME_START - 1;
-                    return false;
-                }
-                secondEvent.TIME_START = firstEvent.TIME_END + 1;
-                return false;
-            }
-
-        }else if((int)firstEvent.DAY == 8 || (int)secondEvent.DAY == 8) //do the same as the above if statement
-        {
-            Debug.Log("one of these is not set");
-            if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END)
-            {
-                return true;
-            }
-            else if (secondEvent.TIME_END >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END)
-            {
-                if (ev2_Ov)
-                {
-                    return false;
-                }
-                secondEvent.TIME_END = firstEvent.TIME_START - 1;
-                return false;
-            }
-            else if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_START <= firstEvent.TIME_END)
-            {
-                if (ev2_Ov)
-                {
-                    return false;
-                }
-                secondEvent.TIME_START = firstEvent.TIME_END + 1;
-                return false;
-            }
-        }
-        else if(firstEvent.DAY == secondEvent.DAY) //if they happen at the same time
+        if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it is encapsulated
         {
             return true;
         }
-        return false;       
-        
+        else if (secondEvent.TIME_END >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it overlapse on one side
+        {
+            Debug.Log(firstEvent.NAME + "    " + secondEvent.NAME);
+            if (ev2_Ov) //and event2 is non overidable
+            {
+                firstEvent.TIME_START = secondEvent.TIME_END + 1; //update event's 1 time
+                return false;
+            }
+            Debug.Log(secondEvent.TIME_END);
+            secondEvent.TIME_END = firstEvent.TIME_START - 1;// otherwise update event 2's time
+            Debug.Log(secondEvent.TIME_END);
+            return false;
+        }
+        else if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_START <= firstEvent.TIME_END) //do the same as above
+        {
+            
+            if (ev2_Ov)
+            {
+                firstEvent.TIME_END = secondEvent.TIME_START - 1;
+                return false;
+            }
+            secondEvent.TIME_START = firstEvent.TIME_END + 1;
+            return false;
+        }
+        else
+        {
+            
+            return false;
+        }
+
     }
 
     /// <summary>
@@ -573,9 +550,17 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += false + " ";
         }
 
-        EVENT_INFO += getTimeStart(currentEvent.DAY, currentEvent) + " " +
-                            getTimeEnd(currentEvent.DAY, currentEvent) + " " +
-                            currentEvent.SCENE.ToString();
+        EVENT_INFO += currentEvent.TIME_START + " " + currentEvent.TIME_END + " ";
+
+        if((int)currentEvent.SCENE_TYPE == 1)
+        {
+           EVENT_INFO += currentEvent.SCENE.ToString();
+        }
+        else
+        {
+            EVENT_INFO += "none ";
+        }
+                            
 
         return EVENT_INFO;
     }
