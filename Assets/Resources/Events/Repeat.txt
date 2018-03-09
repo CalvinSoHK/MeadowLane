@@ -1,0 +1,4 @@
+Sundays
+Chapel None 0.01 1 False True None True 28800 43200 HappyMart
+Fridays
+PokerNight None 1 1 False True None True 72000 79200 None
