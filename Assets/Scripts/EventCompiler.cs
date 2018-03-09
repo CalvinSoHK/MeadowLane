@@ -363,13 +363,14 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += false + " ";
         }
 
-        EVENT_INFO += getTimeStart(currentEvent.DAY, currentEvent) + " " +
-                            getTimeEnd(currentEvent.DAY, currentEvent) + " " +
+        EVENT_INFO += currentEvent.getTimeStart(currentEvent.DAY, currentEvent) + " " +
+                            currentEvent.getTimeEnd(currentEvent.DAY, currentEvent) + " " +
                             currentEvent.SCENE.ToString();
 
         return EVENT_INFO;
     }
 
+    /*
     /// <summary>
     /// returns the int/string value of the time start (based on the type given by the event)
     /// Sleeping is 0
@@ -381,6 +382,24 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public string getTimeStart(EventClass.TIME_TYPE currentType, EventClass currentEvent)
     {
+        string RET = getTimeStartNoEvent(currentType);
+        if(RET.Length <= 0)
+        {
+            return currentEvent.TIME_START.ToString();
+        }
+        else
+        {
+            return RET;
+        }
+    }
+
+    /// <summary>
+    /// Returns a start time as a string for given presets.
+    /// </summary>
+    /// <param name="currentType"></param>
+    /// <returns></returns>
+    public string getTimeStartNoEvent(EventClass.TIME_TYPE currentType)
+    {
         switch (currentType)
         {
             case EventClass.TIME_TYPE.AllDay:
@@ -398,7 +417,7 @@ public class EventCompiler : MonoBehaviour {
             case EventClass.TIME_TYPE.Wake:
                 return "1";
         }
-        return currentEvent.TIME_START.ToString();
+        return "";
     }
 
     /// <summary>
@@ -408,6 +427,24 @@ public class EventCompiler : MonoBehaviour {
     /// <param name="currentEvent"></param>
     /// <returns></returns>
     public string getTimeEnd(EventClass.TIME_TYPE currentType, EventClass currentEvent)
+    {
+        string RET = getTimeEndNoEvent(currentType);
+        if (RET.Length <= 0)
+        {
+            return currentEvent.TIME_END.ToString();
+        }
+        else
+        {
+            return RET;
+        }
+    }
+
+    /// <summary>
+    /// Returns a string end time for a given preset
+    /// </summary>
+    /// <param name="currentType"></param>
+    /// <returns></returns>
+    public string getTimeEndNoEvent(EventClass.TIME_TYPE currentType)
     {
         switch (currentType)
         {
@@ -426,8 +463,8 @@ public class EventCompiler : MonoBehaviour {
             case EventClass.TIME_TYPE.Wake:
                 return "1";
         }
-        return currentEvent.TIME_END.ToString();
-    }
+        return "";
+    }*/
 
     /// <summary>
     /// returns the date based on the current day and month of the events we are going through.

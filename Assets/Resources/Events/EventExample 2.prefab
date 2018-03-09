@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4739379597139662}
   - component: {fileID: 114490669604608484}
   m_Layer: 0
-  m_Name: EventExample 1
+  m_Name: EventExample 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,12 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d6538ba14660e4eb5a3b61f568665c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NAME: ChuninExams
-  IMPORTANCE_WEIGHT: 0.5
+  NAME: HighNoon
+  IMPORTANCE_WEIGHT: 0.126
   TIME: 0
   DATE_DAY_START: 0
   DATE_DAY_END: 0
-  DAY_NUMBER_START: 14
+  DAY_NUMBER_START: 15
   DAY_NUMBER_END: 21
   DAY_NAME_START: 0
   DAY_NAME_END: 0
@@ -67,15 +67,15 @@ MonoBehaviour:
   REPEAT: 0
   TYPE: 1
   SCENE_TYPE: 1
-  SCENE: 1
-  DAY: 8
-  TIME_START: 28800
-  TIME_END: 43200
-  TIME_START_HOUR: 8
-  TIME_END_HOUR: 12
+  SCENE: 0
+  DAY: 5
+  TIME_START: 7200
+  TIME_END: 7200
+  TIME_START_HOUR: 2
+  TIME_END_HOUR: 2
   CONSISTENCY: 0
   CHANCE: 1
   OVERRIDEABLE: 0
-  WEATHER_OVERRIDEABLE: 0
-  WEATHER: 0
+  WEATHER_OVERRIDEABLE: 1
+  WEATHER: 1
   YEAR: 0
