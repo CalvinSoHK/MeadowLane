@@ -18,18 +18,20 @@ public class EventCompiler : MonoBehaviour {
     //Dictionary<int, List<EventClass>> SceneSpecificEventRef = new Dictionary<int, List<EventClass>>();
     //Dictionary<int, EventClass> MainEventsForScenes = new Dictionary<int, EventClass>();
 
-    Dictionary<int, Dictionary<int, List<EventClass>>> DATE_EventOrguanizer = new Dictionary<int, Dictionary<int, List<EventClass>>>();
-    Dictionary<int, List<EventClass>> REPEAT_EventOrguanizer = new Dictionary<int, List<EventClass>>();
-    Dictionary<string, List<EventClass>> Weather_Orguanizer = new Dictionary<string, List<EventClass>>();
+    Dictionary<int, Dictionary<int, List<EventClass>>> DATE_EventOrguanizer = new Dictionary<int, Dictionary<int, List<EventClass>>>(); //keeps track of non repeat or weather specific events
+    Dictionary<int, List<EventClass>> REPEAT_EventOrguanizer = new Dictionary<int, List<EventClass>>(); //keeps reference to all repeat events
+    Dictionary<string, List<EventClass>> Weather_Orguanizer = new Dictionary<string, List<EventClass>>(); //keeps reference to all weather specific events
 
-    string EVENT_TXT_PATH, REPEAT_TXT_PATH, WEATHER_TXT_PATH;
+    string EVENT_TXT_PATH, REPEAT_TXT_PATH, WEATHER_TXT_PATH; //path references to all event text files
 
+    /// <summary>
+    /// gets all the event prefabs and then assigns them to the appropriate dictionary (while checking for timing conflicts) and then writes the events 
+    /// into the correct text file
+    /// </summary>
     public void setTheEventTextFile()
     {
-        DATE_EventOrguanizer.Clear();
-        REPEAT_EventOrguanizer.Clear();
-        Weather_Orguanizer.Clear();
-        EVENT_TXT_PATH = Application.dataPath + "/Resources/Events/Numbered.txt";
+        ClearDictionaries();
+        EVENT_TXT_PATH = Application.dataPath + "/Resources/Events/Numbered.txt"; //Set the path for the relevant txt files
         REPEAT_TXT_PATH = Application.dataPath + "/Resources/Events/Repeat.txt";
         WEATHER_TXT_PATH = Application.dataPath + "/Resources/Events/Weather.txt";
 
@@ -166,29 +168,35 @@ public class EventCompiler : MonoBehaviour {
     /// </summary>
     /// <param name="currenEvent"></param>
     public void addEventRepeat(EventClass currenEvent) {
-        if (!REPEAT_EventOrguanizer.ContainsKey((int)currenEvent.REPEAT)){
-            REPEAT_EventOrguanizer.Add((int)currenEvent.REPEAT, new List<EventClass>());
-            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent);
+        if (!REPEAT_EventOrguanizer.ContainsKey((int)currenEvent.REPEAT)){ //if the spefific key is not within the dictionary
+            REPEAT_EventOrguanizer.Add((int)currenEvent.REPEAT, new List<EventClass>()); //add it
+            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent); //and add the event to that key
         }else
         {
-            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent);
-        }
-    }
-
-    public void addEventRepeat(EventClass currenEvent, int REPEAT)
-    {
-        if (!REPEAT_EventOrguanizer.ContainsKey(REPEAT))
-        {
-            REPEAT_EventOrguanizer.Add(REPEAT, new List<EventClass>());
-            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent);
-        }
-        else
-        {
-            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent);
+            REPEAT_EventOrguanizer[(int)currenEvent.REPEAT].Add(currenEvent); //if the key is there already, just add the event
         }
     }
 
     /// <summary>
+    /// works the same as the addEvent Repeat function but TAKES IN A SPECCIFIC KEY RATHER THAN THE EVENT'S KEY. 
+    /// </summary>
+    /// <param name="currenEvent"></param>
+    /// <param name="REPEAT"></param>
+    public void addEventRepeat(EventClass currenEvent, int REPEAT)
+    {
+        if (!REPEAT_EventOrguanizer.ContainsKey(REPEAT)) //if the given key is not located in the dictionary
+        {
+            REPEAT_EventOrguanizer.Add(REPEAT, new List<EventClass>()); //add it to the dict
+            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent); //and add the event to that key
+        }
+        else
+        {
+            REPEAT_EventOrguanizer[REPEAT].Add(currenEvent); //key already there, simply add the event
+        }
+    }
+
+    /// <summary>
+    /// USE THIS FOR NON REPEAT AND NON WEATHER SPECIFIC EVENTS
     /// goes through all of the events and figures out which ones overlap and are not relevant to this day
     /// </summary>
     public void SetRelevantEventsPerDay()
@@ -258,6 +266,10 @@ public class EventCompiler : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// USE THIS FOR REPEAT SPECIFIC EVENTS
+    /// goes through all of the repeat events and figures out which ones overlap and are not relevant to this day
+    /// </summary>
     public void SetRelevantRepeatEvents()
     {
         List<int> RepeatKeys = new List<int>(this.REPEAT_EventOrguanizer.Keys); //get the REPEAT keys from the dictionary 
@@ -322,17 +334,15 @@ public class EventCompiler : MonoBehaviour {
     /// <returns></returns>
     public bool checkIfEventTimeOverLap(EventClass firstEvent, EventClass secondEvent)
     {
-        firstEvent.TIME_START = int.Parse(getTimeStart(firstEvent.DAY, firstEvent));
-        Debug.Log(firstEvent.TIME_START);
-        firstEvent.TIME_END = int.Parse(getTimeEnd(firstEvent.DAY, firstEvent));
-        secondEvent.TIME_START = int.Parse(getTimeStart(secondEvent.DAY, secondEvent));
-        secondEvent.TIME_END = int.Parse(getTimeEnd(secondEvent.DAY, secondEvent));
-         //Debug.Log("check overlap is happening");
+        firstEvent.TIME_START = int.Parse(getTimeStart(firstEvent.DAY, firstEvent)); //translates the first event's start time enum to an actual int time 
+        firstEvent.TIME_END = int.Parse(getTimeEnd(firstEvent.DAY, firstEvent)); // does the same for the first event's end time
+        secondEvent.TIME_START = int.Parse(getTimeStart(secondEvent.DAY, secondEvent)); //does the same for the second event's start time
+        secondEvent.TIME_END = int.Parse(getTimeEnd(secondEvent.DAY, secondEvent)); //does the same for the second events end time
         bool ev2_Ov = false; //event 2 non overidable?
         
-        if((int)firstEvent.OVERRIDEABLE == 1)
+        if((int)firstEvent.OVERRIDEABLE == 1) //if the first event is non overrideable
         {
-            ev2_Ov = true;
+            ev2_Ov = true; //then the second should be overrideable
         }
 
         if (secondEvent.TIME_START >= firstEvent.TIME_START && secondEvent.TIME_END <= firstEvent.TIME_END) //if it is encapsulated
@@ -390,7 +400,7 @@ public class EventCompiler : MonoBehaviour {
         //TimeEnd : Time the event will end. NOTE: All our options are converted into time int so it should be good.
         //Name Type ImportantWeight Chance YearSetting Overrideable Weather WeatherOverride TimeStart TimeEnd
 
-        FileStream FS = File.Open(EVENT_TXT_PATH, FileMode.Create);
+        FileStream FS = File.Open(EVENT_TXT_PATH, FileMode.Create); //We need to write into the text file for the non repeat non weather dependent events
 
         using (StreamWriter SW = new StreamWriter(FS))
         {
@@ -400,37 +410,37 @@ public class EventCompiler : MonoBehaviour {
                 List<int> DayKeys = new List<int>(this.DATE_EventOrguanizer[MonthKeys[i]].Keys); //gets the days keys
                 for (int j = 0; j < DayKeys.Count; j++) //goes through ech day for each month
                 {
-                    string currentDate = getCurrentEventDate(MonthKeys[i], DayKeys[j]);
-                    string eventEntry = "";
+                    string currentDate = getCurrentEventDate(MonthKeys[i], DayKeys[j]); //get the current date
+                    string eventEntry = ""; //set up the event entry which will be writen in the text file
                     for (int k = 0; k < DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count; k++) //goes through each event on this day 
                     {
-                        if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER == 0)
+                        if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER == 0) //if the weather for that day is == none (enum)
                         {
-                            if (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1)
+                            if (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1) //if there is only one event for that day
                             {
-                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]); //add the whole event in to the event entry
 
                             }
-                            else if (k == 0)
+                            else if (k == 0) //if we are at the first event
                             {
-                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                                eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n"; //add the current date and the first event
                             }
-                            else if (k == DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count - 1)
+                            else if (k == DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count - 1) //if we are at the last event for the day
                             {
-                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]); //add the event entry without the line break
                             }
-                            else
+                            else //every other event for that day 
                             {
-                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                                eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n"; //add the event entry with a line break for the next one
                             }
-                        }else
+                        }else //if this event's weather is not none
                         {
-                            if (!Weather_Orguanizer.ContainsKey(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString()))
+                            if (!Weather_Orguanizer.ContainsKey(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString())) //check if the weather key already exists
                             {
-                                Weather_Orguanizer.Add(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim(), new List<EventClass>());
+                                Weather_Orguanizer.Add(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim(), new List<EventClass>()); //if not create it and add the event
                                 Weather_Orguanizer[DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim()].Add(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
                             }
-                            else
+                            else //if it does just add the event
                             {
                                 Weather_Orguanizer[DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim()].Add
                                     (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
@@ -438,89 +448,91 @@ public class EventCompiler : MonoBehaviour {
                         }                                  
                         
                     }
-                    SW.WriteLine(eventEntry);
+                    SW.WriteLine(eventEntry); //write the event entry into the text file
                 }
             }
 
         }
 
 
-        FileStream FS_REPEAT = File.Open(REPEAT_TXT_PATH, FileMode.Create);
+        FileStream FS_REPEAT = File.Open(REPEAT_TXT_PATH, FileMode.Create); //write the repeat events into the text file
         using (StreamWriter SW = new StreamWriter(FS_REPEAT))
         {
             List<int> RepeatKeys = new List<int>(this.REPEAT_EventOrguanizer.Keys); //get the REPEAT keys from the dictionary 
-            for (int i = 0; i < RepeatKeys.Count; i++)
+            for (int i = 0; i < RepeatKeys.Count; i++) //go through the keys
             {
-                if (RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Rain || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Sunny || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Snow)
+                if (RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Rain || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Sunny || RepeatKeys[i] == (int)EventClass.REPEAT_TYPE.Snow) //check if these repeat events are weather related
                 {
-                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++)
+                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++) //go through all the events for that weather repeat type
                     {
-                        if (!Weather_Orguanizer.ContainsKey(REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()))
+                        if (!Weather_Orguanizer.ContainsKey(REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString())) //check if key already exists
                         {
-                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()] = new List<EventClass>();
-                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()] = new List<EventClass>(); //add key
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]); //add event
                         }
-                        else
+                        else //key already exists
                         {
-                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                            Weather_Orguanizer[REPEAT_EventOrguanizer[RepeatKeys[i]][j].WEATHER.ToString()].Add(REPEAT_EventOrguanizer[RepeatKeys[i]][j]); //add event
                         }
                     }
                 }
-                else
+                else //not a weather repeat type
                 {
-                    string currentEvent = ((EventClass.REPEAT_TYPE)RepeatKeys[i]).ToString() + "\n";
-                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++)
+                    string currentEvent = ((EventClass.REPEAT_TYPE)RepeatKeys[i]).ToString() + "\n"; //set up event entry string with the event type
+                    for (int j = 0; j < REPEAT_EventOrguanizer[RepeatKeys[i]].Count; j++) //go through the events for that type
                     {
-                        if(j == REPEAT_EventOrguanizer[RepeatKeys[i]].Count - 1)
+                        if(j == REPEAT_EventOrguanizer[RepeatKeys[i]].Count - 1) //if last event
                         {
-                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]);
+                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]); //add it without the line break
                         }else
                         {
-                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]) + "\n";
+                            currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]) + "\n"; //add event with the line break as we have not reached the end yet.
                         }
                     }
-                    SW.WriteLine(currentEvent);
+                    SW.WriteLine(currentEvent); //write the event entry into the text file
                 }
 
             }
         }
 
-        FileStream FS_WEATHER = File.Open(WEATHER_TXT_PATH, FileMode.Create);
+        FileStream FS_WEATHER = File.Open(WEATHER_TXT_PATH, FileMode.Create); //write the weather specific events into the text file
         using (StreamWriter SW = new StreamWriter(FS_WEATHER))
         {
             List<string> WeatherKeys = new List<string>(this.Weather_Orguanizer.Keys); //get the REPEAT keys from the dictionary 
-            for (int i = 0; i < WeatherKeys.Count; i++)
+            for (int i = 0; i < WeatherKeys.Count; i++) //go through the keys
             {
-                string currentEvent = WeatherKeys[i] + "\n";
-                for (int j = 0; j < Weather_Orguanizer[WeatherKeys[i]].Count; j++)
+                string currentEvent = WeatherKeys[i] + "\n"; //set up the event entry with the weather type
+                for (int j = 0; j < Weather_Orguanizer[WeatherKeys[i]].Count; j++) //go through all the events within that specific weather type
                 {
-                    if (j == Weather_Orguanizer[WeatherKeys[i]].Count - 1)
+                    if (j == Weather_Orguanizer[WeatherKeys[i]].Count - 1) //if last event
                     {
-                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]);
+                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]); //add to event entry without line breal
                     }
-                    else
+                    else //not last event
                     {
-                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]) + "\n";
-                    }
+                        currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]) + "\n"; //add entry with line break plz
+                    } 
                 }
-                SW.WriteLine(currentEvent);
+                SW.WriteLine(currentEvent); //write event entry into the text file
             }
         }
-
-
-
     }
 
+    /// <summary>
+    /// gets all the info related to the event as to write it in the text file
+    /// </summary>
+    /// <param name="currentEvent"></param>
+    /// <returns></returns>
     public string getEventInfo(EventClass currentEvent)
     {
 
-        string EVENT_INFO = "";
+        string EVENT_INFO = ""; //keeps a ref of all the info
         EVENT_INFO += currentEvent.NAME + " " +
                             currentEvent.TYPE + " " +
                             currentEvent.IMPORTANCE_WEIGHT + " " +
-                            currentEvent.CHANCE + " ";
+                            currentEvent.CHANCE + " "; //add in name, type, importance weight, and chance
 
-        if (currentEvent.YEAR == EventClass.YEAR_TYPE.Default)
+        if (currentEvent.YEAR == EventClass.YEAR_TYPE.Default) //if default year
         {
             EVENT_INFO += false + " ";
         }
@@ -529,7 +541,7 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += true + " ";
         }
 
-        if (currentEvent.OVERRIDEABLE == EventClass.OVERRIDEABLE_TYPE.Overrideable)
+        if (currentEvent.OVERRIDEABLE == EventClass.OVERRIDEABLE_TYPE.Overrideable) //if the event is overridable 
         {
             EVENT_INFO += true + " ";
         }
@@ -538,10 +550,10 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += false + " ";
         }
         
-        EVENT_INFO += currentEvent.WEATHER + " ";
+        EVENT_INFO += currentEvent.WEATHER + " "; //add the weather 
 
 
-        if (currentEvent.WEATHER_OVERRIDEABLE == EventClass.WEATHER_OVERRIDEABLE_TYPE.Overrideable)
+        if (currentEvent.WEATHER_OVERRIDEABLE == EventClass.WEATHER_OVERRIDEABLE_TYPE.Overrideable) //add if weather is overidable
         {
             EVENT_INFO += true + " ";
         }
@@ -550,15 +562,15 @@ public class EventCompiler : MonoBehaviour {
             EVENT_INFO += false + " ";
         }
 
-        EVENT_INFO += currentEvent.TIME_START + " " + currentEvent.TIME_END + " ";
+        EVENT_INFO += currentEvent.TIME_START + " " + currentEvent.TIME_END + " "; //add time start and time end
 
-        if((int)currentEvent.SCENE_TYPE == 1)
+        if((int)currentEvent.SCENE_TYPE == 1) //if scene specific
         {
-           EVENT_INFO += currentEvent.SCENE.ToString();
+           EVENT_INFO += currentEvent.SCENE.ToString(); //add scene
         }
         else
         {
-            EVENT_INFO += "none ";
+            EVENT_INFO += "none "; //no scene
         }
                             
 
@@ -657,71 +669,16 @@ public class EventCompiler : MonoBehaviour {
     }
 
 
-
-
-    //OLD STUFF THAT DOES NOT MATTER 
-    /*
     /// <summary>
-    /// USED ONLY FOR REPEAT EVENTS!
-    /// Adds the event in the RepeatEvent_Orguanizer based on the repeat type (ex: every monday). 
-    /// the repeat type (enum) is used as a key.
+    /// clears the event objects within all the relevant dictionaries
     /// </summary>
-    /// <param name="currentEvent"></param>
-    /// <param name="repeatKey"></param>
-    public void addEvent(EventClass currentEvent, int repeatKey)
+    void ClearDictionaries()
     {
-        if (!REPEAT_EventOrguanizer.ContainsKey(repeatKey)) //check if the key is not already present in the dictionary 
-        {
-            REPEAT_EventOrguanizer.Add(repeatKey, new List<EventClass>()); //add the key to the class
-            REPEAT_EventOrguanizer[repeatKey].Add(currentEvent); //add the event to the list associated to that key in the dictionary.
-        }else //the key already exists 
-        {
-            REPEAT_EventOrguanizer[repeatKey].Add(currentEvent); //add the event to the list associated to that key in the dictionary.
-        }
+        DATE_EventOrguanizer.Clear();
+        REPEAT_EventOrguanizer.Clear();
+        Weather_Orguanizer.Clear();
     }
-
-    /// <summary>
-    /// Finds all the events and orguanizes them by scene
-    /// </summary>
-    public void OrguanizeSceneSpecificDictionary()
-    {
-        for (int i = 0; i < allEventClass.Length; i++) //goes through all the events
-        {
-            if (SceneSpecificEventRef.ContainsKey((int)allEventClass[i].SCENE)) //checks if this the scene in which the current event happens has been accounted for
-            {
-                SceneSpecificEventRef.Add((int) allEventClass[i].SCENE, new List<EventClass>()); //create a new list within the dictionary with that scene as a key
-                SceneSpecificEventRef[(int) allEventClass[i].SCENE].Add(allEventClass[i]); //add the even to the list
-            }
-            else
-            {
-                SceneSpecificEventRef[(int) allEventClass[i].SCENE].Add(allEventClass[i]); //just add the event to the already existing list for that scene
-            }
-        }
-    }
-
-    /// <summary>
-    /// gets the most important event for each type within all individual locations
-    /// </summary>
-    public void GetMainEventsForScenes()
-    {
-        List<int> keyList = new List<int>(this.SceneSpecificEventRef.Keys); //gets a ref to all the keys from the dict that has all the events orguanized by scene
-        for(int i = 0; i < keyList.Count; i++) //go through all the keys we have
-        {
-            for(int j = 0; j < SceneSpecificEventRef[keyList[i]].Count; j++) //nested loop to go through all the list for those dict keys
-            {
-                if (MainEventsForScenes.ContainsKey((int)SceneSpecificEventRef[keyList[i]][j].TYPE)) //if the this event is not in the impo dict then add it
-                {
-                    MainEventsForScenes[(int)SceneSpecificEventRef[keyList[i]][j].TYPE] = SceneSpecificEventRef[keyList[i]][j];
-                }else //if there is already an item in the dict, we need to check if this new item is more important than the current one
-                {
-                    if(SceneSpecificEventRef[keyList[i]][j].OVERRIDEABLE == EventClass.OVERRIDEABLE_TYPE.NonOverrideable && MainEventsForScenes[(int)SceneSpecificEventRef[keyList[i]][j].TYPE].OVERRIDEABLE == EventClass.OVERRIDEABLE_TYPE.NonOverrideable) //if both events are not overridable
-                    {
-                       // Debug.Log("ERROR, two non overridable events of the same type in same location: " + SceneSpecificEventRef[keyList[i]][j].DAY + " Day " + SceneSpecificEventRef[keyList[i]][j].STARTMONTH + " Month " + SceneSpecificEventRef[keyList[i]][j].SCENE + " SCENE"); //that should not happen, debug the error.
-                    }
-                }
-            }
-        }
-    }*/
+    
 }
 
 /// <summary>
