@@ -67,12 +67,14 @@ public class DisplayDialogue: MonoBehaviour{
                 {
                     if (newEvent) //if there is a new event the person should say
                     {
-                        EventDialogueIndex += 1; //move on to the event dialogue
+                       
                         for(int i = 0; i < EventDialogue[EventDialogueIndex].Count; i++) //go through each line of event 
                         {
                             NextLinesToDisplay.Add(EventDialogue[EventDialogueIndex][i]); //add the event line to the next line to be displayed
-                        }                        
-                    }else //no new event
+                        }
+                        EventDialogue.RemoveAt(EventDialogueIndex);
+                    }
+                    else //no new event
                     {
                         Debug.Log(FillerIndexes.Count);
                         if(FillerIndexes.Count == 0 )
@@ -95,11 +97,23 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                    
                 }
+                else if (newEvent)
+                {
+                    DialogueManager.setUpCurrentDialogue(this);
+                    hasGreeted = true;
+                    for (int i = 0; i < EventDialogue[EventDialogueIndex].Count; i++) //add all the event lines
+                    {
+                        NextLinesToDisplay.Add(EventDialogue[EventDialogueIndex][i]);
+                    }
+                    EventDialogue.RemoveAt(EventDialogueIndex);
+
+                }
                 else //player has not been greeted 
-                {                    
-                    DialogueManager.setUpCurrentDialogue(this, requieresEventDialogue); //we need to get the current lines of dialogue that this 
+                {   
+                                  
+                    DialogueManager.setUpCurrentDialogue(this); //we need to get the current lines of dialogue that this 
                     hasGreeted = true; //player has been greeted
-                    if (newEvent) //is there a new event to be mentioned
+                    /*if (newEvent) //is there a new event to be mentioned
                     {
                         for (int i = 0; i < EventDialogue[EventDialogueIndex].Count; i++) //add all the event lines
                         {
@@ -113,6 +127,11 @@ public class DisplayDialogue: MonoBehaviour{
                         {
                             NextLinesToDisplay.Add(GreetingDialogue[i]);  //add the greetings line to the next lines to display
                         }
+                    }*/
+                    FillerIndexes.Clear();
+                    for (int i = 0; i < GreetingDialogue.Count; i++) //go through the greetings dialogue
+                    {
+                        NextLinesToDisplay.Add(GreetingDialogue[i]);  //add the greetings line to the next lines to display
                     }
                 }
                 numberOfLines = NextLinesToDisplay.Count - 1;//assign the number of lines that are spoken by the character
@@ -213,6 +232,10 @@ public class DisplayDialogue: MonoBehaviour{
                 break;
 
             case GameState.StopDisplayingText: //we need to stop displaying text as we have reached the end of the dialogue
+                if(EventDialogue.Count == 0)
+                {
+                    newEvent = false;
+                }
                 textBox.SetActive(false); //turn off the dialogue box
                 blinker.SetActive(false); //Turn off the blinker fam
 
@@ -297,7 +320,7 @@ public class DisplayDialogue: MonoBehaviour{
     /// </summary>
     public void ActivateShopDialogue(string recipe)
     {
-        DialogueManager.setUpCurrentDialogue(this, requieresEventDialogue);
+        DialogueManager.setUpCurrentDialogue(this);
         DialogueManager.currentDisplayDialogue = null;
         setCurrentState(GameState.DialogueSetup);
         hasGreeted = true;

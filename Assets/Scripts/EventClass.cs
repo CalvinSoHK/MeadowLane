@@ -88,6 +88,8 @@ public class EventClass : MonoBehaviour {
     public enum YEAR_TYPE { Default, NewGamePlus };
     public YEAR_TYPE YEAR;
 
+   
+
     /// <summary>
     /// returns the int/string value of the time start (based on the type given by the event)
     /// Sleeping is 0

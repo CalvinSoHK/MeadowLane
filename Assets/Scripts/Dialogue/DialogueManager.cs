@@ -58,15 +58,14 @@ public static class DialogueManager{
     /// </summary>
     /// <param name="characterDialogue"></param>
     /// <param name="Event"></param>
-    public static void setUpCurrentDialogue(DisplayDialogue characterDialogue, bool Event)
+    public static void setUpCurrentDialogue(DisplayDialogue characterDialogue)
     {
         
         CURRENT = Resources.Load("TextAssets/CharacterSpeech/" + characterDialogue.characterName, typeof(TextAsset)) as TextAsset; //load the right text asset
         string[] TEMP_MESSAGE_ARRAY = CURRENT.text.Split('\n'); //split it by line
-        if (Event) //if we need to add event dialogue
-        {
-            GetEventDialogue(characterDialogue, characterDialogue.EventDialogueName, TEMP_MESSAGE_ARRAY);
-        }
+        
+        GetEventDialogue(characterDialogue, TEMP_MESSAGE_ARRAY);
+        
 
         int index = 0, i = 0; //init both index variables
         for(; i < TEMP_MESSAGE_ARRAY.Length; i++) // go through all the dialogue lines within the text file
@@ -129,23 +128,49 @@ public static class DialogueManager{
     /// <param name="characterDialogue"></param>
     /// <param name="eventName"></param>
     /// <param name="dialogue"></param>
-    public static void GetEventDialogue(DisplayDialogue characterDialogue, string eventName, string[] dialogue)
+    public static void GetEventDialogue(DisplayDialogue characterDialogue, string[] dialogue)
     {
+        List<EventInfo> tempEventList = new List<EventInfo>();
+        GameManagerPointer.Instance.EVENT_MANAGER_POINTER.GetCurrentEvent(ref tempEventList);
         characterDialogue.newEvent = true;
-        int i = 0; //init index variable
-        eventName = "_" + eventName + "_"; //set the event name to correspond to the breaker word within the text file.
+        int i = 0, j = 0; //init index variable
+
+        for(; i < tempEventList.Count; i++)
+        {
+
+            if (!tempEventList[i].hasOccured)
+            {
+                for (; j < dialogue.Length; j++)
+                {
+                    if (dialogue[j].Trim().Equals(tempEventList[i].NAME.Trim()))
+                    {
+                        j += 1;
+                        characterDialogue.EventDialogue.Add(new List<string>());
+                        for (; dialogue[j].Trim().Equals(tempEventList[i].NAME.Trim()); j++)
+                        {
+                            characterDialogue.EventDialogue[characterDialogue.EventDialogue.Count].Add(dialogue[i]);
+                        }
+                        j = 0;
+                        tempEventList[i].hasOccured = true;
+                        break;
+                    }
+                }
+            }
+            
+        }
+        /*eventName = "_" + eventName + "_"; //set the event name to correspond to the breaker word within the text file.
         for(; i < dialogue.Length; i++) //go through all the possible dialogue
         {
             if (dialogue[i].Equals(eventName)) //if the current line is equal to the event name
             {
                 i += 1; //move the index by 1 so that we are now on the first line of the relevant diaologue
-                characterDialogue.EventDialogue[characterDialogue.EventDialogue.Count] = new List<string>(); //initialize the dialogue list
+                characterDialogue.EventDialogue.Add(new List<string>()); //initialize the dialogue list
                 for (; dialogue[i].Equals(eventName); i++) //go through all the lines until we hit the breaker word again
                 {
                     characterDialogue.EventDialogue[characterDialogue.EventDialogue.Count].Add(dialogue[i]); //add each line to the relevant dialogue list
                 }
                 break; // we got all the lines, we can break out of this
             }
-        }
+        }*/
     }
 }

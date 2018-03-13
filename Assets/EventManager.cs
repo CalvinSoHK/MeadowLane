@@ -484,27 +484,24 @@ public class EventManager : MonoBehaviour {
     }
 
     //Get the event info for the given scene and time
-    public List<EventInfo> GetCurrentEvent()
+    public void GetCurrentEvent(ref List<EventInfo> LIST)
     {
+        LIST.Clear();
         float CURRENT_TIME = GameManagerPointer.Instance.SCHEDULER.CLOCK;
         EventClass.SCENES SCENE = (EventClass.SCENES)(Enum.Parse(typeof(EventClass.SCENES), GameManagerPointer.Instance.BUS_STOP_MANAGER.BUS.CURRENT_STOP_INFO.GetName()));
-        List<EventInfo> CURRENT_EVENT_LIST = new List<EventInfo>();
         //For loop
         for (int i = 0; i < EVENT_LIST.Count; i++)
         {
             //If the event is in the right scene OR it doesn't occur in a specific scene AND the event starts before this time and ends after this time.
-            if((EVENT_LIST[i].SCENE == SCENE || EVENT_LIST[i].SCENE == EventClass.SCENES.None)
+            if ((EVENT_LIST[i].SCENE == SCENE || EVENT_LIST[i].SCENE == EventClass.SCENES.None)
                 && EVENT_LIST[i].TIME_START < CURRENT_TIME &&
                 EVENT_LIST[i].TIME_END > CURRENT_TIME)
             {
-                CURRENT_EVENT_LIST.Add(EVENT_LIST[i]);
+                LIST.Add(EVENT_LIST[i]);
             }
         }
-        //Debug.Log("No event for the given scene and time: " + SCENE + " " + CURRENT_TIME);
-
-        //Return the list of events
-        return GetCurrentEvent();
     }
+
 
 }
 
@@ -515,7 +512,7 @@ public class EventInfo
     public float WEIGHT,
          CHANCE;
 
-    public bool OVERRIDEABLE = true, NEW_GAME_PLUS = false, WEATHER_OVERRIDEABLE = false;
+    public bool OVERRIDEABLE = true, NEW_GAME_PLUS = false, WEATHER_OVERRIDEABLE = false, hasOccured = false;
     public EventClass.EVENT_TYPE TYPE;
     public EventClass.WEATHER_TYPE WEATHER;
     public EventClass.SCENES SCENE;
