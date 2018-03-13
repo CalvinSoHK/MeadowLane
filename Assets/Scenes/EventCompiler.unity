@@ -358,6 +358,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EVENT_LIST: []
+  WAKE_LIST: []
+  SLEEP_LIST: []
+  MIDNIGHT_LIST: []
 --- !u!4 &2002738204
 Transform:
   m_ObjectHideFlags: 0

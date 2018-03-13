@@ -57,7 +57,6 @@ GameObject:
   - component: {fileID: 224009897590269202}
   - component: {fileID: 222260944086260090}
   - component: {fileID: 114983756994194264}
-  - component: {fileID: 114063941680036422}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -109,7 +108,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1415802494694184}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029653306}
-  m_LocalPosition: {x: -0.946, y: 0.373, z: 4.412}
+  m_LocalPosition: {x: -0.5191561, y: 100.54888, z: 25.609795}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224021186712324154}
@@ -219,26 +218,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: January 1, Year 0
---- !u!114 &114063941680036422
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1227594507691464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85cc8d2b2cade8a4e8e9aaf6a36e98ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _NAME: BaseItem
-  CATEGORY: Decoration
-  KEY: 0
-  _OWNER: 2
-  _VALUE: 0
-  _TAGS: 32
-  CONTAINABLE: 0
-  offset: {x: 0, y: 0, z: 0}
-  rotOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &114092989460997418
 MonoBehaviour:
   m_ObjectHideFlags: 1

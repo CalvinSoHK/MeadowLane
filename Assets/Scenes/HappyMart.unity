@@ -1479,7 +1479,7 @@ Prefab:
     - target: {fileID: 114356386887594300, guid: 5cb960a54f54277438639822fcf258bb,
         type: 2}
       propertyPath: Location
-      value: Happy Mart
+      value: HappyMart
       objectReference: {fileID: 0}
     - target: {fileID: 114685488585642566, guid: 5cb960a54f54277438639822fcf258bb,
         type: 2}

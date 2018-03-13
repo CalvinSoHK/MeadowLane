@@ -71,25 +71,29 @@ public static class DialogueManager{
         int index = 0, i = 0; //init both index variables
         for(; i < TEMP_MESSAGE_ARRAY.Length; i++) // go through all the dialogue lines within the text file
         {
-            if (TEMP_MESSAGE_ARRAY[i].Equals(Greeting)){ //if the current line is equal to the greeting word breaker
+            //Debug.Log(TEMP_MESSAGE_ARRAY[i] + "      " + TEMP_MESSAGE_ARRAY[i].Trim().Equals(Greeting.Trim()));
+            if (TEMP_MESSAGE_ARRAY[i].Trim().Equals(Greeting.Trim())){ //if the current line is equal to the greeting word breaker
                 index = i + 1; //get the index of the next line
-                for (; TEMP_MESSAGE_ARRAY[index].Equals(Greeting); index++) //from the next line, go through each line until we hit the same breaker word
+                for (; !TEMP_MESSAGE_ARRAY[index].Trim().Equals(Greeting.Trim()); index++) //from the next line, go through each line until we hit the same breaker word
                 {
+                    //Debug.Log("Adding greeting");
                     characterDialogue.GreetingDialogue.Add(TEMP_MESSAGE_ARRAY[index]); //add each line to the greeting dialogue for that character
                 }
+                //Debug.Log("Done Adding Greeting" + "       i:" + index);
                 i = index + 1; //account for the lines we have now read through already
             }
-            if (TEMP_MESSAGE_ARRAY[i].Equals(Filler)) // if the current line is equal to the filler word break
+            if (TEMP_MESSAGE_ARRAY[i].Trim().Equals(Filler.Trim())) // if the current line is equal to the filler word break
             {
                 index = i + 1;//get the index of the next line
-                int currentFillerIndex = 0; //we are at the first index section of filler dialogue
-                characterDialogue.FillerDialogue[currentFillerIndex] = new List<string>(); //init the first list of filler dialogue
-                for (; TEMP_MESSAGE_ARRAY[index].Equals(Filler); index++) //go through each line until we hit the breaker word
+                int currentFillerIndex = 0; //we are at the first index section of filler dialogue                
+                characterDialogue.FillerDialogue.Add(new List<string>()); //init the first list of filler dialogue
+                //Debug.Log(i + "        " + index);
+                for (; !TEMP_MESSAGE_ARRAY[index].Trim().Equals(Filler.Trim()); index++) //go through each line until we hit the breaker word
                 {
-                    if (TEMP_MESSAGE_ARRAY[index].Equals(NewSection)) //if the line is the new section breaker word
+                    if (TEMP_MESSAGE_ARRAY[index].Trim().Equals(NewSection.Trim())) //if the line is the new section breaker word
                     {
                         currentFillerIndex += 1; //increase the index section for filler
-                        characterDialogue.FillerDialogue[currentFillerIndex] = new List<string>(); //init the new list
+                        characterDialogue.FillerDialogue.Add(new List<string>()); //init the new list
                     }
                     else
                     {

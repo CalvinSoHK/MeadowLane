@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 
@@ -53,11 +54,13 @@ public class BusEntryManager : BasicEntryManager {
         {
             //If we aren't that location, add it to our entry list.
              if(!Location.Equals(STOP.SCENE_NAME))
-             {
-                SetEntry(STOP.SCENE_NAME, STOP.PRICE);
+             {              
+                SetEntry(STOP.GetSpacesName(), STOP.PRICE);
              }
         }
     }
+
+  
 
     //Puts in the earliest empty entry
     public void SetEntry(string NAME_T, int PRICE_T)

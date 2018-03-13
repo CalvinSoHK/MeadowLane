@@ -273,7 +273,7 @@ public class StallManager : MonoBehaviour {
     //Function that spawns a customer
     public void SpawnCustomer()
     {
-        Debug.Log("ITEM COUNT: " + ITEM_COUNT.Count);
+        //Debug.Log("ITEM COUNT: " + ITEM_COUNT.Count);
         //If we have any items at all.
         if (ITEM_COUNT.Count > 0 && GAME_TIMER > 0)
         {
@@ -287,7 +287,7 @@ public class StallManager : MonoBehaviour {
             //Check recipe list length.
             if(RECIPE_LIST.Count > 0)
             {
-                Debug.Log("RECIPE_LIST COUNT " + RECIPE_LIST.Count);    
+                //Debug.Log("RECIPE_LIST COUNT " + RECIPE_LIST.Count);    
 
                 //Check if there is an available slot
                 foreach (bool VALID in CUSTOMER_SLOTS)

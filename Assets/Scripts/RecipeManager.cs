@@ -53,6 +53,8 @@ public static class RecipeManager{
     //Function that adds items to the master list of items.
     public static void LoadItems(string PATH)
     {
+
+        Debug.Log("Not actually loading the right stuff. Check known list.");
         string TEMP_NAME, TEMP_WEIGHT_AND_PRICE, TEMP_LIST_TEXT;
 
         //Split weight and price
@@ -90,7 +92,7 @@ public static class RecipeManager{
                     TEMP_LIST.Add(TEMP.GetComponent<BaseItem>());
                 }
 
-                DISCOVERED = false;
+                DISCOVERED = true;
                 for(int i = 0; i < KNOWN_LIST.Count; i++)
                 {
                     if (KNOWN_LIST[i].Equals(TEMP_NAME))
@@ -120,7 +122,7 @@ public static class RecipeManager{
         List<Recipe> RETURN_LIST = new List<Recipe>();
         foreach(Recipe TEMP in MASTER_LIST)
         {
-            Debug.Log(TEMP.NAME + TEMP.DISCOVERED);
+            //Debug.Log(TEMP.NAME + TEMP.DISCOVERED);
             if (TEMP.DISCOVERED)
             {
                 RETURN_LIST.Add(TEMP);
@@ -130,7 +132,7 @@ public static class RecipeManager{
                 return RETURN_LIST;
             }
         }
-        return null;
+        return RETURN_LIST;
     }
 
     //Save data for recipes
