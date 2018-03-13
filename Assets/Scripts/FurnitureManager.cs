@@ -16,12 +16,13 @@ public class FurnitureManager : MonoBehaviour {
     //Debug function
     public void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Inventory_Manager.AddItemToInventory((Resources.Load("Deco/Chair/WoodenChair", typeof(GameObject)) as GameObject).GetComponent<BaseItem>(), 
                 Inventory_Manager.FurnitureCategory, 
                 Inventory_Manager.FurnitureCategorySlots);
-        }
+        }*/
 
     }
 

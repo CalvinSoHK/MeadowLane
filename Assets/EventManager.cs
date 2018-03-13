@@ -8,7 +8,7 @@ using System;
 public class EventManager : MonoBehaviour {
 
     string PATH_TO_WEATHER_EVENTS = "Events/Weather",
-        PATH_TO_NAMED_EVENTS = "Events/Named",
+        PATH_TO_NAMED_EVENTS = "Events/Repeat",
         PATH_TO_NUMBERED_EVENTS = "Events/Numbered";
 
     Scheduler SCHEDULER;
@@ -33,11 +33,20 @@ public class EventManager : MonoBehaviour {
     //The events for today
     public List<EventInfo> EVENT_LIST, WAKE_LIST, SLEEP_LIST, MIDNIGHT_LIST;
 
+    public void ClearLists()
+    {
+        EVENT_LIST.Clear();
+        WAKE_LIST.Clear();
+        SLEEP_LIST.Clear();
+        MIDNIGHT_LIST.Clear();
+    }
+
     //Loads in events for today
     public void LoadEvents()
     {
         //LoadWeather();
-        //LoadNamed();
+        ClearLists();
+        LoadNamed();
         LoadNumbered();
         OrganizeList();
     }
@@ -59,6 +68,7 @@ public class EventManager : MonoBehaviour {
         //Each index in input should be a line in the text file
         INPUT = WEATHER.text.Split('\n');
         int index = 0;
+        bool FOUND = true;
 
         //Keep going through the lines till we get to the one with the weather we're looking for.
         while (!INPUT[index].Contains(WEATHER_MANAGER.WEATHER.ToString()))
@@ -67,25 +77,31 @@ public class EventManager : MonoBehaviour {
             if (index >= INPUT.Length)
             {
                 //Debug.Log("Error: Couldn't find that weather type. " + GetComponent<WeatherManager>().WEATHER.ToString());
+                FOUND = false;
                 break;
             }
         }
 
-        while (INPUT[index].Contains(WEATHER_MANAGER.WEATHER.ToString()))
+        index++;
+
+        if (FOUND)
         {
-            //Split the line into each word
-            LINE = INPUT[index].Split(' ');
-
-            //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
-            AddLine(LINE);
-
-            index++;
-            if (index >= INPUT.Length)
+            while (!INPUT[index].Contains("/End"))
             {
-                //Debug.Log("Weather reached the end.");
-                break;
+                //Split the line into each word
+                LINE = INPUT[index].Split(' ');
+
+                //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
+                AddLine(LINE);
+
+                index++;
+                if (index >= INPUT.Length)
+                {
+                    //Debug.Log("Weather reached the end.");
+                    break;
+                }
             }
-        }
+        }    
     }
 
     //Read in named events
@@ -105,35 +121,47 @@ public class EventManager : MonoBehaviour {
         //Each index in input should be a line in the text file
         INPUT = NAMED.text.Split('\n');
         int index = 0;
+        bool FOUND = true;
 
         //Keep going through the lines till we get to the one with the named day we're looking for
+        Debug.Log(SCHEDULER.date.day.ToString());
         while (!INPUT[index].Contains(SCHEDULER.date.day.ToString()))
         {
             index++;
             if (index >= INPUT.Length)
             {
-                //Debug.Log("Error: Couldn't find that named day type. " + GetComponent<Scheduler>().date.day.ToString());
+                Debug.Log("Error: Couldn't find that named day type. " + GetComponent<Scheduler>().date.day.ToString());
+                FOUND = false;
                 break;
             }
         }
+
+        index++;
+
+
         //Line should read something like:
         //  ValentinesDay 0.5 February 14 Sunny true Default true
         //  Name DayName Weather WeatherOverrideable ImportanceWeight YearSetting Overrideable
-        while (INPUT[index].Contains(SCHEDULER.date.day.ToString()))
+        if (FOUND)
         {
-            //Split the line into each word
-            LINE = INPUT[index].Split(' ');
-
-            //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
-            AddLine(LINE);
-
-            index++;
-            if (index >= INPUT.Length)
+            while (!INPUT[index].Contains("/End"))
             {
-                //Debug.Log("Named reached the end.");
-                break;
+                //Split the line into each word
+                Debug.Log(INPUT[index]);
+                LINE = INPUT[index].Split(' ');
+
+                //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
+                AddLine(LINE);
+
+                index++;
+                if (index >= INPUT.Length)
+                {
+                    //Debug.Log("Named reached the end.");
+                    break;
+                }
             }
         }
+   
     }
 
     //Read in the numbered events
@@ -153,7 +181,9 @@ public class EventManager : MonoBehaviour {
         //Each index in input should be a line in the text file
         INPUT = NUMBERED.text.Split('\n');
         int index = 0;
+        bool FOUND = true;
 
+ 
         //Keep going through the lines till we get to the one with the named day we're looking for
         while (!INPUT[index].Contains(GetComponent<Scheduler>().date.month + "_" + GetComponent<Scheduler>().date.dayNumber.ToString()))
         {
@@ -161,33 +191,38 @@ public class EventManager : MonoBehaviour {
             if (index >= INPUT.Length)
             {
                 Debug.Log("Error: Couldn't find that numbered day type. " + GetComponent<Scheduler>().date.month + " " + GetComponent<Scheduler>().date.dayNumber.ToString());
+                FOUND = false;
                 break;
             }
         }
 
         index++;
 
-        //Line should read something like:
-        //  ValentinesDay 0.5 February 14 Sunny trueDefault true
-        //  Name Month DayNumber Weather WeatherOverrideable ImportanceWeight YearSetting Overrideable
-        while (!INPUT[index].Contains(GetComponent<Scheduler>().date.month.ToString()))
+        if (FOUND)
         {
-            Debug.Log(INPUT[index]);
-            //Split the line into each word
-            LINE = INPUT[index].Split(' ');
-
-            //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
-            //If LINE[8] is 0, 1, or 2, they are signifiers for special timed events. Sleep, Wake, Midnight, in that order.
-            AddLine(LINE);
-            
-
-            index++;
-            if (index >= INPUT.Length)
+            //Line should read something like:
+            //  ValentinesDay 0.5 February 14 Sunny trueDefault true
+            //  Name Month DayNumber Weather WeatherOverrideable ImportanceWeight YearSetting Overrideable
+            while (!INPUT[index].Contains("/End"))
             {
-                //Debug.Log("Named reached the end.");
-                break;
+                Debug.Log(INPUT[index]);
+                //Split the line into each word
+                LINE = INPUT[index].Split(' ');
+
+                //Name Type ImportantWeight Chance YearSetting Overrideable [Time] [Weather] 
+                //If LINE[8] is 0, 1, or 2, they are signifiers for special timed events. Sleep, Wake, Midnight, in that order.
+                
+                AddLine(LINE);
+
+
+                index++;
+                if (index >= INPUT.Length)
+                {
+                    //Debug.Log("Named reached the end.");
+                    break;
+                }
             }
-        }
+        }   
     }
 
     /// <summary>
@@ -252,6 +287,7 @@ public class EventManager : MonoBehaviour {
         //If we are not 1 AND we flip a coin that is greater than the chance it should occur, return false
         if(INFO.CHANCE != 1 && UnityEngine.Random.Range(0f, 1f) > INFO.CHANCE)
         {
+            Debug.Log("Calculating chances.");
             return false;
         }
 
@@ -269,13 +305,13 @@ public class EventManager : MonoBehaviour {
                 //Compare all events that are after E1.
                 for (int j = i + 1; j < EVENT_LIST.Count; j++)
                 {
+                    Debug.Log(EVENT_LIST[i].NAME + " " + EVENT_LIST[j].NAME);
                     //Ignore itself
                     if (i != j && EVENT_LIST[j].TIME_START != 0 && EVENT_LIST[j].TIME_START != 1)
                     {
                         //If the same scene and type
                         if (EVENT_LIST[i].SCENE == EVENT_LIST[j].SCENE && EVENT_LIST[i].TYPE == EVENT_LIST[j].TYPE)
                         {
-
                             //If the time of E2 is completely eclipsed by E1, remove E2.
                             if (EVENT_LIST[j].TIME_START >= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END <= EVENT_LIST[i].TIME_END)
                             {
@@ -339,7 +375,39 @@ public class EventManager : MonoBehaviour {
                                 {
                                     Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
                                 }
-
+                            }//If E2 eclipses E1 completely, shift E2's time end so that they can both appear
+                            else if(EVENT_LIST[j].TIME_START < EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END >= EVENT_LIST[i].TIME_END)
+                            {
+                                //If the event is overrideable, make it start right after
+                                if (EVENT_LIST[j].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST[j].TIME_END = EVENT_LIST[i].TIME_START - 1;
+                                }
+                                else if (EVENT_LIST[i].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST.RemoveAt(i);
+                                    i--;
+                                }
+                                else
+                                {
+                                    Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
+                                }
+                            }
+                            else if(EVENT_LIST[j].TIME_START <= EVENT_LIST[i].TIME_START && EVENT_LIST[j].TIME_END > EVENT_LIST[i].TIME_END)
+                            {
+                                if (EVENT_LIST[j].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST[j].TIME_START = EVENT_LIST[i].TIME_END + 1;
+                                }
+                                else if (EVENT_LIST[i].OVERRIDEABLE)
+                                {
+                                    EVENT_LIST.RemoveAt(i);
+                                    i--;
+                                }
+                                else
+                                {
+                                    Debug.Log("Non-overrideable event " + EVENT_LIST[i].NAME + " conflicts with " + EVENT_LIST[j].NAME);
+                                }
                             }
                         }
                     }

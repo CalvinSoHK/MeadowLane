@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4739379597139662}
   - component: {fileID: 114490669604608484}
   m_Layer: 0
-  m_Name: MansionMadness
+  m_Name: LuckyStock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d6538ba14660e4eb5a3b61f568665c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NAME: MansionMadness
-  IMPORTANCE_WEIGHT: 0.205
-  TIME: 1
+  NAME: LuckyStock
+  IMPORTANCE_WEIGHT: 0.01
+  TIME: 2
   DATE_DAY_START: 0
   DATE_DAY_END: 0
   DAY_NUMBER_START: 14
@@ -64,17 +64,17 @@ MonoBehaviour:
   DAY_NAMED_NUMBER_END: 0
   START_MONTH: 2
   END_MONTH: 2
-  REPEAT: 0
+  REPEAT: 4
   TYPE: 1
   SCENE_TYPE: 1
   SCENE: 2
-  DAY: 4
-  TIME_START: 72000
-  TIME_END: 79200
+  DAY: 2
+  TIME_START: 43200
+  TIME_END: 57600
   TIME_START_HOUR: 8
   TIME_END_HOUR: 12
-  CONSISTENCY: 0
-  CHANCE: 1
+  CONSISTENCY: 1
+  CHANCE: 0.99
   OVERRIDEABLE: 0
   WEATHER_OVERRIDEABLE: 0
   WEATHER: 0

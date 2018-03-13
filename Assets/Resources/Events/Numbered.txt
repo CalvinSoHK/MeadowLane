@@ -1,74 +1,114 @@
 February_1
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_2
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_3
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_4
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_5
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_6
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_7
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_8
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_9
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_10
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_11
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_12
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_13
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_14
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-Valentine'sDay Stock 1 1 False True None True 28800 71999 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+Valentine'sDay Stock 0.432 1 False True None True 28800 71999 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_15
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_16
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_17
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_18
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_19
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_20
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_21
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
 MovieNight None 1 1 False True None True 72000 79200 None
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_22
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_23
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
 MovieNight None 1 1 False True None True 43200 57600 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_24
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_25
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_26
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_27
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
 February_28
-MansionMadness Stock 0.758 1 False True None True 72000 79200 HappyMart
-EmailSpamEvent Message 1 1 False True None True 28800 79200 none 
+MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
+EmailSpamEvent Message 1 1 False True None True 28800 79200 None
+/End
+January_1
+NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+/End
+January_2
+NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+/End
+January_3
+NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+/End
+January_4
+NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+/End

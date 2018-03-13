@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NAME: Valentine'sDay
-  IMPORTANCE_WEIGHT: 1
+  IMPORTANCE_WEIGHT: 0.432
   TIME: 0
   DATE_DAY_START: 0
   DATE_DAY_END: 0
@@ -65,8 +65,8 @@ MonoBehaviour:
   START_MONTH: 2
   END_MONTH: 2
   REPEAT: 0
-  TYPE: 0
-  SCENE_TYPE: 0
+  TYPE: 1
+  SCENE_TYPE: 1
   SCENE: 2
   DAY: 0
   TIME_START: 28800

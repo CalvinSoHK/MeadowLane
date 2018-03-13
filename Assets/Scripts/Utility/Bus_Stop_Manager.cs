@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -79,6 +80,7 @@ public class Bus_Stop_Manager : MonoBehaviour {
 public class BusStopInfo
 {
     public string SCENE_NAME;
+    private string SPACES_SCENE_NAME;
 
     //The type of transition we need to go here
     public enum TransitionType { Village, Outskirts, Beachside };
@@ -96,10 +98,46 @@ public class BusStopInfo
     {
         SCENE_NAME = NAME_T;
         TRANSITION = TYPE_T;
+        SPACES_SCENE_NAME = InsertSpaces(SCENE_NAME);
+        //Debug.Log(SPACES_SCENE_NAME);
     }
 
     public string GetName()
     {
         return SCENE_NAME.Replace(" ","");
+    }
+
+    //Returns the spaces scene name. Calls insert spaces if it hasn't been done yet.
+    public string GetSpacesName()
+    {
+        if (string.IsNullOrEmpty(SPACES_SCENE_NAME))
+        {
+            SPACES_SCENE_NAME = InsertSpaces(SCENE_NAME);
+        }
+        return SPACES_SCENE_NAME;
+    }
+
+    //Insert spaces into the line
+    public string InsertSpaces(string INPUT)
+    {
+        if (string.IsNullOrEmpty(INPUT))
+        {
+            Debug.Log("Is null");
+            
+            return "";
+        }
+        StringBuilder newText = new StringBuilder(INPUT.Length * 2);
+        newText.Append(INPUT[0]);
+        for (int i = 1; i < INPUT.Length; i++)
+        {
+            //If the char is upper case AND the spot before us is not a space
+            if (char.IsUpper(INPUT[i]) && INPUT[i - 1] != ' ')
+            {
+                newText.Append(' ');
+            }
+            newText.Append(INPUT[i]);
+        }
+
+        return newText.ToString();
     }
 }

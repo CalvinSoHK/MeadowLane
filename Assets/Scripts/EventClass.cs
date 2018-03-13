@@ -45,7 +45,7 @@ public class EventClass : MonoBehaviour {
     public REPEAT_TYPE REPEAT;
 
     //The type of event, used in comparisons to know if we can overide this event
-    public enum EVENT_TYPE { None, Stock, Message};
+    public enum EVENT_TYPE { None, Stock, Message, Deco};
     public EVENT_TYPE TYPE;
 
     //Whether or not this event should fire off in a specific scene

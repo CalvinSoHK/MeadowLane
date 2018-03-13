@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 //Bus controller script. Places the bus at key locations when given a location and moves in a direction.
 //NOTE: Script doesnt work if the target is Vector3.zero.
 public class Bus_Controller : MonoBehaviour {
@@ -27,9 +28,20 @@ public class Bus_Controller : MonoBehaviour {
     BusStopInfo NEW_STOP_INFO;
 
     //Bus point we are moving to.
-    GameObject BUS_POINT;
+    GameObject BUS_POINT, LOADER;
+
+    EventManager EM;
 
     FarmManagerPointer FMP;
+
+    string[] INPUT;
+    string[] LINE;
+
+    Vector3 POS, ROT;
+    string[] VECTOR;
+
+    public Transform EVENT_OBJECTS;
+    Transform[] OBJECT_ARRAY;
 
     void Start()
     {
@@ -129,6 +141,9 @@ public class Bus_Controller : MonoBehaviour {
         //Start loading the new scene
         SceneManager.LoadSceneAsync(NEW_STOP_INFO.GetName(), LoadSceneMode.Additive);
 
+        //Clear event objects
+        ClearEventObjects();
+
         //When this scene is finished loading, fire off the destination loaded event.
         SceneManager.sceneLoaded += DestinationLoaded;
     }
@@ -141,12 +156,50 @@ public class Bus_Controller : MonoBehaviour {
 
         //If we are going to player home find the farm manager.
         //Should be rewritten so we just call loadTempData and it is handled on that side.
-
         SaveSystem.LoadTempData(NEW_STOP_INFO.GetName());
+
+        //Load in all events except none
+        if (EM == null)
+        {
+            EM = GameManagerPointer.Instance.EVENT_MANAGER_POINTER;
+        }
+
+        //For loop through all the events
+        for (int i = 0; i < EM.EVENT_LIST.Count; i++)
+        {
+            //If we are in the same scene as the one specified in the event, load it
+            if (EM.EVENT_LIST[i].SCENE == (EventClass.SCENES)Enum.Parse(typeof(EventClass.SCENES), NEW_STOP_INFO.SCENE_NAME))
+            {
+                //Debug.Log("Found an event");
+                if (EM.EVENT_LIST[i].TYPE == EventClass.EVENT_TYPE.Deco)
+                {
+                    INPUT = (Resources.Load("TextAssets/Events/" + EM.EVENT_LIST[i].NAME, typeof(TextAsset)) as TextAsset).text.Split('\n');
+                    //Debug.Log(INPUT[0]);
+                    for (int j = 0; j < INPUT.Length; j++)
+                    {
+                        //Split the line up by spaces
+                        LINE = INPUT[j].Split(' ');
+                        //Debug.Log(LINE[0]);
+
+                        //Split the pos vector and make it
+                        VECTOR = LINE[1].Split(',');
+                        POS = new Vector3(float.Parse(VECTOR[0]), float.Parse(VECTOR[1]), float.Parse(VECTOR[2]));
+
+                        //Split the rot vector and make it
+                        VECTOR = LINE[2].Split(',');
+                        ROT = new Vector3(float.Parse(VECTOR[0]), float.Parse(VECTOR[1]), float.Parse(VECTOR[2]));
+
+                        //Spawn the object in the right position and rot
+                        LOADER = Instantiate(Resources.Load(LINE[0], typeof(GameObject)) as GameObject, POS, Quaternion.Euler(ROT), EVENT_OBJECTS);
+                    }
+                }
+            }
+        }
+
+
         GameManagerPointer.Instance.ManagePointers(NEW_STOP_INFO.GetName());
 
         isSceneLoaded = true;
-      
     }
 
     //Function that acts as though we are taking the bus to given location. Transition type denotes what transition scene to load.
@@ -180,4 +233,16 @@ public class Bus_Controller : MonoBehaviour {
             Debug.Log("ERROR: Invalid index. Location doesn't exist on list. Check spelling on bus terminal and in bus.");
         }
     }
+
+    //Destroys and clears all objects in event objects
+    public void ClearEventObjects()
+    {
+        OBJECT_ARRAY = EVENT_OBJECTS.GetComponentsInChildren<Transform>();
+        for (int i = OBJECT_ARRAY.Length - 1; i > 0; i--)
+        {
+            Destroy(OBJECT_ARRAY[i].gameObject);
+        }
+        
+    }
+
 }

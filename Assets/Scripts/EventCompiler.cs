@@ -438,6 +438,7 @@ public class EventCompiler : MonoBehaviour {
                         }                                  
                         
                     }
+                    eventEntry += "\n/End";
                     SW.WriteLine(eventEntry);
                 }
             }
@@ -479,6 +480,7 @@ public class EventCompiler : MonoBehaviour {
                             currentEvent += getEventInfo(REPEAT_EventOrguanizer[RepeatKeys[i]][j]) + "\n";
                         }
                     }
+                    currentEvent += "\n/End";
                     SW.WriteLine(currentEvent);
                 }
 
@@ -503,12 +505,10 @@ public class EventCompiler : MonoBehaviour {
                         currentEvent += getEventInfo(Weather_Orguanizer[WeatherKeys[i]][j]) + "\n";
                     }
                 }
+                currentEvent += "\n/End";
                 SW.WriteLine(currentEvent);
             }
         }
-
-
-
     }
 
     public string getEventInfo(EventClass currentEvent)
@@ -558,7 +558,7 @@ public class EventCompiler : MonoBehaviour {
         }
         else
         {
-            EVENT_INFO += "none ";
+            EVENT_INFO += EventClass.SCENES.None.ToString();
         }
                             
 

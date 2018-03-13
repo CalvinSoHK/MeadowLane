@@ -1,5 +1,5 @@
 /Date
-4 1 2 3 1
+4 1 5 6 1
 /
 /Money
 100
@@ -7,8 +7,11 @@
 /Messages
 [NEW]
 Triangle/Start
+Triangle/Farm
 /
 /Inventory
+Produce/Wheat 15
+Produce/Tomato 10
 /
 /Recipe
 /
@@ -66,39 +69,39 @@ EMPTY
 EMPTY
 EMPTY
 Plot2
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+DEAD
+Wheat_Stage_Two_Standin True 1 0 4 0.9383372,1.034966,0.9383372 0,253.9229,0
+DEAD
+DEAD
+DEAD
+Wheat_Stage_Two_Standin True 1 0 4 0.903577,1.029888,0.903577 0,149.845,0
+Wheat_Stage_Two_Standin True 1 0 4 1.084238,1.094836,1.084238 0,287.4562,0
+DEAD
+DEAD
+DEAD
+DEAD
+Tomato_StageOne True 2 0 4 0.966285,0.9659626,0.966285 0,94.1181,0
+Tomato_StageOne True 2 0 4 1.086055,1.016724,1.086055 0,313.4608,0
+Tomato_StageOne True 2 0 4 0.9361196,1.071352,0.9361196 0,49.4071,0
+Tomato_StageOne True 2 0 4 1.055556,1.093605,1.055556 0,120.4159,0
+Tomato_StageOne True 2 0 4 0.973448,0.9157744,0.973448 0,348.2968,0
 /
 /Decoration
-Chair/WoodenChair -4.2,100.51,23.8 0,90,0
-Table/WorkTable 1.3,100.51,24.1 0,269.9999,0
-Storage/Shoe_Rack 1.3,100.51,25.2 0,1.001791E-05,0
-Utility/Basic_Bed 0.2,100.51,26.5 0,1.001791E-05,0
-Electronic/TV 1.5,101.2664,24.3 0,270,0
-Table/Wooden_TV_Console -3.3,100.51,24.8 0,180,0
+Chair/WoodenChair 0.334,100.495,25.898 0,89.99983,0
+Table/WorkTable 1.271,100.495,25.524 0,269.9999,0
+Storage/Shoe_Rack -4.53185,100.51,24.15105 0,271,0
+Utility/Basic_Bed 0.288,100.495,23.998 0,0,0
+Electronic/TV 1.357146,101.2514,25.71746 0,270,0
+Table/Wooden_TV_Console 0.573,100.495,27.015 0,180,0
 /
 
 /Relationships
