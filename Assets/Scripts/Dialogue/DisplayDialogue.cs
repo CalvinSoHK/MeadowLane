@@ -35,6 +35,8 @@ public class DisplayDialogue: MonoBehaviour{
     public string EventDialogueName = "";
     List<string> NextLinesToDisplay = new List<string>();
 
+    List<int> FillerIndexes = new List<int>();
+
     // Use this for initialization
     void Start()
     {
@@ -60,6 +62,7 @@ public class DisplayDialogue: MonoBehaviour{
                     DialogueManager.currentDisplayDialogue.setCurrentState(GameState.StopDisplayingText); //if there is, they should stop displaying their text
                 }
                 NextLinesToDisplay.Clear(); //clear the last lines of dialogue
+                FillerIndexes.Clear();
                 if (hasGreeted) //if the player has already been greated by the character
                 {
                     if (newEvent) //if there is a new event the person should say
@@ -71,8 +74,13 @@ public class DisplayDialogue: MonoBehaviour{
                         }                        
                     }else //no new event
                     {
-                        
-                        FillerDialogueIndex = Random.Range(0, FillerDialogue.Count); //get random filler dialogue section
+                        if(FillerIndexes.Count == 0 )
+                        {
+                            GetFillerIndexes();
+                        }                        
+                        FillerDialogueIndex = Random.Range(0, FillerIndexes.Count);
+                        FillerIndexes.Remove(FillerDialogueIndex);
+                        //FillerDialogueIndex = Random.Range(0, FillerDialogue.Count); //get random filler dialogue section
                         for (int i = 0; i < FillerDialogue[FillerDialogueIndex].Count; i++) //go through that section's lines
                         {
                             if (!currentRecipe.Equals(""))
@@ -215,6 +223,7 @@ public class DisplayDialogue: MonoBehaviour{
                 }*/
                 setCurrentState(GameState.Wait);
                 inDialogue = false; //they are no longer in dialogue
+                DialogueManager.currentDisplayDialogue = null;
                 
                 break;
 
@@ -285,7 +294,8 @@ public class DisplayDialogue: MonoBehaviour{
     /// </summary>
     public void ActivateShopDialogue(string recipe)
     {
-
+        DialogueManager.setUpCurrentDialogue(this, requieresEventDialogue);
+        DialogueManager.currentDisplayDialogue = null;
         setCurrentState(GameState.DialogueSetup);
         hasGreeted = true;
         newEvent = false;
@@ -297,6 +307,14 @@ public class DisplayDialogue: MonoBehaviour{
     public void DeActivateShop()
     {
         setCurrentState(GameState.StopDisplayingText);
+    }
+
+    public void GetFillerIndexes()
+    {
+        for (int i = 0; i < FillerDialogue.Count; i++)
+        {
+            FillerIndexes.Add(i);
+        }
     }
 
     /*

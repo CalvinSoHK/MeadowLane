@@ -60,7 +60,7 @@ public static class DialogueManager{
     /// <param name="Event"></param>
     public static void setUpCurrentDialogue(DisplayDialogue characterDialogue, bool Event)
     {
-        currentDisplayDialogue = characterDialogue; //keep a reference of current character talking.
+        
         CURRENT = Resources.Load("TextAssets/CharacterSpeech/" + characterDialogue.characterName, typeof(TextAsset)) as TextAsset; //load the right text asset
         string[] TEMP_MESSAGE_ARRAY = CURRENT.text.Split('\n'); //split it by line
         if (Event) //if we need to add event dialogue
@@ -100,6 +100,7 @@ public static class DialogueManager{
                 break; //break out
             }
         }
+        currentDisplayDialogue = characterDialogue; //keep a reference of current character talking.
     }
 
     public static void setUpCurrentDialogueForShop(string recipe)
