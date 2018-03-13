@@ -62,7 +62,7 @@ public class DisplayDialogue: MonoBehaviour{
                     DialogueManager.currentDisplayDialogue.setCurrentState(GameState.StopDisplayingText); //if there is, they should stop displaying their text
                 }
                 NextLinesToDisplay.Clear(); //clear the last lines of dialogue
-                FillerIndexes.Clear();
+                
                 if (hasGreeted) //if the player has already been greated by the character
                 {
                     if (newEvent) //if there is a new event the person should say
@@ -74,12 +74,14 @@ public class DisplayDialogue: MonoBehaviour{
                         }                        
                     }else //no new event
                     {
+                        Debug.Log(FillerIndexes.Count);
                         if(FillerIndexes.Count == 0 )
                         {
                             GetFillerIndexes();
                         }                        
-                        FillerDialogueIndex = Random.Range(0, FillerIndexes.Count);
-                        FillerIndexes.Remove(FillerDialogueIndex);
+                        int tempIndex = Random.Range(0, FillerIndexes.Count);
+                        FillerDialogueIndex = FillerIndexes[tempIndex];
+                        FillerIndexes.RemoveAt(tempIndex);
                         //FillerDialogueIndex = Random.Range(0, FillerDialogue.Count); //get random filler dialogue section
                         for (int i = 0; i < FillerDialogue[FillerDialogueIndex].Count; i++) //go through that section's lines
                         {
@@ -94,7 +96,7 @@ public class DisplayDialogue: MonoBehaviour{
                    
                 }
                 else //player has not been greeted 
-                {
+                {                    
                     DialogueManager.setUpCurrentDialogue(this, requieresEventDialogue); //we need to get the current lines of dialogue that this 
                     hasGreeted = true; //player has been greeted
                     if (newEvent) //is there a new event to be mentioned
@@ -106,7 +108,8 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                     else // there are no new special events
                     {
-                        for(int i = 0; i < GreetingDialogue.Count; i++) //go through the greetings dialogue
+                        FillerIndexes.Clear();
+                        for (int i = 0; i < GreetingDialogue.Count; i++) //go through the greetings dialogue
                         {
                             NextLinesToDisplay.Add(GreetingDialogue[i]);  //add the greetings line to the next lines to display
                         }
