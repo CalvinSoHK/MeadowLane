@@ -347,14 +347,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bb76cd9af363e40a2d17874bb16a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: StallShopper
   currentSituation: 
-  allSituations: []
-  shopOwner: 0
   currentState: 0
   textBox: {fileID: 1932494996315236}
   textObject: {fileID: 114868602175707006}
   blinker: {fileID: 1609734853726656}
+  GreetingDialogue: []
+  requieresEventDialogue: 0
+  newEvent: 0
+  EventDialogueName: 
 --- !u!114 &114868602175707006
 MonoBehaviour:
   m_ObjectHideFlags: 1

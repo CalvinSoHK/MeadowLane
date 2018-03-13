@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4739379597139662}
   - component: {fileID: 114490669604608484}
   m_Layer: 0
-  m_Name: PokerNight
+  m_Name: MansionMadness
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
