@@ -449,30 +449,26 @@ public class EventManager : MonoBehaviour {
     {
         EventClass.WEATHER_TYPE RETURN_WEATHER = EventClass.WEATHER_TYPE.None;
         
-        for(int i = 0; i < EVENT_LIST.Count; i--)
+        if(EVENT_LIST.Count > 0)
         {
-            //If we have an event with a non-overrideable weeather type, always use that one as long as its not none
-            if (!EVENT_LIST[i].WEATHER_OVERRIDEABLE && EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None)
+            for (int i = 0; i < EVENT_LIST.Count; i++)
             {
-                return EVENT_LIST[i].WEATHER;
-            }
-            //If we have an event with a weather type but it is overrideable, AND the weather type is actually a weather type...
-            else if(EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None &&
-                RETURN_WEATHER == EventClass.WEATHER_TYPE.None)
-            {
-                RETURN_WEATHER = EVENT_LIST[i].WEATHER;
+                Debug.Log(EVENT_LIST[i]);
+                //If we have an event with a non-overrideable weeather type, always use that one as long as its not none
+                if (!EVENT_LIST[i].WEATHER_OVERRIDEABLE && EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None)
+                {
+                    return EVENT_LIST[i].WEATHER;
+                }
+                //If we have an event with a weather type but it is overrideable, AND the weather type is actually a weather type...
+                else if (EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None &&
+                    RETURN_WEATHER == EventClass.WEATHER_TYPE.None)
+                {
+                    RETURN_WEATHER = EVENT_LIST[i].WEATHER;
+                }
             }
         }
-
+      
         return RETURN_WEATHER;
-    }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoadEvents();
-        }
     }
 
     //Do all the organizing
@@ -484,11 +480,11 @@ public class EventManager : MonoBehaviour {
     }
 
     //Get the event info for the given scene and time
-    public List<EventInfo> GetCurrentEvent()
+    public void GetCurrentEvent(ref List<EventInfo> LIST)
     {
+        LIST.Clear();
         float CURRENT_TIME = GameManagerPointer.Instance.SCHEDULER.CLOCK;
         EventClass.SCENES SCENE = (EventClass.SCENES)(Enum.Parse(typeof(EventClass.SCENES), GameManagerPointer.Instance.BUS_STOP_MANAGER.BUS.CURRENT_STOP_INFO.GetName()));
-        List<EventInfo> CURRENT_EVENT_LIST = new List<EventInfo>();
         //For loop
         for (int i = 0; i < EVENT_LIST.Count; i++)
         {
@@ -497,13 +493,9 @@ public class EventManager : MonoBehaviour {
                 && EVENT_LIST[i].TIME_START < CURRENT_TIME &&
                 EVENT_LIST[i].TIME_END > CURRENT_TIME)
             {
-                CURRENT_EVENT_LIST.Add(EVENT_LIST[i]);
+                LIST.Add(EVENT_LIST[i]);
             }
         }
-        //Debug.Log("No event for the given scene and time: " + SCENE + " " + CURRENT_TIME);
-
-        //Return the list of events
-        return GetCurrentEvent();
     }
 
 }

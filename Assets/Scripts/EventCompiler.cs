@@ -404,7 +404,7 @@ public class EventCompiler : MonoBehaviour {
                     string eventEntry = "";
                     for (int k = 0; k < DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count; k++) //goes through each event on this day 
                     {
-                        if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER == 0)
+                        /*if((int)DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER == 0)
                         {
                             if (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1)
                             {
@@ -435,8 +435,25 @@ public class EventCompiler : MonoBehaviour {
                                 Weather_Orguanizer[DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k].WEATHER.ToString().Trim()].Add
                                     (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
                             }
-                        }                                  
-                        
+                        }  */
+                        if (DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count == 1)
+                        {
+                            eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+
+                        }
+                        else if (k == 0)
+                        {
+                            eventEntry = currentDate + "\n" + getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                        }
+                        else if (k == DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]].Count - 1)
+                        {
+                            eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]);
+                        }
+                        else
+                        {
+                            eventEntry += getEventInfo(DATE_EventOrguanizer[MonthKeys[i]][DayKeys[j]][k]) + "\n";
+                        }
+
                     }
                     eventEntry += "\n/End";
                     SW.WriteLine(eventEntry);
