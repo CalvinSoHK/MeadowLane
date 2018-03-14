@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 10291225}
   - component: {fileID: 10291224}
   m_Layer: 26
-  m_Name: Canvas
+  m_Name: PhoneNotificationCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   VIBRATE_NEXT: 0
   STIE: {fileID: 228451981}
   TUT_INFO: {fileID: 664984165}
-  NOTIFICATION_OBJ: {fileID: 350878815}
+  NOTIFICATION_OBJ: {fileID: 10291222}
 --- !u!114 &637642981
 MonoBehaviour:
   m_ObjectHideFlags: 0
