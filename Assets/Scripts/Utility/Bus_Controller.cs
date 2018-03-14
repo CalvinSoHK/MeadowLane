@@ -25,7 +25,7 @@ public class Bus_Controller : MonoBehaviour {
     Bus_Stop_Manager BSM;
 
     //Stop info for our target destination
-    BusStopInfo NEW_STOP_INFO;
+    public BusStopInfo CURRENT_STOP_INFO;
 
     //Bus point we are moving to.
     GameObject BUS_POINT, LOADER;
@@ -48,7 +48,7 @@ public class Bus_Controller : MonoBehaviour {
         //Might be problematic if it changes.
         VR_CAMERA = GameObject.Find("VRCamera");
         BSM = GameManagerPointer.Instance.BUS_STOP_MANAGER;
-        NEW_STOP_INFO = BSM.STOP_LIST[BSM.GetIndexOf("Player Home")];
+        CURRENT_STOP_INFO = BSM.STOP_LIST[BSM.GetIndexOf("Player Home")];
         SaveSystem.ClearTempData();
 
     }
@@ -77,7 +77,7 @@ public class Bus_Controller : MonoBehaviour {
                 //Start unloading the old scene
                 SceneManager.UnloadSceneAsync(BSM.CURRENT_STOP.GetName());
 
-                BSM.CURRENT_STOP = NEW_STOP_INFO;
+                BSM.CURRENT_STOP = CURRENT_STOP_INFO;
 
                 //When the old scene is unloaded fire the event old scene unloaded.
                 SceneManager.sceneUnloaded += OldSceneUnloaded;
@@ -139,7 +139,7 @@ public class Bus_Controller : MonoBehaviour {
         SceneManager.sceneUnloaded -= OldSceneUnloaded;
 
         //Start loading the new scene
-        SceneManager.LoadSceneAsync(NEW_STOP_INFO.GetName(), LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(CURRENT_STOP_INFO.GetName(), LoadSceneMode.Additive);
 
         //Clear event objects
         ClearEventObjects();
@@ -156,7 +156,7 @@ public class Bus_Controller : MonoBehaviour {
 
         //If we are going to player home find the farm manager.
         //Should be rewritten so we just call loadTempData and it is handled on that side.
-        SaveSystem.LoadTempData(NEW_STOP_INFO.GetName());
+        SaveSystem.LoadTempData(CURRENT_STOP_INFO.GetName());
 
         //Load in all events except none
         if (EM == null)
@@ -168,7 +168,7 @@ public class Bus_Controller : MonoBehaviour {
         for (int i = 0; i < EM.EVENT_LIST.Count; i++)
         {
             //If we are in the same scene as the one specified in the event, load it
-            if (EM.EVENT_LIST[i].SCENE == (EventClass.SCENES)Enum.Parse(typeof(EventClass.SCENES), NEW_STOP_INFO.SCENE_NAME))
+            if (EM.EVENT_LIST[i].SCENE == (EventClass.SCENES)Enum.Parse(typeof(EventClass.SCENES), CURRENT_STOP_INFO.SCENE_NAME))
             {
                 //Debug.Log("Found an event");
                 if (EM.EVENT_LIST[i].TYPE == EventClass.EVENT_TYPE.Deco)
@@ -197,7 +197,7 @@ public class Bus_Controller : MonoBehaviour {
         }
 
 
-        GameManagerPointer.Instance.ManagePointers(NEW_STOP_INFO.GetName());
+        GameManagerPointer.Instance.ManagePointers(CURRENT_STOP_INFO.GetName());
 
         isSceneLoaded = true;
     }
@@ -214,17 +214,17 @@ public class Bus_Controller : MonoBehaviour {
         //Before replacing new stop info, use it to determine 
         //Save temp data if we need to
         //Debug.Log(NEW_STOP_INFO.GetName());
-        SaveSystem.SaveTempData(NEW_STOP_INFO.GetName());
+        SaveSystem.SaveTempData(CURRENT_STOP_INFO.GetName());
         SaveSystem.WriteTempData();
 
 
         //Get the stop info we want to go to
-        NEW_STOP_INFO = BSM.STOP_LIST[index];
+        CURRENT_STOP_INFO = BSM.STOP_LIST[index];
 
         //If index is -1, its not in the list and we have an error, else do the right thing.
         if(index != -1)
         {
-            TRANSITION_SCENE = BSM.GetTransitionSceneName(NEW_STOP_INFO.TRANSITION);
+            TRANSITION_SCENE = BSM.GetTransitionSceneName(CURRENT_STOP_INFO.TRANSITION);
             SceneManager.LoadSceneAsync(TRANSITION_SCENE, LoadSceneMode.Additive);
             SceneManager.sceneLoaded += TransitionLoaded;
         }
