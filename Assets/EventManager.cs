@@ -489,7 +489,7 @@ public class EventManager : MonoBehaviour {
         for (int i = 0; i < EVENT_LIST.Count; i++)
         {
             //If the event is in the right scene OR it doesn't occur in a specific scene AND the event starts before this time and ends after this time.
-            if((EVENT_LIST[i].SCENE == SCENE || EVENT_LIST[i].SCENE == EventClass.SCENES.None)
+            if ((EVENT_LIST[i].SCENE == SCENE || EVENT_LIST[i].SCENE == EventClass.SCENES.None)
                 && EVENT_LIST[i].TIME_START < CURRENT_TIME &&
                 EVENT_LIST[i].TIME_END > CURRENT_TIME)
             {
@@ -497,6 +497,7 @@ public class EventManager : MonoBehaviour {
             }
         }
     }
+
 
 }
 
@@ -507,7 +508,7 @@ public class EventInfo
     public float WEIGHT,
          CHANCE;
 
-    public bool OVERRIDEABLE = true, NEW_GAME_PLUS = false, WEATHER_OVERRIDEABLE = false;
+    public bool OVERRIDEABLE = true, NEW_GAME_PLUS = false, WEATHER_OVERRIDEABLE = false, hasOccured = false;
     public EventClass.EVENT_TYPE TYPE;
     public EventClass.WEATHER_TYPE WEATHER;
     public EventClass.SCENES SCENE;
