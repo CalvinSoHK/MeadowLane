@@ -34,6 +34,7 @@ public class GameManagerPointer : MonoBehaviour {
             FARM_MANAGER_POINTER = GetComponent<FarmManagerPointer>();
             FURNITURE_MANAGER_POINTER = GetComponent<FurnitureManagerPointer>();
             EVENT_MANAGER_POINTER = GetComponent<EventManager>();
+            WEATHER_MANAGER_POINTER = GetComponent<WeatherManager>();
         }
     }
 
@@ -48,6 +49,7 @@ public class GameManagerPointer : MonoBehaviour {
     public FarmManagerPointer FARM_MANAGER_POINTER;
     public FurnitureManagerPointer FURNITURE_MANAGER_POINTER;
     public EventManager EVENT_MANAGER_POINTER;
+    public WeatherManager WEATHER_MANAGER_POINTER;
 
     //Turns on and off pointers based on the stop given.
     //i.e. When going to happymart it disables farm/furniture pointers so they keep uselessly searching

@@ -132,25 +132,31 @@ public static class DialogueManager{
     {
         List<EventInfo> tempEventList = new List<EventInfo>();
         GameManagerPointer.Instance.EVENT_MANAGER_POINTER.GetCurrentEvent(ref tempEventList);
-        characterDialogue.newEvent = true;
+        
+       
         int i = 0, j = 0; //init index variable
-
+        Debug.Log("temp event list count : " + tempEventList.Count);
         for(; i < tempEventList.Count; i++)
         {
-
+            string tempName = "_" + tempEventList[i].NAME.Trim() + "_";
+            Debug.Log(tempName);
             if (!tempEventList[i].hasOccured)
             {
+                Debug.Log("the event has not occured");
                 for (; j < dialogue.Length; j++)
                 {
-                    if (dialogue[j].Trim().Equals(tempEventList[i].NAME.Trim()))
+                    if (dialogue[j].Trim().Equals(tempName.Trim()))
                     {
+                        Debug.Log("we found the first breaker");
                         j += 1;
                         characterDialogue.EventDialogue.Add(new List<string>());
-                        for (; dialogue[j].Trim().Equals(tempEventList[i].NAME.Trim()); j++)
+                        for (; !dialogue[j].Trim().Equals(tempName.Trim()); j++)
                         {
-                            characterDialogue.EventDialogue[characterDialogue.EventDialogue.Count].Add(dialogue[i]);
+                            Debug.Log("event dialog is being added");
+                            characterDialogue.EventDialogue[characterDialogue.EventDialogue.Count - 1].Add(dialogue[j]);
                         }
                         j = 0;
+                        characterDialogue.newEvent = true;
                         tempEventList[i].hasOccured = true;
                         break;
                     }

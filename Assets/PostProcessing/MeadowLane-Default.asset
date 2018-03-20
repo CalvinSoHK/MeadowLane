@@ -83,9 +83,9 @@ MonoBehaviour:
       sampleCount: 10
       frameBlending: 0
   eyeAdaptation:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
-      lowPercent: 11.441401
+      lowPercent: 15.035099
       highPercent: 99
       minLuminance: -5
       maxLuminance: 1
@@ -94,7 +94,7 @@ MonoBehaviour:
       adaptationType: 0
       speedUp: 2
       speedDown: 1
-      logMin: -5
+      logMin: -8
       logMax: 4
   bloom:
     m_Enabled: 1
@@ -298,8 +298,8 @@ MonoBehaviour:
       mode: 0
       color: {r: 0, g: 0, b: 0, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.243
-      smoothness: 1
+      intensity: 0.281
+      smoothness: 0.329
       roundness: 0.982
       mask: {fileID: 0}
       opacity: 1
