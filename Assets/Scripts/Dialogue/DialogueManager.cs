@@ -131,7 +131,7 @@ public static class DialogueManager{
     public static void GetEventDialogue(DisplayDialogue characterDialogue, string[] dialogue)
     {
         List<EventInfo> tempEventList = new List<EventInfo>();
-        GameManagerPointer.Instance.EVENT_MANAGER_POINTER.GetCurrentEvent(ref tempEventList);
+        //GameManagerPointer.Instance.EVENT_MANAGER_POINTER.GetCurrentEvent(ref tempEventList);
         characterDialogue.newEvent = true;
         int i = 0, j = 0; //init index variable
 

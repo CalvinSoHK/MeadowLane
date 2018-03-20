@@ -9,7 +9,7 @@ public class DisplayDialogue: MonoBehaviour{
     public string characterName, currentSituation; //strings representing the specific character name and situation for this instance
     //public string[] allSituations; //array of all possible instances for that character
     //public bool shopOwner; //whether or not they are a shop owner
-    public enum GameState { Wait, Idle, DialogueSetup, DialogueSetupForShop, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText} //statemachine for the displaying of dialogue
+    public enum GameState { Wait, Idle, DialogueSetup, DialogueSetupForShop, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText, DisplayWithoutPlayerInput} //statemachine for the displaying of dialogue
     public GameState currentState; //current state in the state machine
     float time = 0.0f, lastStateChange; //references to the amount of time that has passed since last state change
     public GameObject textBox; //reference to the specific textbox for the character
@@ -34,8 +34,10 @@ public class DisplayDialogue: MonoBehaviour{
         newEvent = false;           //Whether or not there is a new event the character needs to talk about.
     public string EventDialogueName = "";
     List<string> NextLinesToDisplay = new List<string>();
-
     List<int> FillerIndexes = new List<int>();
+    Dictionary<string, int> IngredientsForChef = new Dictionary<string, int>();
+
+    private float chefTime = 4f;
 
     // Use this for initialization
     void Start()
@@ -57,6 +59,7 @@ public class DisplayDialogue: MonoBehaviour{
                 break;           
 
             case GameState.DialogueSetup: //Get the correct Dialogue from the dialogue manager based on name and situation.
+                Debug.Log("dialogue setup is accessed");
                 if(DialogueManager.currentDisplayDialogue != null) //check if there is an other character talking
                 {
                     DialogueManager.currentDisplayDialogue.setCurrentState(GameState.StopDisplayingText); //if there is, they should stop displaying their text
@@ -80,7 +83,8 @@ public class DisplayDialogue: MonoBehaviour{
                         if(FillerIndexes.Count == 0 )
                         {
                             GetFillerIndexes();
-                        }                        
+                        }
+                        //Debug.Log(FillerIndexes.Count);
                         int tempIndex = Random.Range(0, FillerIndexes.Count);
                         FillerDialogueIndex = FillerIndexes[tempIndex];
                         FillerIndexes.RemoveAt(tempIndex);
@@ -91,8 +95,42 @@ public class DisplayDialogue: MonoBehaviour{
                             {
                                 NextLinesToDisplay.Add(FillerDialogue[FillerDialogueIndex][i].Replace("RECIPE", currentRecipe));
                                 currentRecipe = "";
+                                break;
                             }
-                            NextLinesToDisplay.Add(FillerDialogue[FillerDialogueIndex][i]); //add those lines to the next lines to be displayed
+                            else if (IngredientsForChef.Count != 0) { //are we dealing with the chef and his ingredient mumbling
+                                //Debug.Log("do we get into the chef if statement");
+                                List<string> ingredientKeys = new List<string>(this.IngredientsForChef.Keys); //get the keys representing the ingredients needed
+                                for (int j = 0; j < ingredientKeys.Count; j++) //go through all the ingredients
+                                {
+                                    //Debug.Log("filler dialogue index: " + FillerDialogueIndex + "     i: " + i);
+                                    int num = IngredientsForChef[ingredientKeys[j]]; //get the number of the individual ingredient needed for this recipe
+                                    FillerDialogue[FillerDialogueIndex][i] = FillerDialogue[FillerDialogueIndex][i].Replace("NUMBER", num.ToString()); //put the number value in the string
+                                    if(num > 1) //if there is more than one of this type of ingredient 
+                                    {
+                                        FillerDialogue[FillerDialogueIndex][i] = FillerDialogue[FillerDialogueIndex][i].Replace("INGREDIENT", ingredientKeys[j] + "s"); //add the ingredient (plural)
+                                    }
+                                    else //if there is just one of this type of ingredient
+                                    {
+                                        FillerDialogue[FillerDialogueIndex][i] = FillerDialogue[FillerDialogueIndex][i].Replace("INGREDIENT", ingredientKeys[j]); //add the igredient (singular)
+                                    }
+                                    NextLinesToDisplay.Add(FillerDialogue[FillerDialogueIndex][i]); //add the sentence
+                                    tempIndex = Random.Range(0, FillerIndexes.Count);
+                                    FillerDialogueIndex = FillerIndexes[tempIndex];
+                                    FillerIndexes.RemoveAt(tempIndex);
+                                }
+                                indexLine = 0; //reset current line
+                                indexLetter = 0; //reset current letter
+                                currentLine = ""; //reset the line of dialogue being displayed
+                                inDialogue = true; //they are now in dialogue
+                                textBox.SetActive(true); //display the text box
+                                setCurrentState(GameState.DisplayWithoutPlayerInput); //setup up is done, we now need to display the text   
+                                return;                             
+                            }
+                            else
+                            {
+                                NextLinesToDisplay.Add(FillerDialogue[FillerDialogueIndex][i]); //add those lines to the next lines to be displayed                                
+                            }
+                            
                         }                        
                     }
                    
@@ -135,14 +173,7 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                 }
                 numberOfLines = NextLinesToDisplay.Count - 1;//assign the number of lines that are spoken by the character
-                /*DialogueManager.setUpCurrentDialogue(characterName, currentSituation, shopOwner); //Find the lines of dialogue needed for this character and situation instance
-                //Deep copy. Empty first
-                currentDialogueForCharacter.Clear();
-                foreach (string LINES in DialogueManager.currentDialogueForCharacter)
-                {
-                    currentDialogueForCharacter.Add(LINES);
-                }
-                DialogueManager.resetCurrentDialogue();*/
+                
 
                 //numberOfLines = currentDialogueForCharacter.Count - 1; 
                 indexLine = 0; //reset current line
@@ -153,25 +184,7 @@ public class DisplayDialogue: MonoBehaviour{
                 setCurrentState(GameState.Typing); //setup up is done, we now need to display the text
                 break;
 
-            /*case GameState.DialogueSetupForShop:
-                DialogueManager.setUpCurrentDialogueForShop(currentRecipe);
-
-                //Deep copy. Empty first
-                currentDialogueForCharacter.Clear();
-                foreach(string LINES in DialogueManager.currentDialogueForCharacter)
-                {
-                    currentDialogueForCharacter.Add(LINES);
-                }
-
-                DialogueManager.resetCurrentDialogue();
-                numberOfLines = currentDialogueForCharacter.Count - 1; //assign the number of lines that are spoken by the character
-                indexLine = 0; //reset current line
-                indexLetter = 0; //reset current letter
-                currentLine = ""; //reset the line of dialogue being displayed
-                inDialogue = true; //they are now in dialogue
-                textBox.SetActive(true); //display the text box
-                setCurrentState(GameState.Typing); //setup up is done, we now need to display the text
-                break;*/
+          
 
             case GameState.Typing: //if dialogue is currently being typed out
                 if(indexLetter < NextLinesToDisplay[indexLine].Length) //if the current number of letter displyaed is below the total number of letters in the dialogue line
@@ -179,7 +192,8 @@ public class DisplayDialogue: MonoBehaviour{
                     currentLine += NextLinesToDisplay[indexLine][indexLetter]; //add the next letter to the current line
                     textObject.text = currentLine;// update the text ui element
                     indexLetter += 1; //move on to the next letter
-                }else
+                }
+                else
                 {
                     setCurrentState(GameState.WaitingToProceed); //once all the letters have been displayed, wait for the player to proceed to the next 
                 }
@@ -231,6 +245,37 @@ public class DisplayDialogue: MonoBehaviour{
 
                 break;
 
+            case GameState.DisplayWithoutPlayerInput:
+
+
+                if (indexLetter < NextLinesToDisplay[indexLine].Length) //if the current number of letter displayed is below the total number of letters in the dialogue line
+                {
+                    currentLine += NextLinesToDisplay[indexLine][indexLetter]; //add the next letter to the current line
+                    textObject.text = currentLine;// update the text ui element
+                    indexLetter += 1; //move on to the next letter
+                }
+                else //we have displayed all the letter in this line
+                {
+                    if (getStateElapsed() > chefTime + (chefTime/2)) //if the elapsed time is greater than x + (x/2) seconds
+                    {
+                        indexLine += 1; //increase indexline by one
+                        indexLetter= 0; //reset letter index
+                        currentLine = ""; //reset currentLine
+                        
+                        if(indexLine >= NextLinesToDisplay.Count) //we have passed the last line in the lines to display
+                        {
+                            indexLine = 0; //reset the index lines
+                        }
+                        textBox.SetActive(true); //set the text box to true
+                        setCurrentState(GameState.DisplayWithoutPlayerInput); //reset timer
+                    }else if(getStateElapsed() > chefTime) //if the timer has elapsed 
+                    {
+                        textBox.SetActive(false); //no longer talk for now.
+                        textObject.text = ""; //reset text being displayed on screen
+                    }
+                }
+                break;
+
             case GameState.StopDisplayingText: //we need to stop displaying text as we have reached the end of the dialogue
                 if(EventDialogue.Count == 0)
                 {
@@ -250,6 +295,7 @@ public class DisplayDialogue: MonoBehaviour{
                 setCurrentState(GameState.Wait);
                 inDialogue = false; //they are no longer in dialogue
                 DialogueManager.currentDisplayDialogue = null;
+                IngredientsForChef.Clear();
                 
                 break;
 
@@ -328,6 +374,39 @@ public class DisplayDialogue: MonoBehaviour{
         //Set recipe
         currentRecipe = recipe;
 
+    }
+
+    /// <summary>
+    /// will initiate dialogue setup for the chef during the recipe discovery minigame
+    /// </summary>
+    /// <param name="ingredients"></param>
+    public void ActivateChefDialogue(string[] ingredients)
+    {
+        DialogueManager.setUpCurrentDialogue(this);
+        DialogueManager.currentDisplayDialogue = null;
+        FillIngredientsDictionary(ingredients);
+        hasGreeted = true;
+        newEvent = false;
+        setCurrentState(GameState.DialogueSetup);
+    }
+
+    /// <summary>
+    /// Determines the number of each ingredient needed for the specific recipe
+    /// </summary>
+    /// <param name="ingredients"></param>
+    public void FillIngredientsDictionary(string[] ingredients)
+    {
+        IngredientsForChef.Clear(); //remove residual ingredients from the dictionary before adding the new ones.
+        for(int i = 0; i < ingredients.Length; i++) // going through each ingredient requiered
+        {
+            if (IngredientsForChef.ContainsKey(ingredients[i].Trim())) //checks if this ingredient has already been added to the dictionary 
+            {
+                IngredientsForChef[ingredients[i].Trim()] += 1; //if so increase its value by one
+            }else // if it has not been added 
+            {
+                IngredientsForChef.Add(ingredients[i].Trim(), 1); //add it to the dictionary with a value of 1
+            }
+        }
     }
 
     public void DeActivateShop()
