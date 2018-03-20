@@ -38,6 +38,8 @@ public class DisplayDialogue: MonoBehaviour{
     Dictionary<string, int> IngredientsForChef = new Dictionary<string, int>();
 
     private float chefTime = 4f;
+    bool requieresChoice = false;
+    string decision = "";
 
     // Use this for initialization
     void Start()
