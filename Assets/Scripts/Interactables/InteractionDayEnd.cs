@@ -13,6 +13,7 @@ public class InteractionDayEnd : InteractableCustom {
     DeliveryManager DM;
     LightingManager LM;
     EventManager EM;
+    WeatherManager WM;
 
     public override void Use(Hand hand)
     {
@@ -44,11 +45,13 @@ public class InteractionDayEnd : InteractableCustom {
             LM = GameManagerPointer.Instance.LIGHTING_MANAGER;
             FM = GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM;
             EM = GameManagerPointer.Instance.EVENT_MANAGER_POINTER;
+            WM = GameManagerPointer.Instance.WEATHER_MANAGER_POINTER;
         }
         FM.DayEndAll();
         SCHEDULER.NextDay();
         DM.ManageDeliveries();
         EM.LoadEvents();
+        WM.UpdateWeather();
         GetComponent<InteractionSaveGame>().EYES_CLOSED = true;
     }
 }

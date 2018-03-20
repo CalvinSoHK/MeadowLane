@@ -449,30 +449,26 @@ public class EventManager : MonoBehaviour {
     {
         EventClass.WEATHER_TYPE RETURN_WEATHER = EventClass.WEATHER_TYPE.None;
         
-        for(int i = 0; i < EVENT_LIST.Count; i--)
+        if(EVENT_LIST.Count > 0)
         {
-            //If we have an event with a non-overrideable weeather type, always use that one as long as its not none
-            if (!EVENT_LIST[i].WEATHER_OVERRIDEABLE && EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None)
+            for (int i = 0; i < EVENT_LIST.Count; i++)
             {
-                return EVENT_LIST[i].WEATHER;
-            }
-            //If we have an event with a weather type but it is overrideable, AND the weather type is actually a weather type...
-            else if(EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None &&
-                RETURN_WEATHER == EventClass.WEATHER_TYPE.None)
-            {
-                RETURN_WEATHER = EVENT_LIST[i].WEATHER;
+                Debug.Log(EVENT_LIST[i]);
+                //If we have an event with a non-overrideable weeather type, always use that one as long as its not none
+                if (!EVENT_LIST[i].WEATHER_OVERRIDEABLE && EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None)
+                {
+                    return EVENT_LIST[i].WEATHER;
+                }
+                //If we have an event with a weather type but it is overrideable, AND the weather type is actually a weather type...
+                else if (EVENT_LIST[i].WEATHER != EventClass.WEATHER_TYPE.None &&
+                    RETURN_WEATHER == EventClass.WEATHER_TYPE.None)
+                {
+                    RETURN_WEATHER = EVENT_LIST[i].WEATHER;
+                }
             }
         }
-
+      
         return RETURN_WEATHER;
-    }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoadEvents();
-        }
     }
 
     //Do all the organizing

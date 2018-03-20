@@ -101,14 +101,14 @@ MansionMadness Stock 0.205 1 False True None True 72000 79200 HappyMart
 EmailSpamEvent Message 1 1 False True None True 28800 79200 None
 /End
 January_1
-NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+NewYear_Deco Deco 0.01 1 False True Rain True 28800 79200 HappyMart
 /End
 January_2
-NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+NewYear_Deco Deco 0.01 1 False True Rain True 28800 79200 HappyMart
 /End
 January_3
-NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+NewYear_Deco Deco 0.01 1 False True Rain True 28800 79200 HappyMart
 /End
 January_4
-NewYear_Deco Deco 0.01 1 False True None True 28800 79200 HappyMart
+NewYear_Deco Deco 0.01 1 False True Rain True 28800 79200 HappyMart
 /End

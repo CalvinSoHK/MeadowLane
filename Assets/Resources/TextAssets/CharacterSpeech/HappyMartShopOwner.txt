@@ -27,3 +27,8 @@ The mayor...
 he is not like the rest of us.
 Watch yourself around him.
 _Filler_
+_NewYear_Deco_
+Looks like we forgot the New Year Deco
+Oops...
+We will remember next year!
+_NewYear_Deco_

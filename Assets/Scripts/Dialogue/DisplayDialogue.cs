@@ -137,7 +137,7 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                    
                 }
-                else if (newEvent)
+                /*else if (newEvent)
                 {
                     DialogueManager.setUpCurrentDialogue(this);
                     hasGreeted = true;
@@ -147,32 +147,29 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                     EventDialogue.RemoveAt(EventDialogueIndex);
 
-                }
+                }*/
                 else //player has not been greeted 
-                {   
-                                  
-                    DialogueManager.setUpCurrentDialogue(this); //we need to get the current lines of dialogue that this 
-                    hasGreeted = true; //player has been greeted
-                    /*if (newEvent) //is there a new event to be mentioned
-                    {
+                {
+                    DialogueManager.setUpCurrentDialogue(this);
+                    hasGreeted = true;
+                    if (newEvent)
+                    {                        
                         for (int i = 0; i < EventDialogue[EventDialogueIndex].Count; i++) //add all the event lines
                         {
                             NextLinesToDisplay.Add(EventDialogue[EventDialogueIndex][i]);
                         }
+                        EventDialogue.RemoveAt(EventDialogueIndex);
                     }
-                    else // there are no new special events
+                    else
                     {
+                                                               
                         FillerIndexes.Clear();
                         for (int i = 0; i < GreetingDialogue.Count; i++) //go through the greetings dialogue
                         {
                             NextLinesToDisplay.Add(GreetingDialogue[i]);  //add the greetings line to the next lines to display
                         }
-                    }*/
-                    FillerIndexes.Clear();
-                    for (int i = 0; i < GreetingDialogue.Count; i++) //go through the greetings dialogue
-                    {
-                        NextLinesToDisplay.Add(GreetingDialogue[i]);  //add the greetings line to the next lines to display
                     }
+                        
                 }
                 numberOfLines = NextLinesToDisplay.Count - 1;//assign the number of lines that are spoken by the character
                 

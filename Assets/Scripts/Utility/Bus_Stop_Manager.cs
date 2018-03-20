@@ -92,7 +92,7 @@ public class BusStopInfo
     public int PRICE;
 
     //The bus's position and rotation on arriving in this location
-    public Vector3 BUS_POSITION, BUS_ROTATION;
+    //public Vector3 BUS_POSITION, BUS_ROTATION;
 
     public BusStopInfo(string NAME_T, TransitionType TYPE_T)
     {
