@@ -38,13 +38,27 @@ public class DisplayDialogue: MonoBehaviour{
     Dictionary<string, int> IngredientsForChef = new Dictionary<string, int>();
 
     private float chefTime = 4f;
-    bool requieresChoice = false;
-    string decision = "";
+    public bool requieresChoice = false;
+    public string decision = "";
+
+    public GameObject yes, no; 
 
     // Use this for initialization
     void Start()
     {
-
+        if (requieresChoice) //if a decision needs to be made when talking to this person
+        {
+            if(decision[0] != '_' && decision[decision.Length-1] != '_')
+            {
+                decision = '_' + decision + '_';
+            }else if(decision[0] != '_')
+            {
+                decision = '_' + decision;
+            }else if (decision[decision.Length - 1] != '_')
+            {
+                decision = decision + '_';
+            }
+        }
     }
 
     // Update is called once per frame
@@ -150,7 +164,7 @@ public class DisplayDialogue: MonoBehaviour{
                 }*/
                 else //player has not been greeted 
                 {
-                    DialogueManager.setUpCurrentDialogue(this);
+                    DialogueManager.setUpCurrentDialogue(this, requieresChoice);
                     hasGreeted = true;
                     if (newEvent)
                     {                        
@@ -212,7 +226,7 @@ public class DisplayDialogue: MonoBehaviour{
                         blinker.SetActive(false);
                         break;
                     }
-                    else //otherwise we have reached the last line
+                    else if(indexLine >= numberOfLines && !requieresChoice) //otherwise we have reached the last line
                     {
                         setCurrentState(GameState.StopDisplayingText);// go to the stop diplaying text state
                         showBlinker = false;
@@ -239,6 +253,11 @@ public class DisplayDialogue: MonoBehaviour{
                     }
                 }else //if we have reached the last line of dialogue
                 {
+                    if (requieresChoice)
+                    {
+                        yes.SetActive(true);
+                        no.SetActive(true);
+                    }
                     blinker.SetActive(true); //blinker stays continuously on
                 }
 
@@ -365,7 +384,7 @@ public class DisplayDialogue: MonoBehaviour{
     /// </summary>
     public void ActivateShopDialogue(string recipe)
     {
-        DialogueManager.setUpCurrentDialogue(this);
+        DialogueManager.setUpCurrentDialogue(this, requieresChoice);
         DialogueManager.currentDisplayDialogue = null;
         setCurrentState(GameState.DialogueSetup);
         hasGreeted = true;
@@ -381,7 +400,7 @@ public class DisplayDialogue: MonoBehaviour{
     /// <param name="ingredients"></param>
     public void ActivateChefDialogue(string[] ingredients)
     {
-        DialogueManager.setUpCurrentDialogue(this);
+        DialogueManager.setUpCurrentDialogue(this, requieresChoice);
         DialogueManager.currentDisplayDialogue = null;
         FillIngredientsDictionary(ingredients);
         hasGreeted = true;
@@ -419,6 +438,15 @@ public class DisplayDialogue: MonoBehaviour{
         {
             FillerIndexes.Add(i);
         }
+    }
+
+    public void StartShopMG()
+    {
+        Debug.Log("starting the shop minigame");
+    }
+    public void DeclineShopMG()
+    {
+        setCurrentState(GameState.StopDisplayingText);
     }
 
     /*

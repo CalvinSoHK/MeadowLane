@@ -5582,7 +5582,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4056204718707956, guid: 0fa36a909c196aa4685f1146ba7ee8a9, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.7773409
+      value: -0.268
       objectReference: {fileID: 0}
     - target: {fileID: 4056204718707956, guid: 0fa36a909c196aa4685f1146ba7ee8a9, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5617,7 +5617,8 @@ Prefab:
       propertyPath: characterName
       value: Chef
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114695946797999410, guid: 0fa36a909c196aa4685f1146ba7ee8a9, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0fa36a909c196aa4685f1146ba7ee8a9, type: 2}
   m_IsPrefabParent: 0
 --- !u!114 &1858753007 stripped

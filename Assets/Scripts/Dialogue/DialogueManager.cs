@@ -6,13 +6,14 @@ using System.IO;
 
 public static class DialogueManager{
 
-    public static List<string> currentDialogueForCharacter = new List<string>(); //List that will hold the current dialogue that will be displayed
+    /*public static List<string> currentDialogueForCharacter = new List<string>(); //List that will hold the current dialogue that will be displayed
     public static string[] ShopGreetings = { "Hey there! I'm here to pick up a RECIPE please", "Yo! I need a RECIPE ASAP!", "Hello, could I get one RECIPE please",
-        "Hey, how is it going? One RECIPE please" };
+        "Hey, how is it going? One RECIPE please" };*/
 
     static TextAsset CURRENT;
     public static string Greeting = "_Greetings_", Filler = "_Filler_", NewSection = "_NewSection_";
     public static DisplayDialogue currentDisplayDialogue = null;
+    public static string decisionLine = ""; 
 
     /// <summary>
     /// Will parse through the dialogue text file to find the appropriate dialogue lines based on the character name and the current situation they are in
@@ -22,7 +23,7 @@ public static class DialogueManager{
     /// <param name="shopOwner"></param>
     ///   //Parse  through text asset
    
-    public static void setUpCurrentDialogue(string characterName, string currentSituation, bool shopOwner)
+    /*public static void setUpCurrentDialogue(string characterName, string currentSituation, bool shopOwner)
     {
 
         //Example path: TextFiles/CharacterSpeech/Mayor
@@ -51,14 +52,14 @@ public static class DialogueManager{
                 break;
             }
         }        
-    }
+    }*/
 
     /// <summary>
     /// fill in all the relevant dialogue for the current character (including specific event dialogue)
     /// </summary>
     /// <param name="characterDialogue"></param>
     /// <param name="Event"></param>
-    public static void setUpCurrentDialogue(DisplayDialogue characterDialogue)
+    public static void setUpCurrentDialogue(DisplayDialogue characterDialogue, bool requieresChoice)
     {
         
         CURRENT = Resources.Load("TextAssets/CharacterSpeech/" + characterDialogue.characterName, typeof(TextAsset)) as TextAsset; //load the right text asset
@@ -78,6 +79,10 @@ public static class DialogueManager{
                     //Debug.Log("Adding greeting");
                     characterDialogue.GreetingDialogue.Add(TEMP_MESSAGE_ARRAY[index]); //add each line to the greeting dialogue for that character
                 }
+                if (requieresChoice)
+                {
+                    AddAllChoiceDialogue(TEMP_MESSAGE_ARRAY, index, characterDialogue.decision, characterDialogue);
+                }
                 //Debug.Log("Done Adding Greeting" + "       i:" + index);
                 i = index + 1; //account for the lines we have now read through already
             }
@@ -91,6 +96,10 @@ public static class DialogueManager{
                 {
                     if (TEMP_MESSAGE_ARRAY[index].Trim().Equals(NewSection.Trim())) //if the line is the new section breaker word
                     {
+                        if (requieresChoice)
+                        {
+                            characterDialogue.FillerDialogue[currentFillerIndex].Add(decisionLine);
+                        }
                         currentFillerIndex += 1; //increase the index section for filler
                         characterDialogue.FillerDialogue.Add(new List<string>()); //init the new list
                     }
@@ -104,9 +113,10 @@ public static class DialogueManager{
             }
         }
         currentDisplayDialogue = characterDialogue; //keep a reference of current character talking.
+        decisionLine = "";
     }
 
-    public static void setUpCurrentDialogueForShop(string recipe)
+    /*public static void setUpCurrentDialogueForShop(string recipe)
     {
         string currentGreeting = ShopGreetings[Random.Range(0, ShopGreetings.Length)];
         currentGreeting = currentGreeting.Replace("RECIPE", recipe);
@@ -120,7 +130,7 @@ public static class DialogueManager{
     public static void resetCurrentDialogue()
     {
         currentDialogueForCharacter.Clear();
-    }
+    }*/
 
     /// <summary>
     /// Finds the character's dialogue relevant to the day's specific event.
@@ -178,5 +188,20 @@ public static class DialogueManager{
                 break; // we got all the lines, we can break out of this
             }
         }*/
+    }
+
+    public static void AddAllChoiceDialogue(string[] allDialogue, int index, string decision, DisplayDialogue characterDialogue)
+    {
+        for (int i = index + 1; i < allDialogue.Length; i++)
+        {
+            if (allDialogue[i].Trim().Equals(decision.Trim())){
+                for(int j = i+1; !allDialogue[i].Trim().Equals(decision.Trim()); j++)
+                {
+                    characterDialogue.GreetingDialogue.Add(allDialogue[j]);
+                    index = j;
+                }
+                decisionLine = allDialogue[index];
+            }
+        }
     }
 }

@@ -1,0 +1,24 @@
+_Greeting_
+Hey there!
+Tired of farming? If you stick around, I'm sure our chef will be able to prepare something tasty...
+I hope...
+_Greeting_
+_Filler_
+Maybe if I work hard enough-
+I'll have a restaurant of my own...
+_NewSection_
+What recipe should I teach them next?
+Maybe they should learn about candied tomatoes.
+You'd think they would already know that one...
+_Filler_
+_RecipeMinigame_
+Listen, I'll be honest with you.
+Our chef can't cook to save his life.
+You need to help me make the right dishes for our clients
+But our chef can't know about it.
+I'll give you a bunch of ingredients, as if that is what you ordered
+It's up to you to put the right ones in the pot whithout the chef noticing you.
+I'll be around if you need help.
+So what do you think?
+Will you help me make the right dishes for our customers?
+_RecipeMinigame_ 
