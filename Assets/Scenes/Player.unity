@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.003
   m_LinearFogStart: 2.26
   m_LinearFogEnd: 307.75
-  m_AmbientSkyColor: {r: 0.9558824, g: 0.8651414, b: 0.7028547, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -1549,18 +1549,15 @@ MonoBehaviour:
   - SCENE_NAME: PlayerHome
     TRANSITION: 0
     PRICE: 0
-    BUS_POSITION: {x: 1.6, y: 8, z: 40.4}
-    BUS_ROTATION: {x: 0, y: 90, z: 0}
   - SCENE_NAME: HappyMart
     TRANSITION: 0
     PRICE: 10
-    BUS_POSITION: {x: 8.5, y: 8, z: 143}
-    BUS_ROTATION: {x: 0, y: 270, z: 0}
   - SCENE_NAME: TownSquare
     TRANSITION: 0
     PRICE: 0
-    BUS_POSITION: {x: -36, y: 0, z: 0}
-    BUS_ROTATION: {x: 0, y: 0, z: 0}
+  - SCENE_NAME: Tavern
+    TRANSITION: 0
+    PRICE: 0
   STOP_PRICES: 00000000000000000a000000
   Transition_List:
   - Transition_Village
@@ -1570,8 +1567,6 @@ MonoBehaviour:
     SCENE_NAME: PlayerHome
     TRANSITION: 0
     PRICE: 0
-    BUS_POSITION: {x: 0, y: 0, z: 0}
-    BUS_ROTATION: {x: 0, y: 0, z: 0}
 --- !u!114 &664984163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2192,8 +2187,6 @@ MonoBehaviour:
     SCENE_NAME: 
     TRANSITION: 0
     PRICE: 0
-    BUS_POSITION: {x: 0, y: 0, z: 0}
-    BUS_ROTATION: {x: 0, y: 0, z: 0}
   EVENT_OBJECTS: {fileID: 1812126839}
 --- !u!1001 &971259094
 Prefab:

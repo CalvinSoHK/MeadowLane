@@ -12,6 +12,7 @@ public static class RecipeManager{
     //Master list of all recipes, discovered or not
     public static List<Recipe> MASTER_LIST = new List<Recipe>();
     static List<string> KNOWN_LIST = new List<string>();
+    static List<string> UNKNOWN_LIST = new List<string>();
 
     public static TextAsset ASSET;
 
@@ -48,6 +49,8 @@ public static class RecipeManager{
 
         //Load master list
         LoadItems(MASTER_TXT_LOCATION);
+
+
     }
 
     //Function that adds items to the master list of items.
@@ -98,7 +101,7 @@ public static class RecipeManager{
                     if (KNOWN_LIST[i].Equals(TEMP_NAME))
                     {
                         DISCOVERED = true;
-                        KNOWN_LIST.RemoveAt(i);
+                        //KNOWN_LIST.RemoveAt(i);
                          break;
                     }
                 }

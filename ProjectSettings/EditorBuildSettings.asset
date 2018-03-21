@@ -20,3 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Transition_Village.unity
     guid: 3498cb5ae7ff98244820ac112445e734
+  - enabled: 1
+    path: Assets/Scenes/Tavern.unity
+    guid: dce8bf69fc6c1204bbc8cd54729d3a58
