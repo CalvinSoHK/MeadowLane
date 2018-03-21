@@ -345,9 +345,10 @@ public class StallManager : MonoBehaviour {
         if(ITEM_COUNT.Count > 0)
         {
             //Init the list. The function will do nothing if already init.
-            RecipeManager.InitList();
+            //RecipeManager.InitList();
 
-            //Get the list of recipes the player has already discovered.
+            //Get the list of recipes the player has already 
+            
             RECIPE_LIST = RecipeManager.GetDiscovered();
             ALL_RECIPES_LIST.Clear();
             foreach(Recipe TEMP in RECIPE_LIST)

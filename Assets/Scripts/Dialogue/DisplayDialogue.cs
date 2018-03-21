@@ -200,6 +200,7 @@ public class DisplayDialogue: MonoBehaviour{
           
 
             case GameState.Typing: //if dialogue is currently being typed out
+                Debug.Log(indexLine);
                 if(indexLetter < NextLinesToDisplay[indexLine].Length) //if the current number of letter displyaed is below the total number of letters in the dialogue line
                 {
                     currentLine += NextLinesToDisplay[indexLine][indexLetter]; //add the next letter to the current line
@@ -301,7 +302,8 @@ public class DisplayDialogue: MonoBehaviour{
                 }
                 textBox.SetActive(false); //turn off the dialogue box
                 blinker.SetActive(false); //Turn off the blinker fam
-
+                yes.SetActive(false);
+                no.SetActive(false);
                 textObject.text = "";//remove the text in the text object                
                 /*if (shopOwner && inDialogue) //check if they are shop owner and that the player is still near the character when the conversation ended
                 {

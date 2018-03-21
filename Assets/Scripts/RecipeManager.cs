@@ -10,9 +10,9 @@ using UnityEditor;
 public static class RecipeManager{
 
     //Master list of all recipes, discovered or not
-    public static List<Recipe> MASTER_LIST = new List<Recipe>();
-    static List<string> KNOWN_LIST = new List<string>();
-    static List<string> UNKNOWN_LIST = new List<string>();
+    //public static List<Recipe> MASTER_LIST = new List<Recipe>();
+    public static List<Recipe> KNOWN_LIST = new List<Recipe>();
+    public static List<Recipe> UNKNOWN_LIST = new List<Recipe>();
 
     public static TextAsset ASSET;
 
@@ -29,13 +29,7 @@ public static class RecipeManager{
     //      0.1 10
     //      Produce/Apple Produce/Sugar
     //static 
-    static string MASTER_TXT_LOCATION = Application.dataPath + "/SaveData/MasterRecipeList.txt";
-
-    //Helper function that inits the master list
-    public static void InitList()
-    {
-        Debug.Log("Don't use this anymore");
-    }
+    public static string MASTER_TXT_LOCATION = Application.dataPath + "/SaveData/MasterRecipeList.txt";
 
     public static void LoadData(string DATA)
     {
@@ -44,20 +38,17 @@ public static class RecipeManager{
 
         for(int i = 0; i < INPUT.Length; i++)
         {
-            KNOWN_LIST.Add(INPUT[i]);
+            KNOWN_LIST.Add(new Recipe(INPUT[i], null, true, 0, 0));
         }
 
         //Load master list
         LoadItems(MASTER_TXT_LOCATION);
-
-
     }
 
     //Function that adds items to the master list of items.
     public static void LoadItems(string PATH)
     {
-
-        Debug.Log("Not actually loading the right stuff. Check known list.");
+        //Debug.Log("Not actually loading the right stuff. Check known list.");
         string TEMP_NAME, TEMP_WEIGHT_AND_PRICE, TEMP_LIST_TEXT;
 
         //Split weight and price
@@ -95,63 +86,95 @@ public static class RecipeManager{
                     TEMP_LIST.Add(TEMP.GetComponent<BaseItem>());
                 }
 
-                DISCOVERED = true;
+                DISCOVERED = false;
                 for(int i = 0; i < KNOWN_LIST.Count; i++)
                 {
-                    if (KNOWN_LIST[i].Equals(TEMP_NAME))
+                    if (KNOWN_LIST[i].NAME.Equals(TEMP_NAME))
                     {
                         DISCOVERED = true;
-                        //KNOWN_LIST.RemoveAt(i);
-                         break;
+                        KNOWN_LIST[i].INGREDIENTS = TEMP_LIST;
+                        KNOWN_LIST[i].WEIGHT = TEMP_WEIGHT;
+                        KNOWN_LIST[i].PRICE = TEMP_PRICE;
+                        break;
                     }
                 }
 
-                //Add to master list.
-                AddItem(TEMP_NAME, TEMP_LIST, DISCOVERED, TEMP_WEIGHT, TEMP_PRICE);
+                //If it hasn't been discovered, add to undiscovered list.
+                if (!DISCOVERED)
+                {
+                    UNKNOWN_LIST.Add(new Recipe(TEMP_NAME, TEMP_LIST, false, TEMP_WEIGHT, TEMP_PRICE));
+                }
             }
+
+            //Sort the unknown list by complexity
+            UNKNOWN_LIST.Sort(CompareRecipes);
+           
         }
     }
 
-    //Helper function that adds an item to the list
-    public static void AddItem(string NAME, List<BaseItem> INGREDIENTS, bool DISCOVERED, float WEIGHT, int PRICE)
+    /*
+    public static void PrintUnkownList()
     {
-        MASTER_LIST.Add(new Recipe(NAME, INGREDIENTS, DISCOVERED, WEIGHT, PRICE));
+        foreach(Recipe temp in UNKNOWN_LIST)
+        {
+            Debug.Log(temp.NAME);
+        }
+    }*/
+
+
+    /// <summary>
+    /// Comparision rules between two recipes for complexity.
+    /// </summary>
+    /// <param name="X"></param>
+    /// <param name="Y"></param>
+    /// <returns></returns>
+    public static int CompareRecipes(Recipe X, Recipe Y)
+    {
+        if(X.INGREDIENTS.Count > Y.INGREDIENTS.Count)
+        {
+            return 1;
+        }
+        else if(X.INGREDIENTS.Count < Y.INGREDIENTS.Count)
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    /// <summary>
+    /// Function that "discovers" a recipe. Moves it from unknown to known.
+    /// </summary>
+    /// <param name="RECIPE"></param>
+    public static void DiscoverRecipe(Recipe RECIPE)
+    {
+        if (UNKNOWN_LIST.Contains(RECIPE))
+        {
+            UNKNOWN_LIST.Remove(RECIPE);
+            KNOWN_LIST.Add(RECIPE);
+        }
+        else
+        {
+            Debug.Log("Error: Recipe is not known: " + RECIPE.NAME);
+        }
     }
 
     //Helper function that returns a list of all discovered
     //Since we loaded in true items first, as soon as its false we can return.
     public static List<Recipe> GetDiscovered()
     {
-        List<Recipe> RETURN_LIST = new List<Recipe>();
-        foreach(Recipe TEMP in MASTER_LIST)
-        {
-            //Debug.Log(TEMP.NAME + TEMP.DISCOVERED);
-            if (TEMP.DISCOVERED)
-            {
-                RETURN_LIST.Add(TEMP);
-            }
-            else
-            {
-                return RETURN_LIST;
-            }
-        }
-        return RETURN_LIST;
+        return KNOWN_LIST;
     }
 
     //Save data for recipes
     public static void SaveData()
     {
         string DATA = "";
-        foreach(Recipe RECIPE in MASTER_LIST)
+        foreach(Recipe RECIPE in KNOWN_LIST)
         {
-            if (!RECIPE.DISCOVERED)
-            {
-                break;
-            }
-            else
-            {
-                DATA += RECIPE.NAME + "\n";   
-            }
+            DATA += RECIPE.NAME + "\n";   
         }
         SaveSystem.SaveTo(SaveSystem.SaveType.Recipes, "/Recipe\n" + DATA + "/");
     }

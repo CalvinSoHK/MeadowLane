@@ -52,7 +52,7 @@ public class EventClass : MonoBehaviour {
     public enum SCENE_SPECIFIC { NonSpecific, Specific };
     public SCENE_SPECIFIC SCENE_TYPE;
     //Scene that this event fires off in
-    public enum SCENES { None, PlayerHome, HappyMart, TownSquare };
+    public enum SCENES { None, PlayerHome, HappyMart, TownSquare, Tavern };
     public SCENES SCENE;
 
     //Whether or not this event is constricted to a given time.

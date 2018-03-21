@@ -1,8 +1,8 @@
-_Greeting_
+_Greetings_
 Hey there!
 Tired of farming? If you stick around, I'm sure our chef will be able to prepare something tasty...
 I hope...
-_Greeting_
+_Greetings_
 _Filler_
 Maybe if I work hard enough-
 I'll have a restaurant of my own...
