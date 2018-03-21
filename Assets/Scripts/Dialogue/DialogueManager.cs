@@ -76,7 +76,7 @@ public static class DialogueManager{
                 index = i + 1; //get the index of the next line
                 for (; !TEMP_MESSAGE_ARRAY[index].Trim().Equals(Greeting.Trim()); index++) //from the next line, go through each line until we hit the same breaker word
                 {
-                    //Debug.Log("Adding greeting");
+                    Debug.Log("Adding greeting");
                     characterDialogue.GreetingDialogue.Add(TEMP_MESSAGE_ARRAY[index]); //add each line to the greeting dialogue for that character
                 }
                 if (requieresChoice)
@@ -107,6 +107,10 @@ public static class DialogueManager{
                     {
                         characterDialogue.FillerDialogue[currentFillerIndex].Add(TEMP_MESSAGE_ARRAY[index]); //add the filler to the relevant list
                     }
+                }
+                if (requieresChoice)
+                {
+                    characterDialogue.FillerDialogue[currentFillerIndex].Add(decisionLine);
                 }
                 i = index + 1; //account for the passed lines
                 break; //break out
@@ -143,7 +147,7 @@ public static class DialogueManager{
         List<EventInfo> tempEventList = new List<EventInfo>();
 
         GameManagerPointer.Instance.EVENT_MANAGER_POINTER.GetCurrentEvent(ref tempEventList);
-        characterDialogue.newEvent = true;
+        //characterDialogue.newEvent = true;
         int i = 0, j = 0; //init index variable
         Debug.Log("temp event list count : " + tempEventList.Count);
         for(; i < tempEventList.Count; i++)
@@ -195,12 +199,15 @@ public static class DialogueManager{
         for (int i = index + 1; i < allDialogue.Length; i++)
         {
             if (allDialogue[i].Trim().Equals(decision.Trim())){
-                for(int j = i+1; !allDialogue[i].Trim().Equals(decision.Trim()); j++)
+                for(int j = i+1; !allDialogue[j].Trim().Equals(decision.Trim()); j++)
                 {
+                    Debug.Log("Start adding the decision dialogue");
                     characterDialogue.GreetingDialogue.Add(allDialogue[j]);
                     index = j;
                 }
+                Debug.Log("done adding decision dialogue");
                 decisionLine = allDialogue[index];
+                return;
             }
         }
     }

@@ -15,6 +15,8 @@ Tools/Basic_Scythe
 Tools/Tomato_Seed_Dispenser 10
 /
 /Recipe
+Candied Tomato
+Bread
 /
 /Farm
 Plot0
