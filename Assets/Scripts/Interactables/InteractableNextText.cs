@@ -18,6 +18,9 @@ public class InteractableNextText : InteractableCustom {
         {
             DD.SetProceed(true);
            
+        }else if (DD.currentState == DisplayDialogue.GameState.DisplayTheAction) //turn off text if the NPC is reating to a player action
+        {
+            DD.setCurrentState(DisplayDialogue.GameState.StopDisplayingText);
         }
         base.Use(hand);
     }

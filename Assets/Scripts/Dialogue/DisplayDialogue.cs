@@ -9,7 +9,7 @@ public class DisplayDialogue: MonoBehaviour{
     public string characterName, currentSituation; //strings representing the specific character name and situation for this instance
     //public string[] allSituations; //array of all possible instances for that character
     //public bool shopOwner; //whether or not they are a shop owner
-    public enum GameState { Wait, Idle, DialogueSetup, DialogueSetupForShop, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText, DisplayWithoutPlayerInput} //statemachine for the displaying of dialogue
+    public enum GameState { Wait, Idle, DialogueSetup, DialogueSetupForShop, Typing, WaitingToProceed, TransitionToShop, StopDisplayingText, DisplayWithoutPlayerInput, DisplayTheAction} //statemachine for the displaying of dialogue
     public GameState currentState; //current state in the state machine
     float time = 0.0f, lastStateChange; //references to the amount of time that has passed since last state change
     public GameObject textBox; //reference to the specific textbox for the character
@@ -37,7 +37,7 @@ public class DisplayDialogue: MonoBehaviour{
     List<int> FillerIndexes = new List<int>();
     Dictionary<string, int> IngredientsForChef = new Dictionary<string, int>();
 
-    private float chefTime = 4f;
+    private float waitDisplayDialogueTime = 4f; //for NPCs who speak without reqiering player input, determines how much time in between each new section of dialogue
     public bool requieresChoice = false;
     public string decision = "";
 
@@ -275,7 +275,7 @@ public class DisplayDialogue: MonoBehaviour{
                 }
                 else //we have displayed all the letter in this line
                 {
-                    if (getStateElapsed() > chefTime + (chefTime/2)) //if the elapsed time is greater than x + (x/2) seconds
+                    if (getStateElapsed() > waitDisplayDialogueTime + (waitDisplayDialogueTime/2)) //if the elapsed time is greater than x + (x/2) seconds
                     {
                         indexLine += 1; //increase indexline by one
                         indexLetter= 0; //reset letter index
@@ -287,7 +287,7 @@ public class DisplayDialogue: MonoBehaviour{
                         }
                         textBox.SetActive(true); //set the text box to true
                         setCurrentState(GameState.DisplayWithoutPlayerInput); //reset timer
-                    }else if(getStateElapsed() > chefTime) //if the timer has elapsed 
+                    }else if(getStateElapsed() > waitDisplayDialogueTime) //if the timer has elapsed 
                     {
                         textBox.SetActive(false); //no longer talk for now.
                         textObject.text = ""; //reset text being displayed on screen
@@ -449,6 +449,45 @@ public class DisplayDialogue: MonoBehaviour{
     public void DeclineShopMG()
     {
         setCurrentState(GameState.StopDisplayingText);
+    }
+
+    public void AddActionDialogue(List<string> addedDialogueList)
+    {
+        AddDialogueAtStartOfFillerList(FillerDialogue, addedDialogueList);
+    }
+
+    public void AddActionDialogue(string addedDialogueLine)
+    {
+        AddDialogueAtStartOfFillerList(FillerDialogue, addedDialogueLine);
+    }
+
+    /// <summary>
+    /// If a dialogue sections needs to be added to the filler dialogue list (due to a specific action), 
+    /// this will make sure to put that dialogue is added at the start of the list
+    /// as to have it be the next thing said by the NPC
+    /// </summary>
+    /// <param name="currentDialogueType"></param>
+    /// <param name="currentDialogueSection"></param>
+    public void AddDialogueAtStartOfFillerList(List<List<string>> currentDialogueType, List<string> currentDialogueSection)
+    {
+        currentDialogueType.Insert(0, new List<string>()); //inserts a new list at the start of the dialogue list
+        for(int i = 0; i < currentDialogueSection.Count; i++) //go through all the lines of dialogue that need to be added 
+        {
+            currentDialogueType[0].Add(currentDialogueSection[i]); //add the lines of dialogue to the new list (which is at index 0)
+        }
+    }
+
+    /// <summary>
+    /// If a dialogue sections needs to be added to the filler dialogue list (due to a specific action), 
+    /// this will make sure to put that dialogue is added at the start of the list
+    /// as to have it be the next thing said by the NPC
+    /// </summary>
+    /// <param name="currentDialogueType"></param>
+    /// <param name="currentDialogueSection"></param>
+    public void AddDialogueAtStartOfFillerList(List<List<string>> currentDialogueType, string currentDialogueSection)
+    {
+        currentDialogueType.Insert(0, new List<string>()); //inserts a new list at the start of the dialogue list        
+        currentDialogueType[0].Add(currentDialogueSection); //add the lines of dialogue to the new list (which is at index 0)       
     }
 
     /*
