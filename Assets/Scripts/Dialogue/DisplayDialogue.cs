@@ -40,6 +40,7 @@ public class DisplayDialogue: MonoBehaviour{
     private float waitDisplayDialogueTime = 4f; //for NPCs who speak without reqiering player input, determines how much time in between each new section of dialogue
     public bool requieresChoice = false;
     public string decision = "";
+    //private bool actionTriggered = false;
 
     public GameObject yes, no; 
 
@@ -134,11 +135,7 @@ public class DisplayDialogue: MonoBehaviour{
                                     FillerDialogueIndex = FillerIndexes[tempIndex];
                                     FillerIndexes.RemoveAt(tempIndex);
                                 }
-                                indexLine = 0; //reset current line
-                                indexLetter = 0; //reset current letter
-                                currentLine = ""; //reset the line of dialogue being displayed
-                                inDialogue = true; //they are now in dialogue
-                                textBox.SetActive(true); //display the text box
+                                ResetAndActivateDialogue();
                                 setCurrentState(GameState.DisplayWithoutPlayerInput); //setup up is done, we now need to display the text   
                                 return;                             
                             }
@@ -186,14 +183,10 @@ public class DisplayDialogue: MonoBehaviour{
                         
                 }
                 numberOfLines = NextLinesToDisplay.Count - 1;//assign the number of lines that are spoken by the character
-                
+
 
                 //numberOfLines = currentDialogueForCharacter.Count - 1; 
-                indexLine = 0; //reset current line
-                indexLetter = 0; //reset current letter
-                currentLine = ""; //reset the line of dialogue being displayed
-                inDialogue = true; //they are now in dialogue
-                textBox.SetActive(true); //display the text box
+                ResetAndActivateDialogue();
                 setCurrentState(GameState.Typing); //setup up is done, we now need to display the text
                 break;
 
@@ -266,7 +259,6 @@ public class DisplayDialogue: MonoBehaviour{
 
             case GameState.DisplayWithoutPlayerInput:
 
-
                 if (indexLetter < NextLinesToDisplay[indexLine].Length) //if the current number of letter displayed is below the total number of letters in the dialogue line
                 {
                     currentLine += NextLinesToDisplay[indexLine][indexLetter]; //add the next letter to the current line
@@ -293,6 +285,25 @@ public class DisplayDialogue: MonoBehaviour{
                         textObject.text = ""; //reset text being displayed on screen
                     }
                 }
+                break;
+
+            case GameState.DisplayTheAction:
+
+                //we need to check if the npc is currently saying something 
+                if (indexLetter < NextLinesToDisplay[indexLine].Length) //if the current number of letter displayed is below the total number of letters in the dialogue line
+                {
+                    currentLine += NextLinesToDisplay[indexLine][indexLetter]; //add the next letter to the current line
+                    textObject.text = currentLine;// update the text ui element
+                    indexLetter += 1; //move on to the next letter
+                }
+                else if (getStateElapsed() > waitDisplayDialogueTime) //if the timer has elapsed 
+                {
+                    NextLinesToDisplay.RemoveAt(indexLine); //not sure this is necessary
+                    setCurrentState(GameState.StopDisplayingText);
+                }
+
+
+
                 break;
 
             case GameState.StopDisplayingText: //we need to stop displaying text as we have reached the end of the dialogue
@@ -436,30 +447,58 @@ public class DisplayDialogue: MonoBehaviour{
 
     public void GetFillerIndexes()
     {
+        FillerIndexes.Clear();
         for (int i = 0; i < FillerDialogue.Count; i++)
         {
             FillerIndexes.Add(i);
         }
     }
 
+    /// <summary>
+    /// Accepts to play the recipe minigame.
+    /// </summary>
     public void StartShopMG()
     {
         Debug.Log("starting the shop minigame");
     }
-    public void DeclineShopMG()
+
+    /// <summary>
+    /// Decline to play the recipe minigame. 
+    /// Stops displaying the dialogue text. Conversation ends
+    /// </summary>
+    public void DeclineRecipeMG()
     {
         setCurrentState(GameState.StopDisplayingText);
     }
 
-    public void AddActionDialogue(List<string> addedDialogueList)
+    /// <summary>
+    /// resets the variables associated to the display of the dialogue and turns on the NPC's dialogue box
+    /// </summary>
+    public void ResetAndActivateDialogue()
     {
-        AddDialogueAtStartOfFillerList(FillerDialogue, addedDialogueList);
+        indexLine = 0; //reset current line
+        indexLetter = 0; //reset current letter
+        currentLine = ""; //reset the line of dialogue being displayed
+        inDialogue = true; //they are now in dialogue
+        //actionTriggered = false;
+        textBox.SetActive(true); //display the text box
     }
 
+    
+
+    /// <summary>
+    /// If the player performs an action for which the NPC has a reaction to,
+    /// use this to add the reaction to the action dialogue.
+    /// Adds a single string of dialogue.
+    /// </summary>
     public void AddActionDialogue(string addedDialogueLine)
     {
-        AddDialogueAtStartOfFillerList(FillerDialogue, addedDialogueLine);
-    }
+        NextLinesToDisplay.Clear();
+        AddDialogueAtStartOfFillerList(NextLinesToDisplay, addedDialogueLine);
+        ResetAndActivateDialogue();
+        //actionTriggered = true;
+        setCurrentState(GameState.DisplayTheAction);
+    }  
 
     /// <summary>
     /// If a dialogue sections needs to be added to the filler dialogue list (due to a specific action), 
@@ -468,26 +507,9 @@ public class DisplayDialogue: MonoBehaviour{
     /// </summary>
     /// <param name="currentDialogueType"></param>
     /// <param name="currentDialogueSection"></param>
-    public void AddDialogueAtStartOfFillerList(List<List<string>> currentDialogueType, List<string> currentDialogueSection)
+    public void AddDialogueAtStartOfFillerList(List<string> currentDialogueType, string currentDialogueSection)
     {
-        currentDialogueType.Insert(0, new List<string>()); //inserts a new list at the start of the dialogue list
-        for(int i = 0; i < currentDialogueSection.Count; i++) //go through all the lines of dialogue that need to be added 
-        {
-            currentDialogueType[0].Add(currentDialogueSection[i]); //add the lines of dialogue to the new list (which is at index 0)
-        }
-    }
-
-    /// <summary>
-    /// If a dialogue sections needs to be added to the filler dialogue list (due to a specific action), 
-    /// this will make sure to put that dialogue is added at the start of the list
-    /// as to have it be the next thing said by the NPC
-    /// </summary>
-    /// <param name="currentDialogueType"></param>
-    /// <param name="currentDialogueSection"></param>
-    public void AddDialogueAtStartOfFillerList(List<List<string>> currentDialogueType, string currentDialogueSection)
-    {
-        currentDialogueType.Insert(0, new List<string>()); //inserts a new list at the start of the dialogue list        
-        currentDialogueType[0].Add(currentDialogueSection); //add the lines of dialogue to the new list (which is at index 0)       
+        currentDialogueType.Insert(0, currentDialogueSection); //inserts a new list at the start of the dialogue list         
     }
 
     /*
