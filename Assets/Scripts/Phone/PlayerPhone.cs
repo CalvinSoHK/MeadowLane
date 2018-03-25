@@ -51,7 +51,7 @@ public class PlayerPhone : MonoBehaviour {
         hand2 = transform.GetChild(0).Find("Hand2").GetComponent<Hand>();
         PLAYER_STATS = GetComponent<PlayerStats>();
         PIM = GameManagerPointer.Instance.PLAYER_POINTER.PLAYER.GetComponent<PlayerInputManager>();
-        LoadConversationNow("Triangle/Start");
+        //LoadConversationNow("Triangle/Start");
     }
 
     private void Update()

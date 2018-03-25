@@ -34,9 +34,10 @@ public static class RecipeManager{
     public static void LoadData(string DATA)
     {
         //Compare loaded strings to the master list and set them to discovered
-        string[] INPUT = DATA.Split('/');
+        string[] INPUT = DATA.Split('\n');
 
-        for(int i = 0; i < INPUT.Length; i++)
+        //Note: Since we break by '\n', there is a blank line at the end.
+        for(int i = 0; i < INPUT.Length - 1; i++)
         {
             KNOWN_LIST.Add(new Recipe(INPUT[i], null, true, 0, 0));
         }
@@ -89,7 +90,8 @@ public static class RecipeManager{
                 DISCOVERED = false;
                 for(int i = 0; i < KNOWN_LIST.Count; i++)
                 {
-                    if (KNOWN_LIST[i].NAME.Equals(TEMP_NAME))
+                    //Debug.Log(KNOWN_LIST[i].NAME);
+                    if (KNOWN_LIST[i].NAME.Trim().Equals(TEMP_NAME.Trim()))
                     {
                         DISCOVERED = true;
                         KNOWN_LIST[i].INGREDIENTS = TEMP_LIST;
@@ -103,12 +105,13 @@ public static class RecipeManager{
                 if (!DISCOVERED)
                 {
                     UNKNOWN_LIST.Add(new Recipe(TEMP_NAME, TEMP_LIST, false, TEMP_WEIGHT, TEMP_PRICE));
+                    //Debug.Log(TEMP_NAME);
                 }
             }
 
             //Sort the unknown list by complexity
             UNKNOWN_LIST.Sort(CompareRecipes);
-           
+            //Debug.Log(UNKNOWN_LIST[0]);
         }
     }
 

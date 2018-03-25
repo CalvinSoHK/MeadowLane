@@ -77,7 +77,7 @@ public class MessageApp : BasicApp {
                 ExitApp();
             }
 
-            if (CONVO_ENTRIES != null && CONVO_ENTRIES[0] != null)
+            if (CONVO_ENTRIES != null && CONVO_ENTRIES.Count > 0 && CONVO_ENTRIES[0] != null)
             {
                 //Allow us to select a contact
                 if (PHONE.INPUT.DOWN && PHONE.INPUT.TRACKPAD_DOWN)
