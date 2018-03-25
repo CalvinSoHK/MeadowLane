@@ -41,7 +41,7 @@ public class FurnitureManager : MonoBehaviour {
                 FURNITURE[i].transform.eulerAngles.x + "," + FURNITURE[i].transform.eulerAngles.y + "," + FURNITURE[i].transform.eulerAngles.z + "\n";
         }
 
-        SaveSystem.SaveTo(SaveSystem.SaveType.Decoration, "/Decoration\n" + DATA + "/\n");
+        SaveSystem.SaveTo(SaveSystem.SaveType.Decoration, "/Decoration\n" + DATA + "/");
     }
 
     public void SaveTempData()
