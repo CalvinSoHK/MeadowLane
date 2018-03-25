@@ -240,7 +240,10 @@ public static class SaveSystem {
                             }
                             else
                             {
-                                GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
+                                if (GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM != null)
+                                {
+                                    GameManagerPointer.Instance.FARM_MANAGER_POINTER.FM.LoadData(DATA);
+                                }                             
                                 DATA = "";
                                 TYPE = SaveType.Decoration;
                             }
@@ -255,7 +258,10 @@ public static class SaveSystem {
                             }
                             else
                             {
-                                GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.LoadData(DATA);
+                                if (GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM != null)
+                                {
+                                    GameManagerPointer.Instance.FURNITURE_MANAGER_POINTER.FM.LoadData(DATA);
+                                }                         
                                 DATA = "";
                                 TYPE = SaveType.Relationships;
                             }

@@ -103,9 +103,13 @@ public class Container : MonoBehaviour {
         //theObject.GetComponent<BaseItem>()._OWNER = OWNER;
 
         //PUsh the object up
-        Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 300, Random.Range(-90.0f, 90.0f));
-        theObject.GetComponent<Rigidbody>().AddForce(Vector3.Scale(new Vector3(1,1,1), thrust));
-       
+        if(theObject.GetComponent<Rigidbody>() != null)
+        {
+            Vector3 thrust = new Vector3(Random.Range(-90.0f, 90.0f), 300, Random.Range(-90.0f, 90.0f));
+            theObject.GetComponent<Rigidbody>().AddForce(Vector3.Scale(new Vector3(1, 1, 1), thrust));
+
+        }
+
     }
     /// <summary>
     /// Returns the index of the object in the possibleItems array

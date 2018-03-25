@@ -1,14 +1,19 @@
 /Date
-4 1 2 3 1
+4 1 4 3 1
 /
 /Money
 100
 /
 /Messages
-[NEW]
-Triangle/Start
+EMPTY
 /
 /Inventory
+Produce/Tomato 20
+Produce/Wheat 20
+Tools/Basic_Hoe
+Tools/WateringCan
+Tools/Basic_Scythe
+Tools/Tomato_Seed_Dispenser 10
 /
 /Recipe
 /
@@ -100,7 +105,6 @@ Utility/Basic_Bed 0.288,100.495,23.998 0,0,0
 Electronic/TV 0.181,101.32,26.942 0,180.0003,0
 Table/Wooden_TV_Console 0.573,100.495,27.015 0,180,0
 /
-
 /Relationships
 /
 /Town
