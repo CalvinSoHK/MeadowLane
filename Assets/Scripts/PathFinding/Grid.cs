@@ -11,8 +11,9 @@ public class Grid : MonoBehaviour {
     public Transform player;
     float nodeDiameter;
     int gridSizeX, gridSizeY;
+    public bool displayGridGizmos;
 
-    void Start()
+    void Awake()
     {
         nodeDiameter = nodeRadius * 2; //get the node diameter
         gridSizeX = (int) (gridWorldSize.x / nodeDiameter); //get the number of nodes that we con fit along the horizontal
@@ -79,11 +80,11 @@ public class Grid : MonoBehaviour {
         return grid[x, y];
     }
 
-    public List<Node> path;
+    
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-        if(grid != null)
+        if(grid != null && displayGridGizmos)
         {
             Node playerNode = NodeFromWorldPoint(player.position);
             foreach (Node n in grid)
@@ -93,13 +94,7 @@ public class Grid : MonoBehaviour {
                 {
                     Gizmos.color = Color.cyan;
                 }
-                if(path != null)
-                {
-                    if (path.Contains(n))
-                    {
-                        Gizmos.color = Color.black;
-                    }
-                }
+                
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
 
             }
