@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bb76cd9af363e40a2d17874bb16a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Layla
+  characterName: ADDNAME
   currentSituation: 
   currentState: 0
   textBox: {fileID: 1872789027674822}
